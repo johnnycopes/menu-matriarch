@@ -1,0 +1,11 @@
+@import "main";
+
+:host {
+  flex-basis: 100%;
+  padding: map-get($spacing, 16);
+}
+
+.day {
+  margin-bottom: map-get($spacing, 8);
+  color: map-get($neutral, 6);
+}

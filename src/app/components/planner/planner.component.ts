@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { IMeal } from 'src/app/models/meal.interface';
 import { MealService } from 'src/app/services/meal.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
   selector: 'app-planner',
@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class PlannerComponent implements OnInit {
   public user$ = this._userService.user$;
-  public meals$: Observable<IMeal[]> = this.user$.pipe(
+  public meals$ = this.user$.pipe(
     switchMap(user => {
       const userId = user?.uid;
       if (!userId) {
@@ -22,15 +22,17 @@ export class PlannerComponent implements OnInit {
       return this._mealService.getMeals(userId);
     })
   );
-  public days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
+  public menu$ = this._menuService.getMenu();
 
   constructor(
     private _mealService: MealService,
+    private _menuService: MenuService,
     private _userService: AuthService,
   ) {}
 
   public ngOnInit(): void {
     this.user$.subscribe(console.log);
     this.meals$.subscribe(console.log);
+    this.menu$.subscribe(console.log);
   }
 }
