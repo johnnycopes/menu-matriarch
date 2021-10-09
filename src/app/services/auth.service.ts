@@ -10,7 +10,7 @@ import { IUser } from '../models/user.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class AuthService {
   public user$ = this._auth.user;
 
   constructor(
@@ -31,13 +31,5 @@ export class UserService {
 
   public logout(): void {
     this._auth.signOut();
-  }
-
-  public getMeals(id: string): Observable<IMeal[]> {
-    return this._firestore
-      .collection<IUser>('users')
-      .doc(id)
-      .collection<IMeal>('meals')
-      .valueChanges();
   }
 }
