@@ -22,6 +22,7 @@ export class PlannerComponent implements OnInit {
       return this._mealService.getMeals(userId);
     })
   );
+  public days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
 
   constructor(
     private _mealService: MealService,

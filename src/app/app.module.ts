@@ -8,9 +8,11 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { DaysComponent } from './components/planner/days/days.component';
 import { PlannerComponent } from './components/planner/planner.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { DayComponent } from './components/planner/days/day/day.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
     PlannerComponent,
     PageNotFoundComponent,
     WelcomeComponent,
+    DaysComponent,
+    DayComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
