@@ -1,47 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Day } from '../models/day.type';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { IMenuDbo } from '../models/dbos/menu-dbo.interface';
+import { IMenu } from '../models/interfaces/menu.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
 
-  constructor() { }
+  constructor(private _firestore: AngularFirestore) { }
 
-  getMenu(): Observable<{
-    day: Day,
-    meal: string | undefined,
-  }[]> {
-    return of([
-      {
-        day: 'Monday',
-        meal: 'Pizza',
-      },
-      {
-        day: 'Tuesday',
-        meal: 'Sushi',
-      },
-      {
-        day: 'Wednesday',
-        meal: 'Banh Mi',
-      },
-      {
-        day: 'Thursday',
-        meal: 'Bagels',
-      },
-      {
-        day: 'Friday',
-        meal: 'Noodles',
-      },
-      {
-        day: 'Saturday',
-        meal: 'Lasagna',
-      },
-      {
-        day: 'Sunday',
-        meal: 'Tacos',
-      },
-    ]);
+  getMenu(userId: string): Observable<IMenu> {
+    return this._firestore
+      .collection<IMenuDbo>(
+        'menus',
+        ref => ref.where('userId', '==', userId),
+      )
+      .valueChanges()
+      .pipe(
+        map(menus => menus[0].menu)
+      );
   }
 }

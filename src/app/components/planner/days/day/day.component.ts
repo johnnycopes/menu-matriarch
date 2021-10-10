@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Day } from 'src/app/models/day.type';
+import { Day } from 'src/app/models/types/day.type';
 
 @Component({
   selector: 'li[app-day]',

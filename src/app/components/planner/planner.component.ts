@@ -12,7 +12,7 @@ import { MenuService } from 'src/app/services/menu.service';
   styleUrls: ['./planner.component.scss']
 })
 export class PlannerComponent implements OnInit {
-  public user$ = this._userService.user$;
+  public user$ = this._authService.user$;
   public meals$ = this.user$.pipe(
     switchMap(user => {
       const userId = user?.uid;
@@ -22,17 +22,34 @@ export class PlannerComponent implements OnInit {
       return this._mealService.getMeals(userId);
     })
   );
-  public menu$ = this._menuService.getMenu();
+  // public menu$ = this.user$.pipe(
+  //   switchMap(user => {
+  //     const userId = user?.uid;
+  //     // if (!userId) {
+  //     //   return of({});
+  //     // }
+  //     // return this._menuService.getMenu(userId);
+  //   })
+  // );
+  public preferences$ = this.user$.pipe(
+    switchMap(user => {
+      const userId = user?.uid;
+      if (!userId) {
+        return of([]);
+      }
+      return this._menuService.getMenu(userId);
+    })
+  );
 
   constructor(
+    private _authService: AuthService,
     private _mealService: MealService,
     private _menuService: MenuService,
-    private _userService: AuthService,
   ) {}
 
   public ngOnInit(): void {
-    this.user$.subscribe(console.log);
-    this.meals$.subscribe(console.log);
-    this.menu$.subscribe(console.log);
+    // this.user$.subscribe(console.log);
+    // this.meals$.subscribe(console.log);
+    // this.menu$.subscribe(console.log);
   }
 }
