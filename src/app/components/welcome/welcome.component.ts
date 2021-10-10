@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  public user$ = this._authService.user$;
+  public user$ = this._authService.getUser();
 
   constructor(
     private _authService: AuthService,
@@ -16,13 +16,12 @@ export class WelcomeComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    // this.user$.subscribe(console.log);
   }
 
   public async login(): Promise<void> {
     try {
       await this._authService.login();
-      // this._router.navigate(['/planner']);
+      this._router.navigate(['/planner']);
     } catch (e) {
       console.error(e);
     }

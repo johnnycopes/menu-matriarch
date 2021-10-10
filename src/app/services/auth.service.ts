@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { IUser, IUserDbo } from '../models/interfaces/user.interface';
 
@@ -10,7 +11,9 @@ import { IUser, IUserDbo } from '../models/interfaces/user.interface';
   providedIn: 'root'
 })
 export class AuthService {
-  public user$ = this._auth.user;
+  public uid$ = this._auth.user.pipe(
+    map(user => user?.uid)
+  );
 
   constructor(
     private _auth: AngularFireAuth,
@@ -48,10 +51,14 @@ export class AuthService {
     this._auth.signOut();
   }
 
-  public getUser(uid: string): Observable<IUser | undefined> {
-    return this._firestore
-      .collection<IUserDbo | undefined>('users')
-      .doc(uid)
-      .valueChanges();
+  public getUser(): Observable<IUser | undefined> {
+    return this.uid$.pipe(
+      switchMap(uid => {
+        return this._firestore
+          .collection<IUserDbo | undefined>('users')
+          .doc(uid)
+          .valueChanges();
+      })
+    );
   }
 }
