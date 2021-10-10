@@ -4,12 +4,10 @@
   </li>
 </ul>
 
-
 <ul app-days>
-  <!-- {{menu$ | async}} -->
-  <!-- <li app-day
-    *ngFor="let entry of menu$ | async"
-    [day]="entry.day"
-    [meal]="entry.meal"
-  ></li> -->
+  <li app-day
+    *ngFor="let menuEntry of menuEntries$ | async"
+    [day]="menuEntry.day"
+    [meal]="menuEntry.meal"
+  ></li>
 </ul>

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { IMenu, IMenuDbo } from '../models/interfaces/menu.interface';
+import { IMenu, IMenuDbo, IMenuEntry } from '../models/interfaces/menu.interface';
+import { Day } from '../models/types/day.type';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -16,7 +17,22 @@ export class MenuService {
     private _authService: AuthService,
   ) { }
 
-  public getMenu(): Observable<IMenu | undefined> {
+  public getMenuEntries(): Observable<IMenuEntry[]> {
+    return combineLatest([
+      this._getMenu(),
+      this._authService.getUser(),
+    ]).pipe(
+      map(([menu, user]) => {
+        if (!menu || !user) {
+          return [];
+        }
+        const days = this._getOrderedDays(user.preferences.menuStartDay);
+        return days.map(day => ({ day, meal: menu[day] }));
+      })
+    );
+  }
+
+  private _getMenu(): Observable<IMenu | undefined> {
     return this._authService.uid$.pipe(
       switchMap(uid => {
         return this._firestore
@@ -30,5 +46,24 @@ export class MenuService {
           );
       })
     );
+  }
+
+  private _getOrderedDays(startDay: Day): Day[] {
+    switch (startDay) {
+      case 'Monday':
+        return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      case 'Tuesday':
+        return ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'];
+      case 'Wednesday':
+        return ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday'];
+      case 'Thursday':
+        return ['Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'];
+      case 'Friday':
+        return ['Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+      case 'Saturday':
+        return ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      case 'Sunday':
+        return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    }
   }
 }

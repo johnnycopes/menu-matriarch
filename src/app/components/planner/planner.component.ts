@@ -12,7 +12,7 @@ import { MenuService } from 'src/app/services/menu.service';
 export class PlannerComponent implements OnInit {
   public user$ = this._authService.getUser();
   public meals$ = this._mealService.getMeals();
-  public menu$ = this._menuService.getMenu();
+  public menuEntries$ = this._menuService.getMenuEntries();
 
   constructor(
     private _authService: AuthService,
@@ -23,6 +23,6 @@ export class PlannerComponent implements OnInit {
   public ngOnInit(): void {
     this.user$.subscribe(console.log);
     this.meals$.subscribe(console.log);
-    this.menu$.subscribe(console.log);
+    this.menuEntries$.subscribe(console.log);
   }
 }
