@@ -3,8 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IMenuDbo } from '../models/dbos/menu-dbo.interface';
-import { IMenu } from '../models/interfaces/menu.interface';
+import { IMenu, IMenuDbo } from '../models/interfaces/menu.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class MenuService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  getMenu(uid: string): Observable<IMenu> {
+  public getMenu(uid: string): Observable<IMenu> {
     return this._firestore
       .collection<IMenuDbo>(
         'menus',

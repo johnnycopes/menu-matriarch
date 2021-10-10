@@ -3,10 +3,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { IUserDbo } from '../models/dbos/user-dbo.interface';
-import { IUserPreferences } from '../models/interfaces/user-preferences.interface';
+import { IUser, IUserDbo } from '../models/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -50,15 +48,10 @@ export class AuthService {
     this._auth.signOut();
   }
 
-  public getPreferences(uid: string): Observable<IUserPreferences> {
+  public getUser(uid: string): Observable<IUser | undefined> {
     return this._firestore
-      .collection<IUserDbo>(
-        'users',
-        ref => ref.where('uid', '==', uid),
-      )
-      .valueChanges()
-      .pipe(
-        map(users => users[0].preferences)
-      );
+      .collection<IUserDbo | undefined>('users')
+      .doc(uid)
+      .valueChanges();
   }
 }

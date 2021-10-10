@@ -22,22 +22,22 @@ export class PlannerComponent implements OnInit {
       return this._mealService.getMeals(userId);
     })
   );
-  // public menu$ = this.user$.pipe(
-  //   switchMap(user => {
-  //     const userId = user?.uid;
-  //     // if (!userId) {
-  //     //   return of({});
-  //     // }
-  //     // return this._menuService.getMenu(userId);
-  //   })
-  // );
+  public menu$ = this.user$.pipe(
+    switchMap(user => {
+      const userId = user?.uid;
+      if (!userId) {
+        return of({});
+      }
+      return this._menuService.getMenu(userId);
+    })
+  );
   public preferences$ = this.user$.pipe(
     switchMap(user => {
       const userId = user?.uid;
       if (!userId) {
         return of([]);
       }
-      return this._menuService.getMenu(userId);
+      return this._authService.getUser(userId);
     })
   );
 
@@ -48,8 +48,9 @@ export class PlannerComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    // this.user$.subscribe(console.log);
-    // this.meals$.subscribe(console.log);
-    // this.menu$.subscribe(console.log);
+    this.user$.subscribe(console.log);
+    this.meals$.subscribe(console.log);
+    this.menu$.subscribe(console.log);
+    this.preferences$.subscribe(console.log);
   }
 }
