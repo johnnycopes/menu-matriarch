@@ -11,11 +11,11 @@ export class MealService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  public getMeals(userId: string): Observable<IMeal[]> {
+  public getMeals(uid: string): Observable<IMeal[]> {
     return this._firestore
       .collection<IMeal>(
         'meals',
-        ref => ref.where('userId', '==', userId)
+        ref => ref.where('uid', '==', uid)
       )
       .valueChanges();
   }

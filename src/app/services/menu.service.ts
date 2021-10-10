@@ -13,11 +13,11 @@ export class MenuService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  getMenu(userId: string): Observable<IMenu> {
+  getMenu(uid: string): Observable<IMenu> {
     return this._firestore
       .collection<IMenuDbo>(
         'menus',
-        ref => ref.where('userId', '==', userId),
+        ref => ref.where('uid', '==', uid),
       )
       .valueChanges()
       .pipe(

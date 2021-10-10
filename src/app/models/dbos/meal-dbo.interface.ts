@@ -1,4 +1,4 @@
 export interface IMealDbo {
-  userId: string;
+  uid: string;
   name: string;
 }

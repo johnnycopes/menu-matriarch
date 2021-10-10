@@ -24,19 +24,16 @@ export class AuthService {
     if (loginInfo.user) {
       const { uid, displayName, email } = loginInfo.user;
       const user = await this._firestore
-        .collection<IUserDbo>(
-          'users',
-          ref => ref.where('id', '==', uid),
-        )
+        .collection<IUserDbo>('users')
+        .doc(uid)
         .ref
         .get();
 
-      if (!user.docs.length) {
+      if (!user.exists) {
         this._firestore
           .collection<IUserDbo>('users')
-          .ref
-          .add({
-            id: uid,
+          .doc(uid)
+          .set({
             name: displayName ?? 'friend',
             email: email ?? undefined,
             preferences: {
@@ -53,11 +50,11 @@ export class AuthService {
     this._auth.signOut();
   }
 
-  public getPreferences(userId: string): Observable<IUserPreferences> {
+  public getPreferences(uid: string): Observable<IUserPreferences> {
     return this._firestore
       .collection<IUserDbo>(
         'users',
-        ref => ref.where('userId', '==', userId),
+        ref => ref.where('uid', '==', uid),
       )
       .valueChanges()
       .pipe(
