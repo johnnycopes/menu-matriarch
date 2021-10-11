@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IMeal } from 'src/app/models/interfaces/meal.interface';
+import { IMeal } from '@models/interfaces/meal.interface';
 
-import { Day } from 'src/app/models/types/day.type';
+import { Day } from '@models/types/day.type';
 
 @Component({
   selector: 'li[app-day]',

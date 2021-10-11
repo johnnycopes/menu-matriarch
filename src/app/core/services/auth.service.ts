@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { IUser } from '../models/interfaces/user.interface';
+import { IUser } from '@models/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'

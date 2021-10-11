@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MealService } from 'src/app/services/meal.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { MenuService } from 'src/app/services/menu.service';
+import { MealService } from '@services/meal.service';
+import { AuthService } from '@services/auth.service';
+import { MenuService } from '@services/menu.service';
 
 @Component({
   selector: 'app-planner',

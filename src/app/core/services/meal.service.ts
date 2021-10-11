@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { IMeal } from '../models/interfaces/meal.interface';
+import { IMeal } from '@models/interfaces/meal.interface';
 import { AuthService } from './auth.service';
 
 @Injectable({

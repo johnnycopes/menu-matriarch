@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { IMenu, Menu } from '../models/interfaces/menu.interface';
-import { IMenuEntry } from '../models/interfaces/menu-entry.interface';
-import { Day } from '../models/types/day.type';
+import { IMenu, Menu } from '@models/interfaces/menu.interface';
+import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { Day } from '@models/types/day.type';
 import { AuthService } from './auth.service';
 import { MealService } from './meal.service';
 
