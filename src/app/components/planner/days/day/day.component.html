@@ -2,6 +2,14 @@
   {{ day }}
 </h3>
 
-<h4 *ngIf="meal">
+<h4 class="meal"
+  *ngIf="meal"
+>
   {{ meal}}
 </h4>
+
+<p class="description"
+  *ngIf=="description"
+>
+  {{ description }}
+</p>

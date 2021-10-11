@@ -1,7 +1,9 @@
-<ul class="meals">
-  <li *ngFor="let meal of meals$ | async">
-    {{ meal.name }}
-  </li>
+<ul app-meals>
+  <li app-meal
+    *ngFor="let meal of meals$ | async"
+    [name]="meal.name"
+    [description]="meal.description"
+  ></li>
 </ul>
 
 <ul app-days>

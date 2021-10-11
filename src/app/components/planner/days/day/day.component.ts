@@ -10,12 +10,13 @@ import { Day } from 'src/app/models/types/day.type';
 export class DayComponent implements OnInit {
   @Input() day: Day | undefined;
   @Input() meal: string | undefined;
+  @Input() description: string | undefined;
 
   constructor() { }
 
   ngOnInit(): void {
     if (!this.day) {
-      throw new Error("DayComponent must have an assigned 'day' property");
+      throw new Error('DayComponent must have an assigned "day" property');
     }
   }
 

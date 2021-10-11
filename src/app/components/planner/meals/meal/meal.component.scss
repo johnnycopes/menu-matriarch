@@ -1,0 +1,11 @@
+@import "main";
+
+:host {
+  padding: map-get($spacing, 16);
+}
+
+.description {
+  margin-top: map-get($spacing, 8);
+  font-size: 14px;
+  color: map-get($neutral, 6);
+}

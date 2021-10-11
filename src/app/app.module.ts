@@ -8,20 +8,24 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { DaysComponent } from './components/planner/days/days.component';
-import { PlannerComponent } from './components/planner/planner.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { WelcomeComponent } from './components/welcome/welcome.component';
 import { DayComponent } from './components/planner/days/day/day.component';
+import { DaysComponent } from './components/planner/days/days.component';
+import { MealComponent } from './components/planner/meals/meal/meal.component';
+import { MealsComponent } from './components/planner/meals/meals.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PlannerComponent } from './components/planner/planner.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PlannerComponent,
-    PageNotFoundComponent,
-    WelcomeComponent,
-    DaysComponent,
     DayComponent,
+    DaysComponent,
+    MealComponent,
+    MealsComponent,
+    PageNotFoundComponent,
+    PlannerComponent,
+    WelcomeComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
