@@ -1,28 +1,64 @@
 @import "main";
 
+$toolbar-height: map-get($spacing, 48);
+
 :host {
   display: grid;
-  grid-template-rows: 100%;
   grid-template-columns: 50% 50%;
   height: 100%;
   overflow: hidden;
 }
 
+section {
+  display: grid;
+  grid-template-rows: map-get($spacing, 48) calc(100% - 48px);
+
+  ul {
+    grid-row: 2;
+    padding: map-get($spacing, 16);
+  }
+}
+
+.toolbar {
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 map-get($spacing, 16);
+
+  .title {
+    margin-right: auto;
+    color: map-get($neutral, 4);
+    font-size: 16px;
+    @include small-caps;
+  }
+
+  & > *:not(:first-child) {
+    margin-left: map-get($spacing, 8);
+  }
+}
+
 .meals {
   grid-column: 1;
-  padding: map-get($spacing, 16);
+  overflow: hidden;
 
-  li[app-card] {
+  ul {
+    overflow: auto;
+  }
+
+  li[app-card]:not(:last-child) {
     margin-bottom: map-get($spacing, 16);
   }
 }
 
-.days {
+.menu {
   grid-column: 2;
-  display: flex;
-  flex-direction: column;
-  padding: map-get($spacing, 16);
   background: $white;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+  }
 
   li[app-day] {
     flex-basis: 100%;

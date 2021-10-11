@@ -1,18 +1,43 @@
-<ul class="meals">
-  <li app-card
-    *ngFor="let meal of meals$ | async"
-  >
-    <app-meal
-      [name]="meal.name"
-      [description]="meal.description"
-    ></app-meal>
-  </li>
-</ul>
+<section class="meals">
+  <div class="toolbar">
+    <h2 class="title">
+      Meals
+    </h2>
+    <button app-button>
+      New
+    </button>
+  </div>
+  <ul>
+    <li app-card
+      *ngFor="let meal of meals$ | async"
+    >
+      <app-meal
+        [name]="meal.name"
+        [description]="meal.description"
+      ></app-meal>
+    </li>
+  </ul>
+</section>
 
-<ul class="days">
-  <li app-day
-    *ngFor="let menuEntry of menuEntries$ | async"
-    [day]="menuEntry.day"
-    [meal]="menuEntry.meal"
-  ></li>
-</ul>
+<section class="menu">
+  <div class="toolbar">
+    <h2 class="title">
+      Menu
+    </h2>
+    <button app-button
+      buttonStyle="secondary"
+    >
+      Clear All
+    </button>
+    <button app-button>
+      Export
+    </button>
+  </div>
+  <ul>
+    <li app-day
+      *ngFor="let menuEntry of menuEntries$ | async"
+      [day]="menuEntry.day"
+      [meal]="menuEntry.meal"
+    ></li>
+  </ul>
+</section>
