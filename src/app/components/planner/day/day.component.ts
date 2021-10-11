@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IMeal } from 'src/app/models/interfaces/meal.interface';
 
 import { Day } from 'src/app/models/types/day.type';
 
@@ -9,8 +10,7 @@ import { Day } from 'src/app/models/types/day.type';
 })
 export class DayComponent implements OnInit {
   @Input() day: Day | undefined;
-  @Input() meal: string | undefined;
-  @Input() description: string | undefined;
+  @Input() meal: IMeal | undefined;
 
   constructor() { }
 

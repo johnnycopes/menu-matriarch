@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'li[app-meal]',
+  selector: 'app-meal',
   templateUrl: './meal.component.html',
   styleUrls: ['./meal.component.scss']
 })

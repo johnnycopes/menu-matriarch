@@ -3,9 +3,11 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { IMenu, IMenuEntry, Menu } from '../models/interfaces/menu.interface';
+import { IMenu, Menu } from '../models/interfaces/menu.interface';
+import { IMenuEntry } from '../models/interfaces/menu-entry.interface';
 import { Day } from '../models/types/day.type';
 import { AuthService } from './auth.service';
+import { MealService } from './meal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +17,22 @@ export class MenuService {
   constructor(
     private _firestore: AngularFirestore,
     private _authService: AuthService,
+    private _mealService: MealService,
   ) { }
 
   public getMenuEntries(): Observable<IMenuEntry[]> {
     return combineLatest([
-      this._getMenu(),
       this._authService.getUser(),
+      this._mealService.getMeals(),
+      this._getMenu(),
     ]).pipe(
-      map(([menu, user]) => {
+      map(([user, meals, menu]) => {
         if (!menu || !user) {
           return [];
         }
         const days = this._getOrderedDays(user.preferences.menuStartDay);
-        return days.map(day => ({ day, meal: menu[day] }));
+        console.log(meals);
+        return days.map(day => ({ day, meal: meals.find(meal => meal.id === menu[day]) }));
       })
     );
   }
@@ -40,7 +45,7 @@ export class MenuService {
             'menus',
             ref => ref.where('uid', '==', uid),
           )
-          .valueChanges()
+          .valueChanges({ idField: 'id' })
           .pipe(
             map(menus => menus?.[0]?.menu)
           );

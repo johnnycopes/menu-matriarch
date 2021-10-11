@@ -1,12 +1,13 @@
-<ul app-meals>
-  <li app-meal
-    *ngFor="let meal of meals$ | async"
-    [name]="meal.name"
-    [description]="meal.description"
-  ></li>
+<ul class="meals">
+  <li *ngFor="let meal of meals$ | async">
+    <app-meal
+      [name]="meal.name"
+      [description]="meal.description"
+    ></app-meal>
+  </li>
 </ul>
 
-<ul app-days>
+<ul class="days">
   <li app-day
     *ngFor="let menuEntry of menuEntries$ | async"
     [day]="menuEntry.day"

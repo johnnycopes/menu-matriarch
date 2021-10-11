@@ -1,3 +1,5 @@
+@import "main";
+
 :host {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -8,6 +10,16 @@
   grid-column: 1;
 }
 
-app-days {
+.days {
   grid-column: 2;
+  display: flex;
+  flex-direction: column;
+
+  li {
+    flex-basis: 100%;
+  }
+}
+
+li {
+  padding: map-get($spacing, 16);
 }

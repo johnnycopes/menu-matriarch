@@ -1,7 +1,7 @@
 @import "main";
 
 :host {
-  padding: map-get($spacing, 16);
+  display: block;
 }
 
 .description {

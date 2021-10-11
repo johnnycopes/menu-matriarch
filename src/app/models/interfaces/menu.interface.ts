@@ -8,8 +8,3 @@ export interface IMenu {
   uid: string;
   menu: Menu;
 }
-
-export interface IMenuEntry {
-  day: Day;
-  meal: string | undefined;
-}

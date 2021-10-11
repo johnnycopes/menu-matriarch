@@ -1,0 +1,8 @@
+<h3 class="day">
+  {{ day }}
+</h3>
+
+<app-meal *ngIf="meal"
+  [name]="meal.name"
+  [description]="meal.description"
+></app-meal>
