@@ -21,7 +21,7 @@ html {
 body {
 	min-height: 100vh;
 	position: relative;
-	background: map-get($neutral, 10);
+	background: map-get($neutral, 9);
 	color: map-get($neutral, 1);
 	font-family: $font-stack;
 	font-weight: map-get($font-weight, normal);

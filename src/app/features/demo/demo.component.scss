@@ -1,5 +1,10 @@
 @import "main";
 
+:host {
+  display: block;
+  padding: map-get($spacing, 24);
+}
+
 app-demo-component {
 	display: flex;
 	flex-direction: column;

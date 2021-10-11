@@ -11,6 +11,10 @@
 .meals {
   grid-column: 1;
   padding: map-get($spacing, 16);
+
+  li[app-card] {
+    margin-bottom: map-get($spacing, 16);
+  }
 }
 
 .days {
@@ -18,8 +22,9 @@
   display: flex;
   flex-direction: column;
   padding: map-get($spacing, 16);
+  background: $white;
 
-  li {
+  li[app-day] {
     flex-basis: 100%;
   }
 }

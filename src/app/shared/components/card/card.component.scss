@@ -1,0 +1,8 @@
+@import "main";
+
+:host {
+  display: block;
+  background: $white;
+  border-radius: map-get($border, radius);
+  box-shadow: map-get($box-shadow, lightest);
+}

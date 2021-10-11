@@ -1,5 +1,7 @@
 <ul class="meals">
-  <li *ngFor="let meal of meals$ | async">
+  <li app-card
+    *ngFor="let meal of meals$ | async"
+  >
     <app-meal
       [name]="meal.name"
       [description]="meal.description"

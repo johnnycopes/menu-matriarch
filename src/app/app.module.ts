@@ -22,8 +22,8 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { MealComponent } from './features/planner/meal/meal.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
-import { WelcomeComponent } from './features/welcome/welcome.component';
 import { ShellComponent } from './core/components/shell/shell.component';
+import { WelcomeComponent } from './features/welcome/welcome.component';
 
 @NgModule({
   declarations: [

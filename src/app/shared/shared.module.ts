@@ -7,6 +7,7 @@ import { FormsModule } from "@angular/forms";
 import { AlertComponent } from "./components/alert/alert.component";
 import { AutofocusDirective } from "./directives/autofocus/autofocus.directive";
 import { ButtonComponent } from "./components/button/button.component";
+import { CardComponent } from './components/card/card.component';
 import { CheckboxComponent } from "./components/checkbox/checkbox.component";
 import { HoverDirective } from "./directives/hover/hover.directive";
 import { InputComponent } from "./components/input/input.component";
@@ -19,37 +20,39 @@ import { RangeDirective } from "./directives/range/range.directive";
 
 
 @NgModule({
-	imports: [
-		CommonModule,
-		DragDropModule,
+  imports: [
+    CommonModule,
+    DragDropModule,
     FontAwesomeModule,
-		FormsModule,
-	],
-	declarations: [
-		AlertComponent,
-		AutofocusDirective,
-		ButtonComponent,
-		CheckboxComponent,
-		HoverDirective,
-		InputComponent,
-		KanbanBoardColumnComponent,
-		KanbanBoardComponent,
-		KanbanBoardFormComponent,
-		PanelComponent,
-		RangeDirective,
-	],
-	exports: [
-		AlertComponent,
-		AutofocusDirective,
-		ButtonComponent,
-		CheckboxComponent,
-		HoverDirective,
-		InputComponent,
-		KanbanBoardColumnComponent,
-		KanbanBoardComponent,
-		KanbanBoardFormComponent,
-		PanelComponent,
-		RangeDirective,
-	]
+    FormsModule,
+  ],
+  declarations: [
+    AlertComponent,
+    AutofocusDirective,
+    ButtonComponent,
+    CardComponent,
+    CheckboxComponent,
+    HoverDirective,
+    InputComponent,
+    KanbanBoardColumnComponent,
+    KanbanBoardComponent,
+    KanbanBoardFormComponent,
+    PanelComponent,
+    RangeDirective,
+  ],
+  exports: [
+    AlertComponent,
+    AutofocusDirective,
+    ButtonComponent,
+    CardComponent,
+    CheckboxComponent,
+    HoverDirective,
+    InputComponent,
+    KanbanBoardColumnComponent,
+    KanbanBoardComponent,
+    KanbanBoardFormComponent,
+    PanelComponent,
+    RangeDirective,
+  ]
 })
 export class SharedModule { }
