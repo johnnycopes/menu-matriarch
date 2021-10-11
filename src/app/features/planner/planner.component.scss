@@ -2,24 +2,24 @@
 
 :host {
   display: grid;
+  grid-template-rows: 100%;
   grid-template-columns: 50% 50%;
-  height: 100vh;
+  height: 100%;
+  overflow: hidden;
 }
 
 .meals {
   grid-column: 1;
+  padding: map-get($spacing, 16);
 }
 
 .days {
   grid-column: 2;
   display: flex;
   flex-direction: column;
+  padding: map-get($spacing, 16);
 
   li {
     flex-basis: 100%;
   }
-}
-
-li {
-  padding: map-get($spacing, 16);
 }

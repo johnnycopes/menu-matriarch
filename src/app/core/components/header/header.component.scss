@@ -1,0 +1,46 @@
+@import "main";
+
+.header {
+  display: flex;
+  height: map-get($app, header);
+  background: map-get($neutral, 5);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: map-get($spacing, 16);
+}
+
+.logo {
+  position: relative;
+  top: map-get($spacing, 12);
+  width: map-get($font-size, 72);
+  z-index: map-get($z-index, positive);
+}
+
+.links {
+  display: flex;
+  height: 100%;
+  width: map-get($spacing, 512);
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: map-get($font-size, 16);
+  color: map-get($neutral, 10);
+  flex: 1 0 0;
+
+  &--active {
+    background: map-get($neutral, 4);
+  }
+}

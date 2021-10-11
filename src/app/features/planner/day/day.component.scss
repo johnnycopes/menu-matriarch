@@ -6,10 +6,6 @@
   background: map-get($neutral, 9);
   color: map-get($neutral, 5);
   font-size: map-get($font-size, 16);
-  @include small-caps;
   border-radius: map-get($border, radius);
-}
-
-app-meal {
-  padding: map-get($spacing, 4) map-get($spacing, 8);
+  @include small-caps;
 }

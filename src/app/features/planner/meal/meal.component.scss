@@ -2,10 +2,15 @@
 
 :host {
   display: block;
+  padding: map-get($spacing, 4) map-get($spacing, 8);
+}
+
+.name {
+  margin-bottom: map-get($spacing, 8);
 }
 
 .description {
-  margin-top: map-get($spacing, 8);
+  margin-bottom: map-get($spacing, 8);
   font-size: 14px;
   color: map-get($neutral, 6);
 }

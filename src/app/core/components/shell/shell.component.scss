@@ -1,0 +1,17 @@
+@import "main";
+
+:host {
+  display: block;
+}
+
+.content {
+  height: calc(100vh - #{map-get($app, header)});
+  width: 100%;
+  position: absolute;
+  overflow: auto;
+}
+
+.wrapper {
+  position: relative;
+  height: 100%;
+}

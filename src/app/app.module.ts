@@ -18,10 +18,12 @@ import { AppComponent } from './app.component';
 import { DayComponent } from './features/planner/day/day.component';
 import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
+import { HeaderComponent } from './core/components/header/header.component';
 import { MealComponent } from './features/planner/meal/meal.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
+import { ShellComponent } from './core/components/shell/shell.component';
 
 @NgModule({
   declarations: [
@@ -29,10 +31,12 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     DayComponent,
     DemoComponent,
     DemoComponentComponent,
+    HeaderComponent,
     MealComponent,
     PageNotFoundComponent,
     PlannerComponent,
     WelcomeComponent,
+    ShellComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),

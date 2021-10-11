@@ -1,0 +1,21 @@
+<header class="header">
+  <nav class="container">
+    <a class="home"
+      routerLink="/"
+      >
+      <img class="logo"
+        src="assets/logo-header.svg"
+        alt="App logo"
+      />
+    </a>
+    <div class="links">
+      <a class="link"
+        *ngFor="let link of links"
+        routerLink="/{{link.route}}"
+        routerLinkActive="link--active"
+        >
+        {{link.name}}
+      </a>
+    </div>
+  </nav>
+</header>
