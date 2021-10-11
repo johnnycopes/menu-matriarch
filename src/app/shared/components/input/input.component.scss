@@ -1,0 +1,37 @@
+@import "main";
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: map-get($spacing, 2);
+  font-size: map-get($font-size, 14);
+  color: map-get($neutral, 5);
+  @include small-caps();
+}
+
+::ng-deep input {
+  padding: map-get($spacing, 16) map-get($spacing, 8);
+  border: none;
+  border-bottom: map-get($border, thin) solid map-get($neutral, 7);
+  font-family: $font-stack;
+  font-size: map-get($font-size, 16);
+  outline: none;
+
+  &:focus {
+    border-color: map-get($neutral, 5);
+  }
+
+  &:disabled {
+    background: map-get($neutral, 10);
+    color: map-get($neutral, 5);
+    border-bottom: map-get($border, thin) solid map-get($neutral, 8);
+    cursor: not-allowed;
+  }
+}
+
+.error {
+  margin-top: map-get($spacing, 8);
+}

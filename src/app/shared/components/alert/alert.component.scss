@@ -1,0 +1,31 @@
+@import "main";
+
+@mixin type($background, $color) {
+  background: $background;
+  color: $color;
+}
+
+.app-alert {
+  display: block;
+  padding: map-get($spacing, 8);
+  border-radius: map-get($border, radius);
+  font-weight: map-get($font-weight, bold);
+  font-size: map-get($font-size, 16);
+
+  &--success {
+    @include type(map-get($indigo, 9), map-get($indigo, 4));
+  }
+
+  &--warning {
+    @include type(map-get($yellow, 9), map-get($yellow, 3));
+  }
+
+  &--error {
+    @include type(map-get($red, 9), map-get($red, 4));
+  }
+
+  &--large {
+    padding: map-get($spacing, 16);
+    font-size: map-get($font-size, 20);
+  }
+}
