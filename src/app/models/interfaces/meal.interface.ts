@@ -1,8 +1,7 @@
 export interface IMeal {
+  id: string;
+  uid: string;
   name: string;
   description: string;
   ingredients: string[];
-}
-export interface IMealDbo extends IMeal {
-  uid: string;
 }

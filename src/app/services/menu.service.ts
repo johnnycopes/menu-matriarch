@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { IMenu, IMenuDbo, IMenuEntry } from '../models/interfaces/menu.interface';
+import { IMenu, IMenuEntry, Menu } from '../models/interfaces/menu.interface';
 import { Day } from '../models/types/day.type';
 import { AuthService } from './auth.service';
 
@@ -32,11 +32,11 @@ export class MenuService {
     );
   }
 
-  private _getMenu(): Observable<IMenu | undefined> {
+  private _getMenu(): Observable<Menu> {
     return this._authService.uid$.pipe(
       switchMap(uid => {
         return this._firestore
-          .collection<IMenuDbo>(
+          .collection<IMenu>(
             'menus',
             ref => ref.where('uid', '==', uid),
           )

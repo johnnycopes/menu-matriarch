@@ -5,5 +5,3 @@ export interface IUser {
   email: string | undefined;
   preferences: IUserPreferences;
 }
-
-export interface IUserDbo extends IUser { }

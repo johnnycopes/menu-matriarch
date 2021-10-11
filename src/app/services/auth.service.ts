@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { IUser, IUserDbo } from '../models/interfaces/user.interface';
+import { IUser } from '../models/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -25,14 +25,14 @@ export class AuthService {
     if (loginInfo.user) {
       const { uid, displayName, email } = loginInfo.user;
       const user = await this._firestore
-        .collection<IUserDbo>('users')
+        .collection<IUser>('users')
         .doc(uid)
         .ref
         .get();
 
       if (!user.exists) {
         this._firestore
-          .collection<IUserDbo>('users')
+          .collection<IUser>('users')
           .doc(uid)
           .set({
             name: displayName ?? 'friend',
@@ -55,7 +55,7 @@ export class AuthService {
     return this.uid$.pipe(
       switchMap(uid => {
         return this._firestore
-          .collection<IUserDbo | undefined>('users')
+          .collection<IUser | undefined>('users')
           .doc(uid)
           .valueChanges();
       })
