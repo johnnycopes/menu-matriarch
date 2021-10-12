@@ -78,6 +78,9 @@ export class DemoComponent implements OnInit {
 	];
 	public kanbanBoardConfig: IKanbanBoardConfig<IKitchenLocation, string> = new KanbanBoardConfig();
 
+  // OptionsMenuComponent
+  public isOptionsMenuOpen: boolean = false;
+
 	constructor(
 		private _viewContainerRef: ViewContainerRef
 	) { }
