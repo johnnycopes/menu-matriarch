@@ -141,6 +141,32 @@
 			</app-kanban-board>
 		</app-demo-component>
 
+    <app-demo-component name="OptionsMenuComponent"
+			description="Context menu with clickable options. Leverages the Angular CDK."
+			[dependencies]="['OptionsMenuComponent']"
+			>
+			<!-- <h2>Right-click on an item to see the menu. Note currently the menu always opens downward, but this can be refactored to reposition intelligently (like the tooltip does).</h2> -->
+			<!-- <ul class="collection">
+				<li class="collection-item"
+					*ngFor="let user of users"
+					(contextmenu)="onRightClick($event, user)"
+					>
+					{{user}}
+				</li>
+			</ul> -->
+
+			<!-- <ng-template #userMenu let-user> -->
+				<ul app-options-menu>
+					<li app-options-menu-item>
+						Delete user
+					</li>
+					<li app-options-menu-item>
+						Decorative option
+					</li>
+				</ul>
+			<!-- </ng-template> -->
+		</app-demo-component>
+
 		<app-demo-component name="PanelComponent"
 			description="It's your basic container"
 			>

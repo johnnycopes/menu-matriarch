@@ -1,0 +1,11 @@
+@import "main";
+
+li:host {
+	display: block;
+	padding: map-get($spacing, 8) map-get($spacing, 16);
+
+	&:hover {
+		background: map-get($neutral, 10);
+		cursor: pointer;
+	}
+}

@@ -14,6 +14,8 @@ import { InputComponent } from "./components/input/input.component";
 import { KanbanBoardColumnComponent } from "./components/kanban-board/kanban-board-column/kanban-board-column.component";
 import { KanbanBoardComponent } from "./components/kanban-board/kanban-board.component";
 import { KanbanBoardFormComponent } from "./components/kanban-board/kanban-board-form/kanban-board-form.component";
+import { OptionsMenuComponent } from "./components/options-menu/options-menu.component";
+import { OptionsMenuItemComponent } from "./components/options-menu/options-menu-item/options-menu-item.component";
 import { PanelComponent } from "./components/panel/panel.component";
 import { RangeDirective } from "./directives/range/range.directive";
 
@@ -37,6 +39,8 @@ import { RangeDirective } from "./directives/range/range.directive";
     KanbanBoardColumnComponent,
     KanbanBoardComponent,
     KanbanBoardFormComponent,
+    OptionsMenuComponent,
+    OptionsMenuItemComponent,
     PanelComponent,
     RangeDirective,
   ],
@@ -51,6 +55,8 @@ import { RangeDirective } from "./directives/range/range.directive";
     KanbanBoardColumnComponent,
     KanbanBoardComponent,
     KanbanBoardFormComponent,
+    OptionsMenuComponent,
+    OptionsMenuItemComponent,
     PanelComponent,
     RangeDirective,
   ]
