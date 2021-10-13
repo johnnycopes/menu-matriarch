@@ -5,6 +5,7 @@ export type Menu = {
 };
 
 export interface IMenu {
+  id: string;
   uid: string;
   menu: Menu;
 }

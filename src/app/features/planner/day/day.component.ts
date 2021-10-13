@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faTimes, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { IMeal } from '@models/interfaces/meal.interface';
 
 import { Day } from '@models/types/day.type';
@@ -11,6 +12,8 @@ import { Day } from '@models/types/day.type';
 export class DayComponent implements OnInit {
   @Input() day: Day | undefined;
   @Input() meal: IMeal | undefined;
+  @Output() clear = new EventEmitter<void>();
+  public faTimes: IconDefinition = faTimes;
 
   constructor() { }
 

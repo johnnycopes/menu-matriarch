@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MealService } from '@services/meal.service';
 import { AuthService } from '@services/auth.service';
 import { MenuService } from '@services/menu.service';
+import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 
 @Component({
   selector: 'app-planner',
@@ -22,7 +23,11 @@ export class PlannerComponent implements OnInit {
 
   public ngOnInit(): void {
     // this.user$.subscribe(console.log);
-    // this.meals$.subscribe(console.log);
-    // this.menuEntries$.subscribe(console.log);
+    this.meals$.subscribe(console.log);
+    this.menuEntries$.subscribe(console.log);
+  }
+
+  public onClearDay({ id, day }: IMenuEntry): void {
+    this._menuService.updateMenu({ id, day, meal: null });
   }
 }

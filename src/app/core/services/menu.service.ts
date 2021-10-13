@@ -26,18 +26,35 @@ export class MenuService {
       this._mealService.getMeals(),
       this._getMenu(),
     ]).pipe(
-      map(([user, meals, menu]) => {
+      map(([user, meals, { id, menu }]) => {
         if (!menu || !user) {
           return [];
         }
-        const days = this._getOrderedDays(user.preferences.menuStartDay);
-        console.log(meals);
-        return days.map(day => ({ day, meal: meals.find(meal => meal.id === menu[day]) }));
+        return this
+          ._getOrderedDays(user.preferences.menuStartDay)
+          .map(day => ({
+            id,
+            day,
+            meal: meals.find(meal => meal.id === menu[day]),
+          }));
       })
     );
   }
 
-  private _getMenu(): Observable<Menu> {
+  public async updateMenu({ id, day, meal }: {
+    id: string,
+    day: Day,
+    meal: string | null
+  }): Promise<void> {
+    const key = `menu.${day}`;
+    await this._firestore
+      .collection<IMenu>('menus')
+      .doc(id)
+      .ref
+      .update({ [key]: meal });
+  }
+
+  private _getMenu(): Observable<IMenu> {
     return this._authService.uid$.pipe(
       switchMap(uid => {
         return this._firestore
@@ -47,7 +64,7 @@ export class MenuService {
           )
           .valueChanges({ idField: 'id' })
           .pipe(
-            map(menus => menus?.[0]?.menu)
+            map(menus => menus?.[0])
           );
       })
     );
