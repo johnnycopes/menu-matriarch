@@ -15,6 +15,10 @@
   @include small-caps;
 }
 
+app-meal {
+  padding: map-get($spacing, 4) map-get($spacing, 8);
+}
+
 fa-icon {
   cursor: pointer;
 }

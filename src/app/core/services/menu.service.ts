@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 
 import { IMenu, Menu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
@@ -22,21 +22,19 @@ export class MenuService {
 
   public getMenuEntries(): Observable<IMenuEntry[]> {
     return combineLatest([
-      this._authService.getUser(),
       this._mealService.getMeals(),
-      this._getMenu(),
+      this.getMenu(),
+      this.getOrderedDays(),
     ]).pipe(
-      map(([user, meals, { id, menu }]) => {
-        if (!menu || !user) {
+      map(([meals, { id, menu }, days]) => {
+        if (!menu) {
           return [];
         }
-        return this
-          ._getOrderedDays(user.preferences.menuStartDay)
-          .map(day => ({
-            id,
-            day,
-            meal: meals.find(meal => meal.id === menu[day]),
-          }));
+        return days.map(day => ({
+          id,
+          day,
+          meal: meals.find(meal => meal.id === menu[day]),
+        }));
       })
     );
   }
@@ -54,7 +52,14 @@ export class MenuService {
       .update({ [key]: meal });
   }
 
-  private _getMenu(): Observable<IMenu> {
+  public getOrderedDays(): Observable<Day[]> {
+    return this._authService.getUser().pipe(
+      map(user => this._getOrderedDays(user?.preferences?.menuStartDay)),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  public getMenu(): Observable<IMenu> {
     return this._authService.uid$.pipe(
       switchMap(uid => {
         return this._firestore
@@ -64,13 +69,14 @@ export class MenuService {
           )
           .valueChanges({ idField: 'id' })
           .pipe(
-            map(menus => menus?.[0])
+            map(menus => menus?.[0]),
+            shareReplay({ bufferSize: 1, refCount: true }),
           );
       })
     );
   }
 
-  private _getOrderedDays(startDay: Day): Day[] {
+  private _getOrderedDays(startDay: Day = 'Monday'): Day[] {
     switch (startDay) {
       case 'Monday':
         return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

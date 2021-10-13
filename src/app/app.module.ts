@@ -19,12 +19,13 @@ import { DayComponent } from './features/planner/day/day.component';
 import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
 import { HeaderComponent } from './core/components/header/header.component';
+import { MealCardComponent } from './features/planner/meal-card/meal-card.component';
 import { MealComponent } from './features/planner/meal/meal.component';
+import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
-import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
 
 @NgModule({
   declarations: [
@@ -33,12 +34,13 @@ import { MealEditComponent } from './features/planner/meal-edit/meal-edit.compon
     DemoComponent,
     DemoComponentComponent,
     HeaderComponent,
+    MealCardComponent,
     MealComponent,
+    MealEditComponent,
     PageNotFoundComponent,
     PlannerComponent,
-    WelcomeComponent,
     ShellComponent,
-    MealEditComponent,
+    WelcomeComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -52,7 +54,6 @@ import { MealEditComponent } from './features/planner/meal-edit/meal-edit.compon
     PortalModule,
     AppRoutingModule,
     SharedModule,
-    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

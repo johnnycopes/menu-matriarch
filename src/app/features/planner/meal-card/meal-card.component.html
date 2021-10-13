@@ -1,0 +1,14 @@
+<li app-card>
+  <app-meal
+    [name]="name"
+    [description]="description"
+  ></app-meal>
+  <div class="schedule">
+    <app-checkbox *ngFor="let day of days$ | async"
+      [ngModel]="day.checked ? 'checked' : 'unchecked'"
+      (ngModelChange)="onChange($event, day.id, day.day)"
+    >
+      {{ day.day }}
+    </app-checkbox>
+  </div>
+</li>

@@ -1,0 +1,14 @@
+@import "main";
+
+:host {
+  display: block;
+}
+
+li {
+  padding: map-get($spacing, 16);
+}
+
+.schedule {
+  display: flex;
+  flex-wrap: wrap;
+}

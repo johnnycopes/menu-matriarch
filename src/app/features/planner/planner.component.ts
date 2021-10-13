@@ -23,8 +23,8 @@ export class PlannerComponent implements OnInit {
 
   public ngOnInit(): void {
     // this.user$.subscribe(console.log);
-    this.meals$.subscribe(console.log);
-    this.menuEntries$.subscribe(console.log);
+    // this.meals$.subscribe(console.log);
+    // this.menuEntries$.subscribe(console.log);
   }
 
   public onClearDay({ id, day }: IMenuEntry): void {
