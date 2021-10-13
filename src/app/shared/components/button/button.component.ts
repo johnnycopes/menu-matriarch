@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, HostBinding, ViewEncapsulation } from '@angular/core';
 
 type ButtonStyle = 'primary' | 'secondary' | 'ternary';
 
@@ -6,9 +6,19 @@ type ButtonStyle = 'primary' | 'secondary' | 'ternary';
   selector: '[app-button]',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ButtonComponent {
-  @HostBinding('class')
   @Input() buttonStyle: ButtonStyle = 'primary';
+
+  @HostBinding('class')
+  public get classes(): Record<string, boolean> {
+    return {
+      'app-button': true,
+      'app-button--primary': this.buttonStyle === 'primary',
+      'app-button--secondary': this.buttonStyle === 'secondary',
+      'app-button--ternary': this.buttonStyle === 'ternary',
+    };
+  }
 }

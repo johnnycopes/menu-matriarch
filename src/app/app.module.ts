@@ -24,6 +24,7 @@ import { PageNotFoundComponent } from './core/components/page-not-found/page-not
 import { PlannerComponent } from './features/planner/planner.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
+import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     PlannerComponent,
     WelcomeComponent,
     ShellComponent,
+    MealEditComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),

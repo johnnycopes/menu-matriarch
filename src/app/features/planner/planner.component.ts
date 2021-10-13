@@ -21,8 +21,8 @@ export class PlannerComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.user$.subscribe(console.log);
-    this.meals$.subscribe(console.log);
-    this.menuEntries$.subscribe(console.log);
+    // this.user$.subscribe(console.log);
+    // this.meals$.subscribe(console.log);
+    // this.menuEntries$.subscribe(console.log);
   }
 }
