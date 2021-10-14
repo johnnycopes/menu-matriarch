@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { IUser } from '@models/interfaces/user.interface';
 
@@ -11,9 +11,6 @@ import { IUser } from '@models/interfaces/user.interface';
   providedIn: 'root'
 })
 export class AuthService {
-  public uid$ = this._auth.user.pipe(
-    map(user => user?.uid)
-  );
 
   constructor(
     private _auth: AngularFireAuth,
@@ -35,6 +32,7 @@ export class AuthService {
           .collection<IUser>('users')
           .doc(uid)
           .set({
+            uid,
             name: displayName ?? 'friend',
             email: email ?? undefined,
             preferences: {
@@ -51,14 +49,21 @@ export class AuthService {
     this._auth.signOut();
   }
 
-  public getUser(): Observable<IUser | undefined> {
-    return this.uid$.pipe(
-      switchMap(uid => {
-        return this._firestore
-          .collection<IUser | undefined>('users')
-          .doc(uid)
-          .valueChanges();
-      })
+  public getUserData<T>(dataFn: (uid?: string) => Observable<T>) {
+    return this._auth.user.pipe(
+      map(user => user?.uid),
+      switchMap(dataFn)
     );
+  }
+
+  public getUser(): Observable<IUser | undefined> {
+    return this.getUserData(this._getUser);
+  }
+
+  private _getUser = (uid?: string): Observable<IUser | undefined> => {
+    return this._firestore
+      .collection<IUser | undefined>('users')
+      .doc(uid)
+      .valueChanges();
   }
 }

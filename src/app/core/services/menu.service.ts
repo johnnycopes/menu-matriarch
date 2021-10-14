@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 
-import { IMenu, Menu } from '@models/interfaces/menu.interface';
+import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { AuthService } from './auth.service';
@@ -39,6 +39,10 @@ export class MenuService {
     );
   }
 
+  public getMenu(): Observable<IMenu> {
+    return this._authService.getUserData(this._getMenu);
+  }
+
   public async updateMenu({ id, day, meal }: {
     id: string,
     day: Day,
@@ -59,21 +63,17 @@ export class MenuService {
     );
   }
 
-  public getMenu(): Observable<IMenu> {
-    return this._authService.uid$.pipe(
-      switchMap(uid => {
-        return this._firestore
-          .collection<IMenu>(
-            'menus',
-            ref => ref.where('uid', '==', uid),
-          )
-          .valueChanges({ idField: 'id' })
-          .pipe(
-            map(menus => menus?.[0]),
-            shareReplay({ bufferSize: 1, refCount: true }),
-          );
-      })
-    );
+  private _getMenu = (uid?: string): Observable<IMenu> => {
+    return this._firestore
+      .collection<IMenu>(
+        'menus',
+        ref => ref.where('uid', '==', uid),
+      )
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        map(menus => menus?.[0]),
+        shareReplay({ bufferSize: 1, refCount: true }),
+      );
   }
 
   private _getOrderedDays(startDay: Day = 'Monday'): Day[] {

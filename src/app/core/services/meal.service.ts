@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { AuthService } from './auth.service';
@@ -17,18 +17,18 @@ export class MealService {
   ) { }
 
   public getMeals(): Observable<IMeal[]> {
-    return this._authService.uid$.pipe(
-      switchMap(uid => {
-        return this._firestore
-          .collection<IMeal>(
-            'meals',
-            ref => ref.where('uid', '==', uid)
-          )
-          .valueChanges({ idField: 'id' })
-          .pipe(
-            shareReplay({ bufferSize: 1, refCount: true })
-          );
-      })
-    );
+    return this._authService.getUserData(this._getMeals);
+  }
+
+  private _getMeals = (uid?: string): Observable<IMeal[]> => {
+    return this._firestore
+      .collection<IMeal>(
+        'meals',
+        ref => ref.where('uid', '==', uid)
+      )
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
   }
 }
