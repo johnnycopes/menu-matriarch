@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from "@angular/core";
 import { faAppleAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-import { CheckboxState } from "@shared/components/checkbox/checkbox.component";
 import { IKitchenLocation, KanbanBoardConfig } from "./kitchen-location";
 import { IKanbanBoardConfig } from "@shared/components/kanban-board/kanban-board.component";
 
@@ -31,9 +30,8 @@ export class DemoComponent implements OnInit {
 	public counter: number = 0;
 
 	// CheckboxComponent
-	public checkboxState1: CheckboxState = "indeterminate";
-	public checkboxState2: CheckboxState = "unchecked";
-	public checkboxState3: CheckboxState = "checked";
+	public checkboxState1: boolean = false;
+	public checkboxState2: boolean = false;
 
 	// FontAwesomeComponent
 	public faApple: IconDefinition = faAppleAlt;

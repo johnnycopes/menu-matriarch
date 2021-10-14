@@ -11,4 +11,8 @@ li {
 .schedule {
   display: flex;
   flex-wrap: wrap;
+
+  app-checkbox {
+    margin-right: map-get($spacing, 16);
+  }
 }

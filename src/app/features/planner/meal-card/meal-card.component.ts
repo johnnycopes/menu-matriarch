@@ -4,7 +4,6 @@ import { map } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
 import { Day } from '@models/types/day.type';
-import { CheckboxState } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
   selector: 'app-meal-card',
@@ -30,7 +29,7 @@ export class MealCardComponent {
 
   constructor(private _menuService: MenuService) {}
 
-  public onChange(state: CheckboxState, id: string, day: Day) {
-    this._menuService.updateMenu({ id, day, meal: state === 'checked' ? this.id : null })
+  public onChange(state: boolean, id: string, day: Day) {
+    this._menuService.updateMenu({ id, day, meal: state ? this.id : null })
   }
 }

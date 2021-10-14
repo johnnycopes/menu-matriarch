@@ -1,8 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-export type CheckboxState = 'checked' | 'unchecked' | 'indeterminate';
-
 @Component({
   selector: 'app-checkbox',
   templateUrl: './checkbox.component.html',
@@ -15,26 +13,28 @@ export type CheckboxState = 'checked' | 'unchecked' | 'indeterminate';
   }]
 })
 export class CheckboxComponent implements ControlValueAccessor {
+  @Input() disabled: boolean = false;
+  @Input() indeterminate: boolean = false;
   @Input() bold: boolean = false;
   @Input() invertColors: boolean = false;
-  public state: CheckboxState = 'unchecked';
-  private _onChangeFn: (value: CheckboxState) => void = (_) => undefined;
+  public checked: boolean = false;
+  private _onChangeFn: (value: boolean) => void = (_) => undefined;
 
   constructor(private _changeDetectorRef: ChangeDetectorRef) { }
 
-  writeValue(value: CheckboxState): void {
-    this.state = value;
+  writeValue(value: boolean): void {
+    this.checked = value;
     this._changeDetectorRef.markForCheck();
   }
 
-  registerOnChange(fn: (value: CheckboxState) => void): void {
+  registerOnChange(fn: (value: boolean) => void): void {
     this._onChangeFn = fn;
   }
 
-  registerOnTouched(_fn: (value: CheckboxState) => void): void { }
+  registerOnTouched(_fn: (value: boolean) => void): void { }
 
-  onChange(): void {
-    this.state = this.state !== 'checked' ? 'checked' : 'unchecked';
-    this._onChangeFn(this.state);
+  onChange(value: boolean): void {
+    this.checked = value;
+    this._onChangeFn(this.checked);
   }
 }

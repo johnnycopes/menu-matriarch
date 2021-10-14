@@ -1,16 +1,17 @@
-<label class="checkbox"
-  [class]="{'checkbox--inverted': invertColors}"
-  >
+<label class="container"
+  [class.container--disabled]="disabled"
+>
   <input class="input"
     type="checkbox"
-    [indeterminate]="state === 'indeterminate'"
-    [checked]="state === 'checked'"
-    (change)="onChange()"
+    [indeterminate]="indeterminate"
+    [disabled]="disabled"
+    [ngModel]="checked"
+    (ngModelChange)="onChange($event)"
   />
-  <div class="element"></div>
+  <div class="checkbox"></div>
   <div class="label"
-    [class]="{'label--bold': bold}"
-    >
+    [class.label--disabled]="disabled"
+  >
     <ng-content></ng-content>
   </div>
 </label>

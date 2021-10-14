@@ -5,24 +5,31 @@
   position: relative;
 }
 
-.label {
+.container {
   display: inline-flex;
+  align-items: center;
+  position: relative;
   font-size: map-get($font-size, 14);
 
-  &--bold {
-    font-weight: map-get($font-weight, bold);
+  &:hover .checkbox {
+    background: map-get($neutral, 10);
+  }
+
+  &--disabled {
+    &:hover .checkbox {
+      background: none;
+    }
   }
 }
 
-// custom checkbox
-.element {
+.checkbox {
+  position: relative;
   height: 14px;
   width: 14px;
   border: map-get($border, thin) solid map-get($neutral, 7);
-  user-select: none;
   border-radius: 2px;
 
-  // custom checkmark
+  // Default checkmark (unchecked)
   &::after {
     content: "";
     position: absolute;
@@ -30,55 +37,47 @@
   }
 }
 
-// hide the default checkbox input
-.input {
-  display: none;
+.label {
+  display: inline-flex;
+  align-items: center;
+  margin-left: map-get($spacing, 4);
+  user-select: none;
+
+  &--bold {
+    font-weight: map-get($font-weight, bold);
+  }
+
+  &--disabled {
+    font-style: italic;
+    color: map-get($neutral, 5);
+  }
+}
+
+// Hide the default checkbox input
+input {
   position: absolute;
-  left: -100vh;
+  margin: 0;
   opacity: 0;
 }
 
-// style the custom checkbox when the default checkbox input is indeterminate/checked
-.input:indeterminate ~ .element,
-.input:checked ~ .element {
-  border-color: map-get($neutral, 5);
-}
-
-// style the custom checkbox when the default checkbox input is indeterminate
-.input:indeterminate ~ .element::after {
+// Checkmark (indeterminate)
+input:indeterminate ~ .checkbox::after {
   display: block;
   left: 50%;
   top: 50%;
-  width: 8px;
+  width: map-get($spacing, 8);
   transform: translate(-50%, -50%);
   border-top: map-get($border, thin) solid map-get($neutral, 5);
 }
 
-// style the custom checkmark when the default checkbox input is checked
-.input:checked ~ .element::after {
+// Checkmark (checked)
+input:checked ~ .checkbox::after {
   display: block;
-  left: 4px;
-  top: 0px;
-  width: 8px;
-  height: 13px;
+  top: -1px;
+  left: 2px;
+  width: 6px;
+  height: 10px;
   border: solid map-get($neutral, 3);
   border-width: 0 map-get($border, thin) map-get($border, thin) 0;
   transform: rotate(45deg);
-}
-
-// the <label> element of the checkbox is used as the container
-.checkbox {
-  display: inline-flex;
-
-  &--inverted {
-    .input:indeterminate ~ .element,
-    .input:checked ~ .element {
-      background: map-get($neutral, 5);
-    }
-
-    .input:indeterminate ~ .element::after,
-    .input:checked ~ .element::after {
-      border-color: $white;
-    }
-  }
 }

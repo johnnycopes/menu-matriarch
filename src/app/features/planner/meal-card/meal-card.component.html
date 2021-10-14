@@ -5,10 +5,10 @@
   ></app-meal>
   <div class="schedule">
     <app-checkbox *ngFor="let day of days$ | async"
-      [ngModel]="day.checked ? 'checked' : 'unchecked'"
+      [ngModel]="day.checked"
       (ngModelChange)="onChange($event, day.id, day.day)"
     >
-      {{ day.day }}
+      {{ day.day | slice : 0 : 3 }}
     </app-checkbox>
   </div>
 </li>
