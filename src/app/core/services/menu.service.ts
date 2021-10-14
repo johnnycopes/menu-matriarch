@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
@@ -26,34 +26,31 @@ export class MenuService {
       this.getMenu(),
       this.getOrderedDays(),
     ]).pipe(
-      map(([meals, { id, menu }, days]) => {
+      map(([meals, menu, days]) => {
         if (!menu) {
           return [];
         }
         return days.map(day => ({
-          id,
           day,
-          meal: meals.find(meal => meal.id === menu[day]),
+          meal: meals.find(meal => meal.id === menu.menu[day]),
         }));
       })
     );
   }
 
-  public getMenu(): Observable<IMenu> {
-    return this._authService.getUserData(this._getMenu);
+  public getMenu(): Observable<IMenu | undefined> {
+    return this._authService.getData(this._getMenu);
   }
 
-  public async updateMenu({ id, day, meal }: {
-    id: string,
+  public async updateMenu({ day, mealId }: {
     day: Day,
-    meal: string | null
+    mealId: string | null
   }): Promise<void> {
-    const key = `menu.${day}`;
-    await this._firestore
-      .collection<IMenu>('menus')
-      .doc(id)
-      .ref
-      .update({ [key]: meal });
+    this._updateMenu({
+      menuId: 'KuiR3kwmeYdebwd5u1dY', // TODO: pass this in dynamically
+      day,
+      mealId,
+    })
   }
 
   public getOrderedDays(): Observable<Day[]> {
@@ -63,7 +60,10 @@ export class MenuService {
     );
   }
 
-  private _getMenu = (uid?: string): Observable<IMenu> => {
+  private _getMenu = (uid?: string): Observable<IMenu | undefined> => {
+    if (!uid) {
+      return of();
+    }
     return this._firestore
       .collection<IMenu>(
         'menus',
@@ -74,6 +74,19 @@ export class MenuService {
         map(menus => menus?.[0]),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
+  }
+
+  private _updateMenu = async ({ menuId, day, mealId }: {
+    menuId: string,
+    day: Day,
+    mealId: string | null
+  }): Promise<void> => {
+    const key = `menu.${day}`;
+    await this._firestore
+      .collection<IMenu>('menus')
+      .doc(menuId)
+      .ref
+      .update({ [key]: mealId });
   }
 
   private _getOrderedDays(startDay: Day = 'Monday'): Day[] {

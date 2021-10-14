@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
@@ -17,10 +17,13 @@ export class MealService {
   ) { }
 
   public getMeals(): Observable<IMeal[]> {
-    return this._authService.getUserData(this._getMeals);
+    return this._authService.getData(this._getMeals);
   }
 
   private _getMeals = (uid?: string): Observable<IMeal[]> => {
+    if (!uid) {
+      return of([]);
+    }
     return this._firestore
       .collection<IMeal>(
         'meals',

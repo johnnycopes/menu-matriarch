@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { IUser } from '@models/interfaces/user.interface';
 
@@ -49,7 +49,7 @@ export class AuthService {
     this._auth.signOut();
   }
 
-  public getUserData<T>(dataFn: (uid?: string) => Observable<T>) {
+  public getData<T>(dataFn: (uid?: string) => Observable<T>) {
     return this._auth.user.pipe(
       map(user => user?.uid),
       switchMap(dataFn)
@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   public getUser(): Observable<IUser | undefined> {
-    return this.getUserData(this._getUser);
+    return this.getData(this._getUser);
   }
 
   private _getUser = (uid?: string): Observable<IUser | undefined> => {

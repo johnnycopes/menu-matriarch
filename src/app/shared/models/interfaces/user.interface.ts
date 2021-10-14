@@ -1,8 +1,13 @@
-import { IUserPreferences } from "./user-preferences.interface";
+import { DayNameDisplay } from "@models/types/date-name-display.type";
+import { Day } from "@models/types/day.type";
 
 export interface IUser {
   uid: string;
   name: string;
   email: string | undefined;
-  preferences: IUserPreferences;
+  preferences: {
+    darkMode: boolean;
+    dayNameDisplay: DayNameDisplay;
+    menuStartDay: Day;
+  };
 }

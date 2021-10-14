@@ -20,16 +20,16 @@ export class MealCardComponent {
       map(menu => menu)
     )
   ]).pipe(
-    map(([ days, { id, menu} ]) => days.map(day => ({
-      id,
+    map(([days, menu]) => days.map(day => ({
       day,
-      checked: menu[day] === this.id
+      checked: menu?.menu?.[day] === this.id
     })))
   );
 
   constructor(private _menuService: MenuService) {}
 
-  public onChange(state: boolean, id: string, day: Day) {
-    this._menuService.updateMenu({ id, day, meal: state ? this.id : null })
+  public onChange(state: boolean, day: Day) {
+    const mealId = state ? this.id : null;
+    this._menuService.updateMenu({ day, mealId })
   }
 }

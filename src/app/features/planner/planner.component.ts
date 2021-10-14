@@ -27,7 +27,7 @@ export class PlannerComponent implements OnInit {
     // this.menuEntries$.subscribe(console.log);
   }
 
-  public onClearDay({ id, day }: IMenuEntry): void {
-    this._menuService.updateMenu({ id, day, meal: null });
+  public onClearDay({ day }: IMenuEntry): void {
+    this._menuService.updateMenu({ day, mealId: null });
   }
 }

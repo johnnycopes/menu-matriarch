@@ -6,7 +6,7 @@
   <div class="schedule">
     <app-checkbox *ngFor="let day of days$ | async"
       [ngModel]="day.checked"
-      (ngModelChange)="onChange($event, day.id, day.day)"
+      (ngModelChange)="onChange($event, day.day)"
     >
       {{ day.day | slice : 0 : 3 }}
     </app-checkbox>
