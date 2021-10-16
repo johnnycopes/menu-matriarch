@@ -46,7 +46,7 @@ section {
     overflow: auto;
   }
 
-  app-meal-card:not(:last-child) {
+  li[app-meal-card]:not(:last-child) {
     margin-bottom: map-get($spacing, 8);
   }
 }

@@ -8,6 +8,7 @@ import { PlannerComponent } from './features/planner/planner.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
+import { MenusComponent } from './features/menus/menus.component';
 
 const routes: Routes = [
   { path: '', component: ShellComponent, children: [
@@ -16,6 +17,7 @@ const routes: Routes = [
     { path: 'planner', component: PlannerComponent, data: { state: ERoute.planner } },
     { path: 'planner/meal', component: MealEditComponent, data: { state: ERoute.planner } },
     { path: 'planner/meal/:mealId', component: MealEditComponent, data: { state: ERoute.planner } },
+    { path: 'menus', component: MenusComponent, data: { state: ERoute.menus } },
   ]},
   { path: '**', component: PageNotFoundComponent },
 ];

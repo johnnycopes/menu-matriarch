@@ -24,6 +24,10 @@ export class HeaderComponent {
       route: ERoute.planner,
     },
     {
+      name: 'Menus',
+      route: ERoute.menus,
+    },
+    {
       name: 'Demo',
       route: ERoute.demo,
     },

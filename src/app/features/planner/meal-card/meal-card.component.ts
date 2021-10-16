@@ -6,7 +6,7 @@ import { MenuService } from '@services/menu.service';
 import { Day } from '@models/types/day.type';
 
 @Component({
-  selector: 'app-meal-card',
+  selector: '[app-meal-card]',
   templateUrl: './meal-card.component.html',
   styleUrls: ['./meal-card.component.scss']
 })

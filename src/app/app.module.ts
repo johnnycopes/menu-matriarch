@@ -22,6 +22,8 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { MealCardComponent } from './features/planner/meal-card/meal-card.component';
 import { MealComponent } from './features/planner/meal/meal.component';
 import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
+import { MenuComponent } from './features/menus/menu/menu.component';
+import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
 import { ShellComponent } from './core/components/shell/shell.component';
@@ -37,6 +39,8 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     MealCardComponent,
     MealComponent,
     MealEditComponent,
+    MenuComponent,
+    MenusComponent,
     PageNotFoundComponent,
     PlannerComponent,
     ShellComponent,

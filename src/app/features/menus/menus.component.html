@@ -1,0 +1,5 @@
+<ul>
+  <app-menu *ngFor="let menu of menus$ | async"
+    [name]="menu.name"
+  ></app-menu>
+</ul>
