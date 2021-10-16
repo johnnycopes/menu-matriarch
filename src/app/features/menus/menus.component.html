@@ -1,6 +1,7 @@
 <ul>
   <li app-menu *ngFor="let menu of menus$ | async"
     [name]="menu.id"
+    [selected]="menu.selected"
     (click)="selectMenu(menu.id)"
   ></li>
 </ul>

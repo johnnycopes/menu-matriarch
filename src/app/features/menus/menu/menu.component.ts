@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
   @Input() name = '';
+  @Input() selected: boolean = false;
 
   constructor() { }
 
