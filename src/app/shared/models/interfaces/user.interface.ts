@@ -6,9 +6,11 @@ export interface IUser {
   name: string;
   email: string | undefined;
   selectedMenuId: string;
-  preferences: {
-    darkMode: boolean;
-    dayNameDisplay: DayNameDisplay;
-    menuStartDay: Day;
-  };
+  preferences: IUserPreferences;
+}
+
+export interface IUserPreferences {
+  darkMode: boolean;
+  dayNameDisplay: DayNameDisplay;
+  menuStartDay: Day;
 }

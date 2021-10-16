@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-welcome',
@@ -8,10 +9,11 @@ import { AuthService } from '@services/auth.service';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  public user$ = this._authService.getUser();
+  public user$ = this._userService.getUser();
 
   constructor(
     private _authService: AuthService,
+    private _userService: UserService,
     private _router: Router,
   ) {}
 

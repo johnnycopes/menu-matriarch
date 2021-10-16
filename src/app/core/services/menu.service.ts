@@ -5,9 +5,9 @@ import { map, shareReplay } from 'rxjs/operators';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
-import { AuthService } from './auth.service';
 import { FirestoreService } from './firestore.service';
 import { MealService } from './meal.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,9 @@ export class MenuService {
   private _selectedMenuId: string | undefined;
 
   constructor(
-    private _authService: AuthService,
     private _firestoreService: FirestoreService,
     private _mealService: MealService,
+    private _userService: UserService,
   ) {
     this.getMenu().subscribe(menu => this._selectedMenuId = menu?.id);
   }
@@ -44,7 +44,7 @@ export class MenuService {
   public getMenu(): Observable<IMenu | undefined> {
     return combineLatest([
       this.getMenus(),
-      this._authService.getUser(),
+      this._userService.getUser(),
     ]).pipe(
       map(([menus, user]) => menus.find(menu => menu.id === user?.selectedMenuId)),
       shareReplay({ bufferSize: 1, refCount: true }),
@@ -52,13 +52,14 @@ export class MenuService {
   }
 
   public getMenus(): Observable<IMenu[]> {
-    return this._authService.getData(this._firestoreService.getMenus);
+    return this._userService.getData(this._firestoreService.getMenus);
   }
 
   public async updateMenu({ day, mealId }: {
     day: Day,
     mealId: string | null
   }): Promise<void> {
+    this._userService
     if (!this._selectedMenuId) {
       throw new Error('Cannot perform update because no menu is selected');
     }
@@ -70,7 +71,7 @@ export class MenuService {
   }
 
   public getOrderedDays(): Observable<Day[]> {
-    return this._authService.getUser().pipe(
+    return this._userService.getUser().pipe(
       map(user => this._getOrderedDays(user?.preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
     );

@@ -15,7 +15,7 @@ export class FirestoreService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  public getUser = (uid?: string): Observable<IUser | undefined> => {
+  public getUser = (uid: string | undefined): Observable<IUser | undefined> => {
     return this._firestore
       .collection<IUser | undefined>('users')
       .doc(uid)
@@ -44,7 +44,14 @@ export class FirestoreService {
       });
   }
 
-  public getMeals = (uid?: string): Observable<IMeal[]> => {
+  public updateUser = async (uid: string | undefined, updates: Partial<IUser>) => {
+    await this._firestore
+      .collection<IUser>('users')
+      .doc(uid)
+      .update(updates);
+  };
+
+  public getMeals = (uid: string | undefined): Observable<IMeal[]> => {
     if (!uid) {
       return of([]);
     }
@@ -59,7 +66,7 @@ export class FirestoreService {
       );
   }
 
-  public getMenus = (uid?: string): Observable<IMenu[]> => {
+  public getMenus = (uid: string | undefined): Observable<IMenu[]> => {
     if (!uid) {
       return of([]);
     }
@@ -103,7 +110,6 @@ export class FirestoreService {
     mealId: string | null
   }): Promise<void> => {
     const key = `contents.${day}`;
-    console.log({ menuId, day, mealId });
     await this._firestore
       .collection<IMenu>('menus')
       .doc(menuId)

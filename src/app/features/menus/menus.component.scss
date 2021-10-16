@@ -1,0 +1,10 @@
+@import 'main';
+
+:host {
+  display: block;
+  padding: map-get($spacing, 32);
+}
+
+li[app-menu]:not(:last-child) {
+  margin-bottom: map-get($spacing, 8);
+}
