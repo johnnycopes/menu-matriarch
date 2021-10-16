@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -7,18 +6,22 @@ import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { AuthService } from './auth.service';
+import { FirestoreService } from './firestore.service';
 import { MealService } from './meal.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
+  private _selectedMenuId: string | undefined;
 
   constructor(
-    private _firestore: AngularFirestore,
     private _authService: AuthService,
+    private _firestoreService: FirestoreService,
     private _mealService: MealService,
-  ) { }
+  ) {
+    this.getMenu().subscribe(menu => this._selectedMenuId = menu?.id);
+  }
 
   public getMenuEntries(): Observable<IMenuEntry[]> {
     return combineLatest([
@@ -39,19 +42,28 @@ export class MenuService {
   }
 
   public getMenu(): Observable<IMenu | undefined> {
-    return this._authService.getData(this._getMenu);
+    return combineLatest([
+      this.getMenus(),
+      this._authService.getUser(),
+    ]).pipe(
+      map(([menus, user]) => menus.find(menu => menu.id === user?.selectedMenuId)),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
   }
 
   public getMenus(): Observable<IMenu[]> {
-    return this._authService.getData(this._getMenus);
+    return this._authService.getData(this._firestoreService.getMenus);
   }
 
   public async updateMenu({ day, mealId }: {
     day: Day,
     mealId: string | null
   }): Promise<void> {
-    this._updateMenu({
-      menuId: 'KuiR3kwmeYdebwd5u1dY', // TODO: pass this in dynamically
+    if (!this._selectedMenuId) {
+      throw new Error('Cannot perform update because no menu is selected');
+    }
+    this._firestoreService.updateMenu({
+      menuId: this._selectedMenuId,
       day,
       mealId,
     })
@@ -62,51 +74,6 @@ export class MenuService {
       map(user => this._getOrderedDays(user?.preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
-  }
-
-  private _getMenus = (uid?: string): Observable<IMenu[]> => {
-    if (!uid) {
-      return of([]);
-    }
-    return this._firestore
-      .collection<IMenu>(
-        'menus',
-        ref => ref.where('uid', '==', uid),
-      )
-      .valueChanges({ idField: 'id' })
-      .pipe(
-        shareReplay({ bufferSize: 1, refCount: true }),
-      );
-  }
-
-  private _getMenu = (uid?: string): Observable<IMenu | undefined> => {
-    if (!uid) {
-      return of();
-    }
-    return this._firestore
-      .collection<IMenu>(
-        'menus',
-        ref => ref.where('uid', '==', uid),
-      )
-      .valueChanges({ idField: 'id' })
-      .pipe(
-        map(menus => menus?.[0]),
-        shareReplay({ bufferSize: 1, refCount: true }),
-      );
-  }
-
-  private _updateMenu = async ({ menuId, day, mealId }: {
-    menuId: string,
-    day: Day,
-    mealId: string | null
-  }): Promise<void> => {
-    const key = `contents.${day}`;
-    console.log({ menuId, day, mealId });
-    await this._firestore
-      .collection<IMenu>('menus')
-      .doc(menuId)
-      .ref
-      .update({ [key]: mealId });
   }
 
   private _getOrderedDays(startDay: Day = 'Monday'): Day[] {

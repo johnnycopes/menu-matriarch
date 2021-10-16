@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { IUser } from '@models/interfaces/user.interface';
+import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     private _auth: AngularFireAuth,
     private _firestore: AngularFirestore,
+    private _firestoreService: FirestoreService,
   ) { }
 
   public async login(): Promise<void> {
@@ -28,19 +30,13 @@ export class AuthService {
         .get();
 
       if (!user.exists) {
-        this._firestore
-          .collection<IUser>('users')
-          .doc(uid)
-          .set({
-            uid,
-            name: displayName ?? 'friend',
-            email: email ?? undefined,
-            preferences: {
-              darkMode: false,
-              dayNameDisplay: 'full',
-              menuStartDay: 'Monday',
-            },
-          });
+        const selectedMenuId = await this._firestoreService.createMenu(uid);
+        this._firestoreService.createUser({
+          uid,
+          displayName,
+          email,
+          selectedMenuId,
+        });
       }
     }
   }
@@ -57,13 +53,6 @@ export class AuthService {
   }
 
   public getUser(): Observable<IUser | undefined> {
-    return this.getData(this._getUser);
-  }
-
-  private _getUser = (uid?: string): Observable<IUser | undefined> => {
-    return this._firestore
-      .collection<IUser | undefined>('users')
-      .doc(uid)
-      .valueChanges();
+    return this.getData(this._firestoreService.getUser);
   }
 }

@@ -5,6 +5,7 @@ export interface IUser {
   uid: string;
   name: string;
   email: string | undefined;
+  selectedMenuId: string;
   preferences: {
     darkMode: boolean;
     dayNameDisplay: DayNameDisplay;
