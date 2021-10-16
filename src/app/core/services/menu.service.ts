@@ -32,7 +32,7 @@ export class MenuService {
         }
         return days.map(day => ({
           day,
-          meal: meals.find(meal => meal.id === menu.menu[day]),
+          meal: meals.find(meal => meal.id === menu.contents[day]),
         }));
       })
     );
@@ -40,6 +40,10 @@ export class MenuService {
 
   public getMenu(): Observable<IMenu | undefined> {
     return this._authService.getData(this._getMenu);
+  }
+
+  public getMenus(): Observable<IMenu[]> {
+    return this._authService.getData(this._getMenus);
   }
 
   public async updateMenu({ day, mealId }: {
@@ -58,6 +62,21 @@ export class MenuService {
       map(user => this._getOrderedDays(user?.preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
+  }
+
+  private _getMenus = (uid?: string): Observable<IMenu[]> => {
+    if (!uid) {
+      return of([]);
+    }
+    return this._firestore
+      .collection<IMenu>(
+        'menus',
+        ref => ref.where('uid', '==', uid),
+      )
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true }),
+      );
   }
 
   private _getMenu = (uid?: string): Observable<IMenu | undefined> => {
@@ -81,7 +100,8 @@ export class MenuService {
     day: Day,
     mealId: string | null
   }): Promise<void> => {
-    const key = `menu.${day}`;
+    const key = `contents.${day}`;
+    console.log({ menuId, day, mealId });
     await this._firestore
       .collection<IMenu>('menus')
       .doc(menuId)

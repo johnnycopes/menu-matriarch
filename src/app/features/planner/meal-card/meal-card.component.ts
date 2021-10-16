@@ -22,13 +22,13 @@ export class MealCardComponent {
   ]).pipe(
     map(([days, menu]) => days.map(day => ({
       day,
-      checked: menu?.menu?.[day] === this.id
+      checked: menu?.contents?.[day] === this.id
     })))
   );
 
   constructor(private _menuService: MenuService) {}
 
-  public onChange(state: boolean, day: Day) {
+  public onChange(state: boolean, day: Day): void {
     const mealId = state ? this.id : null;
     this._menuService.updateMenu({ day, mealId })
   }

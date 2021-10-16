@@ -3,5 +3,6 @@ export interface IMeal {
   uid: string;
   name: string;
   description: string;
+  favorited: boolean;
   ingredients: string[];
 }
