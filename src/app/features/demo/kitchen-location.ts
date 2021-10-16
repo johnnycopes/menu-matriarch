@@ -1,4 +1,4 @@
-import { IKanbanBoardConfig } from "@shared/components/kanban-board/kanban-board.component";
+import { IKanbanBoardConfig } from "@shared/generic/kanban-board/kanban-board.component";
 
 export interface IKitchenLocation {
 	id: string;

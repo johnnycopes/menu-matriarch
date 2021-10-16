@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from "@angular/core";
 import { faAppleAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { IKitchenLocation, KanbanBoardConfig } from "./kitchen-location";
-import { IKanbanBoardConfig } from "@shared/components/kanban-board/kanban-board.component";
+import { IKanbanBoardConfig } from "@shared/generic/kanban-board/kanban-board.component";
 
 @Component({
 	selector: "app-demo",

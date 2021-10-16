@@ -12,7 +12,8 @@ import { PortalModule } from "@angular/cdk/portal";
 import { environment } from '@env/environment';
 
 import { AppRoutingModule } from './app-routing.module';
-import { SharedModule } from '@shared/shared.module';
+import { DomainModule } from '@shared/domain/domain.module';
+import { GenericModule } from '@shared/generic/generic.module';
 
 import { AppComponent } from './app.component';
 import { DayComponent } from './features/planner/day/day.component';
@@ -20,7 +21,6 @@ import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
 import { HeaderComponent } from './core/components/header/header.component';
 import { MealCardComponent } from './features/planner/meal-card/meal-card.component';
-import { MealComponent } from './features/planner/meal/meal.component';
 import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
 import { MenuComponent } from './features/menus/menu/menu.component';
 import { MenusComponent } from './features/menus/menus.component';
@@ -37,7 +37,6 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     DemoComponentComponent,
     HeaderComponent,
     MealCardComponent,
-    MealComponent,
     MealEditComponent,
     MenuComponent,
     MenusComponent,
@@ -57,7 +56,8 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
 		OverlayModule,
     PortalModule,
     AppRoutingModule,
-    SharedModule,
+    DomainModule,
+    GenericModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
