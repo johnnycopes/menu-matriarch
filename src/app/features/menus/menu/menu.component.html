@@ -1,12 +1,8 @@
 <app-card>
-  {{ name }}
-  {{ selected }}
-  <!-- <div class="schedule">
-    <app-checkbox *ngFor="let day of days$ | async"
-      [ngModel]="day.checked"
-      (ngModelChange)="onChange($event, day.day)"
-    >
-      {{ day.day | slice : 0 : 3 }}
-    </app-checkbox>
-  </div> -->
+  <h3>{{ name }} | {{ selected }}</h3>
+  <ul>
+    <li *ngFor="let entry of entries">
+      {{ entry.day }} / {{ entry.meal?.name }}
+    </li>
+  </ul>
 </app-card>

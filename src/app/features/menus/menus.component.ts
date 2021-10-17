@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
 import { UserService } from '@services/user.service';
+import { MealService } from '@services/meal.service';
 
 @Component({
   selector: 'app-menus',
@@ -12,15 +13,22 @@ import { UserService } from '@services/user.service';
 })
 export class MenusComponent implements OnInit {
   public menus$ = combineLatest([
-    this._menuService.getMenus(),
     this._userService.getUser(),
+    this._menuService.getOrderedDays(),
+    this._menuService.getMenus(),
+    this._mealService.getMeals(),
   ]).pipe(
-    map(([menus, user]) => menus.map(
-      menu => ({ ...menu, selected: user?.selectedMenuId === menu.id })
+    map(([user, days, menus, meals]) => menus.map(
+      menu => ({
+        ...menu,
+        selected: user?.selectedMenuId === menu.id,
+        entries: this._menuService.getMenuEntries({ days, menu, meals }),
+      })
     ))
   );
 
   constructor(
+    private _mealService: MealService,
     private _menuService: MenuService,
     private _userService: UserService,
   ) { }

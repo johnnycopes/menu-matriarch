@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { first, map, shareReplay, take } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, shareReplay, take } from 'rxjs/operators';
 
+import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { FirestoreService } from './firestore.service';
-import { MealService } from './meal.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -16,26 +16,21 @@ export class MenuService {
 
   constructor(
     private _firestoreService: FirestoreService,
-    private _mealService: MealService,
     private _userService: UserService,
   ) { }
 
-  public getMenuEntries(): Observable<IMenuEntry[]> {
-    return combineLatest([
-      this._mealService.getMeals(),
-      this.getMenu(),
-      this.getOrderedDays(),
-    ]).pipe(
-      map(([meals, menu, days]) => {
-        if (!menu) {
-          return [];
-        }
-        return days.map(day => ({
-          day,
-          meal: meals.find(meal => meal.id === menu.contents[day]),
-        }));
-      })
-    );
+  public getMenuEntries({ days, meals, menu }: {
+    days: Day[],
+    menu: IMenu | undefined,
+    meals: IMeal[],
+  }): IMenuEntry[] {
+    if (!menu) {
+      return [];
+    }
+    return days.map(day => ({
+      day,
+      meal: meals.find(meal => meal.id === menu.contents[day]),
+    }));
   }
 
   public getMenu(): Observable<IMenu | undefined> {

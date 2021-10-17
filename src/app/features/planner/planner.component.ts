@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { MealService } from '@services/meal.service';
 import { MenuService } from '@services/menu.service';
-import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { UserService } from '@services/user.service';
 
 @Component({
@@ -13,7 +15,13 @@ import { UserService } from '@services/user.service';
 export class PlannerComponent implements OnInit {
   public user$ = this._userService.getUser();
   public meals$ = this._mealService.getMeals();
-  public menuEntries$ = this._menuService.getMenuEntries();
+  public menuEntries$ = combineLatest([
+    this._menuService.getOrderedDays(),
+    this._menuService.getMenu(),
+    this._mealService.getMeals(),
+  ]).pipe(
+    map(([days, menu, meals]) => this._menuService.getMenuEntries({ days, menu, meals }))
+  );
 
   constructor(
     private _mealService: MealService,
