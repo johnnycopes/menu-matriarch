@@ -27,7 +27,10 @@ fa-icon {
 
 li {
   display: flex;
-  margin-bottom: map-get($spacing, 8);
+
+  &:not(:last-of-type) {
+    margin-bottom: map-get($spacing, 8);
+  }
 }
 
 app-small-caps-label {

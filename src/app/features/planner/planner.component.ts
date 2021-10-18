@@ -15,6 +15,9 @@ import { UserService } from '@services/user.service';
 export class PlannerComponent implements OnInit {
   public user$ = this._userService.getUser();
   public meals$ = this._mealService.getMeals();
+  public menuName$ = this._menuService.getMenu().pipe(
+    map(menu => menu?.name)
+  );
   public menuEntries$ = combineLatest([
     this._menuService.getOrderedDays(),
     this._menuService.getMenu(),

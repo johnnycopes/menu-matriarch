@@ -28,9 +28,8 @@ section {
 
   .title {
     margin-right: auto;
-    color: map-get($neutral, 4);
-    font-size: 16px;
-    @include small-caps;
+    font-weight: map-get($font-weight, bold);
+    color: map-get($neutral, 3);
   }
 
   & > *:not(:first-child) {
