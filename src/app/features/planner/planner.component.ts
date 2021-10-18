@@ -36,6 +36,8 @@ export class PlannerComponent implements OnInit {
   }
 
   public onClearDay({ day }: IMenuEntry): void {
-    this._menuService.updateMenu({ day, mealId: null });
+    this._menuService
+      .updateMenu({ day, mealId: null })
+      .subscribe();
   }
 }

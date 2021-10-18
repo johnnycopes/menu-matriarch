@@ -29,7 +29,8 @@ export class MealCardComponent {
   constructor(private _menuService: MenuService) {}
 
   public onChange(state: boolean, day: Day): void {
-    const mealId = state ? this.id : null;
-    this._menuService.updateMenu({ day, mealId })
+    this._menuService
+      .updateMenu({ day, mealId: state ? this.id : null })
+      .subscribe();
   }
 }

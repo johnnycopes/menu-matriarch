@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, take } from 'rxjs/operators';
+import { map, shareReplay, take, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
@@ -47,23 +47,24 @@ export class MenuService {
     return this._userService.getData(this._firestoreService.getMenus);
   }
 
-  public async updateMenu({ day, mealId }: {
+  public updateMenu({ day, mealId }: {
     day: Day,
     mealId: string | null
-  }): Promise<void> {
-    this.getMenu().pipe(
+  }): Observable<string | undefined> {
+    return this.getMenu().pipe(
       take(1),
-      map(menu => menu?.id)
-    ).subscribe(menuId => {
-      if (!menuId) {
-        throw new Error('Cannot perform update because no menu is selected');
-      }
-      this._firestoreService.updateMenu({
-        menuId,
-        day,
-        mealId,
-      });
-    });
+      map(menu => menu?.id),
+      tap(menuId => {
+        if (!menuId) {
+          throw new Error('Cannot perform update because no menu is selected');
+        }
+        this._firestoreService.updateMenu({
+          menuId,
+          day,
+          mealId,
+        });
+      })
+    );
   }
 
   public getOrderedDays(): Observable<Day[]> {

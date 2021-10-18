@@ -37,9 +37,8 @@ export class MenusComponent implements OnInit {
   }
 
   public selectMenu(menuId: string): void {
-    this._userService.updateUser({
-      selectedMenuId: menuId
-    });
+    this._userService
+      .updateUser({ selectedMenuId: menuId })
+      .subscribe();
   }
-
 }
