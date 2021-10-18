@@ -13,12 +13,7 @@ export class ButtonComponent {
   @Input() buttonStyle: ButtonStyle = 'primary';
 
   @HostBinding('class')
-  public get classes(): Record<string, boolean> {
-    return {
-      'app-button': true,
-      'app-button--primary': this.buttonStyle === 'primary',
-      'app-button--secondary': this.buttonStyle === 'secondary',
-      'app-button--ternary': this.buttonStyle === 'ternary',
-    };
+  public get hostClasses(): string[] {
+    return ['app-button', `app-button--${this.buttonStyle}`];
   }
 }

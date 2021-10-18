@@ -5,6 +5,9 @@
   padding: map-get($spacing, 32);
 }
 
-li[app-menu]:not(:last-child) {
-  margin-bottom: map-get($spacing, 8);
+ul {
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+  grid-template-rows: auto;
+  grid-gap: map-get($spacing, 16);
 }

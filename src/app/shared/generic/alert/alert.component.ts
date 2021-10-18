@@ -14,7 +14,7 @@ export class AlertComponent {
   @Input() large: boolean = false;
 
   @HostBinding('class')
-  public get classes(): Record<string, boolean> {
+  public get hostClasses(): { [key: string]: boolean } {
     return {
       'app-alert': true,
       'app-alert--success': this.type === 'success',

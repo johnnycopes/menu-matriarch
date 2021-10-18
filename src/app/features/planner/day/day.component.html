@@ -1,12 +1,12 @@
-<div class="container">
-  <h3 class="day">
+<app-small-caps-label>
+  <h3>
     {{ day }}
   </h3>
   <fa-icon *ngIf="meal"
     [icon]="faTimes"
     (click)="clear.emit()"
   ></fa-icon>
-</div>
+</app-small-caps-label>
 
 <app-meal *ngIf="meal"
   [name]="meal.name"

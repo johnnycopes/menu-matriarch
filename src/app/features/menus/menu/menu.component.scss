@@ -2,4 +2,38 @@
 
 app-card {
   padding: map-get($spacing, 16);
+  cursor: pointer;
+
+  &.selected {
+    background: map-get($neutral, 4);
+    color: $white;
+  }
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: map-get($spacing, 16);
+}
+
+h3.selected {
+  font-weight: map-get($font-weight, bold);
+}
+
+fa-icon {
+  color: map-get($neutral, 9);
+}
+
+li {
+  display: flex;
+  margin-bottom: map-get($spacing, 8);
+}
+
+app-small-caps-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: map-get($spacing, 16);
+  width: map-get($spacing, 64);
 }

@@ -1,8 +1,22 @@
-<app-card>
-  <h3>{{ name }} | {{ selected }}</h3>
+<app-card [class.selected]="selected">
+  <div class="top">
+    <h3 [class.selected]="selected">
+      {{ name }}
+    </h3>
+    <fa-icon *ngIf="selected"
+      [icon]="faCheckCircle"
+    ></fa-icon>
+  </div>
   <ul>
     <li *ngFor="let entry of entries">
-      {{ entry.day }} / {{ entry.meal?.name }}
+      <app-small-caps-label>
+        <h4>
+          {{ entry.day | slice : 0 : 3 }}
+        </h4>
+      </app-small-caps-label>
+      <div class="meal">
+        {{ entry.meal?.name }}
+      </div>
     </li>
   </ul>
 </app-card>

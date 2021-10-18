@@ -19,6 +19,7 @@ import { OptionsMenuItemComponent } from './options-menu/options-menu-item/optio
 import { OptionsMenuTriggerDirective } from './options-menu/options-menu-trigger.directive';
 import { PanelComponent } from './panel/panel.component';
 import { RangeDirective } from './range/range.directive';
+import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.component';
 
 
 
@@ -45,6 +46,7 @@ import { RangeDirective } from './range/range.directive';
     OptionsMenuTriggerDirective,
     PanelComponent,
     RangeDirective,
+    SmallCapsLabelComponent,
   ],
   exports: [
     AlertComponent,
@@ -62,6 +64,7 @@ import { RangeDirective } from './range/range.directive';
     OptionsMenuTriggerDirective,
     PanelComponent,
     RangeDirective,
+    SmallCapsLabelComponent,
   ]
 })
 export class GenericModule { }
