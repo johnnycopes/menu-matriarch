@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';

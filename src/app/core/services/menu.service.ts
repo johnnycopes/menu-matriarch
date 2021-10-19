@@ -7,6 +7,7 @@ import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { FirestoreService } from './firestore.service';
+import { LocalStorageService } from './local-storage.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -16,6 +17,7 @@ export class MenuService {
 
   constructor(
     private _firestoreService: FirestoreService,
+    private _localStorageService: LocalStorageService,
     private _userService: UserService,
   ) { }
 
@@ -41,6 +43,11 @@ export class MenuService {
       map(([menus, user]) => menus.find(menu => menu.id === user?.selectedMenuId)),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
+  }
+
+  public getMenuNew(id?: string): Observable<IMenu | undefined> {
+    const menuId = id ?? this._localStorageService.getMenuId();
+    return this._firestoreService.getMenu(menuId ?? '');
   }
 
   public getMenus(): Observable<IMenu[]> {

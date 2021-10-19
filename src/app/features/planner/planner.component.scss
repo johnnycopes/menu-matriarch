@@ -9,57 +9,10 @@ $toolbar-height: map-get($spacing, 48);
   overflow: hidden;
 }
 
-section {
-  display: grid;
-  grid-template-rows: map-get($spacing, 48) calc(100% - 48px);
-
-  ul {
-    grid-row: 2;
-    padding: map-get($spacing, 16);
-  }
-}
-
-.toolbar {
-  grid-row: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 map-get($spacing, 16);
-
-  .title {
-    margin-right: auto;
-    font-weight: map-get($font-weight, bold);
-    color: map-get($neutral, 4);
-  }
-
-  & > *:not(:first-child) {
-    margin-left: map-get($spacing, 8);
-  }
-}
-
-.meals {
+app-planner-meals {
   grid-column: 1;
-  overflow: hidden;
-
-  ul {
-    overflow: auto;
-  }
-
-  li[app-planner-meal]:not(:last-child) {
-    margin-bottom: map-get($spacing, 8);
-  }
 }
 
-.menu {
+app-planner-menu {
   grid-column: 2;
-  background: $white;
-
-  ul {
-    display: flex;
-    flex-direction: column;
-  }
-
-  li[app-planner-day] {
-    flex-basis: 100%;
-  }
 }

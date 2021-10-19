@@ -1,0 +1,35 @@
+@import "main";
+
+:host {
+  display: grid;
+  grid-template-rows: map-get($spacing, 48) calc(100% - 48px);
+  overflow: hidden;
+}
+
+.toolbar {
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 map-get($spacing, 16);
+
+  .title {
+    margin-right: auto;
+    font-weight: map-get($font-weight, bold);
+    color: map-get($neutral, 4);
+  }
+
+  & > *:not(:first-child) {
+    margin-left: map-get($spacing, 8);
+  }
+}
+
+ul {
+  grid-row: 2;
+  padding: map-get($spacing, 16);
+  overflow: auto;
+}
+
+li[app-planner-meal]:not(:last-child) {
+  margin-bottom: map-get($spacing, 8);
+}

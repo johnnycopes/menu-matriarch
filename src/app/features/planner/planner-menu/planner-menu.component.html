@@ -1,0 +1,21 @@
+<div class="toolbar">
+  <h2 class="title">
+    {{ menuName$ | async }}
+  </h2>
+  <button app-button
+    buttonStyle="secondary"
+  >
+    Clear All
+  </button>
+  <button app-button>
+    Export
+  </button>
+</div>
+<ul>
+  <li app-planner-day
+    *ngFor="let menuEntry of menuEntries$ | async"
+    [day]="menuEntry.day"
+    [meal]="menuEntry.meal"
+    (clear)="onClearDay(menuEntry)"
+  ></li>
+</ul>

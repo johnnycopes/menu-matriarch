@@ -1,0 +1,18 @@
+<div class="toolbar">
+  <h2 class="title">
+    Meals
+  </h2>
+  <a app-button
+    routerLink="/meals/new"
+  >
+    New
+  </a>
+</div>
+<ul>
+  <li app-planner-meal
+    *ngFor="let meal of meals$ | async"
+    [id]="meal.id"
+    [name]="meal.name"
+    [description]="meal.description"
+  ></li>
+</ul>
