@@ -5,11 +5,11 @@ import { IMeal } from '@models/interfaces/meal.interface';
 import { Day } from '@models/types/day.type';
 
 @Component({
-  selector: 'li[app-day]',
-  templateUrl: './day.component.html',
-  styleUrls: ['./day.component.scss']
+  selector: '[app-planner-day]',
+  templateUrl: './planner-day.component.html',
+  styleUrls: ['./planner-day.component.scss']
 })
-export class DayComponent implements OnInit {
+export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
   @Input() meal: IMeal | undefined;
   @Output() clear = new EventEmitter<void>();

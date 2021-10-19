@@ -16,32 +16,36 @@ import { DomainModule } from '@shared/domain/domain.module';
 import { GenericModule } from '@shared/generic/generic.module';
 
 import { AppComponent } from './app.component';
-import { DayComponent } from './features/planner/day/day.component';
 import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
 import { HeaderComponent } from './core/components/header/header.component';
-import { MealCardComponent } from './features/planner/meal-card/meal-card.component';
-import { MealEditComponent } from './features/planner/meal-edit/meal-edit.component';
+import { MealComponent } from './features/meals/meal/meal.component';
+import { MealEditComponent } from './features/meals/meal-edit/meal-edit.component';
+import { MealsComponent } from './features/meals/meals.component';
 import { MenuComponent } from './features/menus/menu/menu.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
+import { PlannerDayComponent } from './features/planner/planner-day/planner-day.component';
+import { PlannerMealComponent } from './features/planner/planner-meal/planner-meal.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DayComponent,
     DemoComponent,
     DemoComponentComponent,
     HeaderComponent,
-    MealCardComponent,
+    MealComponent,
     MealEditComponent,
+    MealsComponent,
     MenuComponent,
     MenusComponent,
     PageNotFoundComponent,
     PlannerComponent,
+    PlannerDayComponent,
+    PlannerMealComponent,
     ShellComponent,
     WelcomeComponent,
   ],

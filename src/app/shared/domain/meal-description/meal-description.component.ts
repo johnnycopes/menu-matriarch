@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-meal',
-  templateUrl: './meal.component.html',
-  styleUrls: ['./meal.component.scss']
+  selector: 'app-meal-description',
+  templateUrl: './meal-description.component.html',
+  styleUrls: ['./meal-description.component.scss']
 })
-export class MealComponent implements OnInit {
+export class MealDescriptionComponent implements OnInit {
   @Input() name: string = '';
   @Input() description: string | undefined;
 

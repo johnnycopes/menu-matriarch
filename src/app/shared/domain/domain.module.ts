@@ -2,17 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GenericModule } from '@shared/generic/generic.module';
-
-import { MealComponent } from './meal/meal.component';
+import { MealDescriptionComponent } from './meal-description/meal-description.component';
 
 
 
 @NgModule({
   declarations: [
-    MealComponent,
+    MealDescriptionComponent,
   ],
   exports: [
-    MealComponent,
+    MealDescriptionComponent,
   ],
   imports: [
     CommonModule,

@@ -4,13 +4,13 @@
       Meals
     </h2>
     <a app-button
-      [routerLink]="['meal']"
+      routerLink="/meals/new"
     >
       New
     </a>
   </div>
   <ul>
-    <li app-meal-card
+    <li app-planner-meal
       *ngFor="let meal of meals$ | async"
       [id]="meal.id"
       [name]="meal.name"
@@ -34,7 +34,7 @@
     </button>
   </div>
   <ul>
-    <li app-day
+    <li app-planner-day
       *ngFor="let menuEntry of menuEntries$ | async"
       [day]="menuEntry.day"
       [meal]="menuEntry.meal"

@@ -1,8 +1,8 @@
 <app-card>
-  <app-meal
+  <app-meal-description
     [name]="name"
     [description]="description"
-  ></app-meal>
+  ></app-meal-description>
   <div class="schedule">
     <app-checkbox *ngFor="let day of days$ | async"
       [ngModel]="day.checked"

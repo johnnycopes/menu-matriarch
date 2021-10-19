@@ -28,6 +28,10 @@ export class HeaderComponent {
       route: ERoute.menus,
     },
     {
+      name: 'Meals',
+      route: ERoute.meals,
+    },
+    {
       name: 'Demo',
       route: ERoute.demo,
     },
