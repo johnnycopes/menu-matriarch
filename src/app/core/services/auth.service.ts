@@ -5,6 +5,7 @@ import firebase from 'firebase/compat/app';
 
 import { IUser } from '@models/interfaces/user.interface';
 import { FirestoreService } from './firestore.service';
+import { MenuService } from './menu.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthService {
     private _auth: AngularFireAuth,
     private _firestore: AngularFirestore,
     private _firestoreService: FirestoreService,
+    private _menuService: MenuService,
   ) { }
 
   public async login(): Promise<void> {
@@ -28,12 +30,12 @@ export class AuthService {
         .get();
 
       if (!user.exists) {
-        const selectedMenuId = await this._firestoreService.createMenu(uid);
+        const newMenuId = await this._firestoreService.createMenu(uid);
+        this._menuService.updateMenuId(newMenuId);
         this._firestoreService.createUser({
           uid,
           displayName,
           email,
-          selectedMenuId,
         });
       }
     }

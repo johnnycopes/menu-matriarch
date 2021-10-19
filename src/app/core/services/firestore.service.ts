@@ -22,11 +22,10 @@ export class FirestoreService {
       .valueChanges();
   }
 
-  public createUser = async ({ uid, displayName, email, selectedMenuId }: {
+  public createUser = async ({ uid, displayName, email }: {
     uid: string,
     displayName: string | null,
     email: string | null,
-    selectedMenuId: string,
   }): Promise<void> => {
     await this._firestore
       .collection<IUser>('users')
@@ -35,7 +34,6 @@ export class FirestoreService {
         uid,
         name: displayName ?? 'friend',
         email: email ?? undefined,
-        selectedMenuId,
         preferences: {
           darkMode: false,
           dayNameDisplay: 'full',

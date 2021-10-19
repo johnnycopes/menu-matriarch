@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
@@ -14,6 +14,7 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class MenuService {
+  private _menuId$ = new BehaviorSubject<string>('');
 
   constructor(
     private _firestoreService: FirestoreService,
@@ -36,22 +37,18 @@ export class MenuService {
   }
 
   public getMenu(): Observable<IMenu | undefined> {
-    return combineLatest([
-      this.getMenus(),
-      this._userService.getUser(),
-    ]).pipe(
-      map(([menus, user]) => menus.find(menu => menu.id === user?.selectedMenuId)),
-      shareReplay({ bufferSize: 1, refCount: true }),
+    return this._menuId$.pipe(
+      switchMap(this._firestoreService.getMenu)
     );
-  }
-
-  public getMenuNew(id?: string): Observable<IMenu | undefined> {
-    const menuId = id ?? this._localStorageService.getMenuId();
-    return this._firestoreService.getMenu(menuId ?? '');
   }
 
   public getMenus(): Observable<IMenu[]> {
     return this._userService.getData(this._firestoreService.getMenus);
+  }
+
+  public updateMenuId(id: string): void {
+    this._localStorageService.setMenuId(id);
+    this._menuId$.next(id);
   }
 
   public updateMenu({ day, mealId }: {
