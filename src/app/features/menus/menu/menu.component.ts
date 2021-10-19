@@ -10,11 +10,11 @@ import { Day } from '@models/types/day.type';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+  @Input() id = '';
   @Input() name = '';
   @Input() selected: boolean = false;
   @Input() entries: IMenuEntry[] = [];
   @Input() days: Day[] = [];
-  public faCheckCircle = faCheckCircle;
 
   constructor() { }
 

@@ -66,6 +66,16 @@ export class FirestoreService {
       );
   }
 
+  public getMenu = (id: string): Observable<IMenu | undefined> => {
+    return this._firestore
+      .collection<IMenu>('menus')
+      .doc(id)
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
+  }
+
   public getMenus = (uid: string | undefined): Observable<IMenu[]> => {
     if (!uid) {
       return of([]);

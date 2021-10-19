@@ -3,26 +3,10 @@
 app-card {
   padding: map-get($spacing, 16);
   cursor: pointer;
-
-  &.selected {
-    background: map-get($neutral, 4);
-    color: $white;
-  }
 }
 
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+h3 {
   margin-bottom: map-get($spacing, 16);
-}
-
-h3.selected {
-  font-weight: map-get($font-weight, bold);
-}
-
-fa-icon {
-  color: map-get($neutral, 9);
 }
 
 li {
