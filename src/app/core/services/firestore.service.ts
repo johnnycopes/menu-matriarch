@@ -56,7 +56,9 @@ export class FirestoreService {
     return this._firestore
       .collection<IMeal>(
         'meals',
-        ref => ref.where('uid', '==', uid)
+        ref => ref
+          .where('uid', '==', uid)
+          .orderBy('name')
       )
       .valueChanges({ idField: 'id' })
       .pipe(

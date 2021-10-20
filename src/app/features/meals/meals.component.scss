@@ -1,13 +1,23 @@
 @import "main";
 
 :host {
-  display: block;
-  padding: map-get($spacing, 32);
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100%;
 }
 
 ul {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto;
-  grid-gap: map-get($spacing, 16);
+  grid-column: 1;
+  padding: map-get($spacing, 16);
+  overflow: auto;
+}
+
+li:not(:last-of-type) {
+  margin-bottom: map-get($spacing, 8);
+}
+
+section {
+  grid-column: 2;
+  padding: map-get($spacing, 16);
+  background: $white;
 }

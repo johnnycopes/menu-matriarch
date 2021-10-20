@@ -13,12 +13,12 @@ import { switchMap } from 'rxjs/operators';
 })
 export class MealEditComponent implements OnInit {
   public meal$ = this._route.params.pipe(
-    switchMap(({ mealId }) => {
-      if (!mealId) {
+    switchMap(({ id }) => {
+      if (!id) {
         return of(undefined);
       }
       return this._firestore
-        .doc<IMeal>(`meals/${mealId}`)
+        .doc<IMeal>(`meals/${id}`)
         .valueChanges()
     })
   );

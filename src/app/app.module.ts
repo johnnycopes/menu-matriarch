@@ -20,7 +20,9 @@ import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
 import { HeaderComponent } from './core/components/header/header.component';
 import { MealComponent } from './features/meals/meal/meal.component';
+import { MealDetailsComponent } from './features/meals/meal-details/meal-details.component';
 import { MealEditComponent } from './features/meals/meal-edit/meal-edit.component';
+import { MealPlaceholderComponent } from './features/meals/meal-placeholder/meal-placeholder.component';
 import { MealsComponent } from './features/meals/meals.component';
 import { MenuComponent } from './features/menus/menu/menu.component';
 import { MenusComponent } from './features/menus/menus.component';
@@ -40,7 +42,9 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     DemoComponentComponent,
     HeaderComponent,
     MealComponent,
+    MealDetailsComponent,
     MealEditComponent,
+    MealPlaceholderComponent,
     MealsComponent,
     MenuComponent,
     MenusComponent,
