@@ -15,13 +15,16 @@ import { UserService } from './user.service';
 })
 export class MenuService {
   private _menuId$ = new BehaviorSubject<string>('');
-  public menuId$ = this._menuId$.asObservable();
 
   constructor(
     private _firestoreService: FirestoreService,
     private _localStorageService: LocalStorageService,
     private _userService: UserService,
   ) { }
+
+  public get menuId$(): Observable<string> {
+    return this._menuId$.asObservable();
+  }
 
   public getMenuEntries({ days, meals, menu }: {
     days: Day[],
@@ -56,13 +59,9 @@ export class MenuService {
     day: Day,
     mealId: string | null
   }): Observable<string | undefined> {
-    return this.getMenu().pipe(
+    return this.menuId$.pipe(
       take(1),
-      map(menu => menu?.id),
       tap(menuId => {
-        if (!menuId) {
-          throw new Error('Cannot perform update because no menu is selected');
-        }
         this._firestoreService.updateMenu({
           menuId,
           day,

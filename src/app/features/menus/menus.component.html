@@ -1,5 +1,6 @@
 <ul>
-  <li app-menu *ngFor="let menu of menus$ | async"
+  <li app-menu
+    *ngFor="let menu of menus$ | async"
     [id]="menu.id"
     [name]="menu.name"
     [entries]="menu.entries"

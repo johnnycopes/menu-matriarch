@@ -1,1 +1,10 @@
-<p>meals works!</p>
+<ul>
+  <li app-meal
+    *ngFor="let meal of meals$ | async"
+    [id]="meal.id"
+    [name]="meal.name"
+    [description]="meal.description"
+    [favorited]="meal.favorited"
+    [ingredients]="meal.ingredients"
+  ></li>
+</ul>

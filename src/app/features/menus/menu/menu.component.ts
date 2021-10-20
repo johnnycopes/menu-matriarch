@@ -11,7 +11,6 @@ import { Day } from '@models/types/day.type';
 export class MenuComponent implements OnInit {
   @Input() id = '';
   @Input() name = '';
-  @Input() selected: boolean = false;
   @Input() entries: IMenuEntry[] = [];
   @Input() days: Day[] = [];
 

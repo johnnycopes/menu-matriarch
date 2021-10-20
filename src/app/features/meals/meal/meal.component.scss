@@ -1,0 +1,18 @@
+@import 'main';
+
+app-card {
+  padding: map-get($spacing, 16);
+  cursor: pointer;
+}
+
+h3 {
+  margin-bottom: map-get($spacing, 16);
+}
+
+li {
+  display: flex;
+
+  &:not(:last-of-type) {
+    margin-bottom: map-get($spacing, 8);
+  }
+}
