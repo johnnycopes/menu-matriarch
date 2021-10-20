@@ -10,11 +10,28 @@
     </a> -->
     <div class="links">
       <a class="link"
-        *ngFor="let link of links"
-        routerLink="/{{link.route}}"
+        [routerLink]="ERoute.welcome"
         routerLinkActive="link--active"
-        >
-        {{link.name}}
+      >
+        Welcome
+      </a>
+      <a class="link"
+        [routerLink]="[ERoute.planner, menuId$ | async]"
+        routerLinkActive="link--active"
+      >
+        Planner
+      </a>
+      <a class="link"
+        [routerLink]="ERoute.menus"
+        routerLinkActive="link--active"
+      >
+        Menus
+      </a>
+      <a class="link"
+        [routerLink]="ERoute.meals"
+        routerLinkActive="link--active"
+      >
+        Meals
       </a>
     </div>
   </nav>

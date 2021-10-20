@@ -1,11 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ERoute } from '@models/enums/route.enum';
-
-interface ILink {
-  name: string;
-  route: string;
-}
+import { MenuService } from '@services/menu.service';
 
 @Component({
   selector: 'app-header',
@@ -14,26 +10,8 @@ interface ILink {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  public links: ILink[] = [
-    {
-      name: 'Welcome',
-      route: ERoute.welcome,
-    },
-    {
-      name: 'Planner',
-      route: ERoute.planner,
-    },
-    {
-      name: 'Menus',
-      route: ERoute.menus,
-    },
-    {
-      name: 'Meals',
-      route: ERoute.meals,
-    },
-    {
-      name: 'Demo',
-      route: ERoute.demo,
-    },
-  ];
+  public ERoute: typeof ERoute = ERoute;
+  public menuId$ = this._menuService.menuId$;
+
+  constructor(private _menuService: MenuService) { }
 }

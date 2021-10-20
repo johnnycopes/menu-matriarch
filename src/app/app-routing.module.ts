@@ -16,7 +16,6 @@ const routes: Routes = [
     { path: 'welcome', component: WelcomeComponent, data: { state: ERoute.welcome } },
     { path: 'demo', component: DemoComponent, data: { state: ERoute.demo } },
     { path: 'planner/:menuId', component: PlannerComponent, data: { state: ERoute.planner } },
-    { path: 'planner', component: PlannerComponent, data: { state: ERoute.planner } },
     { path: 'menus', component: MenusComponent, data: { state: ERoute.menus } },
     { path: 'meals/:mealId', component: MealEditComponent, data: { state: ERoute.meals } },
     { path: 'meals', component: MealsComponent, data: { state: ERoute.meals } },

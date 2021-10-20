@@ -15,6 +15,7 @@ import { UserService } from './user.service';
 })
 export class MenuService {
   private _menuId$ = new BehaviorSubject<string>('');
+  public menuId$ = this._menuId$.asObservable();
 
   constructor(
     private _firestoreService: FirestoreService,

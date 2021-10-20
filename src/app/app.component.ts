@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { LocalStorageService } from '@services/local-storage.service';
 import { MenuService } from '@services/menu.service';
 
@@ -14,7 +15,6 @@ export class AppComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    // TODO: else statement setting menuId to first available menuId from getMenus()
     const savedMenuId = this._localStorageService.getMenuId();
     if (savedMenuId) {
       this._menuService.updateMenuId(savedMenuId);
