@@ -1,5 +1,41 @@
-<p>meal-edit works!</p>
-
-<pre *ngIf="meal$ | async as meal">
-  {{ meal | json }}
-</pre>
+<form *ngIf="meal$ | async as meal"
+  #form="ngForm"
+  (ngSubmit)="onSave(form)"
+>
+  <div class="top">
+    <a app-button
+      buttonStyle="secondary"
+      routerLink=".."
+    >
+      Cancel
+    </a>
+    <button app-button
+      buttonStyle="primary"
+      type="submit"
+    >
+      Save
+    </button>
+  </div>
+  <app-input
+    label="name"
+  >
+    <input
+      type="text"
+      name="name"
+      required
+      [(ngModel)]="meal.name"
+      #name="ngModel"
+    />
+  </app-input>
+  <app-input
+    label="description"
+  >
+    <input
+      type="text"
+      name="description"
+      [(ngModel)]="meal.description"
+      #description="ngModel"
+    />
+  </app-input>
+  {{ form.value | json }}
+</form>

@@ -1,0 +1,7 @@
+@import "main";
+
+.top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: map-get($spacing, 16);
+}

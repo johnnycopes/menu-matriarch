@@ -1,1 +1,18 @@
-<p>meal-details works!</p>
+<ng-container *ngIf="meal$ | async as meal">
+  <div class="top">
+    <a app-button
+      buttonStyle="secondary"
+      routerLink="edit"
+    >
+      Edit
+    </a>
+  </div>
+  <h2>
+    {{ meal.name }}
+  </h2>
+  <ul *ngIf="meal.ingredients.length">
+    <li *ngFor="let ingredient of meal.ingredients">
+      {{ ingredient }}
+    </li>
+  </ul>
+</ng-container>

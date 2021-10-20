@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-import { IMeal } from '@models/interfaces/meal.interface';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+
+import { MealService } from '@services/meal.service';
 
 @Component({
   selector: 'app-meal-edit',
@@ -17,18 +17,20 @@ export class MealEditComponent implements OnInit {
       if (!id) {
         return of(undefined);
       }
-      return this._firestore
-        .doc<IMeal>(`meals/${id}`)
-        .valueChanges()
+      return this._mealService.getMeal(id);
     })
   );
 
   constructor(
     private _route: ActivatedRoute,
-    private _firestore: AngularFirestore,
+    private _mealService: MealService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  public onSave(form: NgForm): void {
+    console.log(form.value)
   }
 
 }

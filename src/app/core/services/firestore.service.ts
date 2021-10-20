@@ -49,6 +49,15 @@ export class FirestoreService {
       .update(updates);
   };
 
+  public getMeal = (id: string): Observable<IMeal | undefined> => {
+    return this._firestore
+      .doc<IMeal>(`meals/${id}`)
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
+  }
+
   public getMeals = (uid: string | undefined): Observable<IMeal[]> => {
     if (!uid) {
       return of([]);
@@ -68,7 +77,7 @@ export class FirestoreService {
 
   public getMenu = (id: string): Observable<IMenu | undefined> => {
     return this._firestore
-      .collection<IMenu>('menus')
+      .collection<IMenu | undefined>('menus')
       .doc(id)
       .valueChanges({ idField: 'id' })
       .pipe(
