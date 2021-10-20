@@ -4,12 +4,11 @@
   display: block;
 }
 
-.name {
+h3 {
   margin-bottom: map-get($spacing, 8);
 }
 
-.description {
-  margin-bottom: map-get($spacing, 8);
+p {
   font-size: 14px;
   color: map-get($neutral, 6);
 }

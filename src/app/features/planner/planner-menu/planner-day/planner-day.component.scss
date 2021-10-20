@@ -6,8 +6,9 @@ app-small-caps-label {
   margin-bottom: map-get($spacing, 8);
 }
 
-app-meal-description {
+app-meal-summary {
   padding: map-get($spacing, 4) map-get($spacing, 8);
+  margin-bottom: map-get($spacing, 8);
 }
 
 fa-icon {

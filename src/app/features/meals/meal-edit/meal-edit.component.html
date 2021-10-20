@@ -20,17 +20,20 @@
     label="name"
   >
     <input
+      id="name"
       type="text"
       name="name"
       required
       [(ngModel)]="meal.name"
       #name="ngModel"
+      appAutofocus
     />
   </app-input>
   <app-input
     label="description"
   >
     <input
+      id="description"
       type="text"
       name="description"
       [(ngModel)]="meal.description"

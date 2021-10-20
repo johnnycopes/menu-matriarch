@@ -11,6 +11,7 @@ app-card {
 .schedule {
   display: flex;
   flex-wrap: wrap;
+  margin-top: map-get($spacing, 8);
 
   app-checkbox {
     margin-right: map-get($spacing, 16);
