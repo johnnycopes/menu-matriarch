@@ -1,4 +1,4 @@
-<ng-container *ngIf="meal$ | async as meal">
+<div *appLet="vm$ | async as vm">
   <div class="top">
     <a app-button
       buttonStyle="secondary"
@@ -28,7 +28,7 @@
         type="text"
         name="name"
         required
-        [(ngModel)]="meal.name"
+        [(ngModel)]="vm.name"
         #name="ngModel"
         appAutofocus
       />
@@ -40,9 +40,9 @@
         id="description"
         type="text"
         name="description"
-        [(ngModel)]="meal.description"
+        [(ngModel)]="vm.description"
         #description="ngModel"
       />
     </app-input>
   </form>
-</ng-container>
+</div>

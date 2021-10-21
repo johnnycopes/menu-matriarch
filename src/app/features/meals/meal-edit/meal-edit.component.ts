@@ -15,10 +15,14 @@ export class MealEditComponent {
   public id$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('id'))
   );
-  public meal$ = this._route.params.pipe(
+  public vm$ = this._route.params.pipe(
     switchMap(({ id }) => {
       if (!id) {
-        return of(undefined);
+        return of({
+          name: '',
+          description: '',
+          ingredients: [],
+        });
       }
       return this._mealService.getMeal(id);
     })
@@ -35,6 +39,7 @@ export class MealEditComponent {
       take(1),
       tap(async id => {
         if (!id) {
+          // TODO: create new meal functionality goes here
           return;
         }
         await this._mealService.updateMeal(id, {

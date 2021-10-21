@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { MealService } from '@services/meal.service';
   templateUrl: './meal-details.component.html',
   styleUrls: ['./meal-details.component.scss']
 })
-export class MealDetailsComponent implements OnInit {
+export class MealDetailsComponent {
   public id$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('id'))
   );
@@ -28,9 +28,6 @@ export class MealDetailsComponent implements OnInit {
     private _router: Router,
     private _mealService: MealService,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   public onDelete(): void {
     this.id$.pipe(
