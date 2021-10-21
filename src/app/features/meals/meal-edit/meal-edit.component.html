@@ -1,7 +1,4 @@
-<form *ngIf="meal$ | async as meal"
-  #form="ngForm"
-  (ngSubmit)="onSave(form)"
->
+<ng-container *ngIf="meal$ | async as meal">
   <div class="top">
     <a app-button
       buttonStyle="secondary"
@@ -11,34 +8,41 @@
     </a>
     <button app-button
       buttonStyle="primary"
-      type="submit"
+      form="ngForm"
+      [disabled]="form.disabled"
     >
       Save
     </button>
   </div>
-  <app-input
-    label="name"
+  <form
+    id="ngForm"
+    #form="ngForm"
+    (keydown.enter)="$event.preventDefault()"
+    (ngSubmit)="onSave(form)"
   >
-    <input
-      id="name"
-      type="text"
-      name="name"
-      required
-      [(ngModel)]="meal.name"
-      #name="ngModel"
-      appAutofocus
-    />
-  </app-input>
-  <app-input
-    label="description"
-  >
-    <input
-      id="description"
-      type="text"
-      name="description"
-      [(ngModel)]="meal.description"
-      #description="ngModel"
-    />
-  </app-input>
-  {{ form.value | json }}
-</form>
+    <app-input
+      label="name"
+    >
+      <input
+        id="name"
+        type="text"
+        name="name"
+        required
+        [(ngModel)]="meal.name"
+        #name="ngModel"
+        appAutofocus
+      />
+    </app-input>
+    <app-input
+      label="description"
+    >
+      <input
+        id="description"
+        type="text"
+        name="description"
+        [(ngModel)]="meal.description"
+        #description="ngModel"
+      />
+    </app-input>
+  </form>
+</ng-container>

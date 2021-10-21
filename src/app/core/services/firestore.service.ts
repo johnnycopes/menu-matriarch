@@ -58,6 +58,20 @@ export class FirestoreService {
       );
   }
 
+  public updateMeal = async (id: string, updates: Partial<IMeal>): Promise<void> => {
+    await this._firestore
+      .collection<IMeal>('meals')
+      .doc(id)
+      .update(updates);
+  }
+
+  public deleteMeal = async (id: string): Promise<void> => {
+    await this._firestore
+      .collection<IMeal>('meals')
+      .doc(id)
+      .delete();
+  }
+
   public getMeals = (uid: string | undefined): Observable<IMeal[]> => {
     if (!uid) {
       return of([]);

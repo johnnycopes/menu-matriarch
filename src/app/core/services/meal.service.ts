@@ -19,6 +19,14 @@ export class MealService {
     return this._firestoreService.getMeal(id);
   }
 
+  public updateMeal(id: string, updates: Partial<IMeal>): Promise<void> {
+    return this._firestoreService.updateMeal(id, updates);
+  }
+
+  public deleteMeal(id: string): Promise<void> {
+    return this._firestoreService.deleteMeal(id);
+  }
+
   public getMeals(): Observable<IMeal[]> {
     return this._userService.getData(this._firestoreService.getMeals);
   }

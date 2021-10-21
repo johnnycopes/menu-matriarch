@@ -3,5 +3,14 @@
 .top {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: map-get($spacing, $key: 16);
+
+  [app-button] {
+    margin-left: map-get($spacing, 8);
+  }
+}
+
+.name {
+  font-size: map-get($font-size, 36);
   margin-bottom: map-get($spacing, 16);
 }

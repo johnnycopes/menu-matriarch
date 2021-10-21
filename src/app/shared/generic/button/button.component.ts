@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, HostBinding, ViewEncapsulation } from '@angular/core';
 
-type ButtonStyle = 'primary' | 'secondary' | 'ternary';
+type ButtonStyle = 'primary' | 'secondary' | 'ternary' | 'danger';
 
 @Component({
   selector: '[app-button]',

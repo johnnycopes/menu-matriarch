@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 
 import { MealService } from '@services/meal.service';
 
@@ -11,6 +11,9 @@ import { MealService } from '@services/meal.service';
   styleUrls: ['./meal-details.component.scss']
 })
 export class MealDetailsComponent implements OnInit {
+  public id$ = this._route.paramMap.pipe(
+    map(paramMap => paramMap.get('id'))
+  );
   public meal$ = this._route.params.pipe(
     switchMap(({ id }) => {
       if (!id) {
@@ -22,10 +25,24 @@ export class MealDetailsComponent implements OnInit {
 
   constructor(
     private _route: ActivatedRoute,
+    private _router: Router,
     private _mealService: MealService,
   ) { }
 
   ngOnInit(): void {
   }
 
+  public onDelete(): void {
+    this.id$.pipe(
+      take(1),
+      tap(async id => {
+        if (!id) {
+          return;
+        }
+        await this._mealService.deleteMeal(id);
+      })
+    ).subscribe(
+      () => this._router.navigate(['..'], { relativeTo: this._route })
+    );
+  }
 }

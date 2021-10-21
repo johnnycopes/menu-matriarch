@@ -44,6 +44,10 @@
     }
   }
 
+  &--danger {
+    @include button-style(map-get($red, 7), map-get($red, 6), map-get($red, 6), map-get($red, 9));
+  }
+
   fa-icon {
     margin-right: map-get($spacing, 4);
   }
