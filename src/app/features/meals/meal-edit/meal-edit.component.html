@@ -1,4 +1,4 @@
-<app-section *appLet="vm$ | async as vm">
+<app-section *ngIf="vm$ | async as vm">
   <div class="app-section__toolbar">
     <a app-button
       buttonStyle="secondary"

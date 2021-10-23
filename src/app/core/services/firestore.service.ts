@@ -49,29 +49,6 @@ export class FirestoreService {
       .update(updates);
   };
 
-  public getMeal = (id: string): Observable<IMeal | undefined> => {
-    return this._firestore
-      .doc<IMeal>(`meals/${id}`)
-      .valueChanges({ idField: 'id' })
-      .pipe(
-        shareReplay({ bufferSize: 1, refCount: true })
-      );
-  }
-
-  public updateMeal = async (id: string, updates: Partial<IMeal>): Promise<void> => {
-    await this._firestore
-      .collection<IMeal>('meals')
-      .doc(id)
-      .update(updates);
-  }
-
-  public deleteMeal = async (id: string): Promise<void> => {
-    await this._firestore
-      .collection<IMeal>('meals')
-      .doc(id)
-      .delete();
-  }
-
   public getMeals = (uid: string | undefined): Observable<IMeal[]> => {
     if (!uid) {
       return of([]);
@@ -89,14 +66,43 @@ export class FirestoreService {
       );
   }
 
-  public getMenu = (id: string): Observable<IMenu | undefined> => {
+  public getMeal = (id: string): Observable<IMeal | undefined> => {
     return this._firestore
-      .collection<IMenu | undefined>('menus')
-      .doc(id)
+      .doc<IMeal>(`meals/${id}`)
       .valueChanges({ idField: 'id' })
       .pipe(
         shareReplay({ bufferSize: 1, refCount: true })
       );
+  }
+
+  public createMeal = async (uid: string, { name, description }: Partial<IMeal>): Promise<string> => {
+    const mealDoc = this._firestore
+      .collection<IMeal>('meals')
+      .doc();
+    const id = mealDoc.ref.id;
+    await mealDoc.set({
+      id,
+      uid,
+      name: name ?? '',
+      favorited: false,
+      description: description ?? '',
+      ingredients: [],
+    });
+    return id;
+  }
+
+  public updateMeal = async (id: string, updates: Partial<IMeal>): Promise<void> => {
+    await this._firestore
+      .collection<IMeal>('meals')
+      .doc(id)
+      .update(updates);
+  }
+
+  public deleteMeal = async (id: string): Promise<void> => {
+    await this._firestore
+      .collection<IMeal>('meals')
+      .doc(id)
+      .delete();
   }
 
   public getMenus = (uid: string | undefined): Observable<IMenu[]> => {
@@ -111,6 +117,16 @@ export class FirestoreService {
       .valueChanges({ idField: 'id' })
       .pipe(
         shareReplay({ bufferSize: 1, refCount: true }),
+      );
+  }
+
+  public getMenu = (id: string): Observable<IMenu | undefined> => {
+    return this._firestore
+      .collection<IMenu | undefined>('menus')
+      .doc(id)
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true })
       );
   }
 

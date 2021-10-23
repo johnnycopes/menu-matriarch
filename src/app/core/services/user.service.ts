@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
 
 import { IUser } from '@models/interfaces/user.interface';
 import { FirestoreService } from './firestore.service';
@@ -15,6 +15,13 @@ export class UserService {
     private _auth: AngularFireAuth,
     private _firestoreService: FirestoreService,
   ) { }
+
+  public get uid$() {
+    return this._auth.user.pipe(
+      map(user => user?.uid),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
+  }
 
   public getData<T>(dataFn: (uid: string | undefined) => Observable<T>): Observable<T> {
     return this._auth.user.pipe(

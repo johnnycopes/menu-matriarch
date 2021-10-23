@@ -38,14 +38,15 @@ export class MealEditComponent {
     this.id$.pipe(
       take(1),
       tap(async id => {
-        if (!id) {
-          // TODO: create new meal functionality goes here
-          return;
-        }
-        await this._mealService.updateMeal(id, {
+        const details = {
           name: form.value.name,
           description: form.value.description,
-        });
+        };
+        if (!id) {
+          this._mealService.createMeal(details).subscribe();
+        } else {
+          await this._mealService.updateMeal(id, details);
+        }
       })
     ).subscribe(
       () => this._router.navigate(['..'], { relativeTo: this._route })

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { FirestoreService } from './firestore.service';
@@ -17,6 +18,17 @@ export class MealService {
 
   public getMeal(id: string): Observable<IMeal | undefined> {
     return this._firestoreService.getMeal(id);
+  }
+
+  public createMeal(info: Partial<IMeal>): Observable<string | undefined> {
+    return this._userService.uid$.pipe(
+      take(1),
+      tap(uid => {
+        if (uid) {
+          this._firestoreService.createMeal(uid, info);
+        }
+      })
+    );
   }
 
   public updateMeal(id: string, updates: Partial<IMeal>): Promise<void> {
