@@ -1,0 +1,25 @@
+@import "main";
+
+.app-section {
+  display: grid;
+  grid-template-rows: max-content 1fr;
+  overflow: hidden;
+  height: 100%;
+
+  &__toolbar {
+    grid-row: 1;
+    display: flex;
+    padding: map-get($spacing, 16);
+  }
+
+  &__content {
+    grid-row: 2;
+    padding: map-get($spacing, 16);
+    overflow: auto;
+    height: 100%;
+  }
+
+  li:not(:last-of-type) {
+    margin-bottom: map-get($spacing, 8);
+  }
+}

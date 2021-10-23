@@ -1,17 +1,8 @@
 @import "main";
 
-:host {
-  display: grid;
-  background: $white;
-  grid-template-rows: max-content 1fr;
-}
-
-.toolbar {
-  grid-row: 1;
-  display: flex;
+.app-section__toolbar {
   align-items: center;
   justify-content: flex-end;
-  padding: map-get($spacing, 16);
 
   .title {
     margin-right: auto;
@@ -24,13 +15,11 @@
   }
 }
 
-ul {
-  grid-row: 2;
-  padding: map-get($spacing, 16);
+.app-section__content {
   display: flex;
   flex-direction: column;
-}
 
-li[app-planner-day] {
-  flex-basis: 100%;
+  li[app-planner-day] {
+    flex-basis: 100%;
+  }
 }

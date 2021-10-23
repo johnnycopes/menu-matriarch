@@ -1,17 +1,8 @@
 @import "main";
 
-:host {
-  display: grid;
-  grid-template-rows: max-content 1fr;
-  overflow: hidden;
-}
-
-.toolbar {
-  grid-row: 1;
-  display: flex;
+.app-section__toolbar {
   align-items: center;
   justify-content: flex-end;
-  padding: map-get($spacing, 16);
 
   .title {
     margin-right: auto;
@@ -22,14 +13,4 @@
   & > *:not(:first-child) {
     margin-left: map-get($spacing, 8);
   }
-}
-
-ul {
-  grid-row: 2;
-  padding: map-get($spacing, 16);
-  overflow: auto;
-}
-
-li[app-planner-meal]:not(:last-child) {
-  margin-bottom: map-get($spacing, 8);
 }

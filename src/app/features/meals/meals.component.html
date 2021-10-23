@@ -1,12 +1,12 @@
-<div class="meals">
-  <div class="toolbar">
+<app-section class="meals">
+  <div class="app-section__toolbar">
     <a app-button
       routerLink="/meals/new"
     >
       New
     </a>
   </div>
-  <ul>
+  <ul class="app-section__content">
     <li app-meal
       *ngFor="let meal of meals$ | async"
       [id]="meal.id"
@@ -16,7 +16,7 @@
       [ingredients]="meal.ingredients"
     ></li>
   </ul>
-</div>
+</app-section>
 
 <section>
   <router-outlet></router-outlet>

@@ -20,6 +20,7 @@ import { OptionsMenuItemComponent } from './options-menu/options-menu-item/optio
 import { OptionsMenuTriggerDirective } from './options-menu/options-menu-trigger.directive';
 import { PanelComponent } from './panel/panel.component';
 import { RangeDirective } from './range/range.directive';
+import { SectionComponent } from './section/section.component';
 import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.component';
 
 
@@ -48,6 +49,7 @@ import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.com
     OptionsMenuTriggerDirective,
     PanelComponent,
     RangeDirective,
+    SectionComponent,
     SmallCapsLabelComponent,
   ],
   exports: [
@@ -67,6 +69,7 @@ import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.com
     OptionsMenuTriggerDirective,
     PanelComponent,
     RangeDirective,
+    SectionComponent,
     SmallCapsLabelComponent,
   ]
 })
