@@ -12,6 +12,6 @@
 
 section {
   grid-column: 2;
-  padding: map-get($spacing, 16);
   background: $white;
+  overflow: hidden;
 }

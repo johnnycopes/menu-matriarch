@@ -1,5 +1,5 @@
-<div *appLet="vm$ | async as vm">
-  <div class="top">
+<app-section *appLet="vm$ | async as vm">
+  <div class="app-section__toolbar">
     <a app-button
       buttonStyle="secondary"
       routerLink=".."
@@ -14,7 +14,7 @@
       Save
     </button>
   </div>
-  <form
+  <form class="app-section__content"
     id="ngForm"
     #form="ngForm"
     (keydown.enter)="$event.preventDefault()"
@@ -45,4 +45,4 @@
       />
     </app-input>
   </form>
-</div>
+</app-section>

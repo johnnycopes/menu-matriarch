@@ -10,7 +10,7 @@
     color: map-get($neutral, 4);
   }
 
-  & > *:not(:first-child) {
+  [app-button]:not(:first-child) {
     margin-left: map-get($spacing, 8);
   }
 }
