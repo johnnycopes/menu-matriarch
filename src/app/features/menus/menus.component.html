@@ -1,8 +1,17 @@
-<ul>
-  <li app-menu
-    *ngFor="let menu of menus$ | async"
-    [id]="menu.id"
-    [name]="menu.name"
-    [entries]="menu.entries"
-  ></li>
-</ul>
+<app-section>
+  <div class="app-section__toolbar">
+    <button app-button
+      buttonStyle="primary"
+    >
+      New Menu
+    </button>
+  </div>
+  <ul class="app-section__content">
+    <li app-menu
+      *ngFor="let menu of menus$ | async"
+      [id]="menu.id"
+      [name]="menu.name"
+      [entries]="menu.entries"
+    ></li>
+  </ul>
+</app-section>

@@ -18,8 +18,4 @@
     overflow: auto;
     height: 100%;
   }
-
-  li:not(:last-of-type) {
-    margin-bottom: map-get($spacing, 8);
-  }
 }

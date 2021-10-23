@@ -8,6 +8,10 @@
 
 .meals {
   grid-column: 1;
+
+  li[app-meal]:not(:last-of-type) {
+    margin-bottom: map-get($spacing, 8);
+  }
 }
 
 section {

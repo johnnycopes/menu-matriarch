@@ -14,3 +14,9 @@
     margin-left: map-get($spacing, 8);
   }
 }
+
+.app-section__content {
+  li[app-planner-meal]:not(:last-of-type) {
+    margin-bottom: map-get($spacing, 8);
+  }
+}
