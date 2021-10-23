@@ -1,13 +1,22 @@
-<ul>
-  <li app-meal
-    *ngFor="let meal of meals$ | async"
-    [id]="meal.id"
-    [name]="meal.name"
-    [description]="meal.description"
-    [favorited]="meal.favorited"
-    [ingredients]="meal.ingredients"
-  ></li>
-</ul>
+<div class="meals">
+  <div class="toolbar">
+    <a app-button
+      routerLink="/meals/new"
+    >
+      New
+    </a>
+  </div>
+  <ul>
+    <li app-meal
+      *ngFor="let meal of meals$ | async"
+      [id]="meal.id"
+      [name]="meal.name"
+      [description]="meal.description"
+      [favorited]="meal.favorited"
+      [ingredients]="meal.ingredients"
+    ></li>
+  </ul>
+</div>
 
 <section>
   <router-outlet></router-outlet>

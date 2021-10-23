@@ -6,8 +6,20 @@
   height: 100%;
 }
 
-ul {
+.meals {
   grid-column: 1;
+  display: grid;
+  grid-template-rows: max-content 1fr;
+  overflow: hidden;
+}
+
+.toolbar {
+  grid-row: 1;
+  padding: map-get($spacing, 16);
+}
+
+ul {
+  grid-row: 2;
   padding: map-get($spacing, 16);
   overflow: auto;
 }
