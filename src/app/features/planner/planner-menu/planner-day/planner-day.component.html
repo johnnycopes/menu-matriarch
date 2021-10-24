@@ -9,6 +9,7 @@
 </app-small-caps-label>
 
 <app-meal-summary *ngIf="meal"
+  [id]="meal.id"
   [name]="meal.name"
   [description]="meal.description"
 ></app-meal-summary>

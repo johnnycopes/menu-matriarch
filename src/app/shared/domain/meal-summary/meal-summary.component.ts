@@ -7,12 +7,13 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MealSummaryComponent implements OnInit {
+  @Input() id: string = '';
   @Input() name: string = '';
   @Input() description: string | undefined;
 
   constructor() { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (!this.name) {
       throw new Error('MealComponent must have an assigned "meal" property');
     }
