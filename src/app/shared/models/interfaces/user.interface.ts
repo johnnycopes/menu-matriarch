@@ -4,7 +4,7 @@ import { Day } from "@models/types/day.type";
 export interface IUser {
   uid: string;
   name: string;
-  email: string | undefined;
+  email: string | null;
   preferences: IUserPreferences;
 }
 

@@ -6,7 +6,6 @@ import { shareReplay } from 'rxjs/operators';
 import { IUser } from '@models/interfaces/user.interface';
 import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
-import { Day } from '@models/types/day.type';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +32,7 @@ export class FirestoreService {
       .set({
         uid,
         name: displayName ?? 'friend',
-        email: email ?? undefined,
+        email,
         preferences: {
           darkMode: false,
           dayNameDisplay: 'full',
@@ -141,28 +140,22 @@ export class FirestoreService {
       name: '',
       favorited: false,
       contents: {
-        Monday: undefined,
-        Tuesday: undefined,
-        Wednesday: undefined,
-        Thursday: undefined,
-        Friday: undefined,
-        Saturday: undefined,
-        Sunday: undefined,
+        Monday: null,
+        Tuesday: null,
+        Wednesday: null,
+        Thursday: null,
+        Friday: null,
+        Saturday: null,
+        Sunday: null,
       },
     });
     return id;
   }
 
-  public updateMenu = async ({ menuId, day, mealId }: {
-    menuId: string,
-    day: Day,
-    mealId: string | null
-  }): Promise<void> => {
-    const key = `contents.${day}`;
-    await this._firestore
+  public updateMenu = async (id: string, updates: Partial<IMenu>): Promise<void> => {
+    return this._firestore
       .collection<IMenu>('menus')
-      .doc(menuId)
-      .ref
-      .update({ [key]: mealId });
+      .doc(id)
+      .update(updates);
   }
 }

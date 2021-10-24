@@ -28,9 +28,9 @@ export class PlannerMealComponent {
 
   constructor(private _menuService: MenuService) {}
 
-  public onChange(state: boolean, day: Day): void {
+  public onChange(selected: boolean, day: Day): void {
     this._menuService
-      .updateMenu({ day, mealId: state ? this.id : null })
+      .updateMenuContents({ day, mealId: selected ? this.id : null })
       .subscribe();
   }
 }

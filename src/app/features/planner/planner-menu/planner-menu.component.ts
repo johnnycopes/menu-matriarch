@@ -49,7 +49,13 @@ export class PlannerMenuComponent implements OnInit, OnDestroy {
 
   public onClearDay({ day }: IMenuEntry): void {
     this._menuService
-      .updateMenu({ day, mealId: null })
+      .updateMenuContents({ day, mealId: null })
+      .subscribe();
+  }
+
+  public onClearAll(): void {
+    this._menuService
+      .clearMenuContents()
       .subscribe();
   }
 }

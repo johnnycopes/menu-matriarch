@@ -55,19 +55,38 @@ export class MenuService {
     this._menuId$.next(id);
   }
 
-  public updateMenu({ day, mealId }: {
+  public updateMenuContents({ day, mealId }: {
     day: Day,
     mealId: string | null
   }): Observable<string | undefined> {
     return this.menuId$.pipe(
       take(1),
-      tap(menuId => {
-        this._firestoreService.updateMenu({
+      tap(async menuId => {
+        await this._firestoreService.updateMenu(
           menuId,
-          day,
-          mealId,
-        });
-      })
+          { [`contents.${day}`]: mealId },
+        );
+      }),
+    );
+  }
+
+  public clearMenuContents(): Observable<string | undefined> {
+    return this.menuId$.pipe(
+      take(1),
+      tap(async menuId => {
+        await this._firestoreService.updateMenu(
+          menuId,
+          { contents: {
+            Monday: null,
+            Tuesday: null,
+            Wednesday: null,
+            Thursday: null,
+            Friday: null,
+            Saturday: null,
+            Sunday: null,
+          }}
+        );
+      }),
     );
   }
 
