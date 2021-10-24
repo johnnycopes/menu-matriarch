@@ -26,6 +26,11 @@ export class MenuService {
     return this._menuId$.asObservable();
   }
 
+  public selectMenu(id: string): void {
+    this._localStorageService.setMenuId(id);
+    this._menuId$.next(id);
+  }
+
   public getMenuEntries({ days, meals, menu }: {
     days: Day[],
     menu: IMenu | undefined,
@@ -61,11 +66,6 @@ export class MenuService {
     );
   }
 
-  public selectMenu(id: string): void {
-    this._localStorageService.setMenuId(id);
-    this._menuId$.next(id);
-  }
-
   public updateMenuName(id: string, name: string): Promise<void> {
     return this._firestoreService.updateMenu(id, { name });
   }
@@ -83,6 +83,10 @@ export class MenuService {
         );
       }),
     );
+  }
+
+  public deleteMenu(id: string): Promise<void> {
+    return this._firestoreService.deleteMenu(id);
   }
 
   public clearMenuContents(): Observable<string | undefined> {

@@ -32,7 +32,7 @@ export class MenuComponent implements OnInit {
   }
 
   public onDelete(): void {
-    console.log('delete');
+    this._menuService.deleteMenu(this.id);
   }
 
   public toggleRenaming(): void {

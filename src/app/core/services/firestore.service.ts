@@ -158,4 +158,11 @@ export class FirestoreService {
       .doc(id)
       .update(updates);
   }
+
+  public deleteMenu = async (id: string): Promise<void> => {
+    await this._firestore
+      .collection<IMenu>('menus')
+      .doc(id)
+      .delete();
+  }
 }
