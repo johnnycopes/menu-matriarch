@@ -23,9 +23,9 @@ export class MealService {
   public createMeal(info: Partial<IMeal>): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       take(1),
-      tap(uid => {
+      tap(async uid => {
         if (uid) {
-          this._firestoreService.createMeal(uid, info);
+          await this._firestoreService.createMeal(uid, info);
         }
       })
     );

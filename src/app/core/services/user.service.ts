@@ -38,7 +38,7 @@ export class UserService {
     return this._auth.user.pipe(
       take(1),
       map(user => user?.uid),
-      tap(userId => this._firestoreService.updateUser(userId, updates))
+      tap(async userId => await this._firestoreService.updateUser(userId, updates))
     );
   }
 }
