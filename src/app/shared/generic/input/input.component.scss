@@ -1,5 +1,7 @@
 @import "main";
 
+$size: 40px;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -13,7 +15,8 @@
 }
 
 ::ng-deep input {
-  padding: map-get($spacing, 8) 0;
+  height: $size;
+  padding: map-get($spacing, 8);
   border: none;
   border-bottom: map-get($border, thin) solid map-get($neutral, 7);
   font-family: $font-stack;

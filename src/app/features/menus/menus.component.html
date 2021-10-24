@@ -2,11 +2,18 @@
   <div class="app-section__toolbar">
     <button app-button
       buttonStyle="primary"
+      [disabled]="adding"
+      (click)="toggleAdding()"
     >
       New Menu
     </button>
+    <app-inline-name-edit class="form"
+      *ngIf="adding"
+      (cancel)="toggleAdding()"
+      (save)="onSave($event)"
+    ></app-inline-name-edit>
   </div>
-  <ul class="app-section__content">
+  <ul class="app-section__content menus">
     <li app-menu
       *ngFor="let menu of menus$ | async"
       [id]="menu.id"

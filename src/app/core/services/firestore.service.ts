@@ -129,7 +129,7 @@ export class FirestoreService {
       );
   }
 
-  public createMenu = async (uid: string): Promise<string> => {
+  public createMenu = async (uid: string, name: string): Promise<string> => {
     const menuDoc = this._firestore
       .collection<IMenu>('menus')
       .doc();
@@ -137,7 +137,7 @@ export class FirestoreService {
     await menuDoc.set({
       id,
       uid,
-      name: '',
+      name,
       favorited: false,
       contents: {
         Monday: null,

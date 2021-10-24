@@ -15,7 +15,11 @@ export class ButtonComponent {
   @Input() icon: IconDefinition | undefined;
 
   @HostBinding('class')
-  public get hostClasses(): string[] {
-    return ['app-button', `app-button--${this.buttonStyle}`];
+  public get hostClasses(): { [key: string]: boolean } {
+    return {
+      'app-button': true,
+      [`app-button--${this.buttonStyle}`]: true,
+      'app-button--icon': !!this.icon,
+    };
   }
 }

@@ -50,6 +50,17 @@ export class MenuService {
     return this._userService.getData(this._firestoreService.getMenus);
   }
 
+  public createMenu(name: string): Observable<string | undefined> {
+    return this._userService.uid$.pipe(
+      take(1),
+      tap(async uid => {
+        if (uid) {
+          await this._firestoreService.createMenu(uid, name);
+        }
+      })
+    );
+  }
+
   public selectMenu(id: string): void {
     this._localStorageService.setMenuId(id);
     this._menuId$.next(id);

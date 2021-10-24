@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -23,12 +23,26 @@ export class MenusComponent implements OnInit {
       })
     ))
   );
+  public adding = false;
 
   constructor(
+    private _cdRef: ChangeDetectorRef,
     private _mealService: MealService,
     private _menuService: MenuService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  public onSave(name: string): void {
+    this._menuService
+      .createMenu(name)
+      .subscribe();
+    this.toggleAdding();
+  }
+
+  public toggleAdding(): void {
+    this.adding = !this.adding;
+    this._cdRef.markForCheck();
   }
 }

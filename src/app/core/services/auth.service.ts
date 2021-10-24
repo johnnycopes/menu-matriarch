@@ -30,7 +30,7 @@ export class AuthService {
         .get();
 
       if (!user.exists) {
-        const newMenuId = await this._firestoreService.createMenu(uid);
+        const newMenuId = await this._firestoreService.createMenu(uid, 'My First Menu');
         this._menuService.selectMenu(newMenuId);
         this._firestoreService.createUser({
           uid,
