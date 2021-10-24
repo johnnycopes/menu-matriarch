@@ -10,6 +10,7 @@
     grid-row: 1;
     display: flex;
     padding: map-get($spacing, 16);
+    padding-bottom: 0;
   }
 
   &__content {

@@ -9,7 +9,7 @@
     <button app-button
       buttonStyle="primary"
       form="ngForm"
-      [disabled]="form.disabled"
+      [disabled]="!form.valid"
     >
       Save
     </button>

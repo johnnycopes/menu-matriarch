@@ -1,0 +1,15 @@
+@import "main";
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.buttons {
+  display: flex;
+
+  [app-button] {
+    margin-left: map-get($spacing, 8);
+  }
+}

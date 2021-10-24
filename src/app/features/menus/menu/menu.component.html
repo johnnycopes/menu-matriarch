@@ -1,32 +1,42 @@
 <app-card>
   <div class="top">
-    <a routerLink="/planner/{{ id }}">
-      <h3>
-        {{ name }}
-      </h3>
-    </a>
-    <button app-button
-      buttonStyle="ternary"
-      [icon]="ellipsis"
-      [appOptionsMenuTrigger]="optionsMenu"
-    ></button>
-    <app-options-menu #optionsMenu>
-      <li app-options-menu-item>
-        Export
-      </li>
-      <li app-options-menu-item (click)="onEdit()">
-        Rename
-      </li>
-      <a app-options-menu-item
-        routerLink="/planner/{{ id }}"
-        (click)="onEdit()"
-      >
-        Edit Meals
+    <app-inline-name-edit
+      *ngIf="renaming; else toolbar"
+      [name]="name"
+      (cancel)="toggleRenaming()"
+      (save)="onRename($event)"
+    ></app-inline-name-edit>
+    <ng-template #toolbar>
+      <a routerLink="/planner/{{ id }}">
+        <h3>
+          {{ name }}
+        </h3>
       </a>
-      <li app-options-menu-item (click)="onDelete()">
-        Delete
-      </li>
-    </app-options-menu>
+      <button app-button
+        buttonStyle="ternary"
+        [icon]="faEllipsisV"
+        [appOptionsMenuTrigger]="optionsMenu"
+      ></button>
+      <app-options-menu #optionsMenu>
+        <li app-options-menu-item>
+          Export
+        </li>
+        <li app-options-menu-item
+          (click)="toggleRenaming()"
+        >
+          Rename
+        </li>
+        <a app-options-menu-item
+          routerLink="/planner/{{ id }}"
+          (click)="onEdit()"
+        >
+          Edit Meals
+        </a>
+        <li app-options-menu-item (click)="onDelete()">
+          Delete
+        </li>
+      </app-options-menu>
+    </ng-template>
   </div>
   <ul>
     <li class="entry"
