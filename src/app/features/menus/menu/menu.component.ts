@@ -3,6 +3,7 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
+import { MenuService } from '@services/menu.service';
 
 @Component({
   selector: '[app-menu]',
@@ -17,17 +18,16 @@ export class MenuComponent implements OnInit {
   public faEllipsisV = faEllipsisV;
   public renaming = false;
 
-  constructor(private _cdRef: ChangeDetectorRef) { }
+  constructor(
+    private _cdRef: ChangeDetectorRef,
+    private _menuService: MenuService,
+  ) { }
 
   ngOnInit(): void {
   }
 
-  public onEdit(): void {
-    console.log('edit');
-  }
-
-  public onRename(name: string): void {
-    console.log(name);
+  public async onRename(name: string): Promise<void> {
+    await this._menuService.updateMenuName(this.id, name);
     this.toggleRenaming();
   }
 

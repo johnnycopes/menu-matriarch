@@ -30,7 +30,7 @@ export class PlannerMenuComponent implements OnInit, OnDestroy {
     map(({ menuId }) => menuId),
   ).subscribe(menuId => {
     if (menuId) {
-      this._menuService.updateMenuId(menuId);
+      this._menuService.selectMenu(menuId);
     }
   });
 

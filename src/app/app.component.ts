@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     const savedMenuId = this._localStorageService.getMenuId();
     if (savedMenuId) {
-      this._menuService.updateMenuId(savedMenuId);
+      this._menuService.selectMenu(savedMenuId);
     }
   }
 }

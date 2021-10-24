@@ -50,9 +50,13 @@ export class MenuService {
     return this._userService.getData(this._firestoreService.getMenus);
   }
 
-  public updateMenuId(id: string): void {
+  public selectMenu(id: string): void {
     this._localStorageService.setMenuId(id);
     this._menuId$.next(id);
+  }
+
+  public updateMenuName(id: string, name: string): Promise<void> {
+    return this._firestoreService.updateMenu(id, { name });
   }
 
   public updateMenuContents({ day, mealId }: {
