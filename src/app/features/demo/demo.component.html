@@ -171,18 +171,14 @@
         Click
       </button>
 
-      <ng-template
-        #optionsMenu
-      >
-        <ul app-options-menu>
-          <li app-options-menu-item>
-            Delete user
-          </li>
-          <li app-options-menu-item>
-            Decorative option
-          </li>
-        </ul>
-      </ng-template>
+      <app-options-menu #optionsMenu>
+        <li app-options-menu-item>
+          Delete user
+        </li>
+        <li app-options-menu-item>
+          Decorative option
+        </li>
+      </app-options-menu>
     </app-demo-component>
 
     <app-demo-component name="PanelComponent"

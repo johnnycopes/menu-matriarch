@@ -1,6 +1,10 @@
 @import "main";
 
-ul:host {
+:host {
+  display: none;
+}
+
+.app-options-menu {
 	min-width: 150px;
 	padding: map-get($spacing, 8) 0;
 	overflow: hidden;

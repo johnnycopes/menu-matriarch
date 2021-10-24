@@ -9,14 +9,11 @@
       buttonStyle="ternary"
       [icon]="ellipsis"
       [appOptionsMenuTrigger]="optionsMenu"
-      #button="appOptionsMenuTrigger"
     ></button>
-    <ng-template #optionsMenu>
-      <ul app-options-menu>
-        <li app-options-menu-item (click)="button.close()">Edit</li>
-        <li app-options-menu-item (click)="button.close()">Delete</li>
-      </ul>
-    </ng-template>
+    <app-options-menu #optionsMenu>
+      <li app-options-menu-item (click)="onEdit()">Rename</li>
+      <li app-options-menu-item (click)="onEdit()">Delete</li>
+    </app-options-menu>
   </div>
   <ul>
     <li *ngFor="let entry of entries">

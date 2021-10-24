@@ -1,6 +1,6 @@
 @import "main";
 
-li:host {
+:host {
 	display: block;
 	padding: map-get($spacing, 8) map-get($spacing, 16);
 

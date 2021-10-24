@@ -1,2 +1,8 @@
-<ng-content select="li[app-options-menu-item]">
-</ng-content>
+<ng-template>
+  <ul class="app-options-menu"
+    (click)="close.emit()"
+  >
+    <ng-content select="li[app-options-menu-item]">
+    </ng-content>
+  </ul>
+</ng-template>

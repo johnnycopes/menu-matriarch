@@ -21,4 +21,11 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public onEdit(): void {
+    console.log('edit');
+  }
+
+  public onDelete(): void {
+    console.log('delete');
+  }
 }

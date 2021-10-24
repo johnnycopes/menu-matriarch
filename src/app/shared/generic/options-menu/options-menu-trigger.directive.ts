@@ -1,33 +1,18 @@
-import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef } from "@angular/core";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
 import { fromEvent, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
+import { OptionsMenuComponent } from "./options-menu.component";
+
 @Directive({
-  selector: '[appOptionsMenuTrigger]',
-  exportAs: 'appOptionsMenuTrigger',
+  selector: '[appOptionsMenuTrigger]'
 })
-export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
-  @Input('appOptionsMenuTrigger')
-  public set template(template: TemplateRef<any>) {
-    this._templatePortal = new TemplatePortal(template, this._viewContainerRef);
-  }
+export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
+  @Input('appOptionsMenuTrigger') menu: OptionsMenuComponent | undefined;
   private _templatePortal: TemplatePortal<any> | undefined;
-  private _overlayRef: OverlayRef = this._overlay.create({
-    disposeOnNavigation: true,
-    scrollStrategy: this._overlay.scrollStrategies.close(),
-    positionStrategy: this._overlay.position()
-      .flexibleConnectedTo(this._viewContainerRef.element.nativeElement)
-      .withPositions([
-        {
-          originX: "end",
-          originY: "bottom",
-          overlayX: "end",
-          overlayY: "top",
-        }
-      ]),
-  });
+  private _overlayRef: OverlayRef | undefined;
   private _destroy$ = new Subject();
 
   constructor(
@@ -35,13 +20,35 @@ export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
     private _overlay: Overlay,
   ) { }
 
-  public ngOnInit(): void {
+  public ngAfterViewInit(): void {
+    if (this.menu?.templateRef) {
+      this._templatePortal = new TemplatePortal(this.menu.templateRef, this._viewContainerRef);
+    }
+    this._overlayRef = this._overlay.create({
+      disposeOnNavigation: true,
+      scrollStrategy: this._overlay.scrollStrategies.close(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._viewContainerRef.element.nativeElement)
+        .withPositions([
+          {
+            originX: "end",
+            originY: "bottom",
+            overlayX: "end",
+            overlayY: "top",
+          }
+        ]),
+    })
+    this.menu?.close.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      () => this._overlayRef?.detach()
+    );
     this._overlayRef.outsidePointerEvents().pipe(
       takeUntil(this._destroy$)
     ).subscribe(
       ({ target }) => {
         if (target !== this._viewContainerRef.element.nativeElement) {
-          this._overlayRef.detach()
+          this._overlayRef?.detach()
         }
       },
     );
@@ -49,10 +56,10 @@ export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
       takeUntil(this._destroy$)
     ).subscribe(
       () => {
-        if (this._overlayRef.hasAttached()) {
-          this._overlayRef.detach();
+        if (this._overlayRef?.hasAttached()) {
+          this._overlayRef?.detach();
         } else {
-          this._overlayRef.attach(this._templatePortal);
+          this._overlayRef?.attach(this._templatePortal);
         }
       }
     );
@@ -61,9 +68,5 @@ export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
-  }
-
-  public close(): void {
-    this._overlayRef.detach();
   }
 }
