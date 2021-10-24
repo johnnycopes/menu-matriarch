@@ -1,19 +1,33 @@
-<a routerLink="/planner/{{ id }}">
-  <app-card>
-    <h3>
-      {{ name }}
-    </h3>
-    <ul>
-      <li *ngFor="let entry of entries">
-        <app-small-caps-label>
-          <h4>
-            {{ entry.day | slice : 0 : 3 }}
-          </h4>
-        </app-small-caps-label>
-        <div class="meal">
-          {{ entry.meal?.name }}
-        </div>
-      </li>
-    </ul>
-  </app-card>
-</a>
+<app-card>
+  <div class="top">
+    <a routerLink="/planner/{{ id }}">
+      <h3>
+        {{ name }}
+      </h3>
+    </a>
+    <button app-button
+      buttonStyle="ternary"
+      [icon]="ellipsis"
+      [appOptionsMenuTrigger]="optionsMenu"
+      #button="appOptionsMenuTrigger"
+    ></button>
+    <ng-template #optionsMenu>
+      <ul app-options-menu>
+        <li app-options-menu-item (click)="button.close()">Edit</li>
+        <li app-options-menu-item (click)="button.close()">Delete</li>
+      </ul>
+    </ng-template>
+  </div>
+  <ul>
+    <li *ngFor="let entry of entries">
+      <app-small-caps-label>
+        <h4>
+          {{ entry.day | slice : 0 : 3 }}
+        </h4>
+      </app-small-caps-label>
+      <div class="meal">
+        {{ entry.meal?.name }}
+      </div>
+    </li>
+  </ul>
+</app-card>

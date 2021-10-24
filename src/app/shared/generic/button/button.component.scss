@@ -41,6 +41,7 @@
 
     &:hover {
       color: map-get($neutral, 3);
+      background: map-get($neutral, 10);
     }
   }
 
@@ -49,7 +50,7 @@
   }
 
   fa-icon {
-    margin-right: map-get($spacing, 4);
+    pointer-events: none;
   }
 }
 

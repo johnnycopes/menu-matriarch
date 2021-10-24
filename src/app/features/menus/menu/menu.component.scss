@@ -5,7 +5,10 @@ app-card {
   height: 100%;
 }
 
-h3 {
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: map-get($spacing, 16);
 }
 

@@ -1,11 +1,12 @@
-import { Directive, HostListener, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from "@angular/core";
+import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from "@angular/core";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
-import { Subject } from "rxjs";
+import { fromEvent, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Directive({
   selector: '[appOptionsMenuTrigger]',
+  exportAs: 'appOptionsMenuTrigger',
 })
 export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
   @Input('appOptionsMenuTrigger')
@@ -14,6 +15,7 @@ export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
   }
   private _templatePortal: TemplatePortal<any> | undefined;
   private _overlayRef: OverlayRef = this._overlay.create({
+    disposeOnNavigation: true,
     scrollStrategy: this._overlay.scrollStrategies.close(),
     positionStrategy: this._overlay.position()
       .flexibleConnectedTo(this._viewContainerRef.element.nativeElement)
@@ -34,17 +36,26 @@ export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this._overlayRef.outsidePointerEvents()
-      .pipe(
-        takeUntil(this._destroy$)
-      )
-      .subscribe(
-        ({ target }) => {
-          if (target !== this._viewContainerRef.element.nativeElement) {
-            this._overlayRef.detach()
-          }
-        },
-      );
+    this._overlayRef.outsidePointerEvents().pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      ({ target }) => {
+        if (target !== this._viewContainerRef.element.nativeElement) {
+          this._overlayRef.detach()
+        }
+      },
+    );
+    fromEvent<MouseEvent>(this._viewContainerRef.element.nativeElement, "click").pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      () => {
+        if (this._overlayRef.hasAttached()) {
+          this._overlayRef.detach();
+        } else {
+          this._overlayRef.attach(this._templatePortal);
+        }
+      }
+    );
   }
 
   public ngOnDestroy(): void {
@@ -52,12 +63,7 @@ export class OptionsMenuTriggerDirective implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  @HostListener('click')
-  public onClick(): void {
-    if (this._overlayRef.hasAttached()) {
-      this._overlayRef.detach();
-    } else {
-      this._overlayRef.attach(this._templatePortal);
-    }
+  public close(): void {
+    this._overlayRef.detach();
   }
 }
