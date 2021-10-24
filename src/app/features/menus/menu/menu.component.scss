@@ -12,7 +12,7 @@ app-card {
   margin-bottom: map-get($spacing, 16);
 }
 
-li {
+.entry {
   display: flex;
 
   &:not(:last-of-type) {

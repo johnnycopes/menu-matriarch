@@ -12,9 +12,6 @@ import { optionsMenuAnimation } from './options-menu-animation';
 export class OptionsMenuComponent {
   @Output() close = new EventEmitter<void>();
 
-	@HostBinding('@menuAnimation')
-  public animation = true;
-
   @ViewChild(TemplateRef)
   public templateRef: TemplateRef<any> | undefined;
 }

@@ -1,8 +1,9 @@
 <ng-template>
   <ul class="app-options-menu"
+    @menuAnimation
     (click)="close.emit()"
   >
-    <ng-content select="li[app-options-menu-item]">
+    <ng-content select="[app-options-menu-item]">
     </ng-content>
   </ul>
 </ng-template>

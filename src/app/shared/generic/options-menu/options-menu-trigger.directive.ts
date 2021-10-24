@@ -68,5 +68,7 @@ export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
+    this._overlayRef?.dispose();
+    this._overlayRef = undefined;
   }
 }
