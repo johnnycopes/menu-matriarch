@@ -2,14 +2,14 @@
   <div class="app-section__toolbar">
     <button app-button
       buttonStyle="primary"
-      [disabled]="adding"
-      (click)="toggleAdding()"
+      [disabled]="adding$ | async"
+      (click)="startAdd$.next()"
     >
       New Menu
     </button>
     <app-inline-name-edit class="form"
-      *ngIf="adding"
-      (cancel)="toggleAdding()"
+      *ngIf="adding$ | async"
+      (cancel)="finishAdd$.next()"
       (save)="onSave($event)"
     ></app-inline-name-edit>
   </div>

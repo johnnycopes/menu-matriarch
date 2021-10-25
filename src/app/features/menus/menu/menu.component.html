@@ -1,9 +1,9 @@
 <app-card>
   <div class="top">
     <app-inline-name-edit
-      *ngIf="renaming; else toolbar"
+      *ngIf="renaming$ | async; else toolbar"
       [name]="name"
-      (cancel)="toggleRenaming()"
+      (cancel)="finishRename$.next()"
       (save)="onRename($event)"
     ></app-inline-name-edit>
     <ng-template #toolbar>
@@ -22,7 +22,7 @@
           Export
         </li>
         <li app-options-menu-item
-          (click)="toggleRenaming()"
+          (click)="startRename$.next()"
         >
           Rename
         </li>
