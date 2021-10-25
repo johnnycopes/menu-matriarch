@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { MealService } from '@services/meal.service';
@@ -14,6 +14,10 @@ import { MenuService } from '@services/menu.service';
 })
 export class PlannerMenuComponent implements OnInit, OnDestroy {
   public menu$ = this._menuService.getMenu();
+  public menuId$ = this._route.params.pipe(
+    map(({ menuId }) => menuId as string),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
   public menuName$ = this.menu$.pipe(
     map(menu => menu?.name)
   );
@@ -26,12 +30,8 @@ export class PlannerMenuComponent implements OnInit, OnDestroy {
       return this._menuService.getMenuEntries({ days, menu, meals });
     })
   );
-  private _routeSubscription = this._route.params.pipe(
-    map(({ menuId }) => menuId),
-  ).subscribe(menuId => {
-    if (menuId) {
-      this._menuService.selectMenu(menuId);
-    }
+  private _routeSubscription = this.menuId$.subscribe(menuId => {
+    this._menuService.selectMenu(menuId);
   });
 
   constructor(

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { FirestoreService } from './firestore.service';
@@ -22,7 +22,7 @@ export class MealService {
 
   public createMeal(info: Partial<IMeal>): Observable<string | undefined> {
     return this._userService.uid$.pipe(
-      take(1),
+      first(),
       tap(async uid => {
         if (uid) {
           await this._firestoreService.createMeal(uid, info);

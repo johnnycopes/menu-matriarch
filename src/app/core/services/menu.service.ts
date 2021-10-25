@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
+import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
@@ -57,7 +57,7 @@ export class MenuService {
 
   public createMenu(name: string): Observable<string | undefined> {
     return this._userService.uid$.pipe(
-      take(1),
+      first(),
       tap(async uid => {
         if (uid) {
           await this._firestoreService.createMenu(uid, name);
@@ -75,7 +75,7 @@ export class MenuService {
     mealId: string | null
   }): Observable<string | undefined> {
     return this.menuId$.pipe(
-      take(1),
+      first(),
       tap(async menuId => {
         await this._firestoreService.updateMenu(
           menuId,
@@ -91,7 +91,7 @@ export class MenuService {
 
   public clearMenuContents(): Observable<string | undefined> {
     return this.menuId$.pipe(
-      take(1),
+      first(),
       tap(async menuId => {
         await this._firestoreService.updateMenu(
           menuId,

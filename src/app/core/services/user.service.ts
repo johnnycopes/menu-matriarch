@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
+import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { IUser } from '@models/interfaces/user.interface';
 import { FirestoreService } from './firestore.service';
@@ -36,7 +36,7 @@ export class UserService {
 
   public updateUser(updates: Partial<IUser>): Observable<string | undefined> {
     return this._auth.user.pipe(
-      take(1),
+      first(),
       map(user => user?.uid),
       tap(async userId => await this._firestoreService.updateUser(userId, updates))
     );

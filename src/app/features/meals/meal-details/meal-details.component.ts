@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { MealService } from '@services/meal.service';
 
@@ -31,7 +31,7 @@ export class MealDetailsComponent {
 
   public onDelete(): void {
     this.id$.pipe(
-      take(1),
+      first(),
       tap(async id => {
         if (!id) {
           return;

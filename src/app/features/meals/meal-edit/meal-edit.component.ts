@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { MealService } from '@services/meal.service';
 
@@ -36,7 +36,7 @@ export class MealEditComponent {
 
   public onSave(form: NgForm): void {
     this.id$.pipe(
-      take(1),
+      first(),
       tap(async id => {
         const details = {
           name: form.value.name,
