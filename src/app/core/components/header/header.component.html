@@ -1,44 +1,46 @@
-<header class="header">
-  <nav class="container">
-    <!-- <a class="home"
-      routerLink="/"
-      >
-      <img class="logo"
-        src="assets/logo-header.svg"
-        alt="App logo"
-      />
-    </a> -->
-    <div class="links">
-      <a class="link"
-        [routerLink]="ERoute.welcome"
-        routerLinkActive="link--active"
-      >
-        Welcome
-      </a>
-      <a class="link"
-        [routerLink]="[ERoute.planner, menuId$ | async]"
-        routerLinkActive="link--active"
-      >
-        Planner
-      </a>
-      <a class="link"
-        [routerLink]="ERoute.menus"
-        routerLinkActive="link--active"
-      >
-        Menus
-      </a>
-      <a class="link"
-        [routerLink]="ERoute.meals"
-        routerLinkActive="link--active"
-      >
-        Meals
-      </a>
-      <a class="link"
-        [routerLink]="ERoute.demo"
-        routerLinkActive="link--active"
-      >
-        Demo
-      </a>
-    </div>
-  </nav>
-</header>
+<nav class="container">
+  <!-- <a class="home"
+    routerLink="/"
+    >
+    <img class="logo"
+      src="assets/logo-header.svg"
+      alt="App logo"
+    />
+  </a> -->
+  <a class="link"
+    [routerLink]="ERoute.welcome"
+    routerLinkActive="link--active"
+  >
+    Welcome
+  </a>
+  <a class="link"
+    [routerLink]="[ERoute.planner, menuId$ | async]"
+    routerLinkActive="link--active"
+  >
+    Planner
+  </a>
+  <a class="link"
+    [routerLink]="ERoute.menus"
+    routerLinkActive="link--active"
+  >
+    Menus
+  </a>
+  <a class="link"
+    [routerLink]="ERoute.meals"
+    routerLinkActive="link--active"
+  >
+    Meals
+  </a>
+  <a class="link"
+    [routerLink]="ERoute.demo"
+    routerLinkActive="link--active"
+  >
+    Demo
+  </a>
+  <a class="link"
+    [routerLink]="ERoute.settings"
+    routerLinkActive="link--active"
+  >
+    Settings
+  </a>
+</nav>

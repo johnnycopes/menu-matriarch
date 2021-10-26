@@ -4,7 +4,7 @@ import { ERoute } from '@models/enums/route.enum';
 import { MenuService } from '@services/menu.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'header[app-header]',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

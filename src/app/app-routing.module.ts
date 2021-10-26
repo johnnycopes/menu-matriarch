@@ -10,6 +10,7 @@ import { MealsComponent } from './features/meals/meals.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
+import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
@@ -25,6 +26,7 @@ const routes: Routes = [
       { path: ':id', component: MealDetailsComponent },
       { path: ':id/edit', component: MealEditComponent },
     ] },
+    { path: 'settings', component: SettingsComponent, data: { state: ERoute.settings } },
   ]},
   { path: '**', component: PageNotFoundComponent },
 ];
