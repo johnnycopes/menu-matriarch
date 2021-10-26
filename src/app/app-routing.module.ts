@@ -10,12 +10,10 @@ import { MealsComponent } from './features/meals/meals.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
-import { PrintComponent } from './features/print/print.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 const routes: Routes = [
-  { path: 'print/:menuId', component: PrintComponent, data: { state: ERoute.print } },
   { path: '', component: ShellComponent, children: [
     { path: 'welcome', component: WelcomeComponent, data: { state: ERoute.welcome } },
     { path: 'demo', component: DemoComponent, data: { state: ERoute.demo } },

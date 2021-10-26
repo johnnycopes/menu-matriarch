@@ -18,11 +18,11 @@
         [appOptionsMenuTrigger]="optionsMenu"
       ></button>
       <app-options-menu #optionsMenu>
-        <a app-options-menu-item
-          routerLink="/print/{{ id }}"
+        <li app-options-menu-item
+          (click)="onPrint()"
         >
           Print
-        </a>
+        </li>
         <li app-options-menu-item
           (click)="startRename$.next()"
         >

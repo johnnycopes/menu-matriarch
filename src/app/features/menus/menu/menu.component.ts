@@ -6,6 +6,7 @@ import { mapTo } from 'rxjs/operators';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
+import { PrintService } from '@services/print.service';
 
 @Component({
   selector: '[app-menu]',
@@ -26,7 +27,14 @@ export class MenuComponent {
     this.finishRename$.pipe(mapTo(false)),
   );
 
-  constructor(private _menuService: MenuService) { }
+  constructor(
+    private _menuService: MenuService,
+    private _printService: PrintService,
+  ) { }
+
+  public onPrint(): void {
+    this._printService.printMenu(this.name, this.entries);
+  }
 
   public async onRename(name: string): Promise<void> {
     await this._menuService.updateMenuName(this.id, name);

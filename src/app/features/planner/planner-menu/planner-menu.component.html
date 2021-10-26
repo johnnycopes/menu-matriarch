@@ -9,11 +9,11 @@
     >
       Clear All
     </button>
-    <a app-button
-      routerLink="/print/{{ menuId$ | async }}"
+    <button app-button
+      (click)="onPrint()"
     >
       Print
-    </a>
+    </button>
   </div>
   <ul class="app-section__content">
     <li app-planner-day

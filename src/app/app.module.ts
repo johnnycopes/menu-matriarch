@@ -32,7 +32,6 @@ import { PlannerDayComponent } from './features/planner/planner-menu/planner-day
 import { PlannerMealComponent } from './features/planner/planner-meals/planner-meal/planner-meal.component';
 import { PlannerMealsComponent } from './features/planner/planner-meals/planner-meals.component';
 import { PlannerMenuComponent } from './features/planner/planner-menu/planner-menu.component';
-import { PrintComponent } from './features/print/print.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
@@ -55,7 +54,6 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     PlannerMealComponent,
     PlannerMealsComponent,
     PlannerMenuComponent,
-    PrintComponent,
     ShellComponent,
     WelcomeComponent,
   ],

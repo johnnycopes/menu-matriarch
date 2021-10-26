@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { MealService } from '@services/meal.service';
 import { MenuService } from '@services/menu.service';
+import { PrintService } from '@services/print.service';
 
 @Component({
   selector: 'app-planner-menu',
@@ -14,9 +15,8 @@ import { MenuService } from '@services/menu.service';
 })
 export class PlannerMenuComponent implements OnInit, OnDestroy {
   public menu$ = this._menuService.getMenu();
-  public menuId$ = this._menuService.menuId$;
   public menuName$ = this.menu$.pipe(
-    map(menu => menu?.name)
+    map(menu => menu?.name ?? '')
   );
   public menuEntries$ = combineLatest([
     this.menu$,
@@ -37,6 +37,7 @@ export class PlannerMenuComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _mealService: MealService,
     private _menuService: MenuService,
+    private _printService: PrintService,
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +46,16 @@ export class PlannerMenuComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._routeSubscription.unsubscribe();
+  }
+
+  public onPrint(): void {
+    combineLatest([
+      this.menuName$,
+      this.menuEntries$,
+    ]).pipe(
+      first(),
+      tap(([name, entries]) => this._printService.printMenu(name, entries))
+    ).subscribe();
   }
 
   public onClearDay({ day }: IMenuEntry): void {
