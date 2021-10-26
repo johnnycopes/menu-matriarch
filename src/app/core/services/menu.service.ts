@@ -23,7 +23,9 @@ export class MenuService {
   ) { }
 
   public get menuId$(): Observable<string> {
-    return this._menuId$.asObservable();
+    return this._menuId$.pipe(
+      shareReplay({ refCount: true, bufferSize: 1 })
+    );
   }
 
   public selectMenu(id: string): void {
