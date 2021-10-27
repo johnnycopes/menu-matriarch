@@ -1,0 +1,17 @@
+@import "main";
+
+:host {
+  display: block;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.title {
+  font-weight: map-get($font-weight, bold);
+  color: map-get($neutral, 4);
+  padding: map-get($spacing, 16) 0;
+}
+
+app-card:not(last-of-type) {
+  margin-bottom: map-get($spacing, 16);
+}

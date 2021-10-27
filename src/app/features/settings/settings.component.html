@@ -1,1 +1,29 @@
-<p>settings works!</p>
+<h3 class="title">
+  Account
+</h3>
+<app-card class="account">
+  content
+</app-card>
+
+<h3 class="title">
+  Settings
+</h3>
+<app-card class="account">
+  <form #form="ngForm"
+    *ngIf="preferences$ | async as preferences"
+  >
+    <app-input label="Menu Start Day">
+      <select
+        name="menuStartDay"
+        [ngModel]="preferences?.menuStartDay"
+        (ngModelChange)="onMenuStartDayChange($event)"
+      >
+        <option *ngFor="let day of days"
+          [ngValue]="day"
+        >
+          {{ day }}
+        </option>
+      </select>
+    </app-input>
+  </form>
+</app-card>

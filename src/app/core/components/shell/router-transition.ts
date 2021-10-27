@@ -4,7 +4,7 @@ const duration = 300;
 
 export const routerTransition = trigger("routerTransition", [
 	transition("* <=> *", [
-		query(":enter, :leave", style({ position: "absolute", width: "100%", opacity: 0 })),
+		query(":enter, :leave", style({ width: "100%", opacity: 0 })),
 		group([
 			query(
 				":enter", [
@@ -12,7 +12,7 @@ export const routerTransition = trigger("routerTransition", [
 			], { optional: true }),
 			query(
 				":leave", [
-				animate(0, style({ display: "none" }))
+				animate(0, style({ position: "absolute", display: "none", opacity: 0 }))
 			], { optional: true })
 		])
 	])
