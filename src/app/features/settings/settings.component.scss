@@ -1,17 +1,25 @@
 @import "main";
 
 :host {
-  display: block;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: max-content max-content;
+  grid-gap: map-get($spacing, 16);
   max-width: 1024px;
   margin: 0 auto;
 }
 
 .title {
+  grid-row: 1;
   font-weight: map-get($font-weight, bold);
   color: map-get($neutral, 4);
   padding: map-get($spacing, 16) 0;
 }
 
-app-card:not(last-of-type) {
-  margin-bottom: map-get($spacing, 16);
+app-card {
+  height: 100%;
+
+  & > *:not(:last-child) {
+    margin-bottom: map-get($spacing, 16);
+  }
 }
