@@ -6,6 +6,7 @@ import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
+import { getDays } from '@utility/get-days';
 import { FirestoreService } from './firestore.service';
 import { LocalStorageService } from './local-storage.service';
 import { UserService } from './user.service';
@@ -113,27 +114,8 @@ export class MenuService {
 
   public getOrderedDays(): Observable<Day[]> {
     return this._userService.getUser().pipe(
-      map(user => this._getOrderedDays(user?.preferences?.menuStartDay)),
+      map(user => getDays(user?.preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
-  }
-
-  private _getOrderedDays(startDay: Day = 'Monday'): Day[] {
-    switch (startDay) {
-      case 'Monday':
-        return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      case 'Tuesday':
-        return ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'];
-      case 'Wednesday':
-        return ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday'];
-      case 'Thursday':
-        return ['Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'];
-      case 'Friday':
-        return ['Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-      case 'Saturday':
-        return ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-      case 'Sunday':
-        return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    }
   }
 }

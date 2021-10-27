@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 
 import { Day } from '@models/types/day.type';
 import { UserService } from '@services/user.service';
+import { getDays } from '@utility/get-days';
 
 @Component({
   selector: 'app-settings',
@@ -13,7 +14,7 @@ export class SettingsComponent implements OnInit {
   public preferences$ = this._userService.getUser().pipe(
     map(user => user?.preferences),
   );
-  public days: Day[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  public days: Day[] = getDays();
 
   constructor(private _userService: UserService) { }
 

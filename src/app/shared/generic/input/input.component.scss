@@ -35,6 +35,15 @@ $size: 40px;
   }
 }
 
+::ng-deep select {
+  padding: map-get($spacing, 8);
+  border: map-get($border, thin) solid map-get($neutral, 7);
+  font-family: $font-stack;
+  font-size: map-get($font-size, 20);
+  outline: none;
+  background: $white;
+}
+
 .error {
   margin-top: map-get($spacing, 8);
 }

@@ -13,7 +13,7 @@
     *ngIf="preferences$ | async as preferences"
   >
     <app-input label="Menu Start Day">
-      <select
+      <select id="Menu Start Day"
         name="menuStartDay"
         [ngModel]="preferences?.menuStartDay"
         (ngModelChange)="onMenuStartDayChange($event)"
