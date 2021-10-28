@@ -1,0 +1,18 @@
+@import "main";
+
+:host {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.content {
+  display: grid;
+  place-items: center;
+  margin-bottom: 5%;
+}
+
+h1 {
+  font-size: map-get($font-size, 48);
+  margin-bottom: map-get($spacing, 32);
+}

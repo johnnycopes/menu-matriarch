@@ -23,13 +23,9 @@ export class WelcomeComponent implements OnInit {
   public async login(): Promise<void> {
     try {
       await this._authService.login();
-      this._router.navigate(['/menus']);
+      this._router.navigate(['/planner']);
     } catch (e) {
       console.error(e);
     }
-  }
-
-  public logout(): void {
-    this._authService.logout();
   }
 }

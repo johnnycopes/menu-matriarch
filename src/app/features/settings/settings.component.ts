@@ -35,7 +35,11 @@ export class SettingsComponent implements OnInit {
   }
 
   public async signOut(): Promise<void> {
-    await this._authService.logout();
-    this._router.navigate(['/welcome']);
+    try {
+      await this._authService.logout();
+      this._router.navigate(['/welcome']);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
