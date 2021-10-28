@@ -29,7 +29,7 @@ const routes: Routes = [
       { path: ':id', component: MealDetailsComponent },
       { path: ':id/edit', component: MealEditComponent },
     ] },
-    { path: '', redirectTo: 'menus', pathMatch: 'full', data: { state: ERoute.menus } },
+    { path: '', redirectTo: 'planner', pathMatch: 'full', data: { state: ERoute.menus } },
     { path: 'settings', component: SettingsComponent, data: { state: ERoute.settings } },
   ]},
   { path: '**', component: PageNotFoundComponent },

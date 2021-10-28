@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { filter, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
@@ -50,6 +50,7 @@ export class MenuService {
 
   public getMenu(): Observable<IMenu | undefined> {
     return this._menuId$.pipe(
+      filter(id => !!id),
       switchMap(this._firestoreService.getMenu)
     );
   }
