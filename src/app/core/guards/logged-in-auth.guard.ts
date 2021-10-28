@@ -22,7 +22,7 @@ export class LoggedInAuthGuard implements CanActivate {
       first(),
       map(loggedIn => {
         if (loggedIn) {
-          return this._router.createUrlTree(['/menus']);
+          return this._router.createUrlTree(['/planner']);
         }
         return true;
       })
