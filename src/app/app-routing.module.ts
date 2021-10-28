@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: '', component: ShellComponent, canActivate: [AuthGuard], children: [
     { path: 'demo', component: DemoComponent, data: { state: ERoute.demo } },
     { path: 'planner/:menuId', component: PlannerComponent, data: { state: ERoute.planner } },
+    { path: 'planner', component: PlannerComponent, data: { state: ERoute.planner } },
     { path: 'menus', component: MenusComponent, data: { state: ERoute.menus } },
     { path: 'meals', component: MealsComponent, data: { state: ERoute.meals }, children: [
       { path: '', component: MealPlaceholderComponent, pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
       { path: ':id', component: MealDetailsComponent },
       { path: ':id/edit', component: MealEditComponent },
     ] },
+    { path: '', redirectTo: 'menus', pathMatch: 'full', data: { state: ERoute.menus } },
     { path: 'settings', component: SettingsComponent, data: { state: ERoute.settings } },
   ]},
   { path: '**', component: PageNotFoundComponent },
