@@ -23,7 +23,7 @@ export class WelcomeComponent implements OnInit {
   public async login(): Promise<void> {
     try {
       await this._authService.login();
-      this._router.navigate(['/planner']);
+      this._router.navigate(['/menus']);
     } catch (e) {
       console.error(e);
     }

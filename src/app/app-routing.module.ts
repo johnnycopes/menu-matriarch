@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { ERoute } from '@models/enums/route.enum';
+import { AuthGuard } from './core/guards/auth.guard';
+import { LoggedInAuthGuard } from './core/guards/logged-in-auth.guard';
 import { DemoComponent } from './features/demo/demo.component';
 import { MealDetailsComponent } from './features/meals/meal-details/meal-details.component';
 import { MealEditComponent } from './features/meals/meal-edit/meal-edit.component';
@@ -15,8 +17,8 @@ import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 const routes: Routes = [
-  { path: '', component: ShellComponent, children: [
-    { path: 'welcome', component: WelcomeComponent, data: { state: ERoute.welcome } },
+  { path: 'welcome', component: WelcomeComponent, canActivate: [LoggedInAuthGuard], data: { state: ERoute.welcome } },
+  { path: '', component: ShellComponent, canActivate: [AuthGuard], children: [
     { path: 'demo', component: DemoComponent, data: { state: ERoute.demo } },
     { path: 'planner/:menuId', component: PlannerComponent, data: { state: ERoute.planner } },
     { path: 'menus', component: MenusComponent, data: { state: ERoute.menus } },

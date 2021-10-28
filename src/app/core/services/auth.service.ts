@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IUser } from '@models/interfaces/user.interface';
 import { FirestoreService } from './firestore.service';
@@ -18,6 +20,12 @@ export class AuthService {
     private _firestoreService: FirestoreService,
     private _menuService: MenuService,
   ) { }
+
+  public get loggedIn$(): Observable<boolean> {
+    return this._auth.user.pipe(
+      map(Boolean)
+    );
+  }
 
   public async login(): Promise<void> {
     const loginInfo = await this._auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
@@ -41,7 +49,7 @@ export class AuthService {
     }
   }
 
-  public logout(): void {
-    this._auth.signOut();
+  public async logout(): Promise<void> {
+    await this._auth.signOut();
   }
 }

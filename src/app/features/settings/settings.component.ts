@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 import { Day } from '@models/types/day.type';
@@ -19,6 +20,7 @@ export class SettingsComponent implements OnInit {
   public days: Day[] = getDays();
 
   constructor(
+    private _router: Router,
     private _authService: AuthService,
     private _userService: UserService,
   ) { }
@@ -32,7 +34,8 @@ export class SettingsComponent implements OnInit {
       .subscribe();
   }
 
-  public signOut(): void {
-    this._authService.logout();
+  public async signOut(): Promise<void> {
+    await this._authService.logout();
+    this._router.navigate(['/welcome']);
   }
 }
