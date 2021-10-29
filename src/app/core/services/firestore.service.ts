@@ -18,7 +18,10 @@ export class FirestoreService {
     return this._firestore
       .collection<IUser | undefined>('users')
       .doc(uid)
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true }),
+      );
   }
 
   public createUser = async ({ uid, displayName, email }: {
@@ -36,6 +39,7 @@ export class FirestoreService {
         preferences: {
           darkMode: false,
           dayNameDisplay: 'full',
+          emptyMealText: 'undecided',
           menuStartDay: 'Monday',
         },
       });

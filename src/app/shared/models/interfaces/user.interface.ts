@@ -11,5 +11,6 @@ export interface IUser {
 export interface IUserPreferences {
   darkMode: boolean;
   dayNameDisplay: DayNameDisplay;
+  emptyMealText: string;
   menuStartDay: Day;
 }

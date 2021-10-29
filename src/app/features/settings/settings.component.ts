@@ -34,6 +34,12 @@ export class SettingsComponent implements OnInit {
       .subscribe();
   }
 
+  public onEmptyMealTextChange(text: string): void {
+    this._userService
+      .updatePreferences({ emptyMealText: text })
+      .subscribe();
+  }
+
   public async signOut(): Promise<void> {
     try {
       await this._authService.logout();

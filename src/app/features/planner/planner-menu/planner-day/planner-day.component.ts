@@ -12,6 +12,7 @@ import { Day } from '@models/types/day.type';
 export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
   @Input() meal: IMeal | undefined;
+  @Input() emptyMealText = '';
   @Output() clear = new EventEmitter<void>();
   public faTimes: IconDefinition = faTimes;
 

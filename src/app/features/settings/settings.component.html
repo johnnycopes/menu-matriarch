@@ -34,6 +34,19 @@
           </option>
         </select>
       </app-input>
+      <app-input
+        label="Empty Meal Text"
+      >
+        <input
+          id="Empty Meal Text"
+          type="text"
+          name="emptyMealText"
+          required
+          [ngModel]="user?.preferences?.emptyMealText"
+          (ngModelChange)="onEmptyMealTextChange($event)"
+          appAutofocus
+        />
+      </app-input>
     </form>
   </app-card>
 </ng-container>

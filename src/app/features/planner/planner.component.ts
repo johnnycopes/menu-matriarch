@@ -11,18 +11,18 @@ import { first, map, tap } from 'rxjs/operators';
 })
 export class PlannerComponent implements OnDestroy {
   private _routeSubscription = this._route.paramMap.pipe(
-    map(paramMap => paramMap.get('menuId') ?? '')
+    map(paramMap => paramMap.get('menuId') ?? ''),
   ).subscribe(menuId => {
     const savedMenuId = this._localStorageService.getMenuId();
     if (menuId) {
       this._menuService.selectMenu(menuId);
     } else if (savedMenuId) {
-      this._router.navigate([savedMenuId], { relativeTo: this._route });
+      this._router.navigate(['/planner', savedMenuId]);
     } else {
       this._menuService.getMenus().pipe(
         first(),
         map(menus => menus[0].id),
-        tap(menuId => this._router.navigate([menuId], { relativeTo: this._route }))
+        tap(menuId => this._router.navigate(['/planner', menuId])),
       ).subscribe();
     }
   });

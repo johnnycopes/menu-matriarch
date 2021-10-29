@@ -8,8 +8,14 @@
   ></fa-icon>
 </app-small-caps-label>
 
-<app-meal-summary *ngIf="meal"
+<app-meal-summary *ngIf="meal; else empty"
+  class="contents"
   [id]="meal.id"
   [name]="meal.name"
   [description]="meal.description"
 ></app-meal-summary>
+<ng-template #empty>
+  <h3 [app-meal-name]
+    class="contents"
+  ></h3>
+</ng-template>

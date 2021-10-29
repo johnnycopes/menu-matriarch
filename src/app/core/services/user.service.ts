@@ -34,6 +34,12 @@ export class UserService {
     return this.getData(this._firestoreService.getUser);
   }
 
+  public getPreferences(): Observable<IUserPreferences | undefined> {
+    return this.getData(this._firestoreService.getUser).pipe(
+      map(user => user?.preferences)
+    );
+  }
+
   public updatePreferences(updates: Partial<IUserPreferences>) {
     return this.getData(this._firestoreService.getUser).pipe(
       first(),
@@ -41,14 +47,16 @@ export class UserService {
         const fallbackPreferences = user?.preferences ?? {
           darkMode: false,
           dayNameDisplay: 'full',
+          emptyMealText: 'undecided',
           menuStartDay: 'Monday',
         };
         await this._firestoreService.updateUser(
           user?.uid,
           { preferences: {
-            menuStartDay: updates?.menuStartDay ?? fallbackPreferences.menuStartDay,
             darkMode: updates?.darkMode ?? fallbackPreferences.darkMode,
             dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
+            emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
+            menuStartDay: updates?.menuStartDay ?? fallbackPreferences.menuStartDay,
           },
         });
       }),

@@ -51,9 +51,7 @@
         </h4>
       </app-small-caps-label>
       <a routerLink="/meals/{{ entry.meal?.id }}">
-        <h4>
-          {{ entry.meal?.name }}
-        </h4>
+        <h4 [app-meal-name]="entry.meal?.name"></h4>
       </a>
     </li>
   </ul>

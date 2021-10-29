@@ -1,0 +1,6 @@
+@import "main";
+
+:host(.app-meal-name--placeholder) {
+  color: map-get($neutral, 6);
+  font-style: italic;
+}

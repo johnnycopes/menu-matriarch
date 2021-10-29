@@ -13,13 +13,12 @@
   grid-row: 1;
   font-weight: map-get($font-weight, bold);
   color: map-get($neutral, 4);
-  padding: map-get($spacing, 16) 0;
+  padding: map-get($spacing, 16) 0 0;
 }
 
 app-card {
-  height: 100%;
 
-  & > *:not(:last-child) {
-    margin-bottom: map-get($spacing, 16);
+  *:not(:last-child) {
+    margin-bottom: map-get($spacing, 32);
   }
 }
