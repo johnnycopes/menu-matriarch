@@ -116,8 +116,8 @@ export class MenuService {
   }
 
   public getOrderedDays(): Observable<Day[]> {
-    return this._userService.getUser().pipe(
-      map(user => getDays(user?.preferences?.menuStartDay)),
+    return this._userService.getPreferences().pipe(
+      map(preferences => getDays(preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
   }
