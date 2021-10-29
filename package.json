@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy-dev": "firebase deploy --project menu-matriarch-dev",
-    "deploy-prod": "firebase deploy --project menu-matriarch"
+    "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev",
+    "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch"
   },
   "private": true,
   "dependencies": {
