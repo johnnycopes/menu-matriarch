@@ -23,25 +23,22 @@ export class UserService {
     );
   }
 
-  public getData<T>(dataFn: (uid: string | undefined) => Observable<T>): Observable<T> {
-    return this._auth.user.pipe(
-      map(user => user?.uid),
-      switchMap(dataFn)
+  public getUser(): Observable<IUser | undefined> {
+    return this.uid$.pipe(
+      switchMap(this._firestoreService.getUser),
     );
   }
 
-  public getUser(): Observable<IUser | undefined> {
-    return this.getData(this._firestoreService.getUser);
-  }
-
   public getPreferences(): Observable<IUserPreferences | undefined> {
-    return this.getData(this._firestoreService.getUser).pipe(
-      map(user => user?.preferences)
+    return this.uid$.pipe(
+      switchMap(this._firestoreService.getUser),
+      map(user => user?.preferences),
     );
   }
 
   public updatePreferences(updates: Partial<IUserPreferences>) {
-    return this.getData(this._firestoreService.getUser).pipe(
+    return this.uid$.pipe(
+      switchMap(this._firestoreService.getUser),
       first(),
       tap(async user => {
         const fallbackPreferences = user?.preferences ?? {

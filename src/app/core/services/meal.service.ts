@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { first, tap } from 'rxjs/operators';
+import { first, switchMap, tap } from 'rxjs/operators';
 
 import { IMeal } from '@models/interfaces/meal.interface';
 import { FirestoreService } from './firestore.service';
@@ -40,6 +40,8 @@ export class MealService {
   }
 
   public getMeals(): Observable<IMeal[]> {
-    return this._userService.getData(this._firestoreService.getMeals);
+    return this._userService.uid$.pipe(
+      switchMap(this._firestoreService.getMeals)
+    );
   }
 }

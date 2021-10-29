@@ -56,7 +56,9 @@ export class MenuService {
   }
 
   public getMenus(): Observable<IMenu[]> {
-    return this._userService.getData(this._firestoreService.getMenus);
+    return this._userService.uid$.pipe(
+      switchMap(this._firestoreService.getMenus)
+    );
   }
 
   public createMenu(name: string): Observable<string | undefined> {
