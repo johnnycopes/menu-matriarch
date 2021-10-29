@@ -34,4 +34,8 @@ body {
 */
 a {
   color: map-get($neutral, 1);
+
+  &:hover {
+    color: map-get($indigo, $key: 5);
+  }
 }
