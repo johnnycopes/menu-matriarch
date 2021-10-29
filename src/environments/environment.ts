@@ -9,13 +9,12 @@ import { getAnalytics } from "firebase/analytics";
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyBFGtIzVyFYkAFd2TxurBPWWSKvxa9Ackg",
-    authDomain: "menu-matriarch.firebaseapp.com",
-    projectId: "menu-matriarch",
-    storageBucket: "menu-matriarch.appspot.com",
-    messagingSenderId: "777612475421",
-    appId: "1:777612475421:web:2ccd49956ce868f54a1af4",
-    measurementId: "G-TH0619DG5N"
+    apiKey: "AIzaSyDKEob5wkG_7I7v1c1c2p2ISHsg9R1IdBk",
+    authDomain: "menu-matriarch-dev.firebaseapp.com",
+    projectId: "menu-matriarch-dev",
+    storageBucket: "menu-matriarch-dev.appspot.com",
+    messagingSenderId: "842760878413",
+    appId: "1:842760878413:web:532bc9aeb4e93a13ef5f04"
   },
 };
 

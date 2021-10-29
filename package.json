@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy-dev": "firebase deploy --project menu-matriarch-dev",
+    "deploy-prod": "firebase deploy --project menu-matriarch"
   },
   "private": true,
   "dependencies": {
