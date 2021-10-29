@@ -40,11 +40,19 @@ export class AuthService {
       if (!user.exists) {
         const newMenuId = await this._firestoreService.createMenu(uid, 'My First Menu');
         this._menuService.selectMenu(newMenuId);
-        this._firestoreService.createUser({
-          uid,
-          displayName,
-          email,
-        });
+        await Promise.all([
+          this._firestoreService.createMeal(uid, { name: 'Bagels', description: 'Delicious round vessels from Poland' }),
+          this._firestoreService.createMeal(uid, { name: 'DIY', description: "You're on your own tonight!" }),
+          this._firestoreService.createMeal(uid, { name: 'Pizza', description: 'Delicious flat vessel from Italy' }),
+          this._firestoreService.createMeal(uid, { name: 'Salad', description: 'Lots of leaves in a bowl. Gross!' }),
+          this._firestoreService.createMeal(uid, { name: 'Sushi', description: 'Delicious tiny vessels from Japan' }),
+          this._firestoreService.createMeal(uid, { name: 'Tacos', description: 'Delicious small vessels from Mexico' }),
+          this._firestoreService.createUser({
+            uid,
+            displayName,
+            email,
+          }),
+        ]);
       }
     }
   }
