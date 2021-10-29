@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 
 import { IUserPreferences } from '@models/interfaces/user.interface';
 import { Day } from '@models/types/day.type';
@@ -14,11 +14,12 @@ import { getDays } from '@utility/get-days';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   public user$ = this._userService.getUser();
   public preferences$ = this._userService.preferences$;
   public updateAction$ = new Subject<Partial<IUserPreferences>>();
   public days: Day[] = getDays();
+  private _destroy$ = new Subject<void>();
 
   constructor(
     private _router: Router,
@@ -26,11 +27,17 @@ export class SettingsComponent implements OnInit {
     private _userService: UserService,
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.updateAction$.pipe(
+      takeUntil(this._destroy$),
       debounceTime(200),
       switchMap(update => this._userService.updatePreferences(update))
     ).subscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public async signOut(): Promise<void> {

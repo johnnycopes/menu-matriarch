@@ -13,7 +13,7 @@ export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
   @Input('appOptionsMenuTrigger') menu: OptionsMenuComponent | undefined;
   private _templatePortal: TemplatePortal<any> | undefined;
   private _overlayRef: OverlayRef | undefined;
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
 
   constructor(
     private _viewContainerRef: ViewContainerRef,

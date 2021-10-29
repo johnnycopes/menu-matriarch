@@ -47,7 +47,7 @@ export class UserService {
     );
   }
 
-  public updatePreferences(updates: Partial<IUserPreferences>) {
+  public updatePreferences(updates: Partial<IUserPreferences>): Observable<IUser | undefined> {
     return this.uid$.pipe(
       switchMap(this._firestoreService.getUser),
       first(),
