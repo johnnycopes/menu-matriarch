@@ -25,7 +25,7 @@
         <select id="Menu Start Day"
           name="menuStartDay"
           [ngModel]="user.preferences?.menuStartDay"
-          (ngModelChange)="onMenuStartDayChange($event)"
+          (ngModelChange)="updateAction$.next({ menuStartDay: $event })"
         >
           <option *ngFor="let day of days"
             [ngValue]="day"
@@ -41,9 +41,8 @@
           id="Empty Meal Text"
           type="text"
           name="emptyMealText"
-          required
           [ngModel]="user?.preferences?.emptyMealText"
-          (ngModelChange)="onEmptyMealTextChange($event)"
+          (ngModelChange)="updateAction$.next({ emptyMealText: $event })"
           appAutofocus
         />
       </app-input>

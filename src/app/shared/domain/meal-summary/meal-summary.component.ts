@@ -13,7 +13,7 @@ export class MealSummaryComponent {
   @Input() id: string | undefined;
   @Input() name: string | undefined;
   @Input() description: string | undefined;
-  public fallbackName$ = this._userService.getPreferences().pipe(
+  public fallbackName$ = this._userService.preferences$.pipe(
     map(preferences => preferences?.emptyMealText ?? '')
   );
 

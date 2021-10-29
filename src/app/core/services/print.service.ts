@@ -11,7 +11,7 @@ export class PrintService {
 
   public printMenu(name: string, entries: IMenuEntry[]): void {
     let popupWin;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100vh,width=auto');
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin?.document.open();
     popupWin?.document.write(`
       <html>

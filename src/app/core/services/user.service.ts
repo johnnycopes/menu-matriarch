@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { IUser, IUserPreferences } from '@models/interfaces/user.interface';
@@ -10,11 +10,22 @@ import { FirestoreService } from './firestore.service';
   providedIn: 'root'
 })
 export class UserService {
+  private _preferencesSubject$ = new BehaviorSubject<IUserPreferences | undefined>({
+    darkMode: false,
+    dayNameDisplay: 'full',
+    emptyMealText: 'undecided',
+    menuStartDay: 'Monday',
+  });
+  public preferences$ = this._preferencesSubject$.asObservable();
 
   constructor(
     private _auth: AngularFireAuth,
     private _firestoreService: FirestoreService,
-  ) { }
+  ) {
+    this.getPreferences().subscribe(
+      preferences => this._preferencesSubject$.next(preferences)
+    );
+  }
 
   public get uid$() {
     return this._auth.user.pipe(

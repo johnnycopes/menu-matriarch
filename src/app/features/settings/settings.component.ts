@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
+import { IUserPreferences } from '@models/interfaces/user.interface';
 import { Day } from '@models/types/day.type';
 import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
@@ -14,9 +16,8 @@ import { getDays } from '@utility/get-days';
 })
 export class SettingsComponent implements OnInit {
   public user$ = this._userService.getUser();
-  public preferences$ = this._userService.getUser().pipe(
-    map(user => user?.preferences),
-  );
+  public preferences$ = this._userService.preferences$;
+  public updateAction$ = new Subject<Partial<IUserPreferences>>();
   public days: Day[] = getDays();
 
   constructor(
@@ -26,18 +27,10 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-  }
-
-  public onMenuStartDayChange(day: Day): void {
-    this._userService
-      .updatePreferences({ menuStartDay: day })
-      .subscribe();
-  }
-
-  public onEmptyMealTextChange(text: string): void {
-    this._userService
-      .updatePreferences({ emptyMealText: text })
-      .subscribe();
+    this.updateAction$.pipe(
+      debounceTime(200),
+      switchMap(update => this._userService.updatePreferences(update))
+    ).subscribe();
   }
 
   public async signOut(): Promise<void> {
