@@ -36,11 +36,15 @@
   font-size: map-get($font-size, 16);
   color: map-get($neutral, 10);
 
+  &:hover {
+    background: map-get($neutral, 4);
+  }
+
   &:last-of-type {
     margin-left: auto;
   }
 
   &--active {
-    background: map-get($neutral, 4);
+    background: map-get($neutral, 3);
   }
 }

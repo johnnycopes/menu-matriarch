@@ -30,7 +30,7 @@ $size: 40px;
   font-size: map-get($font-size, 14);
   font-family: $font-stack;
   font-weight: 700;
-  color: $white;
+  color: $white !important;
   @include small-caps();
 
   &--icon {

@@ -28,22 +28,6 @@ body {
 	overflow: hidden;
 }
 
-code {
-	padding: map-get($spacing, 4) map-get($spacing, 8);
-	background: map-get($neutral, 10);
-	border: 1px solid map-get($neutral, 8);
-	border-radius: map-get($border, radius);
-	font-family: monospace;
-	font-size: map-get($font-size, 16);
-	color: map-get($red, 6);
-}
-
-.global {
-
-	&__modal-backdrop {
-		background: rgba(16, 42, 66, .7); // map-get($neutral, 1)
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+a {
+  color: map-get($neutral, 1);
 }

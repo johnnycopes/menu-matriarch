@@ -59,7 +59,9 @@ export class FirestoreService {
     return this._firestore
       .collection<IMenu>(
         'menus',
-        ref => ref.where('uid', '==', uid),
+        ref => ref
+          .where('uid', '==', uid)
+          .orderBy('name')
       )
       .valueChanges()
       .pipe(
