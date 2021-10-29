@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { map, tap } from 'rxjs/operators';
+
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-meal-summary',
@@ -6,16 +9,13 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
   styleUrls: ['./meal-summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MealSummaryComponent implements OnInit {
-  @Input() id: string = '';
-  @Input() name: string = '';
+export class MealSummaryComponent {
+  @Input() id: string | undefined;
+  @Input() name: string | undefined;
   @Input() description: string | undefined;
+  public fallbackName$ = this._userService.getPreferences().pipe(
+    map(preferences => preferences?.emptyMealText ?? '')
+  );
 
-  constructor() { }
-
-  public ngOnInit(): void {
-    if (!this.name) {
-      throw new Error('MealComponent must have an assigned "meal" property');
-    }
-  }
+  constructor(private _userService: UserService) { }
 }

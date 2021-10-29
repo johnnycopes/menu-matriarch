@@ -1,9 +1,18 @@
-<a routerLink="/meals/{{ id }}">
-  <h3>
+<a *ngIf="id && name; else empty"
+  routerLink="/meals/{{ id }}"
+>
+  <h3 class="name">
     {{ name }}
   </h3>
-
-  <p *ngIf="description">
-    {{ description }}
-  </p>
 </a>
+<ng-template #empty>
+  <h3 class="placeholder">
+    {{ fallbackName$ | async }}
+  </h3>
+</ng-template>
+
+<p *ngIf="description"
+  class="description"
+>
+  {{ description }}
+</p>

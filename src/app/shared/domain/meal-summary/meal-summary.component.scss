@@ -4,11 +4,17 @@
   display: block;
 }
 
-h3 {
+.name,
+.placeholder {
   margin-bottom: map-get($spacing, 8);
 }
 
-p {
+.placeholder {
+  color: map-get($neutral, 6);
+  font-style: italic;
+}
+
+.description {
   font-size: 14px;
   color: map-get($neutral, 6);
 }
