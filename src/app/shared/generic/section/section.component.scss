@@ -15,6 +15,7 @@
   &__content {
     grid-row: 2;
     padding: map-get($spacing, 16);
+    padding-top: 0;
     overflow: auto;
     height: 100%;
   }

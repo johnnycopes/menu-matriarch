@@ -4,7 +4,7 @@ $size: 40px;
 
 @mixin button-style($background, $hover, $box-shadow, $disabled) {
   background: $background;
-  color: $white;
+  color: $white !important;
   @include box-shadow($box-shadow);
 
   &:hover {
@@ -48,10 +48,10 @@ $size: 40px;
 
   &--ternary {
     background: transparent;
-    color: map-get($neutral, 4);
+    color: map-get($neutral, 4) !important;
 
     &:hover {
-      color: map-get($neutral, 3);
+      color: map-get($neutral, 3) !important;
       background: map-get($neutral, 10);
       @include box-shadow(map-get($neutral, 9));
     }

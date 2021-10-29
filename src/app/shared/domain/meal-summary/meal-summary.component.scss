@@ -4,11 +4,6 @@
   display: block;
 }
 
-.name,
-.placeholder {
-  margin-bottom: map-get($spacing, 8);
-}
-
 .placeholder {
   color: map-get($neutral, 6);
   font-style: italic;
@@ -17,4 +12,5 @@
 .description {
   font-size: 14px;
   color: map-get($neutral, 6);
+  margin-top: map-get($spacing, 8);
 }
