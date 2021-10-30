@@ -17,7 +17,8 @@
   >
     Meals
   </a>
-  <a class="link"
+  <a *ngIf="showDemo"
+    class="link"
     [routerLink]="ERoute.demo"
     routerLinkActive="link--active"
   >

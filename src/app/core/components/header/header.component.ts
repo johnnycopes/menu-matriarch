@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { environment } from '@env/environment';
 import { ERoute } from '@models/enums/route.enum';
 import { MenuService } from '@services/menu.service';
 
@@ -12,6 +13,7 @@ import { MenuService } from '@services/menu.service';
 export class HeaderComponent {
   public ERoute: typeof ERoute = ERoute;
   public menuId$ = this._menuService.menuId$;
+  public showDemo = !environment.production;
 
   constructor(private _menuService: MenuService) { }
 }
