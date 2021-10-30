@@ -22,8 +22,9 @@ export class UserService {
     private _auth: AngularFireAuth,
     private _firestoreService: FirestoreService,
   ) {
-    this.getPreferences().subscribe(
-      preferences => this._preferencesSubject$.next(preferences)
+    this.uid$.pipe(
+      switchMap(this.getPreferences),
+      map(preferences => this._preferencesSubject$.next(preferences))
     );
   }
 
