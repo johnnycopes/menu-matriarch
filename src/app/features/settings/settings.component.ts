@@ -16,7 +16,7 @@ import { getDays } from '@utility/get-days';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   public user$ = this._userService.getUser();
-  public preferences$ = this._userService.preferences$;
+  public preferences$ = this._userService.getPreferences();
   public updateAction$ = new Subject<Partial<IUserPreferences>>();
   public days: Day[] = getDays();
   private _destroy$ = new Subject<void>();

@@ -3,6 +3,7 @@ import { combineLatest } from 'rxjs';
 import { first, map, tap } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { Day } from '@models/types/day.type';
 import { MealService } from '@services/meal.service';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
@@ -53,5 +54,9 @@ export class PlannerMenuComponent {
     this._menuService
       .clearMenuContents()
       .subscribe();
+  }
+
+  public trackByFn(index: number, { day }: IMenuEntry): Day {
+    return day;
   }
 }

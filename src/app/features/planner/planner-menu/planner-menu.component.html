@@ -17,7 +17,7 @@
   </div>
   <ul class="app-section__content">
     <li app-planner-day
-      *ngFor="let menuEntry of menuEntries$ | async"
+      *ngFor="let menuEntry of menuEntries$ | async; trackBy: trackByFn"
       [day]="menuEntry.day"
       [meal]="menuEntry.meal"
       (clear)="onClearDay(menuEntry)"

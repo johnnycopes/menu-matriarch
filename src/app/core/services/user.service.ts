@@ -10,23 +10,11 @@ import { FirestoreService } from './firestore.service';
   providedIn: 'root'
 })
 export class UserService {
-  private _preferencesSubject$ = new BehaviorSubject<IUserPreferences | undefined>({
-    darkMode: false,
-    dayNameDisplay: 'full',
-    emptyMealText: 'undecided',
-    menuStartDay: 'Monday',
-  });
-  public preferences$ = this._preferencesSubject$.asObservable();
 
   constructor(
     private _auth: AngularFireAuth,
     private _firestoreService: FirestoreService,
-  ) {
-    this.uid$.pipe(
-      switchMap(this.getPreferences),
-      map(preferences => this._preferencesSubject$.next(preferences))
-    );
-  }
+  ) { }
 
   public get uid$() {
     return this._auth.user.pipe(
