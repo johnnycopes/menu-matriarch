@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { IUser, IUserPreferences } from '@models/interfaces/user.interface';
@@ -27,6 +27,34 @@ export class UserService {
   public getUser(): Observable<IUser | undefined> {
     return this.uid$.pipe(
       switchMap(uid => this._firestoreService.getOne<IUser>(this._endpoint, uid)),
+    );
+  }
+
+  public createUser(
+    { name, email }: { name: string, email: string }
+  ): Observable<string | undefined> {
+    return this.uid$.pipe(
+      first(),
+      tap(async uid => {
+        console.log('create user', uid);
+        if (uid) {
+          await this._firestoreService.create<IUser>(
+            this._endpoint,
+            uid,
+            {
+              uid,
+              name,
+              email,
+              preferences: {
+                darkMode: false,
+                dayNameDisplay: 'full',
+                emptyMealText: 'undecided',
+                menuStartDay: 'Monday',
+              },
+            }
+          );
+        }
+      })
     );
   }
 

@@ -21,12 +21,26 @@ export class MealService {
     return this._firestoreService.getOne<IMeal>(this._endpoint, id);
   }
 
-  public createMeal(info: Partial<IMeal>): Observable<string | undefined> {
+  public createMeal(
+    { name, description }: { name: string, description: string }
+  ): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
       tap(async uid => {
         if (uid) {
-          await this._firestoreService.createMeal(uid, info);
+          const id = this._firestoreService.createId();
+          await this._firestoreService.create<IMeal>(
+            this._endpoint,
+            id,
+            {
+              id,
+              uid,
+              name,
+              description,
+              favorited: false,
+              ingredients: [],
+            }
+          );
         }
       })
     );

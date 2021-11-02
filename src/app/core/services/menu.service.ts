@@ -67,7 +67,26 @@ export class MenuService {
       first(),
       tap(async uid => {
         if (uid) {
-          await this._firestoreService.createMenu(uid, name);
+          const id = this._firestoreService.createId();
+          await this._firestoreService.create<IMenu>(
+            this._endpoint,
+            id,
+            {
+              id,
+              uid,
+              name,
+              favorited: false,
+              contents: {
+                Monday: null,
+                Tuesday: null,
+                Wednesday: null,
+                Thursday: null,
+                Friday: null,
+                Saturday: null,
+                Sunday: null,
+              },
+            }
+          );
         }
       })
     );
