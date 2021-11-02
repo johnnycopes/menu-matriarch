@@ -4,17 +4,12 @@ import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { FirestoreService } from './firestore.service';
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(
-    private _auth: AngularFireAuth,
-    private _firestoreService: FirestoreService,
-  ) { }
+  constructor(private _auth: AngularFireAuth) { }
 
   public get loggedIn$(): Observable<boolean> {
     return this._auth.user.pipe(
@@ -22,20 +17,12 @@ export class AuthService {
     );
   }
 
-  public async login(): Promise<void> {
+  public async login(): Promise<{ name: string, email: string } | void> {
     const loginInfo = await this._auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     if (loginInfo?.user && loginInfo.additionalUserInfo?.isNewUser) {
-      const { uid, displayName, email } = loginInfo.user;
-      await Promise.all([
-        this._firestoreService.createUser({ uid, displayName, email }),
-        this._firestoreService.createMenu(uid, 'My First Menu'),
-        this._firestoreService.createMeal(uid, { name: 'Bagels', description: 'Delicious round vessels from Poland' }),
-        this._firestoreService.createMeal(uid, { name: 'DIY', description: "You're on your own tonight!" }),
-        this._firestoreService.createMeal(uid, { name: 'Pizza', description: 'Delicious flat vessel from Italy' }),
-        this._firestoreService.createMeal(uid, { name: 'Salad', description: 'Lots of leaves in a bowl. Gross!' }),
-        this._firestoreService.createMeal(uid, { name: 'Sushi', description: 'Delicious tiny vessels from Japan' }),
-        this._firestoreService.createMeal(uid, { name: 'Tacos', description: 'Delicious small vessels from Mexico' }),
-      ]);
+      const displayName = loginInfo.user.displayName ?? '';
+      const email = loginInfo.user.email ?? '';
+      return { name: displayName, email };
     }
   }
 
