@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
@@ -14,14 +14,55 @@ export class FirestoreService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  public getUser = (uid: string | undefined): Observable<IUser | undefined> => {
+  public createId(): string {
+    return this._firestore.createId();
+  }
+
+  public getOne<T>(endpoint: string, uid: string | undefined): Observable<T | undefined> {
     return this._firestore
-      .collection<IUser | undefined>('users')
+      .collection<T | undefined>(endpoint)
       .doc(uid)
       .valueChanges()
       .pipe(
         shareReplay({ bufferSize: 1, refCount: true }),
       );
+  }
+
+  public getMany<T>(endpoint: string, uid: string | undefined): Observable<T[]> {
+    if (!uid) {
+      return of([]);
+    }
+    return this._firestore
+      .collection<T>(
+        endpoint,
+        ref => ref
+          .where('uid', '==', uid)
+          .orderBy('name')
+      )
+      .valueChanges()
+      .pipe(
+        shareReplay({ bufferSize: 1, refCount: true }),
+      );
+  }
+
+  public async create<T>(endpoint: string, details: T): Promise<DocumentReference<T>> {
+    return await this._firestore
+      .collection<T>(endpoint)
+      .add(details);
+  }
+
+  public async update<T>(endpoint: string, id: string, updates: Partial<T>): Promise<void> {
+    return this._firestore
+      .collection<T>(endpoint)
+      .doc(id)
+      .update(updates);
+  }
+
+  public async delete<T>(id: string | undefined, endpoint: string): Promise<void> {
+    await this._firestore
+      .collection<T>(endpoint)
+      .doc(id)
+      .delete();
   }
 
   public createUser = async ({ uid, displayName, email }: {
@@ -43,40 +84,6 @@ export class FirestoreService {
           menuStartDay: 'Monday',
         },
       });
-  }
-
-  public updateUser = async (uid: string | undefined, updates: Partial<IUser>) => {
-    await this._firestore
-      .collection<IUser>('users')
-      .doc(uid)
-      .update(updates);
-  };
-
-  public getMenus = (uid: string | undefined): Observable<IMenu[]> => {
-    if (!uid) {
-      return of([]);
-    }
-    return this._firestore
-      .collection<IMenu>(
-        'menus',
-        ref => ref
-          .where('uid', '==', uid)
-          .orderBy('name')
-      )
-      .valueChanges()
-      .pipe(
-        shareReplay({ bufferSize: 1, refCount: true }),
-      );
-  }
-
-  public getMenu = (id: string): Observable<IMenu | undefined> => {
-    return this._firestore
-      .collection<IMenu | undefined>('menus')
-      .doc(id)
-      .valueChanges()
-      .pipe(
-        shareReplay({ bufferSize: 1, refCount: true })
-      );
   }
 
   public createMenu = async (uid: string, name: string): Promise<string> => {
@@ -102,46 +109,6 @@ export class FirestoreService {
     return id;
   }
 
-  public updateMenu = async (id: string, updates: Partial<IMenu>): Promise<void> => {
-    return this._firestore
-      .collection<IMenu>('menus')
-      .doc(id)
-      .update(updates);
-  }
-
-  public deleteMenu = async (id: string): Promise<void> => {
-    await this._firestore
-      .collection<IMenu>('menus')
-      .doc(id)
-      .delete();
-  }
-
-  public getMeals = (uid: string | undefined): Observable<IMeal[]> => {
-    if (!uid) {
-      return of([]);
-    }
-    return this._firestore
-      .collection<IMeal>(
-        'meals',
-        ref => ref
-          .where('uid', '==', uid)
-          .orderBy('name')
-      )
-      .valueChanges()
-      .pipe(
-        shareReplay({ bufferSize: 1, refCount: true })
-      );
-  }
-
-  public getMeal = (id: string): Observable<IMeal | undefined> => {
-    return this._firestore
-      .doc<IMeal>(`meals/${id}`)
-      .valueChanges()
-      .pipe(
-        shareReplay({ bufferSize: 1, refCount: true })
-      );
-  }
-
   public createMeal = async (uid: string, { name, description }: Partial<IMeal>): Promise<string> => {
     const mealDoc = this._firestore
       .collection<IMeal>('meals')
@@ -156,19 +123,5 @@ export class FirestoreService {
       ingredients: [],
     });
     return id;
-  }
-
-  public updateMeal = async (id: string, updates: Partial<IMeal>): Promise<void> => {
-    await this._firestore
-      .collection<IMeal>('meals')
-      .doc(id)
-      .update(updates);
-  }
-
-  public deleteMeal = async (id: string): Promise<void> => {
-    await this._firestore
-      .collection<IMeal>('meals')
-      .doc(id)
-      .delete();
   }
 }

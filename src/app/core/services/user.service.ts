@@ -10,6 +10,7 @@ import { FirestoreService } from './firestore.service';
   providedIn: 'root'
 })
 export class UserService {
+  private _endpoint = 'users';
 
   constructor(
     private _auth: AngularFireAuth,
@@ -25,37 +26,41 @@ export class UserService {
 
   public getUser(): Observable<IUser | undefined> {
     return this.uid$.pipe(
-      switchMap(this._firestoreService.getUser),
+      switchMap(uid => this._firestoreService.getOne<IUser>(this._endpoint, uid)),
     );
   }
 
   public getPreferences(): Observable<IUserPreferences | undefined> {
-    return this.uid$.pipe(
-      switchMap(this._firestoreService.getUser),
+    return this.getUser().pipe(
       map(user => user?.preferences),
     );
   }
 
   public updatePreferences(updates: Partial<IUserPreferences>): Observable<IUser | undefined> {
-    return this.uid$.pipe(
-      switchMap(this._firestoreService.getUser),
+    return this.getUser().pipe(
       first(),
       tap(async user => {
+        if (!user?.uid) {
+          return;
+        }
         const fallbackPreferences = user?.preferences ?? {
           darkMode: false,
           dayNameDisplay: 'full',
           emptyMealText: 'undecided',
           menuStartDay: 'Monday',
         };
-        await this._firestoreService.updateUser(
-          user?.uid,
-          { preferences: {
-            darkMode: updates?.darkMode ?? fallbackPreferences.darkMode,
-            dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
-            emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
-            menuStartDay: updates?.menuStartDay ?? fallbackPreferences.menuStartDay,
-          },
-        });
+        await this._firestoreService.update<IUser>(
+          this._endpoint,
+          user.uid,
+          { preferences:
+            {
+              darkMode: updates?.darkMode ?? fallbackPreferences.darkMode,
+              dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
+              emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
+              menuStartDay: updates?.menuStartDay ?? fallbackPreferences.menuStartDay,
+            },
+          }
+        );
       }),
     );
   }

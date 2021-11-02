@@ -10,6 +10,7 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class MealService {
+  private _endpoint = 'meals';
 
   constructor(
     private _firestoreService: FirestoreService,
@@ -17,7 +18,7 @@ export class MealService {
   ) { }
 
   public getMeal(id: string): Observable<IMeal | undefined> {
-    return this._firestoreService.getMeal(id);
+    return this._firestoreService.getOne<IMeal>(this._endpoint, id);
   }
 
   public createMeal(info: Partial<IMeal>): Observable<string | undefined> {
@@ -32,16 +33,16 @@ export class MealService {
   }
 
   public updateMeal(id: string, updates: Partial<IMeal>): Promise<void> {
-    return this._firestoreService.updateMeal(id, updates);
+    return this._firestoreService.update<IMeal>(this._endpoint, id, updates);
   }
 
   public deleteMeal(id: string): Promise<void> {
-    return this._firestoreService.deleteMeal(id);
+    return this._firestoreService.delete<IMeal>(this._endpoint, id);
   }
 
   public getMeals(): Observable<IMeal[]> {
     return this._userService.uid$.pipe(
-      switchMap(this._firestoreService.getMeals)
+      switchMap(uid => this._firestoreService.getMany<IMeal>(this._endpoint, uid))
     );
   }
 }

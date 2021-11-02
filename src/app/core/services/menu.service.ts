@@ -15,6 +15,7 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class MenuService {
+  private _endpoint = 'menus';
   private _menuId$ = new BehaviorSubject<string>('');
 
   constructor(
@@ -51,13 +52,13 @@ export class MenuService {
   public getMenu(): Observable<IMenu | undefined> {
     return this._menuId$.pipe(
       filter(id => !!id),
-      switchMap(this._firestoreService.getMenu)
+      switchMap(uid => this._firestoreService.getOne<IMenu>(this._endpoint, uid))
     );
   }
 
   public getMenus(): Observable<IMenu[]> {
     return this._userService.uid$.pipe(
-      switchMap(this._firestoreService.getMenus)
+      switchMap(uid => this._firestoreService.getMany<IMenu>(this._endpoint, uid))
     );
   }
 
@@ -73,7 +74,7 @@ export class MenuService {
   }
 
   public updateMenuName(id: string, name: string): Promise<void> {
-    return this._firestoreService.updateMenu(id, { name });
+    return this._updateMenu(id, { name });
   }
 
   public updateMenuContents({ day, mealId }: {
@@ -83,7 +84,7 @@ export class MenuService {
     return this.menuId$.pipe(
       first(),
       tap(async menuId => {
-        await this._firestoreService.updateMenu(
+        await this._updateMenu(
           menuId,
           { [`contents.${day}`]: mealId },
         );
@@ -92,14 +93,14 @@ export class MenuService {
   }
 
   public deleteMenu(id: string): Promise<void> {
-    return this._firestoreService.deleteMenu(id);
+    return this._firestoreService.delete<IMenu>(this._endpoint, id);
   }
 
   public clearMenuContents(): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),
       tap(async menuId => {
-        await this._firestoreService.updateMenu(
+        await this._updateMenu(
           menuId,
           { contents: {
             Monday: null,
@@ -120,5 +121,9 @@ export class MenuService {
       map(preferences => getDays(preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
+  }
+
+  private async _updateMenu(id: string, updates: Partial<IMenu>): Promise<void> {
+    return await this._firestoreService.update<IMenu>(this._endpoint, id, updates);
   }
 }
