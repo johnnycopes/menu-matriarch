@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev",
-    "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch"
+    "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
+    "reset-dev": "node scripts/delete-users-dev.js && firebase firestore:delete --all-collections -y --project menu-matriarch-dev"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +29,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "firebase": "^9.0.0",
+    "firebase-admin": "^10.0.0",
     "lodash-es": "^4.17.21",
     "rxfire": "^6.0.0",
     "rxjs": "~6.6.0",

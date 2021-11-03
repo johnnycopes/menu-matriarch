@@ -4,9 +4,9 @@
 /dist
 /tmp
 /out-tsc
+/.firebase
 # Only exists if Bazel was run
 /bazel-out
-/.firebase
 
 # dependencies
 /node_modules
@@ -44,3 +44,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Firebase
+firebase-admin-dev.json
+firebase-admin-prod.json

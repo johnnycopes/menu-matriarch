@@ -36,7 +36,6 @@ export class UserService {
     return this.uid$.pipe(
       first(),
       tap(async uid => {
-        console.log('create user', uid);
         if (uid) {
           await this._firestoreService.create<IUser>(
             this._endpoint,
