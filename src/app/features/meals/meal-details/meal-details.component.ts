@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { first, map, switchMap, tap } from 'rxjs/operators';
@@ -9,7 +9,8 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 @Component({
   selector: 'app-meal-details',
   templateUrl: './meal-details.component.html',
-  styleUrls: ['./meal-details.component.scss']
+  styleUrls: ['./meal-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MealDetailsComponent {
   public id$ = this._route.paramMap.pipe(

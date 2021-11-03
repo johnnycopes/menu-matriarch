@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -9,7 +9,8 @@ import { MealService } from '@services/meal.service';
 @Component({
   selector: 'app-meal-edit',
   templateUrl: './meal-edit.component.html',
-  styleUrls: ['./meal-edit.component.scss']
+  styleUrls: ['./meal-edit.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MealEditComponent {
   public id$ = this._route.paramMap.pipe(

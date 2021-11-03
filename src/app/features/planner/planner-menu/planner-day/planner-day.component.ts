@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faTimes, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 import { IMeal } from '@models/interfaces/meal.interface';
@@ -7,7 +7,8 @@ import { Day } from '@models/types/day.type';
 @Component({
   selector: '[app-planner-day]',
   templateUrl: './planner-day.component.html',
-  styleUrls: ['./planner-day.component.scss']
+  styleUrls: ['./planner-day.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;

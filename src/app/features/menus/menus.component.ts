@@ -1,17 +1,17 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { combineLatest, merge, Subject } from 'rxjs';
 import { map, mapTo, shareReplay } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
 import { MealService } from '@services/meal.service';
-import { ButtonComponent } from '@shared/generic/button/button.component';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   selector: 'app-menus',
   templateUrl: './menus.component.html',
-  styleUrls: ['./menus.component.scss']
+  styleUrls: ['./menus.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenusComponent {
   public menus$ = combineLatest([
@@ -35,9 +35,6 @@ export class MenusComponent {
     shareReplay({ refCount: true, bufferSize: 1 })
   );
   public trackByFn = trackByFactory<IMenu, string>(menu => menu.id);
-
-  @ViewChild(ButtonComponent, { read: ElementRef, static: true })
-  public buttonRef: ElementRef<HTMLButtonElement> | undefined;
 
   constructor(
     private _mealService: MealService,

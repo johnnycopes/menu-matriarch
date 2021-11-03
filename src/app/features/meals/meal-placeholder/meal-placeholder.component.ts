@@ -1,15 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-meal-placeholder',
   templateUrl: './meal-placeholder.component.html',
-  styleUrls: ['./meal-placeholder.component.scss']
+  styleUrls: ['./meal-placeholder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MealPlaceholderComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class MealPlaceholderComponent { }

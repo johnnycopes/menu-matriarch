@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { first, map, tap } from 'rxjs/operators';
 
@@ -12,7 +12,8 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 @Component({
   selector: 'app-planner-menu',
   templateUrl: './planner-menu.component.html',
-  styleUrls: ['./planner-menu.component.scss']
+  styleUrls: ['./planner-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerMenuComponent {
   public menu$ = this._menuService.getMenu();

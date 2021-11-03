@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +14,8 @@ interface IDayModel {
 @Component({
   selector: '[app-planner-meal]',
   templateUrl: './planner-meal.component.html',
-  styleUrls: ['./planner-meal.component.scss']
+  styleUrls: ['./planner-meal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerMealComponent {
   @Input() id = '';

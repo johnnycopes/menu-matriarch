@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
@@ -12,7 +12,8 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 @Component({
   selector: '[app-menu]',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: ['./menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
   @Input() id = '';

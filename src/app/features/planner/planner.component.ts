@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '@services/local-storage.service';
 import { MenuService } from '@services/menu.service';
@@ -7,7 +7,8 @@ import { first, map, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-planner',
   templateUrl: './planner.component.html',
-  styleUrls: ['./planner.component.scss']
+  styleUrls: ['./planner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent implements OnDestroy {
   private _routeSubscription = this._route.paramMap.pipe(

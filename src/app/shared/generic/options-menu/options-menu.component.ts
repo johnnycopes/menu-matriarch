@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, HostBinding, TemplateRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, TemplateRef, ViewChild, Output, EventEmitter } from '@angular/core';
 
 import { optionsMenuAnimation } from './options-menu-animation';
 

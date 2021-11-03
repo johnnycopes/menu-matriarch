@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,17 +8,12 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./inline-name-edit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InlineNameEditComponent implements OnInit {
+export class InlineNameEditComponent {
   @Input() name: string = '';
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<string>();
   public faCheck = faCheck;
   public faTimes = faTimes;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   public onCancel(): void {
     this.cancel.emit()
