@@ -7,6 +7,7 @@ import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   selector: '[app-menu]',
@@ -18,6 +19,7 @@ export class MenuComponent {
   @Input() name = '';
   @Input() entries: IMenuEntry[] = [];
   @Input() days: Day[] = [];
+  public trackByFn = trackByFactory<IMenuEntry, Day>(entry => entry.day);
   public faEllipsisV = faEllipsisV;
   public renaming = false;
   public startRename$ = new Subject<void>();

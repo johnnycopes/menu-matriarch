@@ -5,7 +5,7 @@
 <h2>
 	<em><strong>Dependencies: </strong>
 		<ng-container *ngIf="dependencies?.length; else none"></ng-container>
-		<span *ngFor="let dependency of dependencies; last as last">
+		<span *ngFor="let dependency of dependencies; last as last; trackBy: trackByFn">
 			{{ dependency }}{{ !last ? ',' : '' }}
 		</span>
 		<ng-template #none>
@@ -14,7 +14,7 @@
 	</em>
 </h2>
 <div class="wrapper"
-	[ngClass]="{'wrapper--limited-width': limitWidth}"
+	[class.wrapper--limited-width]="limitWidth"
 	>
 	<ng-content></ng-content>
 </div>

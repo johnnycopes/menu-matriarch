@@ -27,7 +27,7 @@
           [ngModel]="user.preferences?.menuStartDay"
           (ngModelChange)="updateAction$.next({ menuStartDay: $event })"
         >
-          <option *ngFor="let day of days"
+          <option *ngFor="let day of days; trackBy: trackByFn"
             [ngValue]="day"
           >
             {{ day }}

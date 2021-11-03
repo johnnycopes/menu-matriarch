@@ -8,6 +8,7 @@ import { Day } from '@models/types/day.type';
 import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
 import { getDays } from '@utility/get-days';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   selector: 'app-settings',
@@ -18,6 +19,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public user$ = this._userService.getUser();
   public preferences$ = this._userService.getPreferences();
   public updateAction$ = new Subject<Partial<IUserPreferences>>();
+  public trackByFn = trackByFactory<Day, Day>(day => day);
   public days: Day[] = getDays();
   private _destroy$ = new Subject<void>();
 

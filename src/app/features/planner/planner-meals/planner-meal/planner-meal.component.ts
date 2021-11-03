@@ -1,9 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
 import { Day } from '@models/types/day.type';
+import { trackByFactory } from '@shared/utility/track-by-factory';
+
+interface IDayModel {
+  day: Day;
+  checked: boolean;
+}
 
 @Component({
   selector: '[app-planner-meal]',
@@ -14,7 +20,7 @@ export class PlannerMealComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() description = '';
-  public days$ = combineLatest([
+  public dayModels$: Observable<IDayModel[]> = combineLatest([
     this._menuService.getOrderedDays(),
     this._menuService.getMenu().pipe(
       map(menu => menu)
@@ -25,6 +31,7 @@ export class PlannerMealComponent {
       checked: menu?.contents?.[day] === this.id
     })))
   );
+  public trackByFn = trackByFactory<IDayModel, Day>(model => model.day);
 
   constructor(private _menuService: MenuService) {}
 

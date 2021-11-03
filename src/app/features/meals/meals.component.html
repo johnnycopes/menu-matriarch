@@ -8,7 +8,7 @@
   </div>
   <ul class="app-section__content">
     <li app-meal
-      *ngFor="let meal of meals$ | async"
+      *ngFor="let meal of meals$ | async; trackBy: trackByFn"
       [id]="meal.id"
       [name]="meal.name"
       [description]="meal.description"

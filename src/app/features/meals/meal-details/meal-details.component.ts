@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { MealService } from '@services/meal.service';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   selector: 'app-meal-details',
@@ -22,6 +23,7 @@ export class MealDetailsComponent {
       return this._mealService.getMeal(id);
     })
   );
+  public trackByFn = trackByFactory<string, string>(ingredient => ingredient);
 
   constructor(
     private _route: ActivatedRoute,

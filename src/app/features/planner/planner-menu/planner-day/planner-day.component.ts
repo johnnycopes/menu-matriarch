@@ -16,12 +16,9 @@ export class PlannerDayComponent implements OnInit {
   @Output() clear = new EventEmitter<void>();
   public faTimes: IconDefinition = faTimes;
 
-  constructor() { }
-
   ngOnInit(): void {
     if (!this.day) {
       throw new Error('DayComponent must have an assigned "day" property');
     }
   }
-
 }

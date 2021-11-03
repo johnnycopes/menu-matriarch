@@ -7,6 +7,7 @@ import { Day } from '@models/types/day.type';
 import { MealService } from '@services/meal.service';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   selector: 'app-planner-menu',
@@ -27,6 +28,7 @@ export class PlannerMenuComponent {
       return this._menuService.getMenuEntries({ days, menu, meals });
     })
   );
+  public trackByFn = trackByFactory<IMenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
     private _mealService: MealService,
@@ -54,9 +56,5 @@ export class PlannerMenuComponent {
     this._menuService
       .clearMenuContents()
       .subscribe();
-  }
-
-  public trackByFn(index: number, { day }: IMenuEntry): Day {
-    return day;
   }
 }

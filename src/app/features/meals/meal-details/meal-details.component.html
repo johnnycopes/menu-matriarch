@@ -21,7 +21,7 @@
       {{ meal.description }}
     </p>
     <ul *ngIf="meal.ingredients.length">
-      <li *ngFor="let ingredient of meal.ingredients">
+      <li *ngFor="let ingredient of meal.ingredients; trackBy: trackByFn">
         {{ ingredient }}
       </li>
     </ul>

@@ -8,7 +8,7 @@
     cdkDropListGroup
     >
     <app-kanban-board-column class="column"
-      *ngFor="let column of columns; trackBy: trackByFunction"
+      *ngFor="let column of columns; trackBy: trackByFn"
       cdkDrag
       [cdkDragData]="config.getColumnId(column)"
       [id]="config.getColumnId(column)"

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, Templa
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IconDefinition, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { Dictionary } from 'lodash';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 export interface IKanbanBoardActionClick {
   action: string;
@@ -42,7 +43,7 @@ export class KanbanBoardColumnComponent<TItem> {
   @Output() movingChange: EventEmitter<boolean> = new EventEmitter();
   public menuIcon: IconDefinition = faEllipsisH;
   public hoverStatesDict: Dictionary<boolean> = {};
-  public trackByFunction = (index: number, item: TItem): string => this.getItemId(item);
+  public trackByFn = trackByFactory(this.getItemId);
 
   public onDragItem(): void {
     this.movingChange.emit(true);

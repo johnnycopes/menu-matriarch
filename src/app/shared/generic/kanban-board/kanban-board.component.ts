@@ -2,6 +2,7 @@ import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, Templa
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { IKanbanBoardItemAdd, IKanbanBoardActionClick, IKanbanBoardItemMove } from './kanban-board-column/kanban-board-column.component';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 export interface IKanbanBoardConfig<TColumn, TItem> {
   getColumnId(node: TColumn): string;
@@ -40,7 +41,7 @@ export class KanbanBoardComponent<TColumn, TItem> {
   @Output() itemMove: EventEmitter<IKanbanBoardItemMove> = new EventEmitter();
   @Output() actionClick: EventEmitter<IKanbanBoardActionClick> = new EventEmitter();
   public moving: boolean = false;
-  public trackByFunction = (index: number, column: TColumn): string => this.config.getColumnId(column);
+  public trackByFn = trackByFactory(this.config.getColumnId);
 
   public onColumnAdd(newColumnName: string): void {
     this.columnAdd.emit(newColumnName);

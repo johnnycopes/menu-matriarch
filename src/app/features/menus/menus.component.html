@@ -15,7 +15,7 @@
   </div>
   <ul class="app-section__content menus">
     <li app-menu
-      *ngFor="let menu of menus$ | async"
+      *ngFor="let menu of menus$ | async; trackBy: trackByFn"
       [id]="menu.id"
       [name]="menu.name"
       [entries]="menu.entries"

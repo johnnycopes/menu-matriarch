@@ -15,7 +15,7 @@
   >
   <li class="list-item"
     [class.list-item--moving]="moving"
-    *ngFor="let item of items; trackBy: trackByFunction"
+    *ngFor="let item of items; trackBy: trackByFn"
     cdkDrag
     [cdkDragData]="{
       columnId: id,
