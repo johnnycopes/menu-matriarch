@@ -30,6 +30,10 @@ export class MenuService {
     );
   }
 
+  public get savedMenuId(): string | null {
+    return this._localStorageService.getMenuId();
+  }
+
   public selectMenu(id: string): void {
     this._localStorageService.setMenuId(id);
     this._menuId$.next(id);
@@ -103,6 +107,9 @@ export class MenuService {
     return this.menuId$.pipe(
       first(),
       tap(async menuId => {
+        if (!menuId) {
+          return;
+        }
         await this._updateMenu(
           menuId,
           { [`contents.${day}`]: mealId },
@@ -111,14 +118,19 @@ export class MenuService {
     );
   }
 
-  public deleteMenu(id: string): Promise<void> {
-    return this._firestoreService.delete<IMenu>(this._endpoint, id);
+  public async deleteMenu(id: string): Promise<void> {
+    await this._firestoreService.delete<IMenu>(this._endpoint, id);
+    this._localStorageService.deleteMenuId();
+    this._menuId$.next('');
   }
 
   public clearMenuContents(): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),
       tap(async menuId => {
+        if (!menuId) {
+          return;
+        }
         await this._updateMenu(
           menuId,
           { contents: {

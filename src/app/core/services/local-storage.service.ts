@@ -13,6 +13,10 @@ export class LocalStorageService {
   }
 
   public setMenuId(id: string): void {
-    window.localStorage.setItem(this._prefix + 'MENU_ID', id);
+    return window.localStorage.setItem(this._prefix + 'MENU_ID', id);
+  }
+
+  public deleteMenuId(): void {
+    return window.localStorage.removeItem(this._prefix + 'MENU_ID');
   }
 }
