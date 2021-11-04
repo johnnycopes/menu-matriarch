@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
-import { MenuService } from '@services/menu.service';
+import { DishType } from '@models/interfaces/dish-type.type';
 import { Day } from '@models/types/day.type';
+import { MenuService } from '@services/menu.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 interface IDayModel {
@@ -21,16 +22,23 @@ export class PlannerDishComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() description = '';
+  @Input() type: DishType = 'main';
   public dayModels$: Observable<IDayModel[]> = combineLatest([
     this._menuService.getOrderedDays(),
     this._menuService.getMenu().pipe(
-      map(menu => menu)
-    )
+      map(menu => menu),
+      tap(console.log),
+    ),
   ]).pipe(
-    map(([days, menu]) => days.map(day => ({
-      day,
-      checked: menu?.contents?.[day]?.main === this.id
-    })))
+    map(([days, menu]) => days.map(day => {
+      let checked = false;
+      if (this.type === 'main') {
+        checked = menu.contents[day].main === this.id;
+      } else if (this.type === 'side') {
+        checked = menu.contents[day].sides.includes(this.id);
+      }
+      return { day, checked };
+    }))
   );
   public trackByFn = trackByFactory<IDayModel, Day>(model => model.day);
 
@@ -40,8 +48,9 @@ export class PlannerDishComponent {
     this._menuService
       .updateMenuContents({
         day,
-        dishId: selected ? this.id : null,
-        dishType: 'main',
+        dishId: this.id,
+        dishType: this.type,
+        selected,
       })
       .subscribe();
   }

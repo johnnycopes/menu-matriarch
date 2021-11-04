@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 import { IDish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/interfaces/dish-type.type';
@@ -98,14 +99,21 @@ export class MenuService {
     );
   }
 
+  public async deleteMenu(id: string): Promise<void> {
+    await this._firestoreService.delete<IMenu>(this._endpoint, id);
+    this._localStorageService.deleteMenuId();
+    this._menuId$.next('');
+  }
+
   public updateMenuName(id: string, name: string): Promise<void> {
     return this._updateMenu(id, { name });
   }
 
-  public updateMenuContents({ day, dishId, dishType }: {
+  public updateMenuContents({ day, dishId, dishType, selected }: {
     day: Day,
-    dishId: string | null,
+    dishId: string,
     dishType: DishType,
+    selected: boolean,
   }): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),
@@ -113,39 +121,49 @@ export class MenuService {
         if (!menuId) {
           return;
         }
-        await this._updateMenu(
-          menuId,
-          { [`contents.${day}.${dishType}`]: dishId },
-        );
+        let updates: Partial<IMenu> = {};
+        if (dishType === 'main') {
+          updates = {
+            [`contents.${day}.main`]: selected ? dishId : null
+          };
+        } else if (dishType === 'side') {
+          updates = {
+            [`contents.${day}.sides`]: selected
+              ? firebase.firestore.FieldValue.arrayUnion(dishId)
+              : firebase.firestore.FieldValue.arrayRemove(dishId)
+          };
+        }
+        await this._updateMenu(menuId, updates);
       }),
     );
   }
 
-  public async deleteMenu(id: string): Promise<void> {
-    await this._firestoreService.delete<IMenu>(this._endpoint, id);
-    this._localStorageService.deleteMenuId();
-    this._menuId$.next('');
-  }
-
-  public clearMenuContents(): Observable<string | undefined> {
+  public clearMenuContents(day?: Day): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),
       tap(async menuId => {
         if (!menuId) {
           return;
         }
-        await this._updateMenu(
-          menuId,
-          { contents: {
-            Monday: { main: null, sides: [] },
-            Tuesday: { main: null, sides: [] },
-            Wednesday: { main: null, sides: [] },
-            Thursday: { main: null, sides: [] },
-            Friday: { main: null, sides: [] },
-            Saturday: { main: null, sides: [] },
-            Sunday: { main: null, sides: [] },
-          }}
-        );
+        let updates: Partial<IMenu> = {};
+        if (day) {
+          updates = {
+            [`contents.${day}`]: { main: null, sides: [] }
+          };
+        } else {
+          updates = {
+            contents: {
+              Monday: { main: null, sides: [] },
+              Tuesday: { main: null, sides: [] },
+              Wednesday: { main: null, sides: [] },
+              Thursday: { main: null, sides: [] },
+              Friday: { main: null, sides: [] },
+              Saturday: { main: null, sides: [] },
+              Sunday: { main: null, sides: [] },
+            }
+          };
+        }
+        await this._updateMenu(menuId, updates);
       }),
     );
   }

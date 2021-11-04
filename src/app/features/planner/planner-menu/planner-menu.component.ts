@@ -49,7 +49,7 @@ export class PlannerMenuComponent {
 
   public onClearDay({ day }: IMenuEntry): void {
     this._menuService
-      .updateMenuContents({ day, dishId: null, dishType: 'main' })
+      .clearMenuContents(day)
       .subscribe();
   }
 

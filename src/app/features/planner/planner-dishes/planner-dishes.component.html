@@ -13,6 +13,7 @@
     <li app-planner-dish
       *ngFor="let dish of dishes$ | async; trackBy: trackByFn"
       [id]="dish.id"
+      [type]="dish.type"
       [name]="dish.name"
       [description]="dish.description"
     ></li>
