@@ -20,8 +20,9 @@ export class MenuComponent {
   @Input() name = '';
   @Input() entries: IMenuEntry[] = [];
   @Input() days: Day[] = [];
+  @Input() canDelete = true;
+  public readonly faEllipsisV = faEllipsisV;
   public trackByFn = trackByFactory<IMenuEntry, Day>(entry => entry.day);
-  public faEllipsisV = faEllipsisV;
   public renaming = false;
   public startRename$ = new Subject<void>();
   public finishRename$ = new Subject<void>();

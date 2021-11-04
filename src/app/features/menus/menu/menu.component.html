@@ -34,6 +34,7 @@
           Edit Meals
         </a>
         <li app-options-menu-item
+          [disabled]="!canDelete"
           (click)="onDelete()"
         >
           Delete

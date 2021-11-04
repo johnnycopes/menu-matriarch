@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { IconDefinition, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { Dictionary } from 'lodash';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -41,7 +41,7 @@ export class KanbanBoardColumnComponent<TItem> {
   @Output() itemMove: EventEmitter<IKanbanBoardItemMove> = new EventEmitter();
   @Output() actionClick: EventEmitter<IKanbanBoardActionClick> = new EventEmitter();
   @Output() movingChange: EventEmitter<boolean> = new EventEmitter();
-  public menuIcon: IconDefinition = faEllipsisH;
+  public readonly menuIcon = faEllipsisH;
   public hoverStatesDict: Dictionary<boolean> = {};
   public trackByFn = trackByFactory(this.getItemId);
 

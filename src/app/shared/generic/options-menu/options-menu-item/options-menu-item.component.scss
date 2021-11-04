@@ -9,3 +9,9 @@
 		cursor: pointer;
 	}
 }
+
+:host(.disabled) {
+  background: map-get($neutral, 10);
+  color: map-get($neutral, 6);
+  pointer-events: none;
+}

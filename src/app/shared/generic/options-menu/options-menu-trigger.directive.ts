@@ -1,10 +1,10 @@
-import { AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef } from "@angular/core";
-import { Overlay, OverlayRef } from "@angular/cdk/overlay";
-import { TemplatePortal } from "@angular/cdk/portal";
-import { fromEvent, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { OptionsMenuComponent } from "./options-menu.component";
+import { OptionsMenuComponent } from './options-menu.component';
 
 @Directive({
   selector: '[appOptionsMenuTrigger]'
@@ -31,10 +31,10 @@ export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
         .flexibleConnectedTo(this._viewContainerRef.element.nativeElement)
         .withPositions([
           {
-            originX: "end",
-            originY: "bottom",
-            overlayX: "end",
-            overlayY: "top",
+            originX: 'end',
+            originY: 'bottom',
+            overlayX: 'end',
+            overlayY: 'top',
           }
         ]),
     })
@@ -52,7 +52,7 @@ export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
         }
       },
     );
-    fromEvent<MouseEvent>(this._viewContainerRef.element.nativeElement, "click").pipe(
+    fromEvent<MouseEvent>(this._viewContainerRef.element.nativeElement, 'click').pipe(
       takeUntil(this._destroy$)
     ).subscribe(
       () => {

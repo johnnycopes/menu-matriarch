@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, HostListener, HostBinding } from '@angular/core';
 
 @Component({
 	selector: '[app-options-menu-item]',
@@ -6,4 +6,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	styleUrls: ['./options-menu-item.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OptionsMenuItemComponent { }
+export class OptionsMenuItemComponent {
+  @Input()
+  @HostBinding('attr.disabled')
+  @HostBinding('class.disabled')
+  disabled = false;
+}

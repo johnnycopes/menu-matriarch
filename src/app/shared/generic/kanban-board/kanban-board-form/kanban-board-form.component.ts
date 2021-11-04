@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { IconDefinition, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -11,7 +11,7 @@ import { NgForm } from '@angular/forms';
 export class KanbanBoardFormComponent {
 	@Input() name: string = '';
 	@Output() add: EventEmitter<string> = new EventEmitter();
-	public addNewIcon: IconDefinition = faPlus;
+	public readonly addNewIcon = faPlus;
 	public adding: boolean = false;
 	public model: string = '';
 
