@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
+import { DishType } from '@models/interfaces/dish-type.type';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
@@ -49,7 +50,7 @@ export class MenuService {
     }
     return days.map(day => ({
       day,
-      dish: dishes.find(dish => dish.id === menu.contents[day]),
+      dish: dishes.find(dish => dish.id === menu.contents[day].main),
     }));
   }
 
@@ -81,13 +82,13 @@ export class MenuService {
               name,
               favorited: false,
               contents: {
-                Monday: null,
-                Tuesday: null,
-                Wednesday: null,
-                Thursday: null,
-                Friday: null,
-                Saturday: null,
-                Sunday: null,
+                Monday: { main: null, sides: [] },
+                Tuesday: { main: null, sides: [] },
+                Wednesday: { main: null, sides: [] },
+                Thursday: { main: null, sides: [] },
+                Friday: { main: null, sides: [] },
+                Saturday: { main: null, sides: [] },
+                Sunday: { main: null, sides: [] },
               },
             }
           );
@@ -100,9 +101,10 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
-  public updateMenuContents({ day, dishId }: {
+  public updateMenuContents({ day, dishId, dishType }: {
     day: Day,
-    dishId: string | null
+    dishId: string | null,
+    dishType: DishType,
   }): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),
@@ -112,7 +114,7 @@ export class MenuService {
         }
         await this._updateMenu(
           menuId,
-          { [`contents.${day}`]: dishId },
+          { [`contents.${day}.${dishType}`]: dishId },
         );
       }),
     );
@@ -134,13 +136,13 @@ export class MenuService {
         await this._updateMenu(
           menuId,
           { contents: {
-            Monday: null,
-            Tuesday: null,
-            Wednesday: null,
-            Thursday: null,
-            Friday: null,
-            Saturday: null,
-            Sunday: null,
+            Monday: { main: null, sides: [] },
+            Tuesday: { main: null, sides: [] },
+            Wednesday: { main: null, sides: [] },
+            Thursday: { main: null, sides: [] },
+            Friday: { main: null, sides: [] },
+            Saturday: { main: null, sides: [] },
+            Sunday: { main: null, sides: [] },
           }}
         );
       }),

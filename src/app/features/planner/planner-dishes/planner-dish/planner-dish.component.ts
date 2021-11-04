@@ -29,7 +29,7 @@ export class PlannerDishComponent {
   ]).pipe(
     map(([days, menu]) => days.map(day => ({
       day,
-      checked: menu?.contents?.[day] === this.id
+      checked: menu?.contents?.[day]?.main === this.id
     })))
   );
   public trackByFn = trackByFactory<IDayModel, Day>(model => model.day);
@@ -38,7 +38,11 @@ export class PlannerDishComponent {
 
   public onChange(selected: boolean, day: Day): void {
     this._menuService
-      .updateMenuContents({ day, dishId: selected ? this.id : null })
+      .updateMenuContents({
+        day,
+        dishId: selected ? this.id : null,
+        dishType: 'main',
+      })
       .subscribe();
   }
 }

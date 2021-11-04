@@ -6,6 +6,9 @@ export interface IMenu {
   name: string;
   favorited: boolean;
   contents: {
-    [day in Day]: string | null;
+    [day in Day]: {
+      main: string | null;
+      sides: string[];
+    }
   };
-}
+};
