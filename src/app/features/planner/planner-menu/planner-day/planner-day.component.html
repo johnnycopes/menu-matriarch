@@ -18,11 +18,12 @@
     class="sides"
   >
     <p>&nbsp;+&nbsp;</p>
-    <app-dish-summary *ngFor="let side of sides"
-      [id]="side.id"
-      [name]="side.name"
-    >
-      {{ side.name }}
-    </app-dish-summary>
+    <ng-container *ngFor="let side of sides; trackBy: trackByFn; let last = last">
+      <app-dish-summary
+        [id]="side.id"
+        [name]="side.name"
+      ></app-dish-summary>
+      <span *ngIf="!last">,&nbsp;</span>
+    </ng-container>
   </ul>
 </div>

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { DishType } from '@models/interfaces/dish-type.type';
 
 @Component({
   selector: '[app-dish]',
@@ -10,6 +11,7 @@ export class DishComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() description = '';
+  @Input() type: DishType = 'main';
   @Input() favorited: boolean = false;
   @Input() ingredients: string[] = [];
 }

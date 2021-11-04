@@ -4,6 +4,11 @@
   display: block;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .placeholder {
   color: map-get($neutral, 6);
   font-style: italic;

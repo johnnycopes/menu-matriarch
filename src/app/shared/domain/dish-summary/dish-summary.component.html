@@ -1,4 +1,6 @@
-<ng-container *appLet="fallbackName$ | async as fallbackName">
+<div class="container"
+  *appLet="fallbackName$ | async as fallbackName"
+>
   <a *ngIf="id && name; else empty"
     routerLink="/dishes/{{ id }}"
   >
@@ -11,7 +13,12 @@
       {{ fallbackName }}
     </h3>
   </ng-template>
-</ng-container>
+  <app-small-caps-label *ngIf="type"
+    class="type"
+    >
+    {{ type }}
+  </app-small-caps-label>
+</div>
 
 <p *ngIf="description"
   class="description"
