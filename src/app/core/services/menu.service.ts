@@ -50,7 +50,8 @@ export class MenuService {
     }
     return days.map(day => ({
       day,
-      dish: dishes.find(dish => dish.id === menu.contents[day].main),
+      main: dishes.find(dish => dish.id === menu.contents[day].main),
+      sides: dishes.filter(dish => menu.contents[day].sides.includes(dish.id)),
     }));
   }
 

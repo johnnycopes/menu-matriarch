@@ -12,7 +12,8 @@ import { Day } from '@models/types/day.type';
 })
 export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
-  @Input() dish: IDish | undefined;
+  @Input() main: IDish | undefined;
+  @Input() sides: IDish[] = [];
   @Input() emptyDishText = '';
   @Output() clear = new EventEmitter<void>();
   public readonly faTimes = faTimes;

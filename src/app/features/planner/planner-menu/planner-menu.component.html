@@ -19,7 +19,8 @@
     <li app-planner-day
       *ngFor="let menuEntry of menuEntries$ | async; trackBy: trackByFn"
       [day]="menuEntry.day"
-      [dish]="menuEntry.dish"
+      [main]="menuEntry.main"
+      [sides]="menuEntry.sides"
       (clear)="onClearDay(menuEntry)"
     ></li>
   </ul>

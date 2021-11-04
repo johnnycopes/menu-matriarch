@@ -3,5 +3,6 @@ import { IDish } from "./dish.interface";
 
 export interface IMenuEntry {
   day: Day;
-  dish: IDish | undefined;
+  main: IDish | undefined;
+  sides: IDish[];
 }
