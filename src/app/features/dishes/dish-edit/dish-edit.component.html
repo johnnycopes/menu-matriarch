@@ -28,7 +28,7 @@
         type="text"
         name="name"
         required
-        [(ngModel)]="vm.name"
+        [ngModel]="vm.name"
         #name="ngModel"
         appAutofocus
       />
@@ -40,9 +40,23 @@
         id="description"
         type="text"
         name="description"
-        [(ngModel)]="vm.description"
+        [ngModel]="vm.description"
         #description="ngModel"
       />
+    </app-input>
+    <app-input
+      label="dish type"
+    >
+      <div class="radio-container">
+        <label class="radio-button">
+          <input type="radio" name="type" value="main" [ngModel]="vm.type" />
+          Main
+        </label>
+        <label class="radio-button">
+          <input type="radio" name="type" value="side" [ngModel]="vm.type" />
+          Side
+        </label>
+      </div>
     </app-input>
   </form>
 </app-section>

@@ -12,3 +12,9 @@
   font-size: map-get($font-size, 36);
   margin-bottom: map-get($spacing, 16);
 }
+
+.type {
+  border-top: map-get($border, thin) solid map-get($neutral, 9);
+  margin-top: map-get($spacing, 16);
+  padding-top: map-get($spacing, 16);
+}

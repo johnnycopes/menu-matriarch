@@ -5,7 +5,13 @@ import { of } from 'rxjs';
 import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { DishService } from '@services/dish.service';
-import { IDish } from '@models/interfaces/dish.interface';
+import { DishType } from '@models/interfaces/dish-type.type';
+
+interface IDishEditForm {
+  name: string;
+  description: string;
+  type: DishType;
+}
 
 @Component({
   selector: 'app-dish-edit',
@@ -23,7 +29,7 @@ export class DishEditComponent {
         return of({
           name: '',
           description: '',
-          ingredients: [],
+          type: 'main',
         });
       }
       return this._dishService.getDish(id);
@@ -40,17 +46,15 @@ export class DishEditComponent {
     this.id$.pipe(
       first(),
       tap(async id => {
+        const details: IDishEditForm = {
+          name: form.value.name,
+          description: form.value.description,
+          type: form.value.type,
+        };
         if (!id) {
-          this._dishService.createDish({
-            name: form.value.name,
-            description: form.value.description,
-            type: 'main',
-          }).subscribe();
+          this._dishService.createDish(details).subscribe();
         } else {
-          await this._dishService.updateDish(id, {
-            name: form.value.name,
-            description: form.value.description,
-          });
+          await this._dishService.updateDish(id, details);
         }
       })
     ).subscribe(
