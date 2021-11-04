@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import { IMeal } from '@models/interfaces/meal.interface';
+import { IDish } from '@models/interfaces/dish.interface';
 import { Day } from '@models/types/day.type';
 
 @Component({
@@ -12,8 +12,8 @@ import { Day } from '@models/types/day.type';
 })
 export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
-  @Input() meal: IMeal | undefined;
-  @Input() emptyMealText = '';
+  @Input() dish: IDish | undefined;
+  @Input() emptyDishText = '';
   @Output() clear = new EventEmitter<void>();
   public readonly faTimes = faTimes;
 

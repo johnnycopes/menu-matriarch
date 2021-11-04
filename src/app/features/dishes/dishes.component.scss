@@ -1,0 +1,21 @@
+@import "main";
+
+:host {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100%;
+}
+
+.dishes {
+  grid-column: 1;
+
+  li[app-dish]:not(:last-of-type) {
+    margin-bottom: map-get($spacing, 8);
+  }
+}
+
+section {
+  grid-column: 2;
+  background: $white;
+  overflow: hidden;
+}

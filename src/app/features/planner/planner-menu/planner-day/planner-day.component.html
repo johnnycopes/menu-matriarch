@@ -2,15 +2,15 @@
   <h3>
     {{ day }}
   </h3>
-  <fa-icon *ngIf="meal"
+  <fa-icon *ngIf="dish"
     [icon]="faTimes"
     (click)="clear.emit()"
   ></fa-icon>
 </app-small-caps-label>
 
-<app-meal-summary
+<app-dish-summary
   class="contents"
-  [id]="meal?.id"
-  [name]="meal?.name"
-  [description]="meal?.description"
-></app-meal-summary>
+  [id]="dish?.id"
+  [name]="dish?.name"
+  [description]="dish?.description"
+></app-dish-summary>

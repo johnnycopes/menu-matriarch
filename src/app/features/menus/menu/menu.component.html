@@ -31,7 +31,7 @@
         <a app-options-menu-item
           routerLink="/planner/{{ id }}"
         >
-          Edit Meals
+          Edit Dishes
         </a>
         <li app-options-menu-item
           [disabled]="!canDelete"
@@ -51,10 +51,10 @@
           {{ entry.day | slice : 0 : 3 }}
         </h4>
       </app-small-caps-label>
-      <app-meal-summary
-        [id]="entry.meal?.id"
-        [name]="entry.meal?.name"
-      ></app-meal-summary>
+      <app-dish-summary
+        [id]="entry.dish?.id"
+        [name]="entry.dish?.name"
+      ></app-dish-summary>
     </li>
   </ul>
 </app-card>

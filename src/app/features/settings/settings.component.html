@@ -35,14 +35,14 @@
         </select>
       </app-input>
       <app-input
-        label="Empty Meal Text"
+        label="Empty Dish Text"
       >
         <input
-          id="Empty Meal Text"
+          id="Empty Dish Text"
           type="text"
-          name="emptyMealText"
-          [ngModel]="user?.preferences?.emptyMealText"
-          (ngModelChange)="updateAction$.next({ emptyMealText: $event })"
+          name="emptyDishText"
+          [ngModel]="user?.preferences?.emptyDishText"
+          (ngModelChange)="updateAction$.next({ emptyDishText: $event })"
           appAutofocus
         />
       </app-input>

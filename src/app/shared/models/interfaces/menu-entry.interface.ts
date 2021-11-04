@@ -1,7 +1,7 @@
 import { Day } from "../types/day.type";
-import { IMeal } from "./meal.interface";
+import { IDish } from "./dish.interface";
 
 export interface IMenuEntry {
   day: Day;
-  meal: IMeal | undefined;
+  dish: IDish | undefined;
 }

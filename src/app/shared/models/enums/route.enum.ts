@@ -1,7 +1,7 @@
 export enum ERoute {
 	planner = 'planner',
   demo = 'demo',
-  meals = 'meals',
+  dishes = 'dishes',
   menus = 'menus',
   settings = 'settings',
   welcome = 'welcome',

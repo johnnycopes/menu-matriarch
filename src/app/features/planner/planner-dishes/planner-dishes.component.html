@@ -1,0 +1,20 @@
+<app-section>
+  <div class="app-section__toolbar">
+    <h2 class="title">
+      Dishes
+    </h2>
+    <a app-button
+      routerLink="/dishes/new"
+    >
+      New Dish
+    </a>
+  </div>
+  <ul class="app-section__content">
+    <li app-planner-dish
+      *ngFor="let dish of dishes$ | async; trackBy: trackByFn"
+      [id]="dish.id"
+      [name]="dish.name"
+      [description]="dish.description"
+    ></li>
+  </ul>
+</app-section>

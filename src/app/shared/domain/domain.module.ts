@@ -5,18 +5,18 @@ import { RouterModule } from '@angular/router';
 
 import { GenericModule } from '@shared/generic/generic.module';
 import { InlineNameEditComponent } from './inline-name-edit/inline-name-edit.component';
-import { MealSummaryComponent } from './meal-summary/meal-summary.component';
+import { DishSummaryComponent } from './dish-summary/dish-summary.component';
 
 
 
 @NgModule({
   declarations: [
     InlineNameEditComponent,
-    MealSummaryComponent,
+    DishSummaryComponent,
   ],
   exports: [
     InlineNameEditComponent,
-    MealSummaryComponent,
+    DishSummaryComponent,
   ],
   imports: [
     CommonModule,

@@ -3,7 +3,7 @@ import { combineLatest, merge, Subject } from 'rxjs';
 import { map, mapTo, shareReplay } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
-import { MealService } from '@services/meal.service';
+import { DishService } from '@services/dish.service';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -17,12 +17,12 @@ export class MenusComponent {
   public menus$ = combineLatest([
     this._menuService.getOrderedDays(),
     this._menuService.getMenus(),
-    this._mealService.getMeals(),
+    this._dishService.getDishes(),
   ]).pipe(
-    map(([days, menus, meals]) => menus.map(
+    map(([days, menus, dishes]) => menus.map(
       menu => ({
         ...menu,
-        entries: this._menuService.getMenuEntries({ days, menu, meals }),
+        entries: this._menuService.getMenuEntries({ days, menu, dishes }),
       })
     ))
   );
@@ -37,7 +37,7 @@ export class MenusComponent {
   public trackByFn = trackByFactory<IMenu, string>(menu => menu.id);
 
   constructor(
-    private _mealService: MealService,
+    private _dishService: DishService,
     private _menuService: MenuService,
   ) { }
 

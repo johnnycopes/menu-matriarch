@@ -47,7 +47,7 @@ export class UserService {
               preferences: {
                 darkMode: false,
                 dayNameDisplay: 'full',
-                emptyMealText: 'undecided',
+                emptyDishText: 'undecided',
                 menuStartDay: 'Monday',
               },
             }
@@ -73,7 +73,7 @@ export class UserService {
         const fallbackPreferences = user?.preferences ?? {
           darkMode: false,
           dayNameDisplay: 'full',
-          emptyMealText: 'undecided',
+          emptyDishText: 'undecided',
           menuStartDay: 'Monday',
         };
         await this._firestoreService.update<IUser>(
@@ -83,7 +83,7 @@ export class UserService {
             {
               darkMode: updates?.darkMode ?? fallbackPreferences.darkMode,
               dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
-              emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
+              emptyDishText: updates?.emptyDishText ?? fallbackPreferences.emptyDishText,
               menuStartDay: updates?.menuStartDay ?? fallbackPreferences.menuStartDay,
             },
           }

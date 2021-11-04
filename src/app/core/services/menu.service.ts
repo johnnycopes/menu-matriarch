@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
-import { IMeal } from '@models/interfaces/meal.interface';
+import { IDish } from '@models/interfaces/dish.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
@@ -39,17 +39,17 @@ export class MenuService {
     this._menuId$.next(id);
   }
 
-  public getMenuEntries({ days, meals, menu }: {
+  public getMenuEntries({ days, menu, dishes }: {
     days: Day[],
     menu: IMenu | undefined,
-    meals: IMeal[],
+    dishes: IDish[],
   }): IMenuEntry[] {
     if (!menu) {
       return [];
     }
     return days.map(day => ({
       day,
-      meal: meals.find(meal => meal.id === menu.contents[day]),
+      dish: dishes.find(dish => dish.id === menu.contents[day]),
     }));
   }
 
@@ -100,9 +100,9 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
-  public updateMenuContents({ day, mealId }: {
+  public updateMenuContents({ day, dishId }: {
     day: Day,
-    mealId: string | null
+    dishId: string | null
   }): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),
@@ -112,7 +112,7 @@ export class MenuService {
         }
         await this._updateMenu(
           menuId,
-          { [`contents.${day}`]: mealId },
+          { [`contents.${day}`]: dishId },
         );
       }),
     );

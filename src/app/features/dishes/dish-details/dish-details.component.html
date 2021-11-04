@@ -1,0 +1,29 @@
+<app-section *ngIf="dish$ | async as dish">
+  <div class="app-section__toolbar">
+    <button app-button
+      buttonStyle="danger"
+      (click)="onDelete()"
+    >
+      Delete
+    </button>
+    <a app-button
+      buttonStyle="secondary"
+      routerLink="edit"
+    >
+      Edit
+    </a>
+  </div>
+  <div class="app-section__content">
+    <h2 class="name">
+      {{ dish.name }}
+    </h2>
+    <p class="description">
+      {{ dish.description }}
+    </p>
+    <ul *ngIf="dish.ingredients.length">
+      <li *ngFor="let ingredient of dish.ingredients; trackBy: trackByFn">
+        {{ ingredient }}
+      </li>
+    </ul>
+  </div>
+</app-section>

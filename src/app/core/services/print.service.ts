@@ -32,12 +32,12 @@ export class PrintService {
     popupWin?.document.close();
   }
 
-  private _createEntry({ day, meal }: IMenuEntry): string {
+  private _createEntry({ day, dish }: IMenuEntry): string {
     return `<li class="entry">
       <h2 class="day">${day}</h2>
-      <div class="meal">
-        <h3 class="meal-name">${meal?.name ?? ''}</h3>
-        <p class="meal-description">${meal?.description}
+      <div class="dish">
+        <h3 class="dish-name">${dish?.name ?? ''}</h3>
+        <p class="dish-description">${dish?.description}
       </div>
     </li>`;
   }
@@ -79,7 +79,7 @@ export class PrintService {
         margin-bottom: 8pt;
       }
 
-      .meal {
+      .dish {
         max-width: 256pt;
         margin-left: 4pt;
       }
@@ -91,11 +91,11 @@ export class PrintService {
         border-bottom: 1px solid #e2e2e2;
       }
 
-      .meal-name {
+      .dish-name {
         font-size: 14pt;
       }
 
-      .meal-description {
+      .dish-description {
         font-size: 10pt;
         color: #6e6e6e;
       }

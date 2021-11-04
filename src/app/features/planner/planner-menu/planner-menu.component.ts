@@ -4,7 +4,7 @@ import { first, map, tap } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
-import { MealService } from '@services/meal.service';
+import { DishService } from '@services/dish.service';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
@@ -23,16 +23,16 @@ export class PlannerMenuComponent {
   public menuEntries$ = combineLatest([
     this.menu$,
     this._menuService.getOrderedDays(),
-    this._mealService.getMeals(),
+    this._dishService.getDishes(),
   ]).pipe(
-    map(([menu, days, meals]) => {
-      return this._menuService.getMenuEntries({ days, menu, meals });
+    map(([menu, days, dishes]) => {
+      return this._menuService.getMenuEntries({ days, menu, dishes });
     })
   );
   public trackByFn = trackByFactory<IMenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
-    private _mealService: MealService,
+    private _dishService: DishService,
     private _menuService: MenuService,
     private _printService: PrintService,
   ) { }
@@ -49,7 +49,7 @@ export class PlannerMenuComponent {
 
   public onClearDay({ day }: IMenuEntry): void {
     this._menuService
-      .updateMenuContents({ day, mealId: null })
+      .updateMenuContents({ day, dishId: null })
       .subscribe();
   }
 

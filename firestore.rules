@@ -23,7 +23,7 @@ service cloud.firestore {
       allow delete: if belongsToUser(request, resource);
     }
 
-    match /meals/{mealId} {
+    match /dishes/{dishId} {
     	allow read: if belongsToUser(request, resource);
     	allow create: if isFromUser(request);
       allow update: if isFromUser(request)
