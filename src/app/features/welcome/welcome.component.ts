@@ -33,9 +33,9 @@ export class WelcomeComponent {
           this._userService.createUser({ name, email }),
           this._menuService.createMenu('My First Menu'),
           this._dishService.createDish({ name: 'Bagels', description: 'Delicious round vessels from Poland', type: 'main' }),
-          this._dishService.createDish({ name: 'DIY', description: "You're on your own tonight!", type: 'main' }),
+          this._dishService.createDish({ name: 'Mashed Potatoes', description: "Delicious squishy vessel from the U.K.", type: 'side' }),
           this._dishService.createDish({ name: 'Pizza', description: 'Delicious flat vessel from Italy', type: 'main' }),
-          this._dishService.createDish({ name: 'Salad', description: 'Lots of leaves in a bowl. Gross!', type: 'main' }),
+          this._dishService.createDish({ name: 'Salad', description: 'Lots of leaves in a bowl. Gross!', type: 'side' }),
           this._dishService.createDish({ name: 'Sushi', description: 'Delicious tiny vessels from Japan', type: 'main'}),
           this._dishService.createDish({ name: 'Tacos', description: 'Delicious small vessels from Mexico', type: 'main' }),
         ]).subscribe(

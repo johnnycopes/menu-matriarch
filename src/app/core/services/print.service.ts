@@ -32,12 +32,12 @@ export class PrintService {
     popupWin?.document.close();
   }
 
-  private _createEntry({ day, main }: IMenuEntry): string {
+  private _createEntry({ day, main, sides }: IMenuEntry): string {
     return `<li class="entry">
       <h2 class="day">${day}</h2>
       <div class="dish">
         <h3 class="dish-name">${main?.name ?? ''}</h3>
-        <p class="dish-description">${main?.description}
+        <p class="side-name">${sides.map((side, index) => (index === 0 ? '' : '&nbsp') + side.name)}</p>
       </div>
     </li>`;
   }
@@ -95,8 +95,8 @@ export class PrintService {
         font-size: 14pt;
       }
 
-      .dish-description {
-        font-size: 10pt;
+      .side-name {
+        font-size: 12pt;
         color: #6e6e6e;
       }
     `;
