@@ -59,11 +59,11 @@ export class DishEditComponent {
         tap(async dish => await this._dishService.updateDish(dish?.id ?? '', details)),
         concatMap(dish => {
           if (dish?.type !== details.type) {
-            console.log('do not align')
             return this._menuService.clearDishFromAllMenus(dish?.id ?? '');
           }
           return of(undefined);
-        })
+        }),
+        tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
       ).subscribe();
     }
   }

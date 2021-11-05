@@ -168,12 +168,33 @@ export class MenuService {
     );
   }
 
-  public clearDishFromAllMenus(dishId: string | null) {
+  public clearDishFromAllMenus(dishId: string) {
     return this.getMenus().pipe(
-      map(menus => menus.map(menu => {
-        return Object.entries(menu.contents);
-      })),
-      tap(console.log),
+      first(),
+      map(menus => menus.map(menu => ({
+        id: menu.id,
+        contents: Object
+          .entries(menu.contents)
+          .filter(([day, { main, sides }]) =>
+            main === dishId || sides.includes(dishId)
+          )
+      }))),
+      tap(data => {
+        // TODO: abstract this to not have to expose firestore directly
+        const batch = this._firestoreService.firestore.firestore.batch();
+        for (let datum of data) {
+          const ref = this._firestoreService.firestore.firestore.collection(this._endpoint).doc(datum.id);
+          for (let [day, { main, sides }] of datum.contents) {
+            if (main) {
+              batch.update(ref, { [`contents.${day}.main`]: null });
+            }
+            if (sides.length) {
+              batch.update(ref, { [`contents.${day}.sides`]: firebase.firestore.FieldValue.arrayRemove(dishId) });
+            }
+          }
+        }
+        batch.commit();
+      }),
     );
   }
 

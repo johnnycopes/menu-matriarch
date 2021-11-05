@@ -10,6 +10,10 @@ export class FirestoreService {
 
   constructor(private _firestore: AngularFirestore) { }
 
+  public get firestore() {
+    return this._firestore;
+  }
+
   public getOne<T>(endpoint: string, uid: string | undefined): Observable<T | undefined> {
     return this._firestore
       .collection<T | undefined>(endpoint)
