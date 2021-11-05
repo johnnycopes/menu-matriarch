@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { concatMap, first } from 'rxjs/operators';
+import { catchError, concatMap, first, tap } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
-import { of } from 'rxjs';
+import { IMenu } from '@models/interfaces/menu.interface';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-planner',
@@ -12,6 +13,7 @@ import { of } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent implements OnInit {
+  public menu$: Observable<IMenu | undefined> = of(undefined);
 
   constructor(
     private _route: ActivatedRoute,
@@ -23,12 +25,16 @@ export class PlannerComponent implements OnInit {
       first(),
       concatMap(paramMap => {
         const menuId = paramMap.get('menuId') ?? undefined;
-        if (menuId) {
-          return this._menuService.updateSavedMenuId(menuId);
-        } else {
-          return of(undefined);
-        }
+        return this._menuService.updateSavedMenuId(menuId);
       }),
     ).subscribe();
+    this.menu$ = this._menuService.getMenu().pipe(
+      catchError(_ => of(undefined)),
+      tap(menu => {
+        if (!menu) {
+          this._menuService.deleteMenu();
+        }
+      })
+    );
   }
 }

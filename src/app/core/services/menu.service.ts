@@ -70,7 +70,6 @@ export class MenuService {
 
   public getMenu(): Observable<IMenu | undefined> {
     return this._menuId$.pipe(
-      filter(id => !!id),
       switchMap(uid => this._firestoreService.getOne<IMenu>(this._endpoint, uid))
     );
   }
@@ -111,8 +110,10 @@ export class MenuService {
     );
   }
 
-  public async deleteMenu(id: string): Promise<void> {
-    await this._firestoreService.delete<IMenu>(this._endpoint, id);
+  public async deleteMenu(id?: string): Promise<void> {
+    if (id) {
+      await this._firestoreService.delete<IMenu>(this._endpoint, id);
+    }
     this._localStorageService.deleteMenuId();
     this.updateSavedMenuId().pipe(
       first()

@@ -28,7 +28,7 @@ const routes: Routes = [
       { path: ':id', component: DishDetailsComponent },
       { path: ':id/edit', component: DishEditComponent },
     ] },
-    { path: '', redirectTo: 'planner', pathMatch: 'full', data: { state: ERoute.menus } },
+    { path: '', redirectTo: 'dishes', pathMatch: 'full', data: { state: ERoute.dishes } },
     { path: 'settings', component: SettingsComponent, data: { state: ERoute.settings } },
   ]},
   { path: '**', component: PageNotFoundComponent },
