@@ -21,7 +21,6 @@ const routes: Routes = [
   { path: '', component: ShellComponent, canActivate: [AuthGuard], children: [
     { path: 'demo', component: DemoComponent, data: { state: ERoute.demo } },
     { path: 'planner/:menuId', component: PlannerComponent, data: { state: ERoute.planner } },
-    { path: 'planner', component: PlannerComponent, data: { state: ERoute.planner } },
     { path: 'menus', component: MenusComponent, data: { state: ERoute.menus } },
     { path: 'dishes', component: DishesComponent, data: { state: ERoute.dishes }, children: [
       { path: '', component: DishPlaceholderComponent, pathMatch: 'full' },

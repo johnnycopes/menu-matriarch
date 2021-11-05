@@ -32,20 +32,23 @@ export class MenuService {
     );
   }
 
-  public selectMenu(id: string): void {
-    this._localStorageService.setMenuId(id);
-    this._menuId$.next(id);
-  }
-
-  public getSavedMenuId(): Observable<string> {
+  public updateSavedMenuId(routeMenuId?: string): Observable<string> {
     const savedMenuId = this._localStorageService.getMenuId();
-    if (savedMenuId) {
-      return of(savedMenuId);
+    if (routeMenuId) {
+      return of(routeMenuId).pipe(
+        first(),
+        tap(routeMenuId => this._setMenuId(routeMenuId)),
+      );
+    } else if (savedMenuId) {
+      return of(savedMenuId).pipe(
+        first(),
+        tap(savedMenuId => this._setMenuId(savedMenuId))
+      );
     } else {
-      // default to first menu ID if one doesn't exist in local storage
       return this.getMenus().pipe(
         first(),
         map(menus => menus[0].id),
+        tap(firstMenuId => this._setMenuId(firstMenuId))
       );
     }
   }
@@ -111,7 +114,9 @@ export class MenuService {
   public async deleteMenu(id: string): Promise<void> {
     await this._firestoreService.delete<IMenu>(this._endpoint, id);
     this._localStorageService.deleteMenuId();
-    this._menuId$.next('');
+    this.updateSavedMenuId().pipe(
+      first()
+    ).subscribe();
   }
 
   public updateMenuName(id: string, name: string): Promise<void> {
@@ -216,5 +221,10 @@ export class MenuService {
 
   private async _updateMenu(id: string, updates: Partial<IMenu>): Promise<void> {
     return await this._firestoreService.update<IMenu>(this._endpoint, id, updates);
+  }
+
+  private _setMenuId(id: string): void {
+    this._localStorageService.setMenuId(id);
+    this._menuId$.next(id);
   }
 }
