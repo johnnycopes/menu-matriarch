@@ -38,7 +38,9 @@ export class WelcomeComponent {
           this._dishService.createDish({ name: 'Salad', description: 'Lots of leaves in a bowl. Gross!', type: 'main' }),
           this._dishService.createDish({ name: 'Sushi', description: 'Delicious tiny vessels from Japan', type: 'main'}),
           this._dishService.createDish({ name: 'Tacos', description: 'Delicious small vessels from Mexico', type: 'main' }),
-        ]).subscribe(() => this._router.navigate(['/planner']));
+        ]).subscribe(
+          () => this._router.navigate(['/planner'])
+        );
       } else {
         this._router.navigate(['/planner']);
       }

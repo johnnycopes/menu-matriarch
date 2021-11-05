@@ -27,14 +27,13 @@ export class PlannerDishComponent {
     this._menuService.getOrderedDays(),
     this._menuService.getMenu().pipe(
       map(menu => menu),
-      tap(console.log),
     ),
   ]).pipe(
     map(([days, menu]) => days.map(day => {
       let checked = false;
-      if (this.type === 'main') {
+      if (menu && this.type === 'main') {
         checked = menu.contents[day].main === this.id;
-      } else if (this.type === 'side') {
+      } else if (menu && this.type === 'side') {
         checked = menu.contents[day].sides.includes(this.id);
       }
       return { day, checked };

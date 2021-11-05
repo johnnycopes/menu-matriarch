@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
@@ -165,6 +165,15 @@ export class MenuService {
         }
         await this._updateMenu(menuId, updates);
       }),
+    );
+  }
+
+  public clearDishFromAllMenus(dishId: string | null) {
+    return this.getMenus().pipe(
+      map(menus => menus.map(menu => {
+        return Object.entries(menu.contents);
+      })),
+      tap(console.log),
     );
   }
 

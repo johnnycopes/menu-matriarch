@@ -2,7 +2,7 @@
   <h3>
     {{ day }}
   </h3>
-  <fa-icon *ngIf="main"
+  <fa-icon *ngIf="main || sides.length"
     [icon]="faTimes"
     (click)="clear.emit()"
   ></fa-icon>

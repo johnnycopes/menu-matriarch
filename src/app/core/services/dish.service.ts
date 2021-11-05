@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { first, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, switchMap, tap } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/interfaces/dish-type.type';
@@ -27,7 +27,7 @@ export class DishService {
   ): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
-      tap(async uid => {
+      concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
           await this._firestoreService.create<IDish>(
@@ -43,6 +43,9 @@ export class DishService {
               ingredients: [],
             }
           );
+          return id;
+        } else {
+          return undefined;
         }
       })
     );
