@@ -32,13 +32,22 @@ export class MenuService {
     );
   }
 
-  public get savedMenuId(): string | null {
-    return this._localStorageService.getMenuId();
-  }
-
   public selectMenu(id: string): void {
     this._localStorageService.setMenuId(id);
     this._menuId$.next(id);
+  }
+
+  public getSavedMenuId(): Observable<string> {
+    const savedMenuId = this._localStorageService.getMenuId();
+    if (savedMenuId) {
+      return of(savedMenuId);
+    } else {
+      // default to first menu ID if one doesn't exist in local storage
+      return this.getMenus().pipe(
+        first(),
+        map(menus => menus[0].id),
+      );
+    }
   }
 
   public getMenuEntries({ days, menu, dishes }: {

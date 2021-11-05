@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, map, tap } from 'rxjs/operators';
+import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-planner',
@@ -13,19 +14,17 @@ import { MenuService } from '@services/menu.service';
 export class PlannerComponent implements OnDestroy {
   private _routeSubscription = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('menuId') ?? ''),
-  ).subscribe(routeMenuId => {
-    if (routeMenuId) {
-      this._menuService.selectMenu(routeMenuId);
-    } else if (this._menuService.savedMenuId) {
-      this._router.navigate(['/planner', this._menuService.savedMenuId]);
-    } else {
-      this._menuService.getMenus().pipe(
-        first(),
-        map(menus => menus[0].id),
-        tap(firstMenuId => this._router.navigate(['/planner', firstMenuId])),
-      ).subscribe();
-    }
-  });
+    concatMap(routeId => {
+      if (routeId) {
+        return of(routeId);
+      } else {
+        return this._menuService.getSavedMenuId().pipe(
+          tap(id => this._router.navigate(['/planner', id])),
+        );
+      }
+    }),
+    tap(id => this._menuService.selectMenu(id))
+  ).subscribe();
 
   constructor(
     private _route: ActivatedRoute,
