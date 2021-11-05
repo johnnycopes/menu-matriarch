@@ -51,24 +51,11 @@
           {{ entry.day | slice : 0 : 3 }}
         </h4>
       </app-small-caps-label>
-      <div class="container">
-        <app-dish-summary
-          [id]="entry.main?.id"
-          [name]="entry.main?.name"
-        ></app-dish-summary>
-        <ul *ngIf="entry.sides.length"
-          class="sides"
-          >
-          <p>&nbsp;+&nbsp;</p>
-          <ng-container *ngFor="let side of entry.sides; trackBy: dishesTrackByFn; let last = last">
-            <app-dish-summary
-              [id]="side.id"
-              [name]="side.name"
-            ></app-dish-summary>
-            <span *ngIf="!last">,&nbsp;</span>
-          </ng-container>
-        </ul>
-      </div>
+      <app-dish-summary
+        [id]="entry.main?.id"
+        [name]="entry.main?.name"
+        [sides]="entry.sides"
+      ></app-dish-summary>
     </li>
   </ul>
 </app-card>

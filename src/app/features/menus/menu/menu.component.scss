@@ -26,13 +26,3 @@ app-card {
   margin-right: map-get($spacing, 16);
   width: map-get($spacing, 64);
 }
-
-.container {
-  display: flex;
-  align-items: center;
-}
-
-.sides {
-  display: flex;
-  align-items: center;
-}

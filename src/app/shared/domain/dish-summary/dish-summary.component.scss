@@ -1,10 +1,16 @@
 @import "main";
 
-:host {
-  display: block;
+:host(.horizontal) {
+  display: flex;
+  align-items: center;
 }
 
-.container {
+:host(.vertical) {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-and-type {
   display: flex;
   justify-content: space-between;
 }
@@ -18,4 +24,14 @@
   font-size: 14px;
   color: map-get($neutral, 6);
   margin-top: map-get($spacing, 8);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.sides {
+  display: flex;
+  align-items: center;
 }

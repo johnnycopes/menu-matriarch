@@ -8,22 +8,8 @@
   ></fa-icon>
 </app-small-caps-label>
 
-<div class="container">
-  <app-dish-summary
-    [id]="main?.id"
-    [name]="main?.name"
-  ></app-dish-summary>
-
-  <ul *ngIf="sides.length"
-    class="sides"
-  >
-    <p>&nbsp;+&nbsp;</p>
-    <ng-container *ngFor="let side of sides; trackBy: trackByFn; let last = last">
-      <app-dish-summary
-        [id]="side.id"
-        [name]="side.name"
-      ></app-dish-summary>
-      <span *ngIf="!last">,&nbsp;</span>
-    </ng-container>
-  </ul>
-</div>
+<app-dish-summary
+  [id]="main?.id"
+  [name]="main?.name"
+  [sides]="sides"
+></app-dish-summary>

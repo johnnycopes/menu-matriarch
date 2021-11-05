@@ -10,14 +10,8 @@ fa-icon {
   cursor: pointer;
 }
 
-.container {
-  display: flex;
-  align-items: center;
-  padding: map-get($spacing, 4) map-get($spacing, 8);
+app-dish-summary {
   margin-bottom: map-get($spacing, 8);
+  padding: map-get($spacing, 4) map-get($spacing, 8);
 }
 
-.sides {
-  display: flex;
-  align-items: center;
-}
