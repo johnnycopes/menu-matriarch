@@ -11,6 +11,11 @@ app-card {
   margin-bottom: map-get($spacing, 16);
 }
 
+.name {
+  font-weight: map-get($font-weight, bold);
+  color: map-get($neutral, 4);
+}
+
 .entry {
   display: flex;
 
@@ -20,6 +25,7 @@ app-card {
 }
 
 .day {
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -3,7 +3,6 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
-import { IDish } from '@models/interfaces/dish.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
@@ -23,8 +22,7 @@ export class MenuComponent {
   @Input() days: Day[] = [];
   @Input() canDelete = true;
   public readonly faEllipsisV = faEllipsisV;
-  public entriesTrackByFn = trackByFactory<IMenuEntry, Day>(entry => entry.day);
-  public dishesTrackByFn = trackByFactory<IDish, string>(dish => dish.id);
+  public trackByFn = trackByFactory<IMenuEntry, Day>(entry => entry.day);
   public renaming = false;
   public startRename$ = new Subject<void>();
   public finishRename$ = new Subject<void>();

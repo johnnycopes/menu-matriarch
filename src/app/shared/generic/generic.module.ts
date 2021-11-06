@@ -19,6 +19,7 @@ import { OptionsMenuComponent } from './options-menu/options-menu.component';
 import { OptionsMenuItemComponent } from './options-menu/options-menu-item/options-menu-item.component';
 import { OptionsMenuTriggerDirective } from './options-menu/options-menu-trigger.directive';
 import { PanelComponent } from './panel/panel.component';
+import { PluralPipe } from './plural/plural.pipe';
 import { RangeDirective } from './range/range.directive';
 import { SectionComponent } from './section/section.component';
 import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.component';
@@ -48,6 +49,7 @@ import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.com
     OptionsMenuItemComponent,
     OptionsMenuTriggerDirective,
     PanelComponent,
+    PluralPipe,
     RangeDirective,
     SectionComponent,
     SmallCapsLabelComponent,
@@ -68,6 +70,7 @@ import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.com
     OptionsMenuItemComponent,
     OptionsMenuTriggerDirective,
     PanelComponent,
+    PluralPipe,
     RangeDirective,
     SectionComponent,
     SmallCapsLabelComponent,

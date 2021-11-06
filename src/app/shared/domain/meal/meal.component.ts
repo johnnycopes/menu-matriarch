@@ -12,8 +12,16 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MealComponent {
-  @Input() dishes: IDish[] = [];
+  @Input()
+  set dishes(dishes: IDish[]) {
+    this.mains = dishes.filter(dish => dish.type === 'main');
+    this.sides = dishes.filter(dish => dish.type === 'side');
+    this.showFallback = !dishes.length;
+  }
   public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
+  public mains: IDish[] = [];
+  public sides: IDish[] = [];
+  public showFallback = true;
   public fallbackName$ = this._userService.getPreferences().pipe(
     map(preferences => preferences?.emptyDishText ?? '')
   );

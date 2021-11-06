@@ -8,7 +8,7 @@
     ></app-inline-name-edit>
     <ng-template #toolbarTemplate>
       <a routerLink="/planner/{{ id }}">
-        <h3>
+        <h3 class="name">
           {{ name }}
         </h3>
       </a>
@@ -44,7 +44,7 @@
   </div>
   <ul>
     <li class="entry"
-      *ngFor="let entry of entries; trackBy: entriesTrackByFn"
+      *ngFor="let entry of entries; trackBy: trackByFn"
     >
       <app-small-caps-label class="day">
         <h4>

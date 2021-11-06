@@ -9,6 +9,20 @@
   flex-wrap: wrap;
 }
 
+.mains {
+
+  a {
+    font-weight: map-get($font-weight, semibold);
+    color: map-get($neutral, 4);
+  }
+}
+
+.separator {
+  margin: map-get($spacing, 4) 0;
+  border: 0;
+  border-bottom: 1px solid map-get($neutral, 9);
+}
+
 .fallback {
   color: map-get($neutral, 6);
   font-style: italic;
