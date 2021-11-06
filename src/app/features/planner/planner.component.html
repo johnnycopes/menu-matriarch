@@ -1,13 +1,12 @@
-<ng-container *ngIf="menu$ | async; else invalidMenu">
-  <app-planner-dishes>
-  </app-planner-dishes>
+<ng-container *ngIf="menu$ | async as menu">
+  <ng-container *ngIf="menu !== 'INVALID'">
+    <app-planner-dishes></app-planner-dishes>
+    <app-planner-menu></app-planner-menu>
+  </ng-container>
 
-  <app-planner-menu>
-  </app-planner-menu>
-</ng-container>
-
-<ng-template #invalidMenu>
-  <div class="invalid-menu">
+  <div *ngIf="menu === 'INVALID'"
+    class="invalid-menu"
+  >
     <div class="invalid-menu__container">
       <p>Menu is either invalid or no longer exists.</p>
       <a app-button
@@ -17,4 +16,4 @@
       </a>
     </div>
   </div>
-</ng-template>
+</ng-container>

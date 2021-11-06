@@ -18,12 +18,13 @@ import { GenericModule } from '@shared/generic/generic.module';
 import { AppComponent } from './app.component';
 import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
-import { HeaderComponent } from './core/components/header/header.component';
 import { DishComponent } from './features/dishes/dish/dish.component';
 import { DishDetailsComponent } from './features/dishes/dish-details/dish-details.component';
 import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.component';
-import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { DishesComponent } from './features/dishes/dishes.component';
+import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
+import { ErrorComponent } from './core/components/error/error.component';
+import { HeaderComponent } from './core/components/header/header.component';
 import { MenuComponent } from './features/menus/menu/menu.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
@@ -41,12 +42,13 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     AppComponent,
     DemoComponent,
     DemoComponentComponent,
-    HeaderComponent,
     DishComponent,
     DishDetailsComponent,
     DishEditComponent,
-    DishPlaceholderComponent,
     DishesComponent,
+    DishPlaceholderComponent,
+    ErrorComponent,
+    HeaderComponent,
     MenuComponent,
     MenusComponent,
     PageNotFoundComponent,

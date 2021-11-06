@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { catchError, concatMap, first, tap } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
-import { IMenu } from '@models/interfaces/menu.interface';
-import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-planner',
@@ -13,7 +12,15 @@ import { Observable, of } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent implements OnInit {
-  public menu$: Observable<IMenu | undefined> = of(undefined);
+  public menu$ = this._menuService.getMenu().pipe(
+    first(),
+    catchError(_ => of('INVALID')),
+    tap(menu => {
+      if (menu === 'INVALID') {
+        this._menuService.deleteMenu();
+      }
+    }),
+  );
 
   constructor(
     private _route: ActivatedRoute,
@@ -28,13 +35,5 @@ export class PlannerComponent implements OnInit {
         return this._menuService.updateSavedMenuId(menuId);
       }),
     ).subscribe();
-    this.menu$ = this._menuService.getMenu().pipe(
-      catchError(_ => of(undefined)),
-      tap(menu => {
-        if (!menu) {
-          this._menuService.deleteMenu();
-        }
-      })
-    );
   }
 }
