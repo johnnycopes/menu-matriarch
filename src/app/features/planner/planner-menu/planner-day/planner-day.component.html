@@ -2,15 +2,11 @@
   <h3>
     {{ day }}
   </h3>
-  <fa-icon *ngIf="main || sides.length"
+  <fa-icon *ngIf="dishes.length"
     [icon]="faTimes"
     (click)="clear.emit()"
   ></fa-icon>
 </app-small-caps-label>
 
-<!-- TODO: replace with new shared meal component -->
-<!-- <app-dish-summary
-  [id]="main?.id"
-  [name]="main?.name"
-  [sides]="sides"
-></app-dish-summary> -->
+<app-meal [dishes]="dishes">
+</app-meal>

@@ -1,0 +1,17 @@
+<ng-container *appLet="fallbackName$ | async as fallbackName">
+  <ul *ngIf="dishes.length; else fallbackTemplate"
+    class="dishes"
+  >
+    <li *ngFor="let dish of dishes; let last = last; trackBy: trackByFn">
+      <a routerLink="/dishes/{{ dish.id }}">
+        {{ dish.name }}<span *ngIf="!last">,&nbsp;</span>
+      </a>
+    </li>
+  </ul>
+
+  <ng-template #fallbackTemplate>
+    <span class="fallback">
+      {{ fallbackName }}
+    </span>
+  </ng-template>
+</ng-container>

@@ -1,5 +1,5 @@
 <button class="new-button"
-  *ngIf="!adding; else addForm"
+  *ngIf="!adding; else addFormTemplate"
   app-button
   buttonStyle="secondary"
   (click)="adding = true"
@@ -8,7 +8,7 @@
   </fa-icon>
   New {{name}}
 </button>
-<ng-template #addForm>
+<ng-template #addFormTemplate>
   <form #form="ngForm"
     (ngSubmit)="submitForm(form)"
     >

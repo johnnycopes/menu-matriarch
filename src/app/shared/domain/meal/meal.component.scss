@@ -1,0 +1,15 @@
+@import "main";
+
+:host {
+  display: block;
+}
+
+.dishes {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fallback {
+  color: map-get($neutral, 6);
+  font-style: italic;
+}

@@ -1,12 +1,12 @@
 <app-card>
   <div class="top">
     <app-inline-name-edit
-      *ngIf="renaming$ | async; else toolbar"
+      *ngIf="renaming$ | async; else toolbarTemplate"
       [name]="name"
       (cancel)="finishRename$.next()"
       (save)="onRename($event)"
     ></app-inline-name-edit>
-    <ng-template #toolbar>
+    <ng-template #toolbarTemplate>
       <a routerLink="/planner/{{ id }}">
         <h3>
           {{ name }}
@@ -52,12 +52,8 @@
         </h4>
       </app-small-caps-label>
 
-      <!-- TODO: replace with new shared meal component -->
-      <!-- <app-dish-summary
-        [id]="entry.day"
-        [name]="entry.main?.name"
-        [dishes]="entry.dishes"
-      ></app-dish-summary> -->
+      <app-meal [dishes]="entry.dishes">
+      </app-meal>
     </li>
   </ul>
 </app-card>

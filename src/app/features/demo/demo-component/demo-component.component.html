@@ -4,11 +4,11 @@
 </h2>
 <h2>
 	<em><strong>Dependencies: </strong>
-		<ng-container *ngIf="dependencies?.length; else none"></ng-container>
+		<ng-container *ngIf="dependencies?.length; else noneTemplate"></ng-container>
 		<span *ngFor="let dependency of dependencies; last as last; trackBy: trackByFn">
 			{{ dependency }}{{ !last ? ',' : '' }}
 		</span>
-		<ng-template #none>
+		<ng-template #noneTemplate>
 			<span>none</span>
 		</ng-template>
 	</em>
