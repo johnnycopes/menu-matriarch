@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
@@ -12,6 +12,10 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MealComponent {
+  @Input()
+  @HostBinding('class')
+  public orientation: 'horizontal' | 'vertical' = 'vertical';
+
   @Input()
   set dishes(dishes: IDish[]) {
     this.mains = dishes.filter(dish => dish.type === 'main');

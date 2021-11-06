@@ -10,6 +10,8 @@
   </ul>
   <hr *ngIf="mains.length && sides.length"
     class="separator"
+    [class.separator--horizontal]="orientation === 'horizontal'"
+    [class.separator--vertical]="orientation === 'vertical'"
   />
   <ul *ngIf="sides.length"
     class="dishes sides"

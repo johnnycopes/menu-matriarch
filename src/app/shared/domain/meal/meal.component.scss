@@ -1,7 +1,15 @@
 @import "main";
 
 :host {
-  display: block;
+  display: flex;
+}
+
+:host(.vertical) {
+  flex-direction: column;
+}
+
+:host(.horizontal) {
+  align-items: center;
 }
 
 .dishes {
@@ -18,9 +26,18 @@
 }
 
 .separator {
-  margin: map-get($spacing, 4) 0;
   border: 0;
-  border-bottom: 1px solid map-get($neutral, 9);
+
+  &--horizontal {
+    margin: 0 map-get($spacing, 8);
+    border-right: 1px solid map-get($neutral, 9);
+    height: 80%;
+  }
+
+  &--vertical {
+    margin: map-get($spacing, 4) 0;
+    border-bottom: 1px solid map-get($neutral, 9);
+  }
 }
 
 .fallback {
