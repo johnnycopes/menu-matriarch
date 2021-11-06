@@ -1,7 +1,7 @@
-<app-section>
+<app-section *appLet="dishes$ | async as dishes">
   <div class="app-section__toolbar">
     <h2 class="title">
-      Dishes
+      Dishes ({{ dishes.length }})
     </h2>
     <a app-button
       routerLink="/dishes/new"
@@ -11,7 +11,7 @@
   </div>
   <ul class="app-section__content">
     <li app-planner-dish
-      *ngFor="let dish of dishes$ | async; trackBy: trackByFn"
+      *ngFor="let dish of dishes; trackBy: trackByFn"
       [id]="dish.id"
       [type]="dish.type"
       [name]="dish.name"

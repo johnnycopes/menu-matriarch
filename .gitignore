@@ -46,5 +46,4 @@ testem.log
 Thumbs.db
 
 # Firebase
-firebase-admin-dev.json
-firebase-admin-prod.json
+firebase-admin-*.json
