@@ -13,6 +13,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 })
 export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
+  @Input() dishes: IDish[] = [];
   @Input() main: IDish | undefined;
   @Input() sides: IDish[] = [];
   @Input() emptyDishText = '';

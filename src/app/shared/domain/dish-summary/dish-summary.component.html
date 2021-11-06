@@ -1,21 +1,10 @@
-<div class="name-and-type"
-  *appLet="fallbackName$ | async as fallbackName"
->
-  <a *ngIf="id && name; else empty"
-    routerLink="/dishes/{{ id }}"
-  >
+<div class="container">
+  <a routerLink="/dishes/{{ id }}">
     <h3 class="name">
       {{ name }}
     </h3>
   </a>
-  <ng-template #empty>
-    <h3 class="placeholder">
-      {{ fallbackName }}
-    </h3>
-  </ng-template>
-  <app-small-caps-label *ngIf="type"
-    class="type"
-    >
+  <app-small-caps-label class="type">
     {{ type }}
   </app-small-caps-label>
 </div>
@@ -25,16 +14,3 @@
 >
   {{ description }}
 </p>
-
-<ul *ngIf="sides?.length"
-  class="sides"
->
-  <span>&nbsp;+&nbsp;</span>
-  <ng-container *ngFor="let side of sides; trackBy: trackByFn; let last = last">
-    <app-dish-summary
-      [id]="side.id"
-      [name]="side.name"
-    ></app-dish-summary>
-    <span *ngIf="!last">,&nbsp;</span>
-  </ng-container>
-</ul>

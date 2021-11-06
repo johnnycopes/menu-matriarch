@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { DishType } from '@models/interfaces/dish-type.type';
 import { Day } from '@models/types/day.type';
@@ -29,15 +29,10 @@ export class PlannerDishComponent {
       map(menu => menu),
     ),
   ]).pipe(
-    map(([days, menu]) => days.map(day => {
-      let checked = false;
-      if (menu && this.type === 'main') {
-        checked = menu.contents[day].main === this.id;
-      } else if (menu && this.type === 'side') {
-        checked = menu.contents[day].sides.includes(this.id);
-      }
-      return { day, checked };
-    }))
+    map(([days, menu]) => days.map(day => ({
+      day,
+      checked: menu?.contents[day].includes(this.id) ?? false,
+    })))
   );
   public trackByFn = trackByFactory<IDayModel, Day>(model => model.day);
 

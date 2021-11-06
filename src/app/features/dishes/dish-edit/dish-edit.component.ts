@@ -56,12 +56,10 @@ export class DishEditComponent {
     } else {
       this.dish$.pipe(
         first(),
-        tap(async dish => await this._dishService.updateDish(dish?.id ?? '', details)),
-        concatMap(dish => {
-          if (dish?.type !== details.type) {
-            return this._menuService.clearDishFromAllMenus(dish?.id ?? '');
+        tap(async dish => {
+          if (dish) {
+            await this._dishService.updateDish(dish.id, details);
           }
-          return of(undefined);
         }),
         tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
       ).subscribe();

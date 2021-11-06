@@ -32,12 +32,11 @@ export class PrintService {
     popupWin?.document.close();
   }
 
-  private _createEntry({ day, main, sides }: IMenuEntry): string {
+  private _createEntry({ day, dishes }: IMenuEntry): string {
     return `<li class="entry">
       <h2 class="day">${day}</h2>
       <div class="dish">
-        <h3 class="dish-name">${main?.name ?? ''}</h3>
-        <p class="side-name">${sides.map((side, index) => (index === 0 ? '' : '&nbsp') + side.name)}</p>
+        <p class="side-name">${dishes.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
       </div>
     </li>`;
   }

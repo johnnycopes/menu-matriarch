@@ -63,8 +63,7 @@ export class MenuService {
     }
     return days.map(day => ({
       day,
-      main: dishes.find(dish => dish.id === menu.contents[day].main),
-      sides: dishes.filter(dish => menu.contents[day].sides.includes(dish.id)),
+      dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
     }));
   }
 
@@ -95,13 +94,13 @@ export class MenuService {
               name,
               favorited: false,
               contents: {
-                Monday: { main: null, sides: [] },
-                Tuesday: { main: null, sides: [] },
-                Wednesday: { main: null, sides: [] },
-                Thursday: { main: null, sides: [] },
-                Friday: { main: null, sides: [] },
-                Saturday: { main: null, sides: [] },
-                Sunday: { main: null, sides: [] },
+                Monday: [],
+                Tuesday: [],
+                Wednesday: [],
+                Thursday: [],
+                Friday: [],
+                Saturday: [],
+                Sunday: [],
               },
             }
           );
@@ -139,19 +138,11 @@ export class MenuService {
         if (!menuId) {
           return;
         }
-        let updates: Partial<IMenu> = {};
-        if (dishType === 'main') {
-          updates = {
-            [`contents.${day}.main`]: selected ? dishId : null
-          };
-        } else if (dishType === 'side') {
-          updates = {
-            [`contents.${day}.sides`]: selected
-              ? firebase.firestore.FieldValue.arrayUnion(dishId)
-              : firebase.firestore.FieldValue.arrayRemove(dishId)
-          };
-        }
-        await this._updateMenu(menuId, updates);
+        await this._updateMenu(menuId, {
+          [`contents.${day}`]: selected
+            ? firebase.firestore.FieldValue.arrayUnion(dishId)
+            : firebase.firestore.FieldValue.arrayRemove(dishId)
+        });
       }),
     );
   }
@@ -166,52 +157,22 @@ export class MenuService {
         let updates: Partial<IMenu> = {};
         if (day) {
           updates = {
-            [`contents.${day}`]: { main: null, sides: [] }
+            [`contents.${day}`]: []
           };
         } else {
           updates = {
             contents: {
-              Monday: { main: null, sides: [] },
-              Tuesday: { main: null, sides: [] },
-              Wednesday: { main: null, sides: [] },
-              Thursday: { main: null, sides: [] },
-              Friday: { main: null, sides: [] },
-              Saturday: { main: null, sides: [] },
-              Sunday: { main: null, sides: [] },
+              Monday: [],
+              Tuesday: [],
+              Wednesday: [],
+              Thursday: [],
+              Friday: [],
+              Saturday: [],
+              Sunday: [],
             }
           };
         }
         await this._updateMenu(menuId, updates);
-      }),
-    );
-  }
-
-  public clearDishFromAllMenus(dishId: string) {
-    return this.getMenus().pipe(
-      first(),
-      map(menus => menus.map(menu => ({
-        id: menu.id,
-        contents: Object
-          .entries(menu.contents)
-          .filter(([day, { main, sides }]) =>
-            main === dishId || sides.includes(dishId)
-          )
-      }))),
-      tap(data => {
-        // TODO: abstract this to not have to expose firestore directly
-        const batch = this._firestoreService.firestore.firestore.batch();
-        for (let datum of data) {
-          const ref = this._firestoreService.firestore.firestore.collection(this._endpoint).doc(datum.id);
-          for (let [day, { main, sides }] of datum.contents) {
-            if (main) {
-              batch.update(ref, { [`contents.${day}.main`]: null });
-            }
-            if (sides.length) {
-              batch.update(ref, { [`contents.${day}.sides`]: firebase.firestore.FieldValue.arrayRemove(dishId) });
-            }
-          }
-        }
-        batch.commit();
       }),
     );
   }

@@ -51,11 +51,13 @@
           {{ entry.day | slice : 0 : 3 }}
         </h4>
       </app-small-caps-label>
-      <app-dish-summary
-        [id]="entry.main?.id"
+
+      <!-- TODO: replace with new shared meal component -->
+      <!-- <app-dish-summary
+        [id]="entry.day"
         [name]="entry.main?.name"
-        [sides]="entry.sides"
-      ></app-dish-summary>
+        [dishes]="entry.dishes"
+      ></app-dish-summary> -->
     </li>
   </ul>
 </app-card>

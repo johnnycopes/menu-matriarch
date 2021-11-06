@@ -1,37 +1,12 @@
 @import "main";
 
-:host(.horizontal) {
-  display: flex;
-  align-items: center;
-}
-
-:host(.vertical) {
-  display: flex;
-  flex-direction: column;
-}
-
-.name-and-type {
+.container {
   display: flex;
   justify-content: space-between;
-}
-
-.placeholder {
-  color: map-get($neutral, 6);
-  font-style: italic;
 }
 
 .description {
   font-size: 14px;
   color: map-get($neutral, 6);
   margin-top: map-get($spacing, 8);
-}
-
-.container {
-  display: flex;
-  align-items: center;
-}
-
-.sides {
-  display: flex;
-  align-items: center;
 }
