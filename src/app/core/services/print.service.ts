@@ -33,10 +33,13 @@ export class PrintService {
   }
 
   private _createEntry({ day, dishes }: IMenuEntry): string {
+    const mains = dishes.filter(dish => dish.type === 'main');
+    const sides = dishes.filter(dish => dish.type === 'side');
     return `<li class="entry">
       <h2 class="day">${day}</h2>
-      <div class="dish">
-        <p class="side-name">${dishes.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
+      <div class="meals">
+        <p class="dishes">${mains.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
+        <p class="dishes">${sides.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
       </div>
     </li>`;
   }
@@ -78,7 +81,7 @@ export class PrintService {
         margin-bottom: 8pt;
       }
 
-      .dish {
+      .meals {
         max-width: 256pt;
         margin-left: 4pt;
       }
@@ -90,13 +93,8 @@ export class PrintService {
         border-bottom: 1px solid #e2e2e2;
       }
 
-      .dish-name {
-        font-size: 14pt;
-      }
-
-      .side-name {
+      .dishes {
         font-size: 12pt;
-        color: #6e6e6e;
       }
     `;
   }
