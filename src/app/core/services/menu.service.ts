@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
 import { IDish } from '@models/interfaces/dish.interface';
@@ -47,7 +47,7 @@ export class MenuService {
     } else {
       return this.getMenus().pipe(
         first(),
-        map(menus => menus[0].id),
+        map(menus => menus[0]?.id ?? ''),
         tap(firstMenuId => this._setMenuId(firstMenuId))
       );
     }
@@ -83,7 +83,7 @@ export class MenuService {
   public createMenu(name: string): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
-      tap(async uid => {
+      concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
           await this._firestoreService.create<IMenu>(
@@ -105,6 +105,9 @@ export class MenuService {
               },
             }
           );
+          return id;
+        } else {
+          return undefined;
         }
       })
     );

@@ -6,6 +6,7 @@ import { AuthService } from '@services/auth.service';
 import { DishService } from '@services/dish.service';
 import { MenuService } from '@services/menu.service';
 import { UserService } from '@services/user.service';
+import { first, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-welcome',
@@ -38,11 +39,14 @@ export class WelcomeComponent {
           this._dishService.createDish({ name: 'Salad', description: 'Lots of leaves in a bowl. Gross!', type: 'side' }),
           this._dishService.createDish({ name: 'Sushi', description: 'Delicious tiny vessels from Japan', type: 'main'}),
           this._dishService.createDish({ name: 'Tacos', description: 'Delicious small vessels from Mexico', type: 'main' }),
-        ]).subscribe(
-          () => this._router.navigate(['/planner'])
-        );
+        ]).pipe(
+          tap(([_, menuId]) => this._router.navigate(['/planner', menuId]))
+        ).subscribe();
       } else {
-        this._router.navigate(['/planner']);
+        this._menuService.menuId$.pipe(
+          first(),
+          tap(menuId => this._router.navigate(['/planner', menuId]))
+        ).subscribe();
       }
     } catch (e) {
       console.error(e);
