@@ -3,6 +3,7 @@ import { IDish } from '@models/interfaces/dish.interface';
 
 import { DishService } from '@services/dish.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dishes',
@@ -11,7 +12,13 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishesComponent {
-  public dishes$ = this._dishService.getDishes();
+  public vm$ = this._dishService.getDishes().pipe(
+    map(dishes => ({
+      total: dishes.length,
+      mains: dishes.filter(dish => dish.type === 'main'),
+      sides: dishes.filter(dish => dish.type === 'side'),
+    }))
+  );
   public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
 
   constructor(private _dishService: DishService) { }

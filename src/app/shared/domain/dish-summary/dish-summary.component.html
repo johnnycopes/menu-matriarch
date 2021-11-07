@@ -1,13 +1,8 @@
-<div class="container">
-  <a routerLink="/dishes/{{ id }}">
-    <h3 class="name">
-      {{ name }}
-    </h3>
-  </a>
-  <app-small-caps-label class="type">
-    {{ type }}
-  </app-small-caps-label>
-</div>
+<a routerLink="/dishes/{{ id }}">
+  <h3 class="name">
+    {{ name }}
+  </h3>
+</a>
 
 <p *ngIf="description"
   class="description"

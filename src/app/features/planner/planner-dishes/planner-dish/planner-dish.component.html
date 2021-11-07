@@ -3,7 +3,6 @@
     [id]="id"
     [name]="name"
     [description]="description"
-    [type]="type"
   ></app-dish-summary>
   <div class="schedule">
     <app-checkbox *ngFor="let model of dayModels$ | async; trackBy: trackByFn"

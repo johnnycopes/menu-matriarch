@@ -12,5 +12,4 @@ export class DishSummaryComponent {
   @Input() id: string = '';
   @Input() name: string = '';
   @Input() description: string | undefined;
-  @Input() type: DishType = 'main';
 }

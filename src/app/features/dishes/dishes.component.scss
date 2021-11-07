@@ -14,6 +14,17 @@
   }
 }
 
+.app-section__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-weight: map-get($font-weight, bold);
+  color: map-get($neutral, 4);
+}
+
 section {
   grid-column: 2;
   background: $white;

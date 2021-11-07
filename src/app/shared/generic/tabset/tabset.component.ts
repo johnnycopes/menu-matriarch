@@ -1,5 +1,7 @@
 
-import { Component, AfterContentInit, ContentChildren, QueryList, Input, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, AfterContentInit, ContentChildren, QueryList, Input, TemplateRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { merge, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 
 import { fadeInAnimation, visibilityAnimation } from '@utility/animations';
 import { AnimatedComponent } from '@utility/animated.component';
@@ -14,11 +16,16 @@ export type TabsetContentVisibility = 'visible' | 'invisible';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [fadeInAnimation, visibilityAnimation]
 })
-export class TabsetComponent extends AnimatedComponent implements AfterContentInit {
+export class TabsetComponent extends AnimatedComponent implements AfterContentInit, OnDestroy {
   @Input() controlsTemplate: TemplateRef<unknown> | undefined;
   @Input() contentVisibility: TabsetContentVisibility = 'visible';
   @ContentChildren(TabComponent)
   public tabs: QueryList<TabComponent> | undefined;
+  private _destroy$ = new Subject();
+
+  constructor(private _changeDetectorRef: ChangeDetectorRef) {
+    super();
+  }
 
   public ngAfterContentInit(): void {
     const selectedTab = this.tabs?.find(tab => tab.selected);
@@ -26,6 +33,18 @@ export class TabsetComponent extends AnimatedComponent implements AfterContentIn
     if (!selectedTab && this.tabs?.first) {
       this.tabs.first.selected = true;
     }
+
+    if (this.tabs) {
+      merge(...this.tabs.map(tab => tab.nameChange)).pipe(
+        takeUntil(this._destroy$),
+        tap(() => this._changeDetectorRef.markForCheck())
+      ).subscribe();
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public onSelectTab(tab: TabComponent): void {

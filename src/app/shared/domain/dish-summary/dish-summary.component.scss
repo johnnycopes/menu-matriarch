@@ -1,10 +1,5 @@
 @import "main";
 
-.container {
-  display: flex;
-  justify-content: space-between;
-}
-
 .description {
   font-size: 14px;
   color: map-get($neutral, 6);

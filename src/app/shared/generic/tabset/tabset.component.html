@@ -4,8 +4,8 @@
       class="tab"
       [class.tab--selected]="tab.selected"
       (click)="onSelectTab(tab)"
-      >
-      {{tab.name}}
+    >
+      {{ tab.name }}
     </li>
   </ul>
 </ng-template>
@@ -13,8 +13,7 @@
 <ng-container *ngTemplateOutlet="
   controlsTemplate ? controlsTemplate : defaultControlsTemplate;
   context: { tabs: this.tabs }
-  ">
-</ng-container>
+"></ng-container>
 <div class="content"
   @fadeIn
   [@visibility]="contentVisibility"
