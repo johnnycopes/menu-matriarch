@@ -1,7 +1,7 @@
-<app-section *appLet="dishes$ | async as dishes">
+<app-section *ngIf="vm$ | async as vm">
   <div class="app-section__toolbar">
     <h2 class="title">
-      Dishes ({{ dishes.length }})
+      Dishes ({{ vm.total }})
     </h2>
     <a app-button
       routerLink="/dishes/new"
@@ -10,12 +10,25 @@
     </a>
   </div>
   <ul class="app-section__content">
-    <li app-planner-dish
-      *ngFor="let dish of dishes; trackBy: trackByFn"
-      [id]="dish.id"
-      [type]="dish.type"
-      [name]="dish.name"
-      [description]="dish.description"
-    ></li>
+    <app-tabset contentVisibility="visible">
+      <app-tab name="Mains ({{ vm.mains.length }})">
+        <li app-planner-dish
+          *ngFor="let main of vm.mains; trackBy: trackByFn"
+          [id]="main.id"
+          [type]="main.type"
+          [name]="main.name"
+          [description]="main.description"
+        ></li>
+      </app-tab>
+      <app-tab name="Sides ({{ vm.sides.length }})">
+        <li app-planner-dish
+          *ngFor="let side of vm.sides; trackBy: trackByFn"
+          [id]="side.id"
+          [type]="side.type"
+          [name]="side.name"
+          [description]="side.description"
+        ></li>
+      </app-tab>
+    </app-tabset>
   </ul>
 </app-section>

@@ -23,6 +23,8 @@ import { PluralPipe } from './plural/plural.pipe';
 import { RangeDirective } from './range/range.directive';
 import { SectionComponent } from './section/section.component';
 import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.component';
+import { TabComponent } from './tabset/tab/tab.component';
+import { TabsetComponent } from './tabset/tabset.component';
 
 
 
@@ -53,6 +55,8 @@ import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.com
     RangeDirective,
     SectionComponent,
     SmallCapsLabelComponent,
+    TabComponent,
+    TabsetComponent,
   ],
   exports: [
     AlertComponent,
@@ -74,6 +78,8 @@ import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.com
     RangeDirective,
     SectionComponent,
     SmallCapsLabelComponent,
+    TabComponent,
+    TabsetComponent,
   ]
 })
 export class GenericModule { }
