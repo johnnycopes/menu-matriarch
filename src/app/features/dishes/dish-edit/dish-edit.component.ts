@@ -2,11 +2,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { concatMap, first, switchMap, tap } from 'rxjs/operators';
+import { first, switchMap, tap } from 'rxjs/operators';
 
 import { DishService } from '@services/dish.service';
 import { DishType } from '@models/interfaces/dish-type.type';
-import { MenuService } from '@services/menu.service';
 
 interface IDishEditForm {
   name: string;
@@ -40,7 +39,6 @@ export class DishEditComponent {
     private _route: ActivatedRoute,
     private _router: Router,
     private _dishService: DishService,
-    private _menuService: MenuService,
   ) { }
 
   public async onSave(form: NgForm): Promise<void> {

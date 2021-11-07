@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IDish } from '@models/interfaces/dish.interface';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { IDish } from '@models/interfaces/dish.interface';
 import { DishService } from '@services/dish.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dishes',
@@ -12,14 +14,25 @@ import { map } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishesComponent {
-  public vm$ = this._dishService.getDishes().pipe(
-    map(dishes => ({
-      total: dishes.length,
-      mains: dishes.filter(dish => dish.type === 'main'),
-      sides: dishes.filter(dish => dish.type === 'side'),
-    }))
+  public vm$ = combineLatest([
+    this._dishService.getDishes(),
+    of(this._route.snapshot.firstChild?.params.id),
+  ]).pipe(
+    map(([dishes, routeId]) => {
+      return {
+        total: dishes.length,
+        mains: dishes.filter(dish => dish.type === 'main'),
+        sides: dishes.filter(dish => dish.type === 'side'),
+        initialTab: dishes
+          .find(dish => dish.id === routeId)
+          ?.type ?? 'main',
+      };
+    })
   );
   public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
 
-  constructor(private _dishService: DishService) { }
+  constructor(
+    private _route: ActivatedRoute,
+    private _dishService: DishService,
+  ) { }
 }
