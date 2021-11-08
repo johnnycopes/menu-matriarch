@@ -1,5 +1,14 @@
 @import "main";
 
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menus {
+  color: map-get($neutral, 6);
+}
+
 .description {
   font-size: 14px;
   color: map-get($neutral, 6);

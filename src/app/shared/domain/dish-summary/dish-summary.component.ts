@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-
-import { DishType } from '@models/interfaces/dish-type.type';
+import { faMap } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-dish-summary',
@@ -12,4 +11,6 @@ export class DishSummaryComponent {
   @Input() id: string = '';
   @Input() name: string = '';
   @Input() description: string | undefined;
+  @Input() menus: string[] = [];
+  public faMap = faMap;
 }

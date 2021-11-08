@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -23,6 +24,7 @@ import { MealComponent } from './meal/meal.component';
   ],
   imports: [
     CommonModule,
+    FontAwesomeModule,
     FormsModule,
     RouterModule,
     GenericModule,

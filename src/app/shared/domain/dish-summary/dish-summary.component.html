@@ -1,8 +1,15 @@
-<a routerLink="/dishes/{{ id }}">
-  <h3 class="name">
-    {{ name }}
-  </h3>
-</a>
+<div class="container">
+  <a routerLink="/dishes/{{ id }}">
+    <h3 class="name">
+      {{ name }}
+    </h3>
+  </a>
+  <div class="menus">
+    {{ menus.length }}
+    <fa-icon [icon]="faMap">
+    </fa-icon>
+  </div>
+</div>
 
 <p *ngIf="description"
   class="description"

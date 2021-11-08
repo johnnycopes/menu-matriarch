@@ -22,8 +22,8 @@
     >
       {{ dish.description }}
     </p>
-    <p class="type">
-      {{ dish.type | uppercase }} dish
+    <p class="details">
+      {{ dish.type | uppercase }} dish. Included in {{ dish.menus.length }} {{ 'menu' | appPlural : dish.menus.length }}.
     </p>
     <ul *ngIf="dish.ingredients.length">
       <li *ngFor="let ingredient of dish.ingredients; trackBy: trackByFn">

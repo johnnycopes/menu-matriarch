@@ -8,4 +8,5 @@ export interface IDish {
   favorited: boolean;
   description: string;
   ingredients: string[];
+  menus: string[];
 }

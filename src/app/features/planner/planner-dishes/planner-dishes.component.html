@@ -18,6 +18,7 @@
           [type]="main.type"
           [name]="main.name"
           [description]="main.description"
+          [menus]="main.menus"
         ></li>
       </app-tab>
       <app-tab name="Sides ({{ vm.sides.length }})">
@@ -27,6 +28,7 @@
           [type]="side.type"
           [name]="side.name"
           [description]="side.description"
+          [menus]="side.menus"
         ></li>
       </app-tab>
     </app-tabset>

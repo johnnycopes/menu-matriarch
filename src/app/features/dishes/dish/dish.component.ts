@@ -14,4 +14,5 @@ export class DishComponent {
   @Input() type: DishType = 'main';
   @Input() favorited: boolean = false;
   @Input() ingredients: string[] = [];
+  @Input() menus: string[] = [];
 }
