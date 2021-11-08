@@ -24,6 +24,7 @@ export class PlannerDishComponent {
   @Input() description = '';
   @Input() type: DishType = 'main';
   @Input() menus: string[] = [];
+  @Input() usages: number = 0;
   public dayModels$: Observable<IDayModel[]> = combineLatest([
     this._menuService.getOrderedDays(),
     this._menuService.getMenu().pipe(

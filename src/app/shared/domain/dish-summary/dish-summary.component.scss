@@ -5,8 +5,14 @@
   justify-content: space-between;
 }
 
-.menus {
+.details {
+  display: flex;
+  align-items: center;
   color: map-get($neutral, 6);
+
+  & > * {
+    margin-left: map-get($spacing, 16);
+  }
 }
 
 .description {

@@ -9,4 +9,5 @@ export interface IDish {
   description: string;
   ingredients: string[];
   menus: string[];
+  usages: number;
 }

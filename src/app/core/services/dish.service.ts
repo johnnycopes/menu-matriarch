@@ -42,6 +42,7 @@ export class DishService {
               favorited: false,
               ingredients: [],
               menus: [],
+              usages: 0,
             }
           );
           return id;
