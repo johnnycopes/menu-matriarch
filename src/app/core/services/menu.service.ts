@@ -70,7 +70,12 @@ export class MenuService {
 
   public getMenu(): Observable<IMenu | undefined> {
     return this._menuId$.pipe(
-      switchMap(uid => this._firestoreService.getOne<IMenu>(this._endpoint, uid))
+      switchMap(id => {
+        if (!id) {
+          return of(undefined);
+        }
+        return this._firestoreService.getOne<IMenu>(this._endpoint, id)
+      })
     );
   }
 
@@ -127,30 +132,40 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
-  // TODO: update dish's menus array whenever a change is made to a menu
   public updateMenuContents({ day, dishId, selected }: {
     day: Day,
     dishId: string,
     selected: boolean,
-  }): Observable<string | undefined> {
-    return this.menuId$.pipe(
+  }): Observable<IMenu | undefined> {
+    return this.getMenu().pipe(
       first(),
-      tap(async menuId => {
-        if (!menuId) {
+      tap(async menu => {
+        if (!menu) {
           return;
         }
-        await Promise.all([
-          this._updateMenu(menuId, {
-            [`contents.${day}`]: selected
-              ? firebase.firestore.FieldValue.arrayUnion(dishId)
-              : firebase.firestore.FieldValue.arrayRemove(dishId)
-          }),
-          // this._dishService.updateDish(dishId, {
-          //   menus: selected
-          //     ? firebase.firestore.FieldValue.arrayUnion(menuId) as unknown as string[]
-          //     : firebase.firestore.FieldValue.arrayRemove(menuId) as unknown as string[]
-          // })
-        ]);
+        await this._updateMenu(menu.id, {
+          [`contents.${day}`]: selected
+            ? firebase.firestore.FieldValue.arrayUnion(dishId)
+            : firebase.firestore.FieldValue.arrayRemove(dishId)
+        });
+      }),
+      concatMap(menu => {
+        if (!menu) {
+          return of(undefined);
+        }
+        return this._firestoreService
+          .getOne<IMenu>(this._endpoint, menu.id)
+          .pipe(first());
+      }),
+      tap(async menu => {
+        if (!menu) {
+          return;
+        }
+        await this._dishService.updateDish(dishId, {
+          menus: Object.values(menu.contents).some(dishIds => dishIds.includes(dishId))
+            ? firebase.firestore.FieldValue.arrayUnion(menu.id) as unknown as string[]
+            : firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+        });
       }),
     );
   }
