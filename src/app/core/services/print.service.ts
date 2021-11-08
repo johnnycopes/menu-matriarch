@@ -6,14 +6,21 @@ import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
   providedIn: 'root'
 })
 export class PrintService {
-
-  constructor() { }
+  private _popupWindow: Window | null = null;
 
   public printMenu(name: string, entries: IMenuEntry[]): void {
-    let popupWin;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-    popupWin?.document.open();
-    popupWin?.document.write(`
+    if (this._popupWindow == null || this._popupWindow.closed) {
+      this._popupWindow = window.open(undefined, '_blank', 'resizable,scrollbars,status');
+      this._popupWindow?.document.open();
+      this._popupWindow?.document.write(this._createDocument(name, entries));
+      this._popupWindow?.document.close();
+    } else {
+      this._popupWindow.focus();
+    };
+  }
+
+  private _createDocument(name: string, entries: IMenuEntry[] = []): string {
+    return `
       <html>
         <head>
           <title>${name}</title>
@@ -27,9 +34,8 @@ export class PrintService {
             .join('')
           }
         </body>
-      </html>`
-    );
-    popupWin?.document.close();
+      </html>
+    `;
   }
 
   private _createEntry({ day, dishes }: IMenuEntry): string {
