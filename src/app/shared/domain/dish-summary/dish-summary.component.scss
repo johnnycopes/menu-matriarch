@@ -8,10 +8,18 @@
 .details {
   display: flex;
   align-items: center;
-  color: map-get($neutral, 6);
+  font-size: map-get($font-size, 18);
 
-  & > * {
+  &__counter {
+    display: flex;
+    align-items: center;
     margin-left: map-get($spacing, 16);
+  }
+
+  fa-icon {
+    margin-right: map-get($spacing, 4);
+    font-size: map-get($font-size, 16);
+    color: map-get($neutral, 6);
   }
 }
 
