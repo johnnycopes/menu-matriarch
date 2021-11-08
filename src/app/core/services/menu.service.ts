@@ -170,21 +170,21 @@ export class MenuService {
     );
   }
 
-  // TODO: update dish's/dishes' menus array(s) whenever a change/changes is/are made to a menu
-  public clearMenuContents(day?: Day): Observable<string | undefined> {
-    return this.menuId$.pipe(
+  // TODO: refactor to use batch updates instead of separate promises
+  public clearMenuContents(day?: Day): Observable<IMenu | undefined> {
+    return this.getMenu().pipe(
       first(),
-      tap(async menuId => {
-        if (!menuId) {
+      tap(async menu => {
+        if (!menu) {
           return;
         }
-        let updates: Partial<IMenu> = {};
+        let menuUpdates: Partial<IMenu> = {};
         if (day) {
-          updates = {
+          menuUpdates = {
             [`contents.${day}`]: []
           };
         } else {
-          updates = {
+          menuUpdates = {
             contents: {
               Monday: [],
               Tuesday: [],
@@ -196,7 +196,29 @@ export class MenuService {
             }
           };
         }
-        await this._updateMenu(menuId, updates);
+        await this._updateMenu(menu.id, menuUpdates);
+        if (day) {
+          const dayDishIds = menu.contents[day]
+          await Promise.all(dayDishIds.map(dayDishId => {
+            const dishExistsInMenu = Object
+              .entries(menu.contents)
+              .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dayDishId));
+            return dishExistsInMenu
+              ? undefined
+              : this._dishService.updateDish(dayDishId, {
+                  menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+                });
+          }));
+        } else {
+          const allDishIds = Object
+            .values(menu.contents)
+            .reduce((accum, curr) => ([...accum, ...curr]), []);
+          await Promise.all(allDishIds.map(dishId => {
+            return this._dishService.updateDish(dishId, {
+              menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+            });
+          }));
+        }
       }),
     );
   }
