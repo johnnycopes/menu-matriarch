@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { concatMap, first, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, switchMap } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/interfaces/dish-type.type';
@@ -41,6 +41,7 @@ export class DishService {
               type,
               favorited: false,
               ingredients: [],
+              menus: [],
             }
           );
           return id;

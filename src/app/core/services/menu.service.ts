@@ -4,13 +4,13 @@ import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operato
 import firebase from 'firebase/compat/app';
 
 import { IDish } from '@models/interfaces/dish.interface';
-import { DishType } from '@models/interfaces/dish-type.type';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { getDays } from '@utility/get-days';
 import { FirestoreService } from './firestore.service';
 import { LocalStorageService } from './local-storage.service';
+import { DishService } from './dish.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -23,6 +23,7 @@ export class MenuService {
   constructor(
     private _firestoreService: FirestoreService,
     private _localStorageService: LocalStorageService,
+    private _dishService: DishService,
     private _userService: UserService,
   ) { }
 
@@ -126,10 +127,10 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
-  public updateMenuContents({ day, dishId, dishType, selected }: {
+  // TODO: update dish's menus array whenever a change is made to a menu
+  public updateMenuContents({ day, dishId, selected }: {
     day: Day,
     dishId: string,
-    dishType: DishType,
     selected: boolean,
   }): Observable<string | undefined> {
     return this.menuId$.pipe(
@@ -138,15 +139,23 @@ export class MenuService {
         if (!menuId) {
           return;
         }
-        await this._updateMenu(menuId, {
-          [`contents.${day}`]: selected
-            ? firebase.firestore.FieldValue.arrayUnion(dishId)
-            : firebase.firestore.FieldValue.arrayRemove(dishId)
-        });
+        await Promise.all([
+          this._updateMenu(menuId, {
+            [`contents.${day}`]: selected
+              ? firebase.firestore.FieldValue.arrayUnion(dishId)
+              : firebase.firestore.FieldValue.arrayRemove(dishId)
+          }),
+          // this._dishService.updateDish(dishId, {
+          //   menus: selected
+          //     ? firebase.firestore.FieldValue.arrayUnion(menuId) as unknown as string[]
+          //     : firebase.firestore.FieldValue.arrayRemove(menuId) as unknown as string[]
+          // })
+        ]);
       }),
     );
   }
 
+  // TODO: update dish's/dishes' menus array(s) whenever a change/changes is/are made to a menu
   public clearMenuContents(day?: Day): Observable<string | undefined> {
     return this.menuId$.pipe(
       first(),

@@ -23,6 +23,7 @@ export class PlannerDishComponent {
   @Input() name = '';
   @Input() description = '';
   @Input() type: DishType = 'main';
+  @Input() menus: string[] = [];
   public dayModels$: Observable<IDayModel[]> = combineLatest([
     this._menuService.getOrderedDays(),
     this._menuService.getMenu().pipe(
@@ -43,7 +44,6 @@ export class PlannerDishComponent {
       .updateMenuContents({
         day,
         dishId: this.id,
-        dishType: this.type,
         selected,
       })
       .subscribe();
