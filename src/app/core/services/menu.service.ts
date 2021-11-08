@@ -182,24 +182,27 @@ export class MenuService {
         let menuUpdates: Partial<IMenu> = {};
         let dishUpdatePromises: (Promise<void> | undefined )[] = [];
 
-        // Clear a single day's dishes and update those dishes' menus property
+        // Clear a single day's dishes and update those dishes' `menus`
         if (day) {
           menuUpdates = {
             [`contents.${day}`]: []
           };
           const dayDishIds = menu.contents[day];
-          dishUpdatePromises = dayDishIds.map(dayDishId => {
+          dishUpdatePromises = dayDishIds.map(dishId => {
             const dishInOtherDay = Object
               .entries(menu.contents)
-              .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dayDishId));
-            return dishInOtherDay
-              ? undefined
-              : this._dishService.updateDish(dayDishId, {
-                  menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
-                });
+              .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
+
+            // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
+            return this._dishService.updateDish(dishId, {
+              usages: firebase.firestore.FieldValue.increment(-1) as unknown as number,
+              ...!dishInOtherDay && {
+                menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+              }
+            });
           });
         }
-        // Clear all days' dishes and update those dishes' menus property
+        // Clear all days' dishes and update those dishes' `menus`
         else {
           menuUpdates = {
             contents: {
@@ -212,14 +215,21 @@ export class MenuService {
               Sunday: [],
             }
           };
-          const allDishIds = Object
+          const dishIds = Object
             .values(menu.contents)
-            .reduce((accum, curr) => ([...accum, ...curr]), []);
-          dishUpdatePromises = allDishIds.map(dishId => {
-            return this._dishService.updateDish(dishId, {
-              menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+            .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
+            .reduce((hashMap, dishId) => ({
+              ...hashMap,
+              [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
+            }), {} as { [id: string] : number });
+          dishUpdatePromises = Object
+            .keys(dishIds)
+            .map(dishId => {
+              return this._dishService.updateDish(dishId, {
+                usages: firebase.firestore.FieldValue.increment(-(dishIds[dishId])) as unknown as number,
+                menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+              });
             });
-          });
         }
 
         await Promise.all([
