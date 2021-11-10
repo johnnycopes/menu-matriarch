@@ -34,10 +34,11 @@ time, mark, audio, video {
 html {
   box-sizing: border-box;
   font-size: font-size(20);
+  height: 100%;
 }
 
 body {
-	min-height: 100vh;
+	height: 100%;
 	position: relative;
 	background: color($neutral, 9);
 	color: color($neutral, 1);

@@ -31,7 +31,7 @@ app-planner-menu {
   inset: 0;
   display: grid;
   place-items: center;
-  padding-bottom: map-get($app, header);
+  padding-bottom: app-size(header);
 
   &__container {
     display: flex;

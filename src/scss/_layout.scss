@@ -60,6 +60,9 @@ $border: (
 }
 
 $app: (
-	header: spacing(64),
-	grid-gap: spacing(16)
+	header: spacing(64)
 );
+
+@function app-size($value) {
+  @return map-get($app, $value);
+}

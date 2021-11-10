@@ -2,18 +2,20 @@
 
 .app-section {
   display: grid;
-  grid-template-rows: max-content 1fr;
+  grid-template-rows:
+    [toolbar] max-content
+    [content] 1fr;
   overflow: hidden;
   height: 100%;
 
   &__toolbar {
-    grid-row: 1;
+    grid-row: toolbar;
     display: flex;
     padding: spacing(16);
   }
 
   &__content {
-    grid-row: 2;
+    grid-row: content;
     padding: spacing(16);
     padding-top: 0;
     overflow: auto;

@@ -1,13 +1,19 @@
 @import "main";
 
 :host {
-  display: block;
+  display: grid;
+  grid-template-rows:
+    [header] app-size(header)
+    [content] 1fr;
+  height: 100%;
+}
+
+header {
+  grid-row: header;
 }
 
 .content {
-  height: calc(100vh - #{map-get($app, header)});
-  width: 100%;
-  position: absolute;
+  grid-row: content;
   overflow: auto;
 }
 

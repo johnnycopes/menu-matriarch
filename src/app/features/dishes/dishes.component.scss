@@ -2,12 +2,14 @@
 
 :host {
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns:
+    [list] 50%
+    [details] 50%;
   height: 100%;
 }
 
 .dishes {
-  grid-column: 1;
+  grid-column: list;
 
   li[app-dish]:not(:last-of-type) {
     margin-bottom: spacing(8);
@@ -26,7 +28,7 @@
 }
 
 section {
-  grid-column: 2;
+  grid-column: details;
   background: $white;
   overflow: hidden;
 }

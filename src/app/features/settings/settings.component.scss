@@ -2,15 +2,19 @@
 
 :host {
   display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: max-content max-content;
+  grid-template-columns:
+    [account] 50%
+    [settings] 50%;
+  grid-template-rows:
+    [headers] max-content
+    [panels] max-content;
   grid-gap: spacing(16);
   max-width: 1024px;
   margin: 0 auto;
 }
 
 .title {
-  grid-row: 1;
+  grid-row: headers;
   font-weight: font-weight(bold);
   color: color($neutral, 4);
   padding: spacing(16) 0 0;
