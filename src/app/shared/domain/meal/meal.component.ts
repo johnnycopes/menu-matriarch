@@ -13,10 +13,6 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 })
 export class MealComponent {
   @Input()
-  @HostBinding('class')
-  public orientation: 'horizontal' | 'vertical' = 'vertical';
-
-  @Input()
   set dishes(dishes: IDish[]) {
     this.mains = dishes.filter(dish => dish.type === 'main');
     this.sides = dishes.filter(dish => dish.type === 'side');

@@ -44,8 +44,8 @@ export class PrintService {
     return `<li class="entry">
       <h2 class="day">${day}</h2>
       <div class="meals">
-        <p class="dishes">${mains.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
-        <p class="dishes">${sides.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
+        <p class="dishes mains">${mains.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
+        <p class="dishes sides">${sides.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
       </div>
     </li>`;
   }
@@ -94,13 +94,18 @@ export class PrintService {
 
       .day {
         max-width: 256pt;
-        font-size: 10pt;
-        font-weight: bold;
+        font-size: 8pt;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
         border-bottom: 1px solid #e2e2e2;
       }
 
       .dishes {
         font-size: 12pt;
+      }
+
+      .mains {
+        font-weight: bold;
       }
     `;
   }
