@@ -4,7 +4,7 @@ $size: 40px;
 
 @mixin button-style($background, $hover, $box-shadow, $disabled) {
   background: $background;
-  color: $white !important;
+  color: $white;
   @include box-shadow($box-shadow);
 
   &:hover {
@@ -30,7 +30,7 @@ $size: 40px;
   font-size: map-get($font-size, 14);
   font-family: $font-stack;
   font-weight: 700;
-  color: $white !important;
+  color: $white;
   @include small-caps();
 
   &--icon {
@@ -48,10 +48,10 @@ $size: 40px;
 
   &--ternary {
     background: transparent;
-    color: map-get($neutral, 4) !important;
+    color: map-get($neutral, 4);
 
     &:hover {
-      color: map-get($neutral, 3) !important;
+      color: map-get($neutral, 3);
       background: map-get($neutral, 10);
       @include box-shadow(map-get($neutral, 9));
     }

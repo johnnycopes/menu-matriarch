@@ -31,12 +31,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/reset.scss",
-              "src/styles/main.scss"
+              "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/styles"
+                "src/scss"
               ]
             },
             "scripts": []
