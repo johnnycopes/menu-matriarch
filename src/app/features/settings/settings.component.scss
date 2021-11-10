@@ -12,7 +12,7 @@
 .title {
   grid-row: 1;
   font-weight: map-get($font-weight, bold);
-  color: map-get($neutral, 4);
+  color: color($neutral, 4);
   padding: spacing(16) 0 0;
 }
 

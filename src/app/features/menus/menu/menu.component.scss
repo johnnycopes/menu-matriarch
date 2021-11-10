@@ -13,7 +13,7 @@ app-card {
 
 .name {
   font-weight: map-get($font-weight, bold);
-  color: map-get($neutral, 4);
+  color: color($neutral, 4);
 }
 
 .entry {

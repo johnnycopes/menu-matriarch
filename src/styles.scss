@@ -39,8 +39,8 @@ html {
 body {
 	min-height: 100vh;
 	position: relative;
-	background: map-get($neutral, 9);
-	color: map-get($neutral, 1);
+	background: color($neutral, 9);
+	color: color($neutral, 1);
 	font-family: $font-stack;
 	font-weight: map-get($font-weight, normal);
 	line-height: map-get($line-height, normal);
@@ -48,11 +48,11 @@ body {
 }
 
 a {
-  color: map-get($neutral, 1);
+  color: color($neutral, 1);
   text-decoration: none;
 
   &:hover {
-    color: map-get($indigo, $key: 5);
+    color: color($indigo, 5);
   }
 }
 

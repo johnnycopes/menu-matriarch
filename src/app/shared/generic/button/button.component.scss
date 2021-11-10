@@ -39,26 +39,26 @@ $size: 40px;
   }
 
   &--primary {
-    @include button-style(map-get($pink, 7), map-get($pink, 6), map-get($pink, 5), map-get($pink, 8));
+    @include button-style(color($pink, 7), color($pink, 6), color($pink, 5), color($pink, 8));
   }
 
   &--secondary {
-    @include button-style(map-get($neutral, 5), map-get($neutral, 4), map-get($neutral, 1), map-get($neutral, 8));
+    @include button-style(color($neutral, 5), color($neutral, 4), color($neutral, 1), color($neutral, 8));
   }
 
   &--ternary {
     background: transparent;
-    color: map-get($neutral, 4);
+    color: color($neutral, 4);
 
     &:hover {
-      color: map-get($neutral, 3);
-      background: map-get($neutral, 10);
-      @include box-shadow(map-get($neutral, 9));
+      color: color($neutral, 3);
+      background: color($neutral, 10);
+      @include box-shadow(color($neutral, 9));
     }
   }
 
   &--danger {
-    @include button-style(map-get($red, 7), map-get($red, 6), map-get($red, 6), map-get($red, 9));
+    @include button-style(color($red, 7), color($red, 6), color($red, 6), color($red, 9));
   }
 
   fa-icon {

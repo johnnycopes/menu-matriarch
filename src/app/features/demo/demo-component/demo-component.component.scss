@@ -16,12 +16,12 @@ strong {
 
 em {
 	font-style: italic;
-	color: map-get($neutral, 6);
+	color: color($neutral, 6);
 }
 
 hr {
 	width: 100%;
-	color: map-get($neutral, 10);
+	color: color($neutral, 10);
 	margin: 30px 0;
 }
 

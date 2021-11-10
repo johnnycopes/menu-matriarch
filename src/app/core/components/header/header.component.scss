@@ -3,7 +3,7 @@
 :host {
   display: flex;
   height: map-get($app, header);
-  background: map-get($neutral, 5);
+  background: color($neutral, 5);
 }
 
 .container {
@@ -34,11 +34,11 @@
   width: spacing(128);
   height: 100%;
   font-size: map-get($font-size, 16);
-  color: map-get($neutral, 10);
+  color: color($neutral, 10);
 
   &:hover {
-    color: map-get($neutral, 10);
-    background: map-get($neutral, 4);
+    color: color($neutral, 10);
+    background: color($neutral, 4);
   }
 
   &:last-of-type {
@@ -46,6 +46,6 @@
   }
 
   &--active {
-    background: map-get($neutral, 3);
+    background: color($neutral, 3);
   }
 }

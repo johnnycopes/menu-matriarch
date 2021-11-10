@@ -6,8 +6,8 @@
 
 .cdk-drag-placeholder {
 	position: relative;
-	background: map-get($yellow, 9);
-	color: map-get($yellow, 9);
+	background: color($yellow, 9);
+	color: color($yellow, 9);
 
 	&::after {
 		content: "";
@@ -17,7 +17,7 @@
 		width: 100%;
 		height: 100%;
 		z-index: map-get($z-index, positive);
-		background: map-get($yellow, 8);
+		background: color($yellow, 8);
 		border-radius: map-get($border, radius);
 	}
 }

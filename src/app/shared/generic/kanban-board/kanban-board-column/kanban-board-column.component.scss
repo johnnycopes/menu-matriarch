@@ -4,7 +4,7 @@
   margin-right: spacing(8);
   padding: spacing(8);
   padding-bottom: spacing(12);
-  background-color: map-get($neutral, 8);
+  background-color: color($neutral, 8);
   border-radius: map-get($border, radius);
   box-shadow: map-get($box-shadow, lightest);
 }
@@ -15,7 +15,7 @@
   align-items: center;
   margin-bottom: spacing(8);
   padding: 0 spacing(8);
-  color: map-get($neutral, 3);
+  color: color($neutral, 3);
 }
 
 .name {

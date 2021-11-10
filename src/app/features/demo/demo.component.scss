@@ -23,7 +23,7 @@ strong {
 .panel-container {
 	height: 300px;
 	padding: 20px;
-	background: map-get($neutral, 5);
+	background: color($neutral, 5);
 }
 
 .inline {

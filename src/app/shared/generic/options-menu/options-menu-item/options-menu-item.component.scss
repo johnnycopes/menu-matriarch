@@ -5,13 +5,13 @@
 	padding: spacing(8) spacing(16);
 
 	&:hover {
-		background: map-get($neutral, 10);
+		background: color($neutral, 10);
 		cursor: pointer;
 	}
 }
 
 :host(.disabled) {
-  background: map-get($neutral, 10);
-  color: map-get($neutral, 6);
+  background: color($neutral, 10);
+  color: color($neutral, 6);
   pointer-events: none;
 }

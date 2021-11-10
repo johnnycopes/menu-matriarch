@@ -13,15 +13,15 @@
   font-size: map-get($font-size, 16);
 
   &--success {
-    @include type(map-get($indigo, 9), map-get($indigo, 4));
+    @include type(color($indigo, 9), color($indigo, 4));
   }
 
   &--warning {
-    @include type(map-get($yellow, 9), map-get($yellow, 3));
+    @include type(color($yellow, 9), color($yellow, 3));
   }
 
   &--error {
-    @include type(map-get($red, 9), map-get($red, 4));
+    @include type(color($red, 9), color($red, 4));
   }
 
   &--large {

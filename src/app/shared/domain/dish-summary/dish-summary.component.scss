@@ -19,12 +19,12 @@
   fa-icon {
     margin-right: spacing(4);
     font-size: map-get($font-size, 16);
-    color: map-get($neutral, 6);
+    color: color($neutral, 6);
   }
 }
 
 .description {
   font-size: 14px;
-  color: map-get($neutral, 6);
+  color: color($neutral, 6);
   margin-top: spacing(8);
 }

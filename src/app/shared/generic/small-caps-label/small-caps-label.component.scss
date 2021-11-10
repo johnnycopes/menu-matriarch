@@ -3,8 +3,8 @@
 .app-small-caps-label {
   display: inline-block;
   padding: spacing(4) spacing(8);
-  background: map-get($neutral, 9);
-  color: map-get($neutral, 5);
+  background: color($neutral, 9);
+  color: color($neutral, 5);
   border-radius: map-get($border, radius);
   font-size: map-get($font-size, 16);
   @include small-caps;

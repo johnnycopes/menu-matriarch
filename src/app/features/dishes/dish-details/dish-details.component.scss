@@ -14,7 +14,7 @@
 }
 
 .details {
-  border-top: map-get($border, thin) solid map-get($neutral, 9);
+  border-top: map-get($border, thin) solid color($neutral, 9);
   margin-top: spacing(16);
   padding-top: spacing(16);
 }

@@ -15,12 +15,12 @@
   flex: 1;
   padding: spacing(16);
   background: $white;
-  border-bottom: map-get($border, thin) solid map-get($neutral, 9);
-  color: map-get($neutral, 6);
+  border-bottom: map-get($border, thin) solid color($neutral, 9);
+  color: color($neutral, 6);
   @include small-caps;
 
   &:hover {
-    background: map-get($neutral, 10);
+    background: color($neutral, 10);
   }
 
   &:first-of-type {
@@ -35,8 +35,8 @@
 
   &--selected {
     font-weight: map-get($font-weight, bold);
-    border-color: map-get($neutral, 4);
-    color: map-get($neutral, 4);
+    border-color: color($neutral, 4);
+    color: color($neutral, 4);
   }
 }
 
