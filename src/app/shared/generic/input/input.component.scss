@@ -42,6 +42,18 @@
   background: $white;
 }
 
+::ng-deep .radio-container {
+  display: flex;
+  align-items: center;
+  margin-top: map-get($spacing, 8);
+}
+
+::ng-deep .radio-button {
+  display: inline-flex;
+  align-items: center;
+  margin-right: map-get($spacing, 16);
+}
+
 ::ng-deep input[type="radio"] {
   margin: 0;
   margin-right: map-get($spacing, 8);

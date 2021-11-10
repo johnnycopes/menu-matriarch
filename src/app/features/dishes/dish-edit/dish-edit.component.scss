@@ -11,14 +11,3 @@
 app-input {
   margin-bottom: map-get($spacing, 32);
 }
-
-.radio-container {
-  display: flex;
-  margin-top: map-get($spacing, 8);
-}
-
-.radio-button {
-  display: inline-flex;
-  align-items: center;
-  margin-right: map-get($spacing, 16);
-}
