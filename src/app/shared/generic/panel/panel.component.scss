@@ -2,7 +2,7 @@
 
 .panel {
   background: $white;
-  padding: map-get($spacing, 16);
+  padding: spacing(16);
   border-radius: map-get($border, radius);
   @include box-shadow(map-get($neutral, 9));
 }

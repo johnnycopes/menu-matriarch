@@ -3,7 +3,7 @@
 app-small-caps-label {
   display: flex;
   justify-content: space-between;
-  margin-bottom: map-get($spacing, 8);
+  margin-bottom: spacing(8);
 }
 
 fa-icon {
@@ -11,7 +11,7 @@ fa-icon {
 }
 
 app-meal {
-  margin-bottom: map-get($spacing, 8);
-  padding: map-get($spacing, 4) map-get($spacing, 8);
+  margin-bottom: spacing(8);
+  padding: spacing(4) spacing(8);
 }
 

@@ -11,12 +11,12 @@
   }
 
   [app-button]:not(:first-child) {
-    margin-left: map-get($spacing, 8);
+    margin-left: spacing(8);
   }
 }
 
 .app-section__content {
   li[app-planner-dish]:not(:last-of-type) {
-    margin-bottom: map-get($spacing, 8);
+    margin-bottom: spacing(8);
   }
 }

@@ -10,7 +10,7 @@
   grid-column: 1;
 
   li[app-dish]:not(:last-of-type) {
-    margin-bottom: map-get($spacing, 8);
+    margin-bottom: spacing(8);
   }
 }
 

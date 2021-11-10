@@ -11,7 +11,7 @@
   }
 
   [app-button]:not(:first-child) {
-    margin-left: map-get($spacing, 8);
+    margin-left: spacing(8);
   }
 }
 

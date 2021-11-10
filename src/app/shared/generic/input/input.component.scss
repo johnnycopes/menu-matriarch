@@ -6,7 +6,7 @@
 }
 
 .label {
-  margin-bottom: map-get($spacing, 4);
+  margin-bottom: spacing(4);
   font-size: map-get($font-size, 14);
   color: map-get($neutral, 5);
   @include small-caps();
@@ -14,7 +14,7 @@
 
 ::ng-deep input[type="text"] {
   height: 40px;
-  padding: map-get($spacing, 8);
+  padding: spacing(8);
   border: none;
   border-bottom: map-get($border, thin) solid map-get($neutral, 7);
   font-family: $font-stack;
@@ -34,7 +34,7 @@
 }
 
 ::ng-deep select {
-  padding: map-get($spacing, 8);
+  padding: spacing(8);
   border: map-get($border, thin) solid map-get($neutral, 7);
   font-family: $font-stack;
   font-size: map-get($font-size, 20);
@@ -45,22 +45,22 @@
 ::ng-deep .radio-container {
   display: flex;
   align-items: center;
-  margin-top: map-get($spacing, 8);
+  margin-top: spacing(8);
 }
 
 ::ng-deep .radio-button {
   display: inline-flex;
   align-items: center;
-  margin-right: map-get($spacing, 16);
+  margin-right: spacing(16);
 }
 
 ::ng-deep input[type="radio"] {
   margin: 0;
-  margin-right: map-get($spacing, 8);
+  margin-right: spacing(8);
   height: 20px;
   width: 20px;
 }
 
 .error {
-  margin-top: map-get($spacing, 8);
+  margin-top: spacing(8);
 }

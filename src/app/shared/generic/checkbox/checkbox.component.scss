@@ -40,7 +40,7 @@
 .label {
   display: inline-flex;
   align-items: center;
-  margin-left: map-get($spacing, 4);
+  margin-left: spacing(4);
   user-select: none;
 
   &--bold {
@@ -65,7 +65,7 @@ input:indeterminate ~ .checkbox::after {
   display: block;
   left: 50%;
   top: 50%;
-  width: map-get($spacing, 8);
+  width: spacing(8);
   transform: translate(-50%, -50%);
   border-top: map-get($border, thin) solid map-get($neutral, 5);
 }

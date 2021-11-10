@@ -51,3 +51,7 @@ $app: (
 	header: map-get($spacing, 64),
 	grid-gap: map-get($spacing, 16)
 );
+
+@function spacing($size) {
+  @return map-get($spacing, $size);
+}

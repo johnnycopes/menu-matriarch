@@ -2,7 +2,7 @@
 
 :host {
   display: block;
-  padding: map-get($spacing, 24);
+  padding: spacing(24);
 }
 
 app-demo-component {

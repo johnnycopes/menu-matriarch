@@ -6,7 +6,7 @@
 
 .app-options-menu {
 	min-width: 150px;
-	padding: map-get($spacing, 8) 0;
+	padding: spacing(8) 0;
 	overflow: hidden;
 	border-radius: map-get($border, radius);
 	box-shadow: map-get($box-shadow, medium);

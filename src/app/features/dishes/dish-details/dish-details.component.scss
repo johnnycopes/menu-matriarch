@@ -4,17 +4,17 @@
   justify-content: flex-end;
 
   [app-button] {
-    margin-left: map-get($spacing, 8);
+    margin-left: spacing(8);
   }
 }
 
 .name {
   font-size: map-get($font-size, 36);
-  margin-bottom: map-get($spacing, 16);
+  margin-bottom: spacing(16);
 }
 
 .details {
   border-top: map-get($border, thin) solid map-get($neutral, 9);
-  margin-top: map-get($spacing, 16);
-  padding-top: map-get($spacing, 16);
+  margin-top: spacing(16);
+  padding-top: spacing(16);
 }

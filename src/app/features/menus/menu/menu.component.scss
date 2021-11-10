@@ -8,7 +8,7 @@ app-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: map-get($spacing, 16);
+  margin-bottom: spacing(16);
 }
 
 .name {
@@ -20,7 +20,7 @@ app-card {
   display: flex;
 
   &:not(:last-of-type) {
-    margin-bottom: map-get($spacing, 8);
+    margin-bottom: spacing(8);
   }
 }
 
@@ -29,8 +29,8 @@ app-card {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: map-get($spacing, 16);
-  width: map-get($spacing, 64);
+  margin-right: spacing(16);
+  width: spacing(64);
 }
 
 .meal {

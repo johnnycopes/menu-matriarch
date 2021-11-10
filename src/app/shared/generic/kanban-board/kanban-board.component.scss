@@ -7,7 +7,7 @@
 
 .column {
   flex: 1;
-  max-width: map-get($spacing, 384);
+  max-width: spacing(384);
 }
 
 .cdk-drop-list-dragging ::ng-deep:not(.cdk-drag-placeholder) {

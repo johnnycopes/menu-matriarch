@@ -23,7 +23,7 @@ $size: 40px;
   justify-content: center;
   border: none;
   border-radius: map-get($border, radius);
-  padding: 0 map-get($spacing, 16);
+  padding: 0 spacing(16);
   height: $size;
   cursor: pointer;
   outline: none;

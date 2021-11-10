@@ -19,7 +19,7 @@
 }
 
 .separator {
-  margin: map-get($spacing, 4) 0;
+  margin: spacing(4) 0;
   border: 0;
   border-bottom: 1px solid map-get($neutral, 9);
 }

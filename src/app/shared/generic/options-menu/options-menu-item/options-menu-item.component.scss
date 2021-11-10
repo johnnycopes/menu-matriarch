@@ -2,7 +2,7 @@
 
 :host {
 	display: block;
-	padding: map-get($spacing, 8) map-get($spacing, 16);
+	padding: spacing(8) spacing(16);
 
 	&:hover {
 		background: map-get($neutral, 10);

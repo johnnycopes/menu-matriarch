@@ -9,7 +9,7 @@
 .container {
   display: flex;
   align-items: center;
-  padding: 0 map-get($spacing, 16);
+  padding: 0 spacing(16);
   width: 100%;
 }
 
@@ -17,12 +17,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: map-get($spacing, 16);
+  margin: spacing(16);
 }
 
 .logo {
   position: relative;
-  top: map-get($spacing, 12);
+  top: spacing(12);
   width: map-get($font-size, 72);
   z-index: map-get($z-index, positive);
 }
@@ -31,7 +31,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: map-get($spacing, 128);
+  width: spacing(128);
   height: 100%;
   font-size: map-get($font-size, 16);
   color: map-get($neutral, 10);

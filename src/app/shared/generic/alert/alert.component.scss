@@ -7,7 +7,7 @@
 
 .app-alert {
   display: block;
-  padding: map-get($spacing, 8);
+  padding: spacing(8);
   border-radius: map-get($border, radius);
   font-weight: map-get($font-weight, bold);
   font-size: map-get($font-size, 16);
@@ -25,7 +25,7 @@
   }
 
   &--large {
-    padding: map-get($spacing, 16);
+    padding: spacing(16);
     font-size: map-get($font-size, 20);
   }
 }

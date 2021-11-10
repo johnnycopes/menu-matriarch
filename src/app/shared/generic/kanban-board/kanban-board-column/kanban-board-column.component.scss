@@ -1,9 +1,9 @@
 @import "main";
 
 :host {
-  margin-right: map-get($spacing, 8);
-  padding: map-get($spacing, 8);
-  padding-bottom: map-get($spacing, 12);
+  margin-right: spacing(8);
+  padding: spacing(8);
+  padding-bottom: spacing(12);
   background-color: map-get($neutral, 8);
   border-radius: map-get($border, radius);
   box-shadow: map-get($box-shadow, lightest);
@@ -13,8 +13,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: map-get($spacing, 8);
-  padding: 0 map-get($spacing, 8);
+  margin-bottom: spacing(8);
+  padding: 0 spacing(8);
   color: map-get($neutral, 3);
 }
 
@@ -28,13 +28,13 @@
 }
 
 .list {
-  min-height: map-get($spacing, 8);
-  padding-bottom: map-get($spacing, 8);
+  min-height: spacing(8);
+  padding-bottom: spacing(8);
 }
 
 .list-item {
-  margin-bottom: map-get($spacing, 8);
-  padding: map-get($spacing, 16) map-get($spacing, 8);
+  margin-bottom: spacing(8);
+  padding: spacing(16) spacing(8);
   background: $white;
   border-radius: map-get($border, radius);
   box-shadow: map-get($box-shadow, lightest);

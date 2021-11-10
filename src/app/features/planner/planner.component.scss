@@ -1,6 +1,6 @@
 @import "main";
 
-$toolbar-height: map-get($spacing, 48);
+$toolbar-height: spacing(48);
 
 :host {
   display: block;
@@ -39,7 +39,7 @@ app-planner-menu {
     align-items: center;
 
     p {
-      margin-bottom: map-get($spacing, 24);
+      margin-bottom: spacing(24);
     }
   }
 }

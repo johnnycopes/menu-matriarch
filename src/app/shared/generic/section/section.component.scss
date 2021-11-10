@@ -9,12 +9,12 @@
   &__toolbar {
     grid-row: 1;
     display: flex;
-    padding: map-get($spacing, 16);
+    padding: spacing(16);
   }
 
   &__content {
     grid-row: 2;
-    padding: map-get($spacing, 16);
+    padding: spacing(16);
     padding-top: 0;
     overflow: auto;
     height: 100%;

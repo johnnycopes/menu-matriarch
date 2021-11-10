@@ -5,15 +5,15 @@
 }
 
 app-card {
-  padding: map-get($spacing, 16);
+  padding: spacing(16);
 }
 
 .schedule {
   display: flex;
   flex-wrap: wrap;
-  margin-top: map-get($spacing, 8);
+  margin-top: spacing(8);
 
   app-checkbox {
-    margin-right: map-get($spacing, 16);
+    margin-right: spacing(16);
   }
 }

@@ -5,14 +5,14 @@
 }
 
 .form {
-  margin-left: map-get($spacing, 16);
+  margin-left: spacing(16);
 }
 
 .menus {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
-  grid-gap: map-get($spacing, 16);
+  grid-gap: spacing(16);
 }
 
 .app-section__toolbar {
@@ -21,7 +21,7 @@
 }
 
 .title {
-  margin-right: map-get($spacing, 16);
+  margin-right: spacing(16);
   font-weight: map-get($font-weight, bold);
   color: map-get($neutral, 4);
 }

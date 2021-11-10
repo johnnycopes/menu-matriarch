@@ -4,10 +4,10 @@
   justify-content: flex-end;
 
   [app-button] {
-    margin-left: map-get($spacing, 8);
+    margin-left: spacing(8);
   }
 }
 
 app-input {
-  margin-bottom: map-get($spacing, 32);
+  margin-bottom: spacing(32);
 }

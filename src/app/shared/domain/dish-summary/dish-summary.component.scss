@@ -13,11 +13,11 @@
   &__counter {
     display: flex;
     align-items: center;
-    margin-left: map-get($spacing, 16);
+    margin-left: spacing(16);
   }
 
   fa-icon {
-    margin-right: map-get($spacing, 4);
+    margin-right: spacing(4);
     font-size: map-get($font-size, 16);
     color: map-get($neutral, 6);
   }
@@ -26,5 +26,5 @@
 .description {
   font-size: 14px;
   color: map-get($neutral, 6);
-  margin-top: map-get($spacing, 8);
+  margin-top: spacing(8);
 }
