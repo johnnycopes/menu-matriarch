@@ -37,3 +37,15 @@ $line-height: (
 	letter-spacing: 1px;
 	font-weight: map-get($font-weight, bold);
 }
+
+@function font-size($size) {
+  @return map-get($font-size, $size);
+}
+
+@function font-weight($weight) {
+  @return map-get($font-weight, $weight);
+}
+
+@function line-height($size) {
+  @return map-get($line-height, $size);
+}

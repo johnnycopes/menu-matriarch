@@ -2,6 +2,10 @@
 
 $size: 40px;
 
+@mixin box-shadow($color) {
+	box-shadow: 0 2px 0 #{$color};
+}
+
 @mixin button-style($background, $hover, $box-shadow, $disabled) {
   background: $background;
   color: $white;
@@ -22,16 +26,20 @@ $size: 40px;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: map-get($border, radius);
+  border-radius: border(radius);
   padding: 0 spacing(16);
   height: $size;
   cursor: pointer;
   outline: none;
-  font-size: map-get($font-size, 14);
+  font-size: font-size(14);
   font-family: $font-stack;
   font-weight: 700;
   color: $white;
   @include small-caps();
+
+  &:hover {
+    color: $white;
+  };
 
   &--icon {
     height: $size;

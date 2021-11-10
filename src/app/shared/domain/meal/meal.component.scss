@@ -13,7 +13,7 @@
 .mains {
 
   a {
-    font-weight: map-get($font-weight, semibold);
+    font-weight: font-weight(semibold);
     color: color($neutral, 4);
   }
 }

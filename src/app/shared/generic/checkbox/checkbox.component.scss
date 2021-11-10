@@ -9,7 +9,7 @@
   display: inline-flex;
   align-items: center;
   position: relative;
-  font-size: map-get($font-size, 14);
+  font-size: font-size(14);
 
   &:hover .checkbox {
     background: color($neutral, 10);
@@ -26,7 +26,7 @@
   position: relative;
   height: 14px;
   width: 14px;
-  border: map-get($border, thin) solid color($neutral, 7);
+  border: border(thin) solid color($neutral, 7);
   border-radius: 2px;
 
   // Default checkmark (unchecked)
@@ -44,7 +44,7 @@
   user-select: none;
 
   &--bold {
-    font-weight: map-get($font-weight, bold);
+    font-weight: font-weight(bold);
   }
 
   &--disabled {
@@ -67,7 +67,7 @@ input:indeterminate ~ .checkbox::after {
   top: 50%;
   width: spacing(8);
   transform: translate(-50%, -50%);
-  border-top: map-get($border, thin) solid color($neutral, 5);
+  border-top: border(thin) solid color($neutral, 5);
 }
 
 // Checkmark (checked)
@@ -78,6 +78,6 @@ input:checked ~ .checkbox::after {
   width: 6px;
   height: 10px;
   border: solid color($neutral, 3);
-  border-width: 0 map-get($border, thin) map-get($border, thin) 0;
+  border-width: 0 border(thin) border(thin) 0;
   transform: rotate(45deg);
 }

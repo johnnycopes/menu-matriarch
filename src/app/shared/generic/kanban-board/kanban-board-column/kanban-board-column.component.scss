@@ -5,8 +5,8 @@
   padding: spacing(8);
   padding-bottom: spacing(12);
   background-color: color($neutral, 8);
-  border-radius: map-get($border, radius);
-  box-shadow: map-get($box-shadow, lightest);
+  border-radius: border(radius);
+  box-shadow: box-shadow(lightest);
 }
 
 .toolbar {
@@ -19,7 +19,7 @@
 }
 
 .name {
-  font-size: map-get($font-size, 16);
+  font-size: font-size(16);
   @include small-caps;
 }
 
@@ -36,8 +36,8 @@
   margin-bottom: spacing(8);
   padding: spacing(16) spacing(8);
   background: $white;
-  border-radius: map-get($border, radius);
-  box-shadow: map-get($box-shadow, lightest);
+  border-radius: border(radius);
+  box-shadow: box-shadow(lightest);
 
   &:last-child {
     margin: 0;

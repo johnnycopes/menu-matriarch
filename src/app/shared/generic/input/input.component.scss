@@ -7,7 +7,7 @@
 
 .label {
   margin-bottom: spacing(4);
-  font-size: map-get($font-size, 14);
+  font-size: font-size(14);
   color: color($neutral, 5);
   @include small-caps();
 }
@@ -16,9 +16,9 @@
   height: 40px;
   padding: spacing(8);
   border: none;
-  border-bottom: map-get($border, thin) solid color($neutral, 7);
+  border-bottom: border(thin) solid color($neutral, 7);
   font-family: $font-stack;
-  font-size: map-get($font-size, 20);
+  font-size: font-size(20);
   outline: none;
 
   &:focus {
@@ -28,16 +28,16 @@
   &:disabled {
     background: color($neutral, 10);
     color: color($neutral, 5);
-    border-bottom: map-get($border, thin) solid color($neutral, 8);
+    border-bottom: border(thin) solid color($neutral, 8);
     cursor: not-allowed;
   }
 }
 
 ::ng-deep select {
   padding: spacing(8);
-  border: map-get($border, thin) solid color($neutral, 7);
+  border: border(thin) solid color($neutral, 7);
   font-family: $font-stack;
-  font-size: map-get($font-size, 20);
+  font-size: font-size(20);
   outline: none;
   background: $white;
 }

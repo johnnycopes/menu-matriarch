@@ -1,7 +1,7 @@
 @import "main";
 
 .cdk-drag-preview {
-	box-shadow: map-get($box-shadow, heaviest) !important;
+	box-shadow: box-shadow(heaviest) !important;
 }
 
 .cdk-drag-placeholder {
@@ -16,9 +16,9 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		z-index: map-get($z-index, positive);
+		z-index: z-index(positive);
 		background: color($yellow, 8);
-		border-radius: map-get($border, radius);
+		border-radius: border(radius);
 	}
 }
 

@@ -4,6 +4,6 @@
   display: block;
   background: $white;
   padding: spacing(16);
-  border-radius: map-get($border, radius);
-  box-shadow: map-get($box-shadow, lightest);
+  border-radius: border(radius);
+  box-shadow: box-shadow(lightest);
 }

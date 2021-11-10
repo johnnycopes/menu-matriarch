@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   cursor: pointer;
-  font-size: map-get($font-size, 16);
+  font-size: font-size(16);
   gap: 8px;
 }
 
@@ -15,7 +15,7 @@
   flex: 1;
   padding: spacing(16);
   background: $white;
-  border-bottom: map-get($border, thin) solid color($neutral, 9);
+  border-bottom: border(thin) solid color($neutral, 9);
   color: color($neutral, 6);
   @include small-caps;
 
@@ -24,17 +24,17 @@
   }
 
   &:first-of-type {
-    border-top-left-radius: map-get($border, radius);
-    border-top-right-radius: map-get($border, radius);
+    border-top-left-radius: border(radius);
+    border-top-right-radius: border(radius);
   }
 
   &:last-of-type {
-    border-top-left-radius: map-get($border, radius);
-    border-top-right-radius: map-get($border, radius);
+    border-top-left-radius: border(radius);
+    border-top-right-radius: border(radius);
   }
 
   &--selected {
-    font-weight: map-get($font-weight, bold);
+    font-weight: font-weight(bold);
     border-color: color($neutral, 4);
     color: color($neutral, 4);
   }

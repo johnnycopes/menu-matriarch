@@ -29,10 +29,6 @@ $z-index: (
 	negative: -1
 );
 
-@mixin box-shadow($color) {
-	box-shadow: 0 2px 0 #{$color};
-}
-
 $box-shadow: (
 	lightest: 0 1px 3px hsla(0, 0%, 0%, 0.2),
 	light: 0 4px 6px hsla(0, 0%, 0%, 0.2),
@@ -47,11 +43,23 @@ $border: (
 	radius: 5px,
 );
 
-$app: (
-	header: map-get($spacing, 64),
-	grid-gap: map-get($spacing, 16)
-);
+@function z-index($value) {
+  @return map-get($z-index, $value);
+}
 
 @function spacing($size) {
   @return map-get($spacing, $size);
 }
+
+@function border($size) {
+  @return map-get($border, $size);
+}
+
+@function box-shadow($intensity) {
+  @return map-get($box-shadow, $intensity);
+}
+
+$app: (
+	header: spacing(64),
+	grid-gap: spacing(16)
+);

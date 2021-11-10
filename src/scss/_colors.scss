@@ -7,10 +7,6 @@ and secondary -- the other colors should be used sparingly.
 
 // MAIN COLORS
 
-@function color($palette, $value) {
-  @return map-get($palette, $value);
-}
-
 // Cyan
 $primary: (
 	1: hsl(184, 91%, 17%),
@@ -95,3 +91,7 @@ $yellow: (
 	9: hsl(45, 90%, 88%),
 	10: hsl(45, 100%, 96%)
 );
+
+@function color($palette, $value) {
+  @return map-get($palette, $value);
+}

@@ -3,6 +3,6 @@
 .panel {
   background: $white;
   padding: spacing(16);
-  border-radius: map-get($border, radius);
-  @include box-shadow(color($neutral, 9));
+  border-radius: border(radius);
+  box-shadow: box-shadow(lightest);
 }
