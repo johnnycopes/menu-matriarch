@@ -6,9 +6,10 @@
 ></app-inline-name-edit>
 
 <ng-template #detailsTemplate>
-  <span>
-    {{ name }}
-  </span>
+  <app-tag
+    [id]="id"
+    [name]="name"
+  ></app-tag>
   <div class="buttons">
     <button app-button
       class="edit"

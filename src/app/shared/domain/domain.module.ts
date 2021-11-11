@@ -8,6 +8,7 @@ import { GenericModule } from '@shared/generic/generic.module';
 import { DishSummaryComponent } from './dish-summary/dish-summary.component';
 import { InlineNameEditComponent } from './inline-name-edit/inline-name-edit.component';
 import { MealComponent } from './meal/meal.component';
+import { TagComponent } from './tag/tag.component';
 
 
 
@@ -16,11 +17,13 @@ import { MealComponent } from './meal/meal.component';
     DishSummaryComponent,
     InlineNameEditComponent,
     MealComponent,
+    TagComponent,
   ],
   exports: [
     DishSummaryComponent,
     InlineNameEditComponent,
     MealComponent,
+    TagComponent,
   ],
   imports: [
     CommonModule,
