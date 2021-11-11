@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { concatMap, first, switchMap } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
-import { DishType } from '@models/interfaces/dish-type.type';
+import { DishType } from '@models/types/dish-type.type';
 import { FirestoreService } from './firestore.service';
 import { UserService } from './user.service';
 

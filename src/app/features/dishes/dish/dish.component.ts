@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { DishType } from '@models/interfaces/dish-type.type';
+import { DishType } from '@models/types/dish-type.type';
 
 @Component({
   selector: '[app-dish]',

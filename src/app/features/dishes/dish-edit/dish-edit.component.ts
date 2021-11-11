@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { first, switchMap, tap } from 'rxjs/operators';
 
+import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
-import { DishType } from '@models/interfaces/dish-type.type';
 
 interface IDishEditForm {
   name: string;

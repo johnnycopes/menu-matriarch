@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DishType } from '@models/interfaces/dish-type.type';
+import { DishType } from '@models/types/dish-type.type';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
