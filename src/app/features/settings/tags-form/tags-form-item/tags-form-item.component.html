@@ -1,0 +1,18 @@
+<span *ngIf="!(editing$ | async); else formTemplate">
+  {{ name }}
+</span>
+<ng-template #formTemplate>
+  <app-inline-name-edit class="form"
+    [name]="name"
+    (cancel)="finishEdit$.next()"
+    (save)="onSave($event)"
+  ></app-inline-name-edit>
+</ng-template>
+<button app-button
+  *ngIf="!(editing$ | async)"
+  class="edit"
+  buttonStyle="secondary"
+  (click)="startEdit$.next()"
+>
+  Edit
+</button>

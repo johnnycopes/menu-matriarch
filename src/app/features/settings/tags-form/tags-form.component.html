@@ -14,20 +14,17 @@
       <app-inline-name-edit class="form"
         *ngIf="adding$ | async"
         (cancel)="finishAdd$.next()"
-        (save)="onSave($event)"
+        (save)="onNewTagSave($event)"
       ></app-inline-name-edit>
     </div>
     <ul>
-      <li *ngFor="let tag of tags; trackBy: trackByFn"
+      <li app-tags-form-item
+        *ngFor="let tag of tags; trackBy: trackByFn"
         class="tag"
-      >
-        <button app-button
-          buttonStyle="secondary"
-        >
-          Edit
-        </button>
-        {{ tag.name }}
-      </li>
+        [id]="tag.id"
+        [name]="tag.name"
+        (edit)="onTagEdit(tag.id, $event)"
+      ></li>
     </ul>
   </app-card>
 </ng-container>
