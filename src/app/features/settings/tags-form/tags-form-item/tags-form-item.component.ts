@@ -12,6 +12,7 @@ export class TagsFormItemComponent {
   @Input() id = '';
   @Input() name = '';
   @Output() edit = new EventEmitter<string>();
+  @Output() delete = new EventEmitter<void>();
   public startEdit$ = new Subject<void>();
   public finishEdit$ = new Subject<void>();
   public editing$ = merge(

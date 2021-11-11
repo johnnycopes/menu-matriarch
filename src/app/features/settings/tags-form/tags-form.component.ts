@@ -36,4 +36,8 @@ export class TagsFormComponent {
   public onTagEdit(id: string, name: string): void {
     this._tagService.updateTag(id, { name });
   }
+
+  public onTagDelete(id: string): void {
+    this._tagService.deleteTag(id);
+  }
 }

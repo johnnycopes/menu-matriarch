@@ -24,6 +24,7 @@
         [id]="tag.id"
         [name]="tag.name"
         (edit)="onTagEdit(tag.id, $event)"
+        (delete)="onTagDelete(tag.id)"
       ></li>
     </ul>
   </app-card>
