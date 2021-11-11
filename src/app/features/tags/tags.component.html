@@ -1,28 +1,33 @@
-<app-card>
-  <div class="container">
-    <button app-button
-      buttonStyle="primary"
-      [disabled]="adding$ | async"
-      (click)="startAdd$.next()"
-    >
-      New Tag
-    </button>
-    <app-inline-name-edit class="form"
-      *ngIf="adding$ | async"
-      (cancel)="finishAdd$.next()"
-      (save)="onSave($event)"
-    ></app-inline-name-edit>
-  </div>
-  <ul>
-    <li *ngFor="let tag of tags$ | async; trackBy: trackByFn"
-      class="tag"
-    >
+<ng-container *ngIf="tags$ | async as tags">
+  <h2 class="title">
+    Tags ({{ tags.length }})
+  </h2>
+  <app-card>
+    <div class="container">
       <button app-button
-        buttonStyle="secondary"
+        buttonStyle="primary"
+        [disabled]="adding$ | async"
+        (click)="startAdd$.next()"
       >
-        Edit
+        New Tag
       </button>
-      {{ tag.name }}
-    </li>
-  </ul>
-</app-card>
+      <app-inline-name-edit class="form"
+        *ngIf="adding$ | async"
+        (cancel)="finishAdd$.next()"
+        (save)="onSave($event)"
+      ></app-inline-name-edit>
+    </div>
+    <ul>
+      <li *ngFor="let tag of tags; trackBy: trackByFn"
+        class="tag"
+      >
+        <button app-button
+          buttonStyle="secondary"
+        >
+          Edit
+        </button>
+        {{ tag.name }}
+      </li>
+    </ul>
+  </app-card>
+</ng-container>
