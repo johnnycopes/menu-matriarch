@@ -27,7 +27,7 @@ export class TagService {
     );
   }
 
-  public createDish({ name }: { name: string }): Observable<string | undefined> {
+  public createTag(name: string): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
       concatMap(async uid => {

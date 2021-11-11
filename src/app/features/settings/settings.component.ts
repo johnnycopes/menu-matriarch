@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
+import { merge, Subject } from 'rxjs';
+import { debounceTime, mapTo, shareReplay, switchMap, takeUntil } from 'rxjs/operators';
 
 import { IUserPreferences } from '@models/interfaces/user.interface';
 import { Day } from '@models/types/day.type';
@@ -23,6 +23,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public preferences$ = this._userService.getPreferences();
   public tags$ = this._tagService.getTags();
   public updateAction$ = new Subject<Partial<IUserPreferences>>();
+  public startAdd$ = new Subject<void>();
+  public finishAdd$ = new Subject<void>();
+  public adding$ = merge(
+    this.startAdd$.pipe(mapTo(true)),
+    this.finishAdd$.pipe(mapTo(false)),
+  ).pipe(
+    shareReplay({ refCount: true, bufferSize: 1 })
+  );
   public dayTrackByFn = trackByFactory<Day, Day>(day => day);
   public tagTrackByFn = trackByFactory<ITag, string>(tag => tag.id);
   public days: Day[] = getDays();
@@ -55,5 +63,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  public onSave(name: string): void {
+    this._tagService
+      .createTag(name)
+      .subscribe();
+    this.finishAdd$.next();
   }
 }

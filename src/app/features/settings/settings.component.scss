@@ -28,9 +28,22 @@
   padding: spacing(16) 0;
 }
 
-app-card {
+app-card,
+form {
 
-  *:not(:last-child) {
+  & > *:not(:last-child) {
     margin-bottom: spacing(32);
+  }
+}
+
+.container,
+.tag {
+  display: flex;
+  align-items: center;
+  margin-bottom: spacing(8);
+
+  button {
+    flex-shrink: 0;
+    margin-right: spacing(16);
   }
 }
