@@ -1,23 +1,31 @@
 @import "main";
 
 :host {
+  display: block;
+}
+
+.app-section__content {
   display: grid;
-  grid-template-columns:
-    [account] 50%
-    [settings] 50%;
-  grid-template-rows:
-    [headers] max-content
-    [panels] max-content;
+  grid-template-columns: 512px 512px;
+  grid-template-rows: auto;
   grid-gap: spacing(16);
-  max-width: 1024px;
   margin: 0 auto;
+}
+
+.account {
+  grid-column: 1;
+}
+
+.settings,
+.tags {
+  grid-column: 2;
 }
 
 .title {
   grid-row: headers;
   font-weight: font-weight(bold);
   color: color($neutral, 4);
-  padding: spacing(16) 0 0;
+  padding: spacing(16) 0;
 }
 
 app-card {

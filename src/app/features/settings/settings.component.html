@@ -1,51 +1,66 @@
-<ng-container *ngIf="user$ | async as user">
-  <h3 class="title">
-    Account
-  </h3>
-  <app-card>
-    <h4 class="name">
-      {{ user.name }}
-    </h4>
-    <p class="email">
-      {{ user.email }}
-    </p>
-    <button app-button
-      (click)="signOut()"
-    >
-      Sign Out
-    </button>
-  </app-card>
-
-  <h3 class="title">
-    Settings
-  </h3>
-  <app-card>
-    <form #form="ngForm">
-      <app-input label="Menu Start Day">
-        <select id="Menu Start Day"
-          name="menuStartDay"
-          [ngModel]="user.preferences?.menuStartDay"
-          (ngModelChange)="updateAction$.next({ menuStartDay: $event })"
+<app-section *ngIf="user$ | async as user">
+  <div class="app-section__content">
+    <div class="account">
+      <h2 class="title">
+        Account
+      </h2>
+      <app-card>
+        <h4 class="name">
+          {{ user.name }}
+        </h4>
+        <p class="email">
+          {{ user.email }}
+        </p>
+        <button app-button
+          (click)="signOut()"
         >
-          <option *ngFor="let day of days; trackBy: trackByFn"
-            [ngValue]="day"
+          Sign Out
+        </button>
+      </app-card>
+    </div>
+
+    <div class="settings">
+      <h2 class="title">
+        Settings
+      </h2>
+      <app-card>
+        <form #form="ngForm">
+          <app-input label="Menu Start Day">
+            <select id="Menu Start Day"
+              name="menuStartDay"
+              [ngModel]="user.preferences?.menuStartDay"
+              (ngModelChange)="updateAction$.next({ menuStartDay: $event })"
+            >
+              <option *ngFor="let day of days; trackBy: trackByFn"
+                [ngValue]="day"
+              >
+                {{ day }}
+              </option>
+            </select>
+          </app-input>
+          <app-input
+            label="Empty Dish Text"
           >
-            {{ day }}
-          </option>
-        </select>
-      </app-input>
-      <app-input
-        label="Empty Dish Text"
-      >
-        <input
-          id="Empty Dish Text"
-          type="text"
-          name="emptyDishText"
-          [ngModel]="user?.preferences?.emptyDishText"
-          (ngModelChange)="updateAction$.next({ emptyDishText: $event })"
-          appAutofocus
-        />
-      </app-input>
-    </form>
-  </app-card>
-</ng-container>
+            <input
+              id="Empty Dish Text"
+              type="text"
+              name="emptyDishText"
+              [ngModel]="user?.preferences?.emptyDishText"
+              (ngModelChange)="updateAction$.next({ emptyDishText: $event })"
+              appAutofocus
+            />
+          </app-input>
+        </form>
+      </app-card>
+    </div>
+
+    <div class="tags">
+      <h2 class="title">
+        Tags
+      </h2>
+      <app-card>
+        <p>tags form will go here</p>
+      </app-card>
+    </div>
+  </div>
+</app-section>
