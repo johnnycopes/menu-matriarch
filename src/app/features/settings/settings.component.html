@@ -31,7 +31,7 @@
               [ngModel]="user.preferences?.menuStartDay"
               (ngModelChange)="updateAction$.next({ menuStartDay: $event })"
             >
-              <option *ngFor="let day of days; trackBy: trackByFn"
+              <option *ngFor="let day of days; trackBy: dayTrackByFn"
                 [ngValue]="day"
               >
                 {{ day }}
@@ -60,6 +60,11 @@
       </h2>
       <app-card>
         <p>tags form will go here</p>
+        <ul>
+          <li *ngFor="let tag of tags$ | async; trackBy: tagTrackByFn">
+            {{ tag.name }}
+          </li>
+        </ul>
       </app-card>
     </div>
   </div>
