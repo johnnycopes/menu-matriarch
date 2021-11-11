@@ -118,16 +118,6 @@ export class MenuService {
     );
   }
 
-  public async deleteMenu(id?: string): Promise<void> {
-    if (id) {
-      await this._firestoreService.delete<IMenu>(this._endpoint, id);
-    }
-    this._localStorageService.deleteMenuId();
-    this.updateSavedMenuId().pipe(
-      first()
-    ).subscribe();
-  }
-
   public updateMenuName(id: string, name: string): Promise<void> {
     return this._updateMenu(id, { name });
   }
@@ -238,6 +228,16 @@ export class MenuService {
         ]);
       }),
     );
+  }
+
+  public async deleteMenu(id?: string): Promise<void> {
+    if (id) {
+      await this._firestoreService.delete<IMenu>(this._endpoint, id);
+    }
+    this._localStorageService.deleteMenuId();
+    this.updateSavedMenuId().pipe(
+      first()
+    ).subscribe();
   }
 
   public getOrderedDays(): Observable<Day[]> {

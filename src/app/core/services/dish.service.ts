@@ -22,6 +22,12 @@ export class DishService {
     return this._firestoreService.getOne<IDish>(this._endpoint, id);
   }
 
+  public getDishes(): Observable<IDish[]> {
+    return this._userService.uid$.pipe(
+      switchMap(uid => this._firestoreService.getMany<IDish>(this._endpoint, uid))
+    );
+  }
+
   public createDish(
     { name, description, type }: { name: string, description: string, type: DishType }
   ): Observable<string | undefined> {
@@ -41,6 +47,7 @@ export class DishService {
               type,
               favorited: false,
               ingredients: [],
+              tags: [],
               menus: [],
               usages: 0,
             }
@@ -59,11 +66,5 @@ export class DishService {
 
   public deleteDish(id: string): Promise<void> {
     return this._firestoreService.delete<IDish>(this._endpoint, id);
-  }
-
-  public getDishes(): Observable<IDish[]> {
-    return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IDish>(this._endpoint, uid))
-    );
   }
 }
