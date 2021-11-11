@@ -1,0 +1,13 @@
+@import "main";
+
+.container,
+.tag {
+  display: flex;
+  align-items: center;
+  margin-bottom: spacing(8);
+
+  button {
+    flex-shrink: 0;
+    margin-right: spacing(16);
+  }
+}

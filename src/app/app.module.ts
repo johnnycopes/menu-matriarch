@@ -35,6 +35,7 @@ import { PlannerDishesComponent } from './features/planner/planner-dishes/planne
 import { PlannerMenuComponent } from './features/planner/planner-menu/planner-menu.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
+import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 @NgModule({
@@ -59,6 +60,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     PlannerMenuComponent,
     SettingsComponent,
     ShellComponent,
+    TagsComponent,
     WelcomeComponent,
   ],
   imports: [
