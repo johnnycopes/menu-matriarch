@@ -1,6 +1,3 @@
-export interface ITag {
-  id: string;
-  uid: string;
-  name: string;
-  color: string;
-}
+import { ITagDbo } from "@models/dbos/tag-dbo.interface";
+
+export interface ITag extends ITagDbo { }

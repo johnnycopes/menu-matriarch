@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { ITag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 
 @Component({
@@ -15,7 +16,7 @@ export class DishComponent {
   @Input() type: DishType = 'main';
   @Input() favorited: boolean = false;
   @Input() ingredients: string[] = [];
-  @Input() tags: string[] = [];
+  @Input() tags: ITag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
 }

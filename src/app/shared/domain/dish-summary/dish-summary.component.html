@@ -24,15 +24,13 @@
   {{ description }}
 </p>
 
-<ng-container *ngIf="tags$ | async as tags">
-  <ul *ngIf="tags.length"
-    class="tags"
-  >
-    <li *ngFor="let tag of tags">
-      <app-tag
-        [id]="tag.id"
-        [name]="tag.name"
-      ></app-tag>
-    </li>
-  </ul>
-</ng-container>
+<ul *ngIf="tags.length"
+  class="tags"
+>
+  <li *ngFor="let tag of tags">
+    <app-tag
+      [id]="tag.id"
+      [name]="tag.name"
+    ></app-tag>
+  </li>
+</ul>

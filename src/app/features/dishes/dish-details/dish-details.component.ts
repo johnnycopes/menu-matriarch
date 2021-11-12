@@ -32,18 +32,18 @@ export class DishDetailsComponent {
       return this._dishService.getDish(id);
     })
   );
-  public tagModels$ = combineLatest([
-    this.dish$.pipe(
-      map(dish => dish?.tags ?? [])
-    ),
-    this._tagService.getTags()
-  ]).pipe(
-    map(([dishTags, tags]) => tags.map(tag => ({
-      id: tag.id,
-      name: tag.name,
-      checked: dishTags.includes(tag.id)
-    })))
-  );
+  // public tagModels$ = combineLatest([
+  //   this.dish$.pipe(
+  //     map(dish => dish?.tags ?? [])
+  //   ),
+  //   this._tagService.getTags()
+  // ]).pipe(
+  //   map(([dishTags, tags]) => tags.map(tag => ({
+  //     id: tag.id,
+  //     name: tag.name,
+  //     checked: dishTags.includes(tag.id)
+  //   })))
+  // );
   public ingredientTrackByFn = trackByFactory<string, string>(ingredient => ingredient);
   public tagModelTrackByFn = trackByFactory<ITagModel, string>(tag => tag.id);
 

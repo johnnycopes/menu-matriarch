@@ -3,6 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
+import { IDishDbo } from '@models/dbos/dish-dbo.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
@@ -21,23 +22,35 @@ export class DishService {
   ) { }
 
   public getDish(id: string): Observable<IDish | undefined> {
-    return this._firestoreService.getOne<IDish>(this._endpoint, id);
-  }
-
-  public getDishTags(id: string) {
     return combineLatest([
-      this.getDish(id).pipe(
-        map(dish => dish?.tags ?? [])
-      ),
+      this._firestoreService.getOne<IDishDbo>(this._endpoint, id),
       this._tagService.getTags(),
     ]).pipe(
-      map(([dishTags, tags]) =>  tags.filter(tag => dishTags.includes(tag.id)))
+      map(([dish, tags]) => {
+        if (!dish) {
+          return undefined;
+        }
+        return {
+          ...dish,
+          tags: tags.filter(tag => dish.tags.includes(tag.id))
+        };
+      })
     );
   }
 
   public getDishes(): Observable<IDish[]> {
-    return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IDish>(this._endpoint, uid))
+    return combineLatest([
+      this._userService.uid$.pipe(
+        switchMap(uid => this._firestoreService.getMany<IDishDbo>(this._endpoint, uid))
+      ),
+      this._tagService.getTags(),
+    ]).pipe(
+      map(([dishes, tags]) => {
+        return dishes.map(dish => ({
+          ...dish,
+          tags: tags.filter(tag => dish.tags.includes(tag.id))
+        }));
+      })
     );
   }
 
@@ -73,11 +86,11 @@ export class DishService {
     );
   }
 
-  public updateDish(id: string, updates: Partial<IDish>): Promise<void> {
-    return this._firestoreService.update<IDish>(this._endpoint, id, updates);
+  public updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
+    return this._firestoreService.update<IDishDbo>(this._endpoint, id, updates);
   }
 
   public deleteDish(id: string): Promise<void> {
-    return this._firestoreService.delete<IDish>(this._endpoint, id);
+    return this._firestoreService.delete<IDishDbo>(this._endpoint, id);
   }
 }
