@@ -1,10 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { first, map, switchMap, tap } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 import { DishService } from '@services/dish.service';
+import { TagService } from '@services/tag.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
+
+interface ITagModel {
+  id: string;
+  name: string;
+  checked: boolean;
+}
 
 @Component({
   selector: 'app-dish-details',
@@ -24,12 +32,25 @@ export class DishDetailsComponent {
       return this._dishService.getDish(id);
     })
   );
+  public tagModels$ = combineLatest([
+    this.dish$.pipe(
+      map(dish => dish?.tags ?? [])
+    ),
+    this._tagService.getTags()
+  ]).pipe(
+    map(([dishTags, tags]) => tags.map(tag => ({
+      id: tag.id,
+      name: tag.name,
+      checked: dishTags.includes(tag.id)
+    })))
+  );
   public trackByFn = trackByFactory<string, string>(ingredient => ingredient);
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _dishService: DishService,
+    private _tagService: TagService,
   ) { }
 
   public onDelete(): void {
@@ -44,5 +65,21 @@ export class DishDetailsComponent {
     ).subscribe(
       () => this._router.navigate(['..'], { relativeTo: this._route })
     );
+  }
+
+  public onTagChange(selected: boolean, tagId: string): void {
+    this.id$.pipe(
+      first(),
+      tap(async dishId => {
+        if (!dishId) {
+          return;
+        }
+        await this._dishService.updateDish(dishId, {
+          tags: selected
+            ? firebase.firestore.FieldValue.arrayUnion(tagId) as unknown as string[]
+            : firebase.firestore.FieldValue.arrayRemove(tagId) as unknown as string[]
+        });
+      })
+    ).subscribe();
   }
 }

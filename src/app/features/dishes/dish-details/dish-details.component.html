@@ -22,11 +22,29 @@
     >
       {{ dish.description }}
     </p>
-    <p class="details">
-      {{ dish.type | uppercase }} dish. Included
-      {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
-      {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}.
-    </p>
+    <div class="details">
+      <p>{{ dish.type | uppercase }} dish</p>
+      <p>
+        Included {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
+        {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}
+
+      </p>
+      <ul class="tags">
+        <li *ngFor="let tag of tagModels$ | async"
+          class="tag"
+        >
+          <app-checkbox
+            [ngModel]="tag.checked"
+            (ngModelChange)="onTagChange($event, tag.id)"
+          >
+            <app-tag
+              [id]="tag.id"
+              [name]="tag.name"
+            ></app-tag>
+          </app-checkbox>
+        </li>
+      </ul>
+    </div>
     <ul *ngIf="dish.ingredients.length">
       <li *ngFor="let ingredient of dish.ingredients; trackBy: trackByFn">
         {{ ingredient }}
