@@ -23,6 +23,7 @@ export class PlannerDishComponent {
   @Input() name = '';
   @Input() description = '';
   @Input() type: DishType = 'main';
+  @Input() tags: string[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
   public dayModels$: Observable<IDayModel[]> = combineLatest([

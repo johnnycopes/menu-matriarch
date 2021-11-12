@@ -44,7 +44,8 @@ export class DishDetailsComponent {
       checked: dishTags.includes(tag.id)
     })))
   );
-  public trackByFn = trackByFactory<string, string>(ingredient => ingredient);
+  public ingredientTrackByFn = trackByFactory<string, string>(ingredient => ingredient);
+  public tagModelTrackByFn = trackByFactory<ITagModel, string>(tag => tag.id);
 
   constructor(
     private _route: ActivatedRoute,

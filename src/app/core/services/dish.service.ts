@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { concatMap, first, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { concatMap, first, map, switchMap } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { FirestoreService } from './firestore.service';
+import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -15,11 +16,23 @@ export class DishService {
 
   constructor(
     private _firestoreService: FirestoreService,
+    private _tagService: TagService,
     private _userService: UserService,
   ) { }
 
   public getDish(id: string): Observable<IDish | undefined> {
     return this._firestoreService.getOne<IDish>(this._endpoint, id);
+  }
+
+  public getDishTags(id: string) {
+    return combineLatest([
+      this.getDish(id).pipe(
+        map(dish => dish?.tags ?? [])
+      ),
+      this._tagService.getTags(),
+    ]).pipe(
+      map(([dishTags, tags]) =>  tags.filter(tag => dishTags.includes(tag.id)))
+    );
   }
 
   public getDishes(): Observable<IDish[]> {

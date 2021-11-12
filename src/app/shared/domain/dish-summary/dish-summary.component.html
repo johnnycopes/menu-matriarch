@@ -23,3 +23,13 @@
 >
   {{ description }}
 </p>
+
+<ul *ngIf="tags.length"
+  class="tags"
+>
+  <li *ngFor="let tag of tags">
+    <app-tag
+      [name]="tag"
+    ></app-tag>
+  </li>
+</ul>

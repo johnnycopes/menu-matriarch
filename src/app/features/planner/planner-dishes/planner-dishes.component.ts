@@ -3,7 +3,7 @@ import { IDish } from '@models/interfaces/dish.interface';
 
 import { DishService } from '@services/dish.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-planner-dishes',

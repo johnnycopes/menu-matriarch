@@ -27,10 +27,9 @@
       <p>
         Included {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
         {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}
-
       </p>
       <ul class="tags">
-        <li *ngFor="let tag of tagModels$ | async"
+        <li *ngFor="let tag of tagModels$ | async; trackBy: tagModelTrackByFn"
           class="tag"
         >
           <app-checkbox
@@ -46,7 +45,7 @@
       </ul>
     </div>
     <ul *ngIf="dish.ingredients.length">
-      <li *ngFor="let ingredient of dish.ingredients; trackBy: trackByFn">
+      <li *ngFor="let ingredient of dish.ingredients; trackBy: ingredientTrackByFn">
         {{ ingredient }}
       </li>
     </ul>

@@ -28,3 +28,13 @@
   color: color($neutral, 6);
   margin-top: spacing(8);
 }
+
+.tags {
+  margin-top: spacing(8);
+  display: flex;
+  flex-wrap: wrap;
+
+  app-tag {
+    margin-right: spacing(8);
+  }
+}

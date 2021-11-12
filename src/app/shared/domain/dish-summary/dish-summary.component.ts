@@ -13,6 +13,7 @@ export class DishSummaryComponent {
   @Input() id: string = '';
   @Input() name: string = '';
   @Input() description: string | undefined;
+  @Input() tags: string[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
   public readonly faMap = faMap;
