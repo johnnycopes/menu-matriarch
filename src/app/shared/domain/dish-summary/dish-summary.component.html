@@ -5,16 +5,14 @@
     </h3>
   </a>
   <div class="details">
-    <div class="details__counter">
-      <fa-icon [icon]="faCalendarDay">
-      </fa-icon>
-      {{ usages }}
-    </div>
-    <div class="details__counter">
-      <fa-icon [icon]="faMap">
-      </fa-icon>
-      {{ menus.length }}
-    </div>
+    <app-count
+      type="days"
+      [count]="usages"
+    ></app-count>
+    <app-count
+      type="menus"
+      [count]="menus.length"
+    ></app-count>
   </div>
 </div>
 

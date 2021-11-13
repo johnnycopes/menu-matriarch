@@ -10,12 +10,11 @@
     [id]="id"
     [name]="name"
   ></app-tag>
-  <div class="buttons">
-    <div class="counter">
-      <fa-icon [icon]="faUtensils">
-      </fa-icon>
-      {{ usages }}
-    </div>
+  <div class="container">
+    <app-count
+      type="dishes"
+      [count]="usages"
+    ></app-count>
     <button app-button
       class="edit"
       buttonStyle="danger"

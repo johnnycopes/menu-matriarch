@@ -1,0 +1,12 @@
+@import "main";
+
+:host {
+  display: flex;
+  align-items: center;
+}
+
+fa-icon {
+  margin-right: spacing(4);
+  font-size: font-size(16);
+  color: color($neutral, 6);
+}
