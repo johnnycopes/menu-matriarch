@@ -87,31 +87,20 @@ export class DishService {
     );
   }
 
-  public updateDishNew(id: string, updates: Partial<IDishDbo>) {
-    return combineLatest([
-      this.getDish(id),
-      this._tagService.getTags(),
-    ]).pipe(
+  public updateDishNew(id: string, updates: Partial<IDishDbo>): Observable<IDish | undefined> {
+    return this.getDish(id).pipe(
       first(),
-      tap(async ([dish, tags]) => {
+      tap(async (dish) => {
         if (!dish) {
           return;
         }
         let tagUpdatePromises: (Promise<void> | undefined )[] = [];
-
         if (updates.tags) {
-          const differences = this._getTagDifferences(
+          tagUpdatePromises = this._getTagUpdatePromises(
             dish.tags.map(dish => dish.id),
             updates.tags,
           );
-          tagUpdatePromises = differences.map(tag => this._tagService.updateTag(
-            tag.id,
-            {
-              usages: firebase.firestore.FieldValue.increment(tag.difference) as unknown as number,
-            }
-          ));
         }
-
         await Promise.all([
           this._updateDish(id, updates),
           tagUpdatePromises,
@@ -132,19 +121,28 @@ export class DishService {
     return this._firestoreService.update<IDishDbo>(this._endpoint, id, updates);
   }
 
-  private _getTagDifferences(
+  private _getTagUpdatePromises(
     dishTagIds: string[],
     updateTagIds: string[]
-  ): { id: string, difference: number }[] {
+  ): Promise<void>[] {
     const allIds = [...new Set([...dishTagIds, ...updateTagIds])];
-    const changes: { id: string, difference: number }[] = [];
+    const updates: Promise<void>[] = [];
     for (let id of allIds) {
+      let difference = 0;
       if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
-        changes.push({ id, difference: -1 });
+        difference = -1;
       } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
-        changes.push({ id, difference: 1 });
+        difference = 1;
+      }
+
+      if (difference !== 0) {
+        updates.push(this._tagService.updateTag(id,
+          {
+            usages: firebase.firestore.FieldValue.increment(difference) as unknown as number,
+          }
+        ));
       }
     }
-    return changes;
+    return updates;
   }
 }
