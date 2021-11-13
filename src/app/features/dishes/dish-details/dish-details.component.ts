@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { first, map, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { ITag } from '@models/interfaces/tag.interface';
 import { DishService } from '@services/dish.service';
@@ -37,14 +37,14 @@ export class DishDetailsComponent {
   public onDelete(): void {
     this.id$.pipe(
       first(),
-      tap(async id => {
+      concatMap(id => {
         if (!id) {
-          return;
+          return of(undefined);
         }
-        await this._dishService.deleteDish(id);
-      })
-    ).subscribe(
-      () => this._router.navigate(['..'], { relativeTo: this._route })
-    );
+        console.log('id', id);
+        return this._dishService.deleteDish(id);
+      }),
+      tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
+    ).subscribe();
   }
 }

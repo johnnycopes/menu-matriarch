@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
 import { IDishDbo } from '@models/dbos/dish-dbo.interface';
 import { IDish } from '@models/interfaces/dish.interface';
+import { ITag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
@@ -94,12 +95,9 @@ export class DishService {
         if (!dish) {
           return;
         }
-        let tagUpdatePromises: (Promise<void> | undefined )[] = [];
+        let tagUpdatePromises: Promise<void>[] = [];
         if (updates.tags) {
-          tagUpdatePromises = this._getTagUpdatePromises(
-            dish.tags.map(dish => dish.id),
-            updates.tags,
-          );
+          tagUpdatePromises = this._getTagUpdatePromises(dish.tags, updates.tags);
         }
         await Promise.all([
           this._updateDish(id, updates),
@@ -110,11 +108,22 @@ export class DishService {
   }
 
   public updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
-    return this._firestoreService.update<IDishDbo>(this._endpoint, id, updates);
+    return this._updateDish(id, updates);
   }
 
-  public deleteDish(id: string): Promise<void> {
-    return this._firestoreService.delete<IDishDbo>(this._endpoint, id);
+  public deleteDish(id: string): Observable<IDish | undefined> {
+    return this.getDish(id).pipe(
+      first(),
+      tap(async (dish) => {
+        if (!dish) {
+          return;
+        }
+        await Promise.all([
+          this._firestoreService.delete<IDishDbo>(this._endpoint, id),
+          this._getTagUpdatePromises(dish.tags),
+        ]);
+      })
+    );
   }
 
   private _updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
@@ -122,10 +131,14 @@ export class DishService {
   }
 
   private _getTagUpdatePromises(
-    dishTagIds: string[],
-    updateTagIds: string[]
+    dishTags: ITag[],
+    updateTagIds: string[] = []
   ): Promise<void>[] {
-    const allIds = [...new Set([...dishTagIds, ...updateTagIds])];
+    const dishTagIds = dishTags.map(dish => dish.id)
+    const allIds = [...new Set([
+      ...dishTagIds,
+      ...updateTagIds
+    ])];
     const updates: Promise<void>[] = [];
     for (let id of allIds) {
       let difference = 0;
