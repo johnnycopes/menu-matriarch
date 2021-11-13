@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
-import { first, map, switchMap, tap } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
@@ -27,29 +27,32 @@ export class DishEditComponent {
   public dish$ = this._routeId
     ? this._dishService.getDish(this._routeId)
     : of(undefined);
-  public vm$ = of(this._routeId).pipe(
-    switchMap(id => {
-      if (!id) {
-        return of({
+  public vm$ = combineLatest([
+    this.dish$,
+    this._tagService.getTags(),
+  ]).pipe(
+    map(([dish, tags]) => {
+      if (!dish) {
+        return {
           name: '',
           description: '',
           type: 'main',
-          tags: [],
-        });
-      }
-      return combineLatest([
-        this.dish$,
-        this._tagService.getTags(),
-      ]).pipe(
-        map(([dish, tags]) => ({
+          tags: tags.map(tag => ({
+            id: tag.id,
+            name: tag.name,
+            checked: false,
+          })),
+        };
+      } else {
+        return {
           ...dish,
           tags: tags.map(tag => ({
             id: tag.id,
             name: tag.name,
             checked: !!dish?.tags.find(dishTag => dishTag.id === tag.id)
-          }))
-        }))
-      );
+          })),
+        };
+      }
     })
   );
 

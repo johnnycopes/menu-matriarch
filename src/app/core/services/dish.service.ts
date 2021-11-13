@@ -55,7 +55,7 @@ export class DishService {
   }
 
   public createDish(
-    { name, description, type }: { name: string, description: string, type: DishType }
+    { name, description, type, tags }: { name: string, description: string, type: DishType, tags: string[] }
   ): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
@@ -73,7 +73,7 @@ export class DishService {
               type,
               favorited: false,
               ingredients: [],
-              tags: [],
+              tags,
               menus: [],
               usages: 0,
             }
