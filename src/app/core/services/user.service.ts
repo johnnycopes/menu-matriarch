@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
+import { IUserDbo } from '@models/dbos/user-dbo.interface';
 import { IUser, IUserPreferences } from '@models/interfaces/user.interface';
 import { FirestoreService } from './firestore.service';
 
@@ -26,7 +27,7 @@ export class UserService {
 
   public getUser(): Observable<IUser | undefined> {
     return this.uid$.pipe(
-      switchMap(uid => this._firestoreService.getOne<IUser>(this._endpoint, uid)),
+      switchMap(uid => this._firestoreService.getOne<IUserDbo>(this._endpoint, uid)),
     );
   }
 
@@ -37,7 +38,7 @@ export class UserService {
       first(),
       tap(async uid => {
         if (uid) {
-          await this._firestoreService.create<IUser>(
+          await this._firestoreService.create<IUserDbo>(
             this._endpoint,
             uid,
             {
@@ -76,7 +77,7 @@ export class UserService {
           emptyDishText: 'undecided',
           menuStartDay: 'Monday',
         };
-        await this._firestoreService.update<IUser>(
+        await this._firestoreService.update<IUserDbo>(
           this._endpoint,
           user.uid,
           { preferences:

@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
+import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
 import { IDish } from '@models/interfaces/dish.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
@@ -74,14 +75,14 @@ export class MenuService {
         if (!id) {
           return of(undefined);
         }
-        return this._firestoreService.getOne<IMenu>(this._endpoint, id)
+        return this._firestoreService.getOne<IMenuDbo>(this._endpoint, id)
       })
     );
   }
 
   public getMenus(): Observable<IMenu[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IMenu>(this._endpoint, uid))
+      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid))
     );
   }
 
@@ -91,7 +92,7 @@ export class MenuService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<IMenu>(
+          await this._firestoreService.create<IMenuDbo>(
             this._endpoint,
             id,
             {
@@ -144,7 +145,7 @@ export class MenuService {
           return of(undefined);
         }
         return this._firestoreService
-          .getOne<IMenu>(this._endpoint, menu.id)
+          .getOne<IMenuDbo>(this._endpoint, menu.id)
           .pipe(first());
       }),
       tap(async menu => {
@@ -232,7 +233,7 @@ export class MenuService {
 
   public async deleteMenu(id?: string): Promise<void> {
     if (id) {
-      await this._firestoreService.delete<IMenu>(this._endpoint, id);
+      await this._firestoreService.delete<IMenuDbo>(this._endpoint, id);
     }
     this._localStorageService.deleteMenuId();
     this.updateSavedMenuId().pipe(
@@ -247,8 +248,8 @@ export class MenuService {
     );
   }
 
-  private async _updateMenu(id: string, updates: Partial<IMenu>): Promise<void> {
-    return await this._firestoreService.update<IMenu>(this._endpoint, id, updates);
+  private async _updateMenu(id: string, updates: Partial<IMenuDbo>): Promise<void> {
+    return await this._firestoreService.update<IMenuDbo>(this._endpoint, id, updates);
   }
 
   private _setMenuId(id: string): void {

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap } from 'rxjs/operators';
 
-import { IDish } from '@models/interfaces/dish.interface';
 import { IDishDbo } from '@models/dbos/dish-dbo.interface';
+import { IDish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
@@ -62,7 +62,7 @@ export class DishService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<IDish>(
+          await this._firestoreService.create<IDishDbo>(
             this._endpoint,
             id,
             {
