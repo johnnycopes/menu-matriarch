@@ -10,6 +10,11 @@
     color: color($neutral, 4);
   }
 
+  app-search-input {
+    position: relative;
+    top: 2px;
+  }
+
   [app-button]:not(:first-child) {
     margin-left: spacing(8);
   }

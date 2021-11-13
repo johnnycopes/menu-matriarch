@@ -3,6 +3,10 @@
     <h2 class="title">
       Dishes ({{ vm.total }})
     </h2>
+    <app-search-input
+      [text]="vm.searchText"
+      (textChange)="onSearchTextChange($event)"
+    ></app-search-input>
     <a app-button
       routerLink="/dishes/new"
     >

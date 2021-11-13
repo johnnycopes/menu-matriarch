@@ -4,6 +4,7 @@ import { concatMap, first, map, switchMap } from 'rxjs/operators';
 
 import { ITagDbo } from '@models/dbos/tag-dbo.interface';
 import { ITag } from '@models/interfaces/tag.interface';
+import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
 import { UserService } from './user.service';
@@ -26,7 +27,7 @@ export class TagService {
   public getTags(): Observable<ITag[]> {
     return this._userService.uid$.pipe(
       switchMap(uid => this._firestoreService.getMany<ITagDbo>(this._endpoint, uid)),
-      map(tags => sort(tags, tag => tag.name.toLowerCase()))
+      map(tags => sort(tags, tag => lower(tag.name)))
     );
   }
 
