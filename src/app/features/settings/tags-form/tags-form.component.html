@@ -23,6 +23,7 @@
         class="tag"
         [id]="tag.id"
         [name]="tag.name"
+        [usages]="tag.usages"
         (edit)="onTagEdit(tag.id, $event)"
         (delete)="onTagDelete(tag.id)"
       ></li>

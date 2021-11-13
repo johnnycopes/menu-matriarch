@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
@@ -11,6 +12,7 @@ import { mapTo, shareReplay } from 'rxjs/operators';
 export class TagsFormItemComponent {
   @Input() id = '';
   @Input() name = '';
+  @Input() usages = 0;
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<void>();
   public startEdit$ = new Subject<void>();
@@ -21,6 +23,7 @@ export class TagsFormItemComponent {
   ).pipe(
     shareReplay({ refCount: true, bufferSize: 1 })
   );
+  public readonly faUtensils = faUtensils;
 
   public onSave(name: string): void {
     this.finishEdit$.next();

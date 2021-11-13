@@ -11,6 +11,11 @@
     [name]="name"
   ></app-tag>
   <div class="buttons">
+    <div class="counter">
+      <fa-icon [icon]="faUtensils">
+      </fa-icon>
+      {{ usages }}
+    </div>
     <button app-button
       class="edit"
       buttonStyle="danger"

@@ -3,4 +3,5 @@ export interface ITagDbo {
   uid: string;
   name: string;
   color: string;
+  usages: number;
 }
