@@ -7,6 +7,7 @@ import { IDishDbo } from '@models/dbos/dish-dbo.interface';
 import { IDish } from '@models/interfaces/dish.interface';
 import { ITag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
+import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
@@ -43,7 +44,8 @@ export class DishService {
   public getDishes(): Observable<IDish[]> {
     return combineLatest([
       this._userService.uid$.pipe(
-        switchMap(uid => this._firestoreService.getMany<IDishDbo>(this._endpoint, uid))
+        switchMap(uid => this._firestoreService.getMany<IDishDbo>(this._endpoint, uid)),
+        map(dishes => sort(dishes, dish => dish.name.toLowerCase()))
       ),
       this._tagService.getTags(),
     ]).pipe(

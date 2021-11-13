@@ -8,6 +8,7 @@ import { IDish } from '@models/interfaces/dish.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
+import { sort } from '@shared/utility/sort';
 import { getDays } from '@utility/get-days';
 import { FirestoreService } from './firestore.service';
 import { LocalStorageService } from './local-storage.service';
@@ -82,7 +83,8 @@ export class MenuService {
 
   public getMenus(): Observable<IMenu[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid))
+      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
+      map(menus => sort(menus, menu => menu.name.toLowerCase()))
     );
   }
 
