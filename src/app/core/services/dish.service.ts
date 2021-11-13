@@ -88,7 +88,10 @@ export class DishService {
     );
   }
 
-  public updateDishNew(id: string, updates: Partial<IDishDbo>): Observable<IDish | undefined> {
+  public updateDishDetails(
+    id: string,
+    updates: Partial<Omit<IDishDbo, 'usages' | 'menus'>>
+  ): Observable<IDish | undefined> {
     return this.getDish(id).pipe(
       first(),
       tap(async (dish) => {
@@ -107,14 +110,17 @@ export class DishService {
     );
   }
 
-  public updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
+  public updateDishCounters(
+    id: string,
+    updates: Partial<Pick<IDishDbo, 'usages' | 'menus'>>
+  ): Promise<void> {
     return this._updateDish(id, updates);
   }
 
   public deleteDish(id: string): Observable<IDish | undefined> {
     return this.getDish(id).pipe(
       first(),
-      tap(async (dish) => {
+      tap(async dish => {
         if (!dish) {
           return;
         }

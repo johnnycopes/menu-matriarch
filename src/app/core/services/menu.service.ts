@@ -148,11 +148,11 @@ export class MenuService {
           .getOne<IMenuDbo>(this._endpoint, menu.id)
           .pipe(first());
       }),
-      concatMap(menu => {
+      tap(async menu => {
         if (!menu) {
-          return of(undefined);
+          return;
         }
-        return this._dishService.updateDishNew(dishId, {
+        await this._dishService.updateDishCounters(dishId, {
           usages: firebase.firestore.FieldValue.increment(selected ? 1 : -1) as unknown as number,
           menus: Object.values(menu.contents).some(dishIds => dishIds.includes(dishId))
             ? firebase.firestore.FieldValue.arrayUnion(menu.id) as unknown as string[]
@@ -185,7 +185,7 @@ export class MenuService {
               .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
 
             // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
-            return this._dishService.updateDish(dishId, {
+            return this._dishService.updateDishCounters(dishId, {
               usages: firebase.firestore.FieldValue.increment(-1) as unknown as number,
               ...!dishInOtherDay && {
                 menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
@@ -216,7 +216,7 @@ export class MenuService {
           dishUpdatePromises = Object
             .keys(dishIds)
             .map(dishId => {
-              return this._dishService.updateDish(dishId, {
+              return this._dishService.updateDishCounters(dishId, {
                 usages: firebase.firestore.FieldValue.increment(-(dishIds[dishId])) as unknown as number,
                 menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
               });
