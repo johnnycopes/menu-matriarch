@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
@@ -80,9 +80,11 @@ export class DishEditComponent {
     } else {
       this.dish$.pipe(
         first(),
-        tap(async dish => {
+        concatMap(dish => {
           if (dish) {
-            await this._dishService.updateDish(dish.id, details);
+            return this._dishService.updateDishNew(dish.id, details);
+          } else {
+            return of(undefined);
           }
         }),
         tap(() => this._router.navigate(['..'], { relativeTo: this._route }))

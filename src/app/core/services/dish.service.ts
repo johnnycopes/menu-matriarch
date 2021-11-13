@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { concatMap, first, map, switchMap } from 'rxjs/operators';
+import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 import { IDishDbo } from '@models/dbos/dish-dbo.interface';
 import { IDish } from '@models/interfaces/dish.interface';
@@ -86,11 +87,64 @@ export class DishService {
     );
   }
 
+  public updateDishNew(id: string, updates: Partial<IDishDbo>) {
+    return combineLatest([
+      this.getDish(id),
+      this._tagService.getTags(),
+    ]).pipe(
+      first(),
+      tap(async ([dish, tags]) => {
+        if (!dish) {
+          return;
+        }
+        let tagUpdatePromises: (Promise<void> | undefined )[] = [];
+
+        if (updates.tags) {
+          const differences = this._getTagDifferences(
+            dish.tags.map(dish => dish.id),
+            updates.tags,
+          );
+          tagUpdatePromises = differences.map(tag => this._tagService.updateTag(
+            tag.id,
+            {
+              usages: firebase.firestore.FieldValue.increment(tag.difference) as unknown as number,
+            }
+          ));
+        }
+
+        await Promise.all([
+          this._updateDish(id, updates),
+          tagUpdatePromises,
+        ]);
+      })
+    );
+  }
+
   public updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
     return this._firestoreService.update<IDishDbo>(this._endpoint, id, updates);
   }
 
   public deleteDish(id: string): Promise<void> {
     return this._firestoreService.delete<IDishDbo>(this._endpoint, id);
+  }
+
+  private _updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
+    return this._firestoreService.update<IDishDbo>(this._endpoint, id, updates);
+  }
+
+  private _getTagDifferences(
+    dishTagIds: string[],
+    updateTagIds: string[]
+  ): { id: string, difference: number }[] {
+    const allIds = [...new Set([...dishTagIds, ...updateTagIds])];
+    const changes: { id: string, difference: number }[] = [];
+    for (let id of allIds) {
+      if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
+        changes.push({ id, difference: -1 });
+      } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
+        changes.push({ id, difference: 1 });
+      }
+    }
+    return changes;
   }
 }
