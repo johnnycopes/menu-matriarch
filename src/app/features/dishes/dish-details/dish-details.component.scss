@@ -13,8 +13,7 @@
   margin-bottom: spacing(16);
 }
 
-.details,
-.tags {
+.details {
   border-top: border(thin) solid color($neutral, 9);
   margin-top: spacing(16);
   padding-top: spacing(16);
@@ -22,4 +21,12 @@
   & > *:not(:last-of-type) {
     margin-bottom: spacing(8);
   }
+}
+
+.tags {
+  display: flex;
+}
+
+.tag {
+  margin-right: spacing(8);
 }
