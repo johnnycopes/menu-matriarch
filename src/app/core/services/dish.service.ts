@@ -140,6 +140,7 @@ export class DishService {
       ...updateTagIds
     ])];
     const updates: Promise<void>[] = [];
+
     for (let id of allIds) {
       let difference = 0;
       if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
@@ -147,7 +148,6 @@ export class DishService {
       } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
         difference = 1;
       }
-
       if (difference !== 0) {
         updates.push(this._tagService.updateTag(id,
           {
@@ -156,6 +156,7 @@ export class DishService {
         ));
       }
     }
+
     return updates;
   }
 }

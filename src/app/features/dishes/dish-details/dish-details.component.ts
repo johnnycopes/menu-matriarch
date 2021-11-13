@@ -41,7 +41,6 @@ export class DishDetailsComponent {
         if (!id) {
           return of(undefined);
         }
-        console.log('id', id);
         return this._dishService.deleteDish(id);
       }),
       tap(() => this._router.navigate(['..'], { relativeTo: this._route }))

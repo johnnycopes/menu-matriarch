@@ -127,7 +127,7 @@ export class MenuService {
     day: Day,
     dishId: string,
     selected: boolean,
-  }): Observable<IMenu | undefined> {
+  }) {
     return this.getMenu().pipe(
       first(),
       tap(async menu => {
@@ -148,11 +148,11 @@ export class MenuService {
           .getOne<IMenuDbo>(this._endpoint, menu.id)
           .pipe(first());
       }),
-      tap(async menu => {
+      concatMap(menu => {
         if (!menu) {
-          return;
+          return of(undefined);
         }
-        await this._dishService.updateDish(dishId, {
+        return this._dishService.updateDishNew(dishId, {
           usages: firebase.firestore.FieldValue.increment(selected ? 1 : -1) as unknown as number,
           menus: Object.values(menu.contents).some(dishIds => dishIds.includes(dishId))
             ? firebase.firestore.FieldValue.arrayUnion(menu.id) as unknown as string[]
@@ -163,7 +163,7 @@ export class MenuService {
   }
 
   // TODO: refactor to use batch updates instead of separate promises
-  public clearMenuContents(day?: Day): Observable<IMenu | undefined> {
+  public clearMenuContents(day?: Day) {
     return this.getMenu().pipe(
       first(),
       tap(async menu => {
