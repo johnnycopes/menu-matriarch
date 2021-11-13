@@ -10,12 +10,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: spacing(32);
 
   button {
     flex-shrink: 0;
     margin-right: spacing(16);
   }
+}
+
+.tag:first-of-type {
+  margin-top: spacing(32);
 }
 
 .tag:not(:last-of-type) {

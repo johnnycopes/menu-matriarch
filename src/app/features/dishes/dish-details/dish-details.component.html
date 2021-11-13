@@ -29,16 +29,23 @@
         {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}
       </p>
     </div>
-    <ul class="details tags">
-      <li *ngFor="let tag of dish.tags; trackBy: tagTrackByFn"
-        class="tag"
+    <div class="details">
+      <ul *ngIf="dish.tags.length; else noTagsTemplate"
+        class="tags"
       >
-        <app-tag
-          [id]="tag.id"
-          [name]="tag.name"
-        ></app-tag>
-      </li>
-    </ul>
+        <li *ngFor="let tag of dish.tags; trackBy: tagTrackByFn"
+          class="tag"
+        >
+          <app-tag
+            [id]="tag.id"
+            [name]="tag.name"
+          ></app-tag>
+        </li>
+      </ul>
+      <ng-template #noTagsTemplate>
+        No tags selected
+      </ng-template>
+    </div>
     <ul *ngIf="dish.ingredients.length">
       <li *ngFor="let ingredient of dish.ingredients; trackBy: ingredientTrackByFn">
         {{ ingredient }}
