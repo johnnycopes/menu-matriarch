@@ -11,3 +11,12 @@
 app-input {
   margin-bottom: spacing(32);
 }
+
+.tags {
+  display: flex;
+  margin-top: spacing(8);
+}
+
+.tag {
+  margin-right: spacing(16);
+}
