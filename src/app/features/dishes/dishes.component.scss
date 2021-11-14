@@ -18,13 +18,20 @@
 
 .app-section__toolbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
 .title {
+  margin-right: auto;
   font-weight: font-weight(bold);
   color: color($neutral, 4);
+}
+
+app-search-input {
+  margin-right: spacing(8);
+  position: relative;
+  top: 2px;
 }
 
 section {
