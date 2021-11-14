@@ -20,6 +20,7 @@
       *ngFor="let menuEntry of menuEntries$ | async; trackBy: trackByFn"
       [day]="menuEntry.day"
       [dishes]="menuEntry.dishes"
+      [orientation]="menuEntry.orientation"
       (clear)="onClearDay(menuEntry)"
     ></li>
   </ul>

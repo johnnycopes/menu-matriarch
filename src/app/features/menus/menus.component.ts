@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { combineLatest, merge, Subject } from 'rxjs';
-import { map, mapTo, shareReplay } from 'rxjs/operators';
+import { map, mapTo, shareReplay, switchMap } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
-import { DishService } from '@services/dish.service';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { trackByFactory } from '@shared/utility/track-by-factory';
+import { MealService } from '@services/meal.service';
 
 @Component({
   selector: 'app-menus',
@@ -15,16 +15,16 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 })
 export class MenusComponent {
   public menus$ = combineLatest([
-    this._menuService.getOrderedDays(),
     this._menuService.getMenus(),
-    this._dishService.getDishes(),
+    this._menuService.getMenus().pipe(
+      switchMap(menus => combineLatest(
+        menus.map(menu => this._mealService.getMenuEntries(menu))
+      ))
+    )
   ]).pipe(
-    map(([days, menus, dishes]) => menus.map(
-      menu => ({
-        ...menu,
-        entries: this._menuService.getMenuEntries({ days, menu, dishes }),
-      })
-    ))
+    map(([menus, menusEntries]) => {
+      return menus.map((menu, index) => ({ ...menu, entries: menusEntries[index] }))
+    })
   );
   public startAdd$ = new Subject<void>();
   public finishAdd$ = new Subject<void>();
@@ -37,7 +37,7 @@ export class MenusComponent {
   public trackByFn = trackByFactory<IMenu, string>(menu => menu.id);
 
   constructor(
-    private _dishService: DishService,
+    private _mealService: MealService,
     private _menuService: MenuService,
   ) { }
 

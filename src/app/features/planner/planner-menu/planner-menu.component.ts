@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { combineLatest } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
+import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
-import { DishService } from '@services/dish.service';
+import { MealService } from '@services/meal.service';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
@@ -20,19 +20,18 @@ export class PlannerMenuComponent {
   public menuName$ = this.menu$.pipe(
     map(menu => menu?.name ?? '')
   );
-  public menuEntries$ = combineLatest([
-    this.menu$,
-    this._menuService.getOrderedDays(),
-    this._dishService.getDishes(),
-  ]).pipe(
-    map(([menu, days, dishes]) => {
-      return this._menuService.getMenuEntries({ days, menu, dishes });
+  public menuEntries$ = this.menu$.pipe(
+    switchMap(menu => {
+      if (!menu) {
+        return of([]);
+      }
+      return this._mealService.getMenuEntries(menu);
     })
   );
   public trackByFn = trackByFactory<IMenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
-    private _dishService: DishService,
+    private _mealService: MealService,
     private _menuService: MenuService,
     private _printService: PrintService,
   ) { }

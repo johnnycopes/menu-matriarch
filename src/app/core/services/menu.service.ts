@@ -57,20 +57,6 @@ export class MenuService {
     }
   }
 
-  public getMenuEntries({ days, menu, dishes }: {
-    days: Day[],
-    menu: IMenu | undefined,
-    dishes: IDish[],
-  }): IMenuEntry[] {
-    if (!menu) {
-      return [];
-    }
-    return days.map(day => ({
-      day,
-      dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-    }));
-  }
-
   public getMenu(): Observable<IMenu | undefined> {
     return this._menuId$.pipe(
       switchMap(id => {

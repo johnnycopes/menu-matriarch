@@ -3,6 +3,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { IDish } from '@models/interfaces/dish.interface';
 import { Day } from '@models/types/day.type';
+import { Orientation } from '@models/types/orientation.type';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
@@ -15,6 +16,7 @@ export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
   @Input() dishes: IDish[] = [];
   @Input() emptyDishText = '';
+  @Input() orientation: Orientation = 'horizontal';
   @Output() clear = new EventEmitter<void>();
   public readonly faTimes = faTimes;
   public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
