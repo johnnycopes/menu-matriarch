@@ -4,9 +4,9 @@ import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operato
 import firebase from 'firebase/compat/app';
 
 import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
-import { IDish } from '@models/interfaces/dish.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { IDish } from '@models/interfaces/dish.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
