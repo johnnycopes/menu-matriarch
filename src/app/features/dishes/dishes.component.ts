@@ -49,8 +49,8 @@ export class DishesComponent {
 
   private _filterDish(dish: IDish, type: DishType, searchText: string): boolean {
     return dish.type === type &&
-      lower(dish.name).includes(lower(searchText)) ||
+      (lower(dish.name).includes(lower(searchText)) ||
       lower(dish.description).includes(lower(searchText)) ||
-      dish.tags.some(tag => lower(tag.name).includes(lower(searchText)));
+      dish.tags.some(tag => lower(tag.name).includes(lower(searchText))));
   }
 }
