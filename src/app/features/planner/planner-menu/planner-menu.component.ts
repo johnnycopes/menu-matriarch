@@ -4,7 +4,6 @@ import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
-import { MealService } from '@services/meal.service';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
@@ -25,13 +24,12 @@ export class PlannerMenuComponent {
       if (!menu) {
         return of([]);
       }
-      return this._mealService.getMenuEntries(menu);
+      return this._menuService.getMenuEntries(menu);
     })
   );
   public trackByFn = trackByFactory<IMenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
-    private _mealService: MealService,
     private _menuService: MenuService,
     private _printService: PrintService,
   ) { }

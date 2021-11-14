@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
 import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
-import { IDish } from '@models/interfaces/dish.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -72,6 +71,27 @@ export class MenuService {
     return this._userService.uid$.pipe(
       switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
       map(menus => sort(menus, menu => lower(menu.name)))
+    );
+  }
+
+  public getMenuEntries(menu: IMenu): Observable<IMenuEntry[]> {
+    return combineLatest([
+      this.getOrderedDays(),
+      this._dishService.getDishes(),
+      this._userService.getPreferences().pipe(
+        map(preferences => preferences?.menuOrientation ?? 'horizontal')
+      ),
+    ]).pipe(
+      map(([days, dishes, orientation]) => {
+        if (!menu) {
+          return [];
+        }
+        return days.map(day => ({
+          day,
+          orientation,
+          dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+        }));
+      }),
     );
   }
 

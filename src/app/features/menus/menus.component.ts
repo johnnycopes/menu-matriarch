@@ -5,7 +5,6 @@ import { map, mapTo, shareReplay, switchMap } from 'rxjs/operators';
 import { MenuService } from '@services/menu.service';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { trackByFactory } from '@shared/utility/track-by-factory';
-import { MealService } from '@services/meal.service';
 
 @Component({
   selector: 'app-menus',
@@ -18,7 +17,7 @@ export class MenusComponent {
     this._menuService.getMenus(),
     this._menuService.getMenus().pipe(
       switchMap(menus => combineLatest(
-        menus.map(menu => this._mealService.getMenuEntries(menu))
+        menus.map(menu => this._menuService.getMenuEntries(menu))
       ))
     )
   ]).pipe(
@@ -36,10 +35,7 @@ export class MenusComponent {
   );
   public trackByFn = trackByFactory<IMenu, string>(menu => menu.id);
 
-  constructor(
-    private _mealService: MealService,
-    private _menuService: MenuService,
-  ) { }
+  constructor(private _menuService: MenuService) { }
 
   public onSave(name: string): void {
     this._menuService
