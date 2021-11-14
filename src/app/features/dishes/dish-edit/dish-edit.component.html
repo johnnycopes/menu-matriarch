@@ -61,7 +61,8 @@
     <app-input
       label="tags"
     >
-      <ul class="tags"
+      <ul *ngIf="vm.tags.length; else noTagsPlaceholder"
+        class="tags"
         ngModelGroup="tags"
       >
         <li *ngFor="let tag of vm.tags"
@@ -78,6 +79,16 @@
           </app-checkbox>
         </li>
       </ul>
+      <ng-template #noTagsPlaceholder>
+        <div class="placeholder">
+          <p>No tags to display</p>
+          <a app-button
+            routerLink="/settings"
+          >
+            New Tag
+          </a>
+        </div>
+      </ng-template>
     </app-input>
   </form>
 </app-section>
