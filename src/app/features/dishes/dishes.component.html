@@ -21,35 +21,49 @@
         name="Mains ({{ vm.mains.length }})"
         [selected]="vm.initialTab === 'main'"
       >
-        <li app-dish
-          *ngFor="let main of vm.mains; trackBy: trackByFn"
-          [id]="main.id"
-          [name]="main.name"
-          [description]="main.description"
-          [type]="main.type"
-          [favorited]="main.favorited"
-          [ingredients]="main.ingredients"
-          [tags]="main.tags"
-          [menus]="main.menus"
-          [usages]="main.usages"
-        ></li>
+        <ng-container *ngIf="vm.mains.length; else noMainsPlaceholder">
+          <li app-dish
+            *ngFor="let main of vm.mains; trackBy: trackByFn"
+            [id]="main.id"
+            [name]="main.name"
+            [description]="main.description"
+            [type]="main.type"
+            [favorited]="main.favorited"
+            [ingredients]="main.ingredients"
+            [tags]="main.tags"
+            [menus]="main.menus"
+            [usages]="main.usages"
+          ></li>
+        </ng-container>
+        <ng-template #noMainsPlaceholder>
+          <div class="placeholder">
+            No main dishes to display
+          </div>
+        </ng-template>
       </app-tab>
       <app-tab
         name="Sides ({{ vm.sides.length }})"
         [selected]="vm.initialTab === 'side'"
       >
-        <li app-dish
-          *ngFor="let side of vm.sides; trackBy: trackByFn"
-          [id]="side.id"
-          [name]="side.name"
-          [description]="side.description"
-          [type]="side.type"
-          [favorited]="side.favorited"
-          [ingredients]="side.ingredients"
-          [tags]="side.tags"
-          [menus]="side.menus"
-          [usages]="side.usages"
-        ></li>
+        <ng-container *ngIf="vm.sides.length; else noSidesPlaceholder">
+          <li app-dish
+            *ngFor="let side of vm.sides; trackBy: trackByFn"
+            [id]="side.id"
+            [name]="side.name"
+            [description]="side.description"
+            [type]="side.type"
+            [favorited]="side.favorited"
+            [ingredients]="side.ingredients"
+            [tags]="side.tags"
+            [menus]="side.menus"
+            [usages]="side.usages"
+          ></li>
+        </ng-container>
+        <ng-template #noSidesPlaceholder>
+          <div class="placeholder">
+            No side dishes to display
+          </div>
+        </ng-template>
       </app-tab>
     </app-tabset>
   </ul>

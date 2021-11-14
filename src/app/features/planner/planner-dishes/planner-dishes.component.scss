@@ -25,3 +25,9 @@
     margin-bottom: spacing(8);
   }
 }
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  margin-top: spacing(24);
+}

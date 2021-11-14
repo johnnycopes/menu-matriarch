@@ -39,3 +39,9 @@ section {
   background: $white;
   overflow: hidden;
 }
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  margin-top: spacing(24);
+}
