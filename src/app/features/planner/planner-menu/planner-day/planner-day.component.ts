@@ -15,7 +15,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 export class PlannerDayComponent implements OnInit {
   @Input() day: Day | undefined;
   @Input() dishes: IDish[] = [];
-  @Input() emptyDishText = '';
+  @Input() fallbackText = '';
   @Input() orientation: Orientation = 'horizontal';
   @Output() clear = new EventEmitter<void>();
   public readonly faTimes = faTimes;

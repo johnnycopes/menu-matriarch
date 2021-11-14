@@ -78,18 +78,17 @@ export class MenuService {
     return combineLatest([
       this.getOrderedDays(),
       this._dishService.getDishes(),
-      this._userService.getPreferences().pipe(
-        map(preferences => preferences?.menuOrientation ?? 'horizontal')
-      ),
+      this._userService.getPreferences(),
     ]).pipe(
-      map(([days, dishes, orientation]) => {
+      map(([days, dishes, preferences]) => {
         if (!menu) {
           return [];
         }
         return days.map(day => ({
           day,
-          orientation,
           dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+          fallbackText: preferences?.emptyDishText ?? '',
+          orientation: preferences?.menuOrientation ?? 'horizontal',
         }));
       }),
     );

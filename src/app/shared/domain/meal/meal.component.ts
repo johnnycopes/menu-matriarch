@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { map } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
 import { Orientation } from '@models/types/orientation.type';
-import { UserService } from '@services/user.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
@@ -19,14 +17,10 @@ export class MealComponent {
     this.sides = dishes.filter(dish => dish.type === 'side');
     this.showFallback = !dishes.length;
   }
+  @Input() fallbackText = '';
   @Input() orientation: Orientation = 'horizontal';
-  public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
   public mains: IDish[] = [];
   public sides: IDish[] = [];
   public showFallback = true;
-  public fallbackName$ = this._userService.getPreferences().pipe(
-    map(preferences => preferences?.emptyDishText ?? '')
-  );
-
-  constructor(private _userService: UserService) { }
+  public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
 }
