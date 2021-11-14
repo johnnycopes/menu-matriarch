@@ -31,9 +31,7 @@ export class FirestoreService {
     return this._firestore
       .collection<T>(
         endpoint,
-        ref => ref
-          .where('uid', '==', uid)
-          .orderBy('name')
+        ref => ref.where('uid', '==', uid)
       )
       .valueChanges()
       .pipe(

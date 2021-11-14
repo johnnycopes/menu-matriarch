@@ -1,11 +1,3 @@
-import { Day } from "../types/day.type";
+import { IMenuDbo } from "@models/dbos/menu-dbo.interface";
 
-export interface IMenu {
-  id: string;
-  uid: string;
-  name: string;
-  favorited: boolean;
-  contents: {
-    [day in Day]: string[];
-  };
-};
+export interface IMenu extends IMenuDbo { }

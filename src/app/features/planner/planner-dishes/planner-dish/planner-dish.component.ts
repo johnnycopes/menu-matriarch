@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DishType } from '@models/interfaces/dish-type.type';
+import { ITag } from '@models/interfaces/tag.interface';
+import { DishType } from '@models/types/dish-type.type';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
@@ -23,6 +24,7 @@ export class PlannerDishComponent {
   @Input() name = '';
   @Input() description = '';
   @Input() type: DishType = 'main';
+  @Input() tags: ITag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
   public dayModels$: Observable<IDayModel[]> = combineLatest([

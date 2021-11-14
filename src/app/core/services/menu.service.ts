@@ -3,10 +3,13 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
-import { IDish } from '@models/interfaces/dish.interface';
+import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { IDish } from '@models/interfaces/dish.interface';
 import { Day } from '@models/types/day.type';
+import { lower } from '@shared/utility/format';
+import { sort } from '@shared/utility/sort';
 import { getDays } from '@utility/get-days';
 import { FirestoreService } from './firestore.service';
 import { LocalStorageService } from './local-storage.service';
@@ -74,14 +77,15 @@ export class MenuService {
         if (!id) {
           return of(undefined);
         }
-        return this._firestoreService.getOne<IMenu>(this._endpoint, id)
+        return this._firestoreService.getOne<IMenuDbo>(this._endpoint, id)
       })
     );
   }
 
   public getMenus(): Observable<IMenu[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IMenu>(this._endpoint, uid))
+      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
+      map(menus => sort(menus, menu => lower(menu.name)))
     );
   }
 
@@ -91,7 +95,7 @@ export class MenuService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<IMenu>(
+          await this._firestoreService.create<IMenuDbo>(
             this._endpoint,
             id,
             {
@@ -118,16 +122,6 @@ export class MenuService {
     );
   }
 
-  public async deleteMenu(id?: string): Promise<void> {
-    if (id) {
-      await this._firestoreService.delete<IMenu>(this._endpoint, id);
-    }
-    this._localStorageService.deleteMenuId();
-    this.updateSavedMenuId().pipe(
-      first()
-    ).subscribe();
-  }
-
   public updateMenuName(id: string, name: string): Promise<void> {
     return this._updateMenu(id, { name });
   }
@@ -136,7 +130,7 @@ export class MenuService {
     day: Day,
     dishId: string,
     selected: boolean,
-  }): Observable<IMenu | undefined> {
+  }) {
     return this.getMenu().pipe(
       first(),
       tap(async menu => {
@@ -154,14 +148,14 @@ export class MenuService {
           return of(undefined);
         }
         return this._firestoreService
-          .getOne<IMenu>(this._endpoint, menu.id)
+          .getOne<IMenuDbo>(this._endpoint, menu.id)
           .pipe(first());
       }),
       tap(async menu => {
         if (!menu) {
           return;
         }
-        await this._dishService.updateDish(dishId, {
+        await this._dishService.updateDishCounters(dishId, {
           usages: firebase.firestore.FieldValue.increment(selected ? 1 : -1) as unknown as number,
           menus: Object.values(menu.contents).some(dishIds => dishIds.includes(dishId))
             ? firebase.firestore.FieldValue.arrayUnion(menu.id) as unknown as string[]
@@ -172,7 +166,7 @@ export class MenuService {
   }
 
   // TODO: refactor to use batch updates instead of separate promises
-  public clearMenuContents(day?: Day): Observable<IMenu | undefined> {
+  public clearMenuContents(day?: Day) {
     return this.getMenu().pipe(
       first(),
       tap(async menu => {
@@ -194,7 +188,7 @@ export class MenuService {
               .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
 
             // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
-            return this._dishService.updateDish(dishId, {
+            return this._dishService.updateDishCounters(dishId, {
               usages: firebase.firestore.FieldValue.increment(-1) as unknown as number,
               ...!dishInOtherDay && {
                 menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
@@ -225,7 +219,7 @@ export class MenuService {
           dishUpdatePromises = Object
             .keys(dishIds)
             .map(dishId => {
-              return this._dishService.updateDish(dishId, {
+              return this._dishService.updateDishCounters(dishId, {
                 usages: firebase.firestore.FieldValue.increment(-(dishIds[dishId])) as unknown as number,
                 menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
               });
@@ -240,6 +234,16 @@ export class MenuService {
     );
   }
 
+  public async deleteMenu(id?: string): Promise<void> {
+    if (id) {
+      await this._firestoreService.delete<IMenuDbo>(this._endpoint, id);
+    }
+    this._localStorageService.deleteMenuId();
+    this.updateSavedMenuId().pipe(
+      first()
+    ).subscribe();
+  }
+
   public getOrderedDays(): Observable<Day[]> {
     return this._userService.getPreferences().pipe(
       map(preferences => getDays(preferences?.menuStartDay)),
@@ -247,8 +251,8 @@ export class MenuService {
     );
   }
 
-  private async _updateMenu(id: string, updates: Partial<IMenu>): Promise<void> {
-    return await this._firestoreService.update<IMenu>(this._endpoint, id, updates);
+  private async _updateMenu(id: string, updates: Partial<IMenuDbo>): Promise<void> {
+    return await this._firestoreService.update<IMenuDbo>(this._endpoint, id, updates);
   }
 
   private _setMenuId(id: string): void {

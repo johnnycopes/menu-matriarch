@@ -22,13 +22,32 @@
     >
       {{ dish.description }}
     </p>
-    <p class="details">
-      {{ dish.type | uppercase }} dish. Included
-      {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
-      {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}.
-    </p>
+    <div class="details">
+      <p>{{ dish.type | uppercase }} dish</p>
+      <p>
+        Included {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
+        {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}
+      </p>
+    </div>
+    <div class="details">
+      <ul *ngIf="dish.tags.length; else noTagsTemplate"
+        class="tags"
+      >
+        <li *ngFor="let tag of dish.tags; trackBy: tagTrackByFn"
+          class="tag"
+        >
+          <app-tag
+            [id]="tag.id"
+            [name]="tag.name"
+          ></app-tag>
+        </li>
+      </ul>
+      <ng-template #noTagsTemplate>
+        No tags selected
+      </ng-template>
+    </div>
     <ul *ngIf="dish.ingredients.length">
-      <li *ngFor="let ingredient of dish.ingredients; trackBy: trackByFn">
+      <li *ngFor="let ingredient of dish.ingredients; trackBy: ingredientTrackByFn">
         {{ ingredient }}
       </li>
     </ul>

@@ -10,6 +10,11 @@
     color: color($neutral, 4);
   }
 
+  app-search-input {
+    position: relative;
+    top: 2px;
+  }
+
   [app-button]:not(:first-child) {
     margin-left: spacing(8);
   }
@@ -19,4 +24,10 @@
   li[app-planner-dish]:not(:last-of-type) {
     margin-bottom: spacing(8);
   }
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  margin-top: spacing(24);
 }

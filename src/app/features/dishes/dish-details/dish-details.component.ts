@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { first, map, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
+import { ITag } from '@models/interfaces/tag.interface';
 import { DishService } from '@services/dish.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -24,25 +25,25 @@ export class DishDetailsComponent {
       return this._dishService.getDish(id);
     })
   );
-  public trackByFn = trackByFactory<string, string>(ingredient => ingredient);
+  public ingredientTrackByFn = trackByFactory<string, string>(ingredient => ingredient);
+  public tagTrackByFn = trackByFactory<ITag, string>(tag => tag.id);
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _dishService: DishService,
+    private _dishService: DishService
   ) { }
 
   public onDelete(): void {
     this.id$.pipe(
       first(),
-      tap(async id => {
+      concatMap(id => {
         if (!id) {
-          return;
+          return of(undefined);
         }
-        await this._dishService.deleteDish(id);
-      })
-    ).subscribe(
-      () => this._router.navigate(['..'], { relativeTo: this._route })
-    );
+        return this._dishService.deleteDish(id);
+      }),
+      tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
+    ).subscribe();
   }
 }

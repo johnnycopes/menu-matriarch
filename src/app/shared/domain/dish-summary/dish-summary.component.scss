@@ -8,18 +8,9 @@
 .details {
   display: flex;
   align-items: center;
-  font-size: font-size(18);
 
-  &__counter {
-    display: flex;
-    align-items: center;
-    margin-left: spacing(16);
-  }
-
-  fa-icon {
-    margin-right: spacing(4);
-    font-size: font-size(16);
-    color: color($neutral, 6);
+  app-count {
+    margin-left: spacing(12);
   }
 }
 
@@ -27,4 +18,14 @@
   font-size: 14px;
   color: color($neutral, 6);
   margin-top: spacing(8);
+}
+
+.tags {
+  margin-top: spacing(8);
+  display: flex;
+  flex-wrap: wrap;
+
+  app-tag {
+    margin-right: spacing(8);
+  }
 }

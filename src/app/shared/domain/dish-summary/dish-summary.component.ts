@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { faMap } from '@fortawesome/free-regular-svg-icons';
-import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+import { ITag } from '@models/interfaces/tag.interface';
 
 @Component({
   selector: 'app-dish-summary',
@@ -13,8 +12,7 @@ export class DishSummaryComponent {
   @Input() id: string = '';
   @Input() name: string = '';
   @Input() description: string | undefined;
+  @Input() tags: ITag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
-  public readonly faMap = faMap;
-  public readonly faCalendarDay = faCalendarDay;
 }

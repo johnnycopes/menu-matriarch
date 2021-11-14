@@ -1,13 +1,6 @@
-import { DishType } from "./dish-type.type";
+import { IDishDbo } from "@models/dbos/dish-dbo.interface";
+import { ITag } from "./tag.interface";
 
-export interface IDish {
-  id: string;
-  uid: string;
-  type: DishType;
-  name: string;
-  favorited: boolean;
-  description: string;
-  ingredients: string[];
-  usages: number;
-  menus: string[];
+export interface IDish extends Omit<IDishDbo, 'tags'> {
+  tags: ITag[];
 }

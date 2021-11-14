@@ -1,0 +1,33 @@
+<app-inline-name-edit *ngIf="editing$ | async; else detailsTemplate"
+  class="form"
+  [name]="name"
+  (cancel)="finishEdit$.next()"
+  (save)="onSave($event)"
+></app-inline-name-edit>
+
+<ng-template #detailsTemplate>
+  <app-tag
+    [id]="id"
+    [name]="name"
+  ></app-tag>
+  <div class="container">
+    <app-count
+      type="dishes"
+      [count]="usages"
+    ></app-count>
+    <button app-button
+      class="edit"
+      buttonStyle="danger"
+      (click)="delete.emit()"
+    >
+      Delete
+    </button>
+    <button app-button
+      class="edit"
+      buttonStyle="secondary"
+      (click)="startEdit$.next()"
+    >
+      Edit
+    </button>
+  </div>
+</ng-template>

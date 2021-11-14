@@ -3,6 +3,10 @@
     <h2 class="title">
       Dishes ({{ vm.total }})
     </h2>
+    <app-search-input
+      [text]="vm.searchText"
+      (textChange)="onSearchTextChange($event)"
+    ></app-search-input>
     <a app-button
       routerLink="/dishes/new"
     >
@@ -12,26 +16,42 @@
   <ul class="app-section__content">
     <app-tabset contentVisibility="visible">
       <app-tab name="Mains ({{ vm.mains.length }})">
-        <li app-planner-dish
-          *ngFor="let main of vm.mains; trackBy: trackByFn"
-          [id]="main.id"
-          [type]="main.type"
-          [name]="main.name"
-          [description]="main.description"
-          [menus]="main.menus"
-          [usages]="main.usages"
-        ></li>
+        <ng-container *ngIf="vm.mains.length; else noMainsPlaceholder">
+          <li app-planner-dish
+            *ngFor="let main of vm.mains; trackBy: trackByFn"
+            [id]="main.id"
+            [type]="main.type"
+            [name]="main.name"
+            [description]="main.description"
+            [tags]="main.tags"
+            [menus]="main.menus"
+            [usages]="main.usages"
+          ></li>
+        </ng-container>
+        <ng-template #noMainsPlaceholder>
+          <div class="placeholder">
+            No main dishes to display
+          </div>
+        </ng-template>
       </app-tab>
       <app-tab name="Sides ({{ vm.sides.length }})">
-        <li app-planner-dish
-          *ngFor="let side of vm.sides; trackBy: trackByFn"
-          [id]="side.id"
-          [type]="side.type"
-          [name]="side.name"
-          [description]="side.description"
-          [menus]="side.menus"
-          [usages]="side.usages"
-        ></li>
+        <ng-container *ngIf="vm.sides.length; else noSidesPlaceholder">
+          <li app-planner-dish
+            *ngFor="let side of vm.sides; trackBy: trackByFn"
+            [id]="side.id"
+            [type]="side.type"
+            [name]="side.name"
+            [description]="side.description"
+            [tags]="side.tags"
+            [menus]="side.menus"
+            [usages]="side.usages"
+          ></li>
+        </ng-container>
+        <ng-template #noSidesPlaceholder>
+          <div class="placeholder">
+            No side dishes to display
+          </div>
+        </ng-template>
       </app-tab>
     </app-tabset>
   </ul>

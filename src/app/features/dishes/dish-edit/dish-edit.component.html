@@ -58,5 +58,26 @@
         </label>
       </div>
     </app-input>
+    <app-input
+      label="tags"
+    >
+      <ul class="tags"
+        ngModelGroup="tags"
+      >
+        <li *ngFor="let tag of vm.tags"
+          class="tag"
+        >
+          <app-checkbox
+            [name]="tag.id"
+            [ngModel]="tag.checked"
+          >
+            <app-tag
+              [id]="tag.id"
+              [name]="tag.name"
+            ></app-tag>
+          </app-checkbox>
+        </li>
+      </ul>
+    </app-input>
   </form>
 </app-section>

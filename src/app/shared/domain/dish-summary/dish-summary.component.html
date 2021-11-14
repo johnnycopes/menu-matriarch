@@ -5,16 +5,14 @@
     </h3>
   </a>
   <div class="details">
-    <div class="details__counter">
-      <fa-icon [icon]="faCalendarDay">
-      </fa-icon>
-      {{ usages }}
-    </div>
-    <div class="details__counter">
-      <fa-icon [icon]="faMap">
-      </fa-icon>
-      {{ menus.length }}
-    </div>
+    <app-count
+      type="days"
+      [count]="usages"
+    ></app-count>
+    <app-count
+      type="menus"
+      [count]="menus.length"
+    ></app-count>
   </div>
 </div>
 
@@ -23,3 +21,14 @@
 >
   {{ description }}
 </p>
+
+<ul *ngIf="tags.length"
+  class="tags"
+>
+  <li *ngFor="let tag of tags">
+    <app-tag
+      [id]="tag.id"
+      [name]="tag.name"
+    ></app-tag>
+  </li>
+</ul>
