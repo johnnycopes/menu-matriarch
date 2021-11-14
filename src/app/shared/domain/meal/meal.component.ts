@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { IDish } from '@models/interfaces/dish.interface';
+import { Orientation } from '@models/types/orientation.type';
 import { UserService } from '@services/user.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -18,6 +19,7 @@ export class MealComponent {
     this.sides = dishes.filter(dish => dish.type === 'side');
     this.showFallback = !dishes.length;
   }
+  @Input() orientation: Orientation = 'horizontal';
   public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
   public mains: IDish[] = [];
   public sides: IDish[] = [];

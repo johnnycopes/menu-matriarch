@@ -1,6 +1,8 @@
 <ng-container *appLet="fallbackName$ | async as fallbackName">
   <ul *ngIf="mains.length"
     class="dishes mains"
+    [class.dishes--horizontal]="orientation === 'horizontal'"
+    [class.dishes--vertical]="orientation === 'vertical'"
   >
     <li *ngFor="let dish of mains; let last = last; trackBy: trackByFn">
       <a routerLink="/dishes/{{ dish.id }}">
@@ -13,6 +15,8 @@
   />
   <ul *ngIf="sides.length"
     class="dishes sides"
+    [class.dishes--horizontal]="orientation === 'horizontal'"
+    [class.dishes--vertical]="orientation === 'vertical'"
   >
     <li *ngFor="let dish of sides; let last = last; trackBy: trackByFn">
       <a routerLink="/dishes/{{ dish.id }}">

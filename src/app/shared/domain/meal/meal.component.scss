@@ -7,7 +7,14 @@
 
 .dishes {
   display: flex;
-  flex-wrap: wrap;
+
+  &--horizontal {
+    flex-wrap: wrap;
+  }
+
+  &--vertical {
+    flex-direction: column;
+  }
 }
 
 .mains {
