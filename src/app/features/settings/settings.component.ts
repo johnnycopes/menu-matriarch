@@ -32,9 +32,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.updateAction$.pipe(
-      takeUntil(this._destroy$),
       debounceTime(200),
-      switchMap(update => this._userService.updatePreferences(update))
+      switchMap(update => this._userService.updatePreferences(update)),
+      takeUntil(this._destroy$),
     ).subscribe();
   }
 

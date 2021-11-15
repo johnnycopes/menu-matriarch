@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
 import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
-import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
-import { IDish } from '@models/interfaces/dish.interface';
+import { IMenuDisplay } from '@models/interfaces/menu-display.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -57,20 +56,6 @@ export class MenuService {
     }
   }
 
-  public getMenuEntries({ days, menu, dishes }: {
-    days: Day[],
-    menu: IMenu | undefined,
-    dishes: IDish[],
-  }): IMenuEntry[] {
-    if (!menu) {
-      return [];
-    }
-    return days.map(day => ({
-      day,
-      dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-    }));
-  }
-
   public getMenu(): Observable<IMenu | undefined> {
     return this._menuId$.pipe(
       switchMap(id => {
@@ -79,6 +64,27 @@ export class MenuService {
         }
         return this._firestoreService.getOne<IMenuDbo>(this._endpoint, id)
       })
+    );
+  }
+
+  public getMenuDisplay(menu: IMenu): Observable<IMenuDisplay> {
+    return combineLatest([
+      this.getOrderedDays(),
+      this._dishService.getDishes(),
+      this._userService.getPreferences(),
+    ]).pipe(
+      map(([days, dishes, preferences]) => {
+        return {
+          id: menu.id,
+          name: menu.name,
+          entries: days.map(day => ({
+            day,
+            dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+          })),
+          entryOrientation: preferences?.menuOrientation ?? 'horizontal',
+          entryFallbackText: preferences?.emptyDishText ?? '',
+        };
+      }),
     );
   }
 

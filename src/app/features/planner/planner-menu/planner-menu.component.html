@@ -1,7 +1,7 @@
-<app-section>
+<app-section *ngIf="menu$ | async as menu">
   <div class="app-section__toolbar">
     <h2 class="title">
-      {{ menuName$ | async }}
+      {{ menu.name }}
     </h2>
     <button app-button
       buttonStyle="secondary"
@@ -17,10 +17,12 @@
   </div>
   <ul class="app-section__content">
     <li app-planner-day
-      *ngFor="let menuEntry of menuEntries$ | async; trackBy: trackByFn"
-      [day]="menuEntry.day"
-      [dishes]="menuEntry.dishes"
-      (clear)="onClearDay(menuEntry)"
+      *ngFor="let entry of menu.entries; trackBy: trackByFn"
+      [day]="entry.day"
+      [dishes]="entry.dishes"
+      [fallbackText]="menu.entryFallbackText"
+      [orientation]="menu.entryOrientation"
+      (clear)="onClearDay(entry)"
     ></li>
   </ul>
 </app-section>

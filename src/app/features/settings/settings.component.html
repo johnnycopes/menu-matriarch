@@ -25,6 +25,32 @@
       </h2>
       <app-card>
         <form #form="ngForm">
+          <app-input
+            label="Menu Orientation"
+          >
+            <div class="radio-container">
+              <label class="radio-button">
+                <input
+                  type="radio"
+                  name="menuOrientation"
+                  value="horizontal"
+                  [ngModel]="user.preferences?.menuOrientation"
+                  (ngModelChange)="updateAction$.next({ menuOrientation: $event })"
+                />
+                Horizontal
+              </label>
+              <label class="radio-button">
+                <input
+                  type="radio"
+                  name="menuOrientation"
+                  value="vertical"
+                  [ngModel]="user.preferences?.menuOrientation"
+                  (ngModelChange)="updateAction$.next({ menuOrientation: $event })"
+                />
+                Vertical
+              </label>
+            </div>
+          </app-input>
           <app-input label="Menu Start Day">
             <select id="Menu Start Day"
               name="menuStartDay"
