@@ -5,6 +5,7 @@ import { mapTo } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
+import { Orientation } from '@models/types/orientation.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
@@ -19,6 +20,8 @@ export class MenuComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() entries: IMenuEntry[] = [];
+  @Input() orientation: Orientation = 'horizontal';
+  @Input() fallbackText = '';
   @Input() days: Day[] = [];
   @Input() canDelete = true;
   public readonly faEllipsisV = faEllipsisV;

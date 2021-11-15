@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 
 import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
-import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { IMenuDisplay } from '@models/interfaces/menu-display.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -67,30 +67,31 @@ export class MenuService {
     );
   }
 
-  public getMenus(): Observable<IMenu[]> {
-    return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
-      map(menus => sort(menus, menu => lower(menu.name)))
-    );
-  }
-
-  public getMenuEntries(menu: IMenu): Observable<IMenuEntry[]> {
+  public getMenuDisplay(menu: IMenu): Observable<IMenuDisplay> {
     return combineLatest([
       this.getOrderedDays(),
       this._dishService.getDishes(),
       this._userService.getPreferences(),
     ]).pipe(
       map(([days, dishes, preferences]) => {
-        if (!menu) {
-          return [];
-        }
-        return days.map(day => ({
-          day,
-          dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-          fallbackText: preferences?.emptyDishText ?? '',
-          orientation: preferences?.menuOrientation ?? 'horizontal',
-        }));
+        return {
+          id: menu.id,
+          name: menu.name,
+          entries: days.map(day => ({
+            day,
+            dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+          })),
+          entryOrientation: preferences?.menuOrientation ?? 'horizontal',
+          entryFallbackText: preferences?.emptyDishText ?? '',
+        };
       }),
+    );
+  }
+
+  public getMenus(): Observable<IMenu[]> {
+    return this._userService.uid$.pipe(
+      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
+      map(menus => sort(menus, menu => lower(menu.name)))
     );
   }
 
