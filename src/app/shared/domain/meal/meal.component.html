@@ -5,7 +5,7 @@
 >
   <li *ngFor="let dish of mains; let last = last; trackBy: trackByFn">
     <a routerLink="/dishes/{{ dish.id }}">
-      {{ dish.name }}<span *ngIf="!last">,&nbsp;</span>
+      {{ dish.name }}<span *ngIf="orientation === 'horizontal' && !last">,&nbsp;</span>
     </a>
   </li>
 </ul>
@@ -19,7 +19,7 @@
 >
   <li *ngFor="let dish of sides; let last = last; trackBy: trackByFn">
     <a routerLink="/dishes/{{ dish.id }}">
-      {{ dish.name }}<span *ngIf="!last">,&nbsp;</span>
+      {{ dish.name }}<span *ngIf="orientation === 'horizontal' && !last">,&nbsp;</span>
     </a>
   </li>
 </ul>

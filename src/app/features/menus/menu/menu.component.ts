@@ -40,7 +40,13 @@ export class MenuComponent {
   ) { }
 
   public onPrint(): void {
-    this._printService.printMenu(this.name, this.entries);
+    this._printService.printMenu({
+      id: this.id,
+      name: this.name,
+      entries: this.entries,
+      entryFallbackText: this.fallbackText,
+      entryOrientation: this.orientation,
+    });
   }
 
   public async onRename(name: string): Promise<void> {

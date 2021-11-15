@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { IMenuDisplay } from '@models/interfaces/menu-display.interface';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { Orientation } from '@models/types/orientation.type';
 
 @Injectable({
   providedIn: 'root'
@@ -8,29 +10,33 @@ import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 export class PrintService {
   private _popupWindow: Window | null = null;
 
-  public printMenu(name: string, entries: IMenuEntry[]): void {
+  public printMenu(menu: IMenuDisplay): void {
     if (this._popupWindow == null || this._popupWindow.closed) {
       this._popupWindow = window.open(undefined, '_blank', 'resizable,scrollbars,status');
       this._popupWindow?.document.open();
-      this._popupWindow?.document.write(this._createDocument(name, entries));
+      this._popupWindow?.document.write(this._createDocument(menu));
       this._popupWindow?.document.close();
     } else {
       this._popupWindow.focus();
     };
   }
 
-  private _createDocument(name: string, entries: IMenuEntry[] = []): string {
+  private _createDocument(menu: IMenuDisplay): string {
     return `
       <html>
         <head>
-          <title>${name}</title>
+          <title>${menu.name}</title>
           <style>
             ${this._createStyles()}
           </style>
         </head>
         <body onload="window.print()">
-          ${entries
-            .map(this._createEntry)
+          ${menu.entries
+            .map(entry => this._createEntry({
+              entry,
+              fallbackText: menu.entryFallbackText,
+              orientation: menu.entryOrientation
+            }))
             .join('')
           }
         </body>
@@ -38,14 +44,25 @@ export class PrintService {
     `;
   }
 
-  private _createEntry({ day, dishes }: IMenuEntry): string {
-    const mains = dishes.filter(dish => dish.type === 'main');
-    const sides = dishes.filter(dish => dish.type === 'side');
+  private _createEntry({ entry, fallbackText, orientation }:
+    { entry: IMenuEntry, fallbackText: string, orientation: Orientation }
+  ): string {
+    const mains = entry.dishes
+      .filter(dish => dish.type === 'main')
+      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(orientation === 'vertical' ? '' : ',');
+    const sides = entry.dishes
+      .filter(dish => dish.type === 'side')
+      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(orientation === 'vertical' ? '' : ',');
+    const content = entry.dishes.length
+      ? `<ul class="dishes mains ${orientation}">${mains}</ul>
+        <ul class="dishes sides ${orientation}">${sides}</ul>`
+      : `<p class="fallback">${fallbackText}</p>`;
     return `<li class="entry">
-      <h2 class="day">${day}</h2>
+      <h2 class="day">${entry.day}</h2>
       <div class="meals">
-        <p class="dishes mains">${mains.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
-        <p class="dishes sides">${sides.map((dish, index) => (index === 0 ? '' : '&nbsp') + dish.name)}</p>
+        ${content}
       </div>
     </li>`;
   }
@@ -70,8 +87,9 @@ export class PrintService {
         }
       }
 
-      h1, h2, h3, h4, h5, h6, p {
+      h1, h2, h3, h4, h5, h6, ul, ol, p {
         margin: 0;
+        padding: 0;
         font-weight: normal;
       }
 
@@ -101,11 +119,24 @@ export class PrintService {
       }
 
       .dishes {
+        display: flex;
         font-size: 12pt;
+      }
+
+      .horizontal {
+        flex-wrap: wrap;
+      }
+
+      .vertical {
+        flex-direction: column;
       }
 
       .mains {
         font-weight: bold;
+      }
+
+      .fallback {
+        font-style: italic;
       }
     `;
   }

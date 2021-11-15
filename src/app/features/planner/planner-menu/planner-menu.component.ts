@@ -37,7 +37,7 @@ export class PlannerMenuComponent {
         if (!menu) {
           return;
         }
-        this._printService.printMenu(menu.name, menu.entries);
+        this._printService.printMenu(menu);
       })
     ).subscribe();
   }
