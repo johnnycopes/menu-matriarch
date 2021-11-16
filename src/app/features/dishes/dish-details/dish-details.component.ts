@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
-import { ITag } from '@models/interfaces/tag.interface';
+import { Tag } from '@models/interfaces/tag.interface';
 import { DishService } from '@services/dish.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -26,7 +26,7 @@ export class DishDetailsComponent {
     })
   );
   public ingredientTrackByFn = trackByFactory<string, string>(ingredient => ingredient);
-  public tagTrackByFn = trackByFactory<ITag, string>(tag => tag.id);
+  public tagTrackByFn = trackByFactory<Tag, string>(tag => tag.id);
 
   constructor(
     private _route: ActivatedRoute,

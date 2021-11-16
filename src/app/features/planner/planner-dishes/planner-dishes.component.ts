@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-import { IDish } from '@models/interfaces/dish.interface';
+import { Dish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { lower } from '@shared/utility/format';
@@ -29,7 +29,7 @@ export class PlannerDishesComponent {
       sides: dishes.filter(dish => this._filterDish(dish, 'side', searchText)),
     })),
   );
-  public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
+  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(private _dishService: DishService) { }
 
@@ -37,7 +37,7 @@ export class PlannerDishesComponent {
     this._searchText$.next(text);
   }
 
-  private _filterDish(dish: IDish, type: DishType, searchText: string): boolean {
+  private _filterDish(dish: Dish, type: DishType, searchText: string): boolean {
     return dish.type === type &&
       (lower(dish.name).includes(lower(searchText)) ||
       lower(dish.description).includes(lower(searchText)) ||

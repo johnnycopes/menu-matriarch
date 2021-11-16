@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { first, tap } from 'rxjs/operators';
 
-import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { MenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
@@ -15,7 +15,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 })
 export class PlannerMenuComponent {
   public menu$ = this._menuService.getMenu();
-  public trackByFn = trackByFactory<IMenuEntry, Day>(menuEntry => menuEntry.day);
+  public trackByFn = trackByFactory<MenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
     private _menuService: MenuService,
@@ -39,7 +39,7 @@ export class PlannerMenuComponent {
     ).subscribe();
   }
 
-  public onClearDay({ day }: IMenuEntry): void {
+  public onClearDay({ day }: MenuEntry): void {
     this._menuService
       .clearMenuContents(day)
       .subscribe();

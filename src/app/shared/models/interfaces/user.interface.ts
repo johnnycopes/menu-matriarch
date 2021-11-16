@@ -1,13 +1,3 @@
-import { IUserDbo } from "@models/dbos/user-dbo.interface";
-import { DayNameDisplay } from "@models/types/date-name-display.type";
-import { Day } from "@models/types/day.type";
-import { Orientation } from "@models/types/orientation.type";
+import { UserDbo } from "@models/dbos/user-dbo.interface";
 
-export interface IUser extends IUserDbo { }
-export interface IUserPreferences {
-  darkMode: boolean;
-  dayNameDisplay: DayNameDisplay;
-  emptyDishText: string;
-  menuOrientation: Orientation;
-  menuStartDay: Day;
-}
+export interface User extends UserDbo { }

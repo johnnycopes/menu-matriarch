@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 
-import { IUserPreferences } from '@models/interfaces/user.interface';
+import { UserPreferences } from '@models/interfaces/user-preferences.interface';
 import { Day } from '@models/types/day.type';
 import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
@@ -19,7 +19,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 export class SettingsComponent implements OnInit, OnDestroy {
   public user$ = this._userService.getUser();
   public preferences$ = this._userService.getPreferences();
-  public updateAction$ = new Subject<Partial<IUserPreferences>>();
+  public updateAction$ = new Subject<Partial<UserPreferences>>();
   public trackByFn = trackByFactory<Day, Day>(day => day);
   public days: Day[] = getDays();
   private _destroy$ = new Subject<void>();

@@ -1,6 +1,6 @@
 import { Directive, Input, ViewContainerRef, TemplateRef } from '@angular/core';
 
-interface IRangeContext {
+interface RangeContext {
   $implicit: number;
 }
 
@@ -21,7 +21,7 @@ export class RangeDirective {
     });
   }
 
-  constructor(private vcr: ViewContainerRef, private tpl: TemplateRef<IRangeContext>) { }
+  constructor(private vcr: ViewContainerRef, private tpl: TemplateRef<RangeContext>) { }
 
   private _generateRange(from: number, to: number): number[] {
     const arr = [];

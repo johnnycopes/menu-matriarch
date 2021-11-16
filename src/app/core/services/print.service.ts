@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
-import { IMenu } from '@models/interfaces/menu.interface';
+import { MenuEntry } from '@models/interfaces/menu-entry.interface';
+import { Menu } from '@models/interfaces/menu.interface';
 import { Orientation } from '@models/types/orientation.type';
 
-interface IPrintMenu extends Pick<IMenu,
+interface PrintMenu extends Pick<Menu,
   'name' | 'entries' | 'fallbackText' | 'orientation'
 >{ }
 
@@ -14,7 +14,7 @@ interface IPrintMenu extends Pick<IMenu,
 export class PrintService {
   private _popupWindow: Window | null = null;
 
-  public printMenu(menu: IPrintMenu): void {
+  public printMenu(menu: PrintMenu): void {
     if (this._popupWindow == null || this._popupWindow.closed) {
       this._popupWindow = window.open(undefined, '_blank', 'resizable,scrollbars,status');
       this._popupWindow?.document.open();
@@ -25,7 +25,7 @@ export class PrintService {
     };
   }
 
-  private _createDocument({ name, entries, fallbackText, orientation }: IPrintMenu): string {
+  private _createDocument({ name, entries, fallbackText, orientation }: PrintMenu): string {
     return `
       <html>
         <head>
@@ -49,7 +49,7 @@ export class PrintService {
   }
 
   private _createEntry({ entry, fallbackText, orientation }:
-    { entry: IMenuEntry, fallbackText: string, orientation: Orientation }
+    { entry: MenuEntry, fallbackText: string, orientation: Orientation }
   ): string {
     const mains = entry.dishes
       .filter(dish => dish.type === 'main')

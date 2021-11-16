@@ -1,6 +1,6 @@
 import { DishType } from "../types/dish-type.type";
 
-export interface IDishDbo {
+export interface DishDbo {
   id: string;
   uid: string;
   type: DishType;

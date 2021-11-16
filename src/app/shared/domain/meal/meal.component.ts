@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { IDish } from '@models/interfaces/dish.interface';
+import { Dish } from '@models/interfaces/dish.interface';
 import { Orientation } from '@models/types/orientation.type';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -12,15 +12,15 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 })
 export class MealComponent {
   @Input()
-  set dishes(dishes: IDish[]) {
+  set dishes(dishes: Dish[]) {
     this.mains = dishes.filter(dish => dish.type === 'main');
     this.sides = dishes.filter(dish => dish.type === 'side');
     this.showFallback = !dishes.length;
   }
   @Input() fallbackText = '';
   @Input() orientation: Orientation = 'horizontal';
-  public mains: IDish[] = [];
-  public sides: IDish[] = [];
+  public mains: Dish[] = [];
+  public sides: Dish[] = [];
   public showFallback = true;
-  public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
+  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 }

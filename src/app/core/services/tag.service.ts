@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { concatMap, first, map, switchMap } from 'rxjs/operators';
 
-import { ITagDbo } from '@models/dbos/tag-dbo.interface';
-import { ITag } from '@models/interfaces/tag.interface';
+import { TagDbo } from '@models/dbos/tag-dbo.interface';
+import { Tag } from '@models/interfaces/tag.interface';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
@@ -20,13 +20,13 @@ export class TagService {
     private _userService: UserService,
   ) { }
 
-  public getTag(id: string): Observable<ITag | undefined> {
-    return this._firestoreService.getOne<ITagDbo>(this._endpoint, id);
+  public getTag(id: string): Observable<Tag | undefined> {
+    return this._firestoreService.getOne<TagDbo>(this._endpoint, id);
   }
 
-  public getTags(): Observable<ITag[]> {
+  public getTags(): Observable<Tag[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<ITagDbo>(this._endpoint, uid)),
+      switchMap(uid => this._firestoreService.getMany<TagDbo>(this._endpoint, uid)),
       map(tags => sort(tags, tag => lower(tag.name)))
     );
   }
@@ -37,7 +37,7 @@ export class TagService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<ITagDbo>(
+          await this._firestoreService.create<TagDbo>(
             this._endpoint,
             id,
             {
@@ -56,11 +56,11 @@ export class TagService {
     );
   }
 
-  public updateTag(id: string, updates: Partial<ITagDbo>): Promise<void> {
-    return this._firestoreService.update<ITagDbo>(this._endpoint, id, updates);
+  public updateTag(id: string, updates: Partial<TagDbo>): Promise<void> {
+    return this._firestoreService.update<TagDbo>(this._endpoint, id, updates);
   }
 
   public deleteTag(id: string): Promise<void> {
-    return this._firestoreService.delete<ITagDbo>(this._endpoint, id);
+    return this._firestoreService.delete<TagDbo>(this._endpoint, id);
   }
 }

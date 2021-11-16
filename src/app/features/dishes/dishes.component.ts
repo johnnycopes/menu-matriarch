@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-import { IDish } from '@models/interfaces/dish.interface';
+import { Dish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { lower } from '@shared/utility/format';
@@ -36,7 +36,7 @@ export class DishesComponent {
       };
     })
   );
-  public trackByFn = trackByFactory<IDish, string>(dish => dish.id);
+  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _route: ActivatedRoute,
@@ -47,7 +47,7 @@ export class DishesComponent {
     this._searchText$.next(text);
   }
 
-  private _filterDish(dish: IDish, type: DishType, searchText: string): boolean {
+  private _filterDish(dish: Dish, type: DishType, searchText: string): boolean {
     return dish.type === type &&
       (lower(dish.name).includes(lower(searchText)) ||
       lower(dish.description).includes(lower(searchText)) ||

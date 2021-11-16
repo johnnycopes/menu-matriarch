@@ -3,8 +3,9 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
-import { IUserDbo } from '@models/dbos/user-dbo.interface';
-import { IUser, IUserPreferences } from '@models/interfaces/user.interface';
+import { UserDbo } from '@models/dbos/user-dbo.interface';
+import { User } from '@models/interfaces/user.interface';
+import { UserPreferences } from '@models/interfaces/user-preferences.interface';
 import { FirestoreService } from './firestore.service';
 
 @Injectable({
@@ -25,9 +26,9 @@ export class UserService {
     );
   }
 
-  public getUser(): Observable<IUser | undefined> {
+  public getUser(): Observable<User | undefined> {
     return this.uid$.pipe(
-      switchMap(uid => this._firestoreService.getOne<IUserDbo>(this._endpoint, uid)),
+      switchMap(uid => this._firestoreService.getOne<UserDbo>(this._endpoint, uid)),
     );
   }
 
@@ -38,7 +39,7 @@ export class UserService {
       first(),
       tap(async uid => {
         if (uid) {
-          await this._firestoreService.create<IUserDbo>(
+          await this._firestoreService.create<UserDbo>(
             this._endpoint,
             uid,
             {
@@ -59,13 +60,13 @@ export class UserService {
     );
   }
 
-  public getPreferences(): Observable<IUserPreferences | undefined> {
+  public getPreferences(): Observable<UserPreferences | undefined> {
     return this.getUser().pipe(
       map(user => user?.preferences),
     );
   }
 
-  public updatePreferences(updates: Partial<IUserPreferences>): Observable<IUser | undefined> {
+  public updatePreferences(updates: Partial<UserPreferences>): Observable<User | undefined> {
     return this.getUser().pipe(
       first(),
       tap(async user => {
@@ -79,7 +80,7 @@ export class UserService {
           menuOrientation: 'horizontal',
           menuStartDay: 'Monday',
         };
-        await this._firestoreService.update<IUserDbo>(
+        await this._firestoreService.update<UserDbo>(
           this._endpoint,
           user.uid,
           { preferences:

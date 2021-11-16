@@ -1,6 +1,6 @@
 import { Day } from "../types/day.type";
 
-export interface IMenuDbo {
+export interface MenuDbo {
   id: string;
   uid: string;
   name: string;

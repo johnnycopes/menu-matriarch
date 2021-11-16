@@ -3,7 +3,7 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
-import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { MenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { Orientation } from '@models/types/orientation.type';
 import { MenuService } from '@services/menu.service';
@@ -19,12 +19,12 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 export class MenuComponent {
   @Input() id = '';
   @Input() name = '';
-  @Input() entries: IMenuEntry[] = [];
+  @Input() entries: MenuEntry[] = [];
   @Input() orientation: Orientation = 'horizontal';
   @Input() fallbackText = '';
   @Input() canDelete = true;
   public readonly faEllipsisV = faEllipsisV;
-  public trackByFn = trackByFactory<IMenuEntry, Day>(entry => entry.day);
+  public trackByFn = trackByFactory<MenuEntry, Day>(entry => entry.day);
   public renaming = false;
   public startRename$ = new Subject<void>();
   public finishRename$ = new Subject<void>();

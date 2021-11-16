@@ -1,7 +1,7 @@
 import { Day } from "@models/types/day.type";
-import { IDish } from "./dish.interface";
+import { Dish } from "./dish.interface";
 
-export interface IMenuEntry {
+export interface MenuEntry {
   day: Day;
-  dishes: IDish[];
+  dishes: Dish[];
 }

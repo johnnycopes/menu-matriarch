@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
-import { ITag } from '@models/interfaces/tag.interface';
+import { Tag } from '@models/interfaces/tag.interface';
 import { TagService } from '@services/tag.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -22,7 +22,7 @@ export class TagsFormComponent {
   ).pipe(
     shareReplay({ refCount: true, bufferSize: 1 })
   );
-  public trackByFn = trackByFactory<ITag, string>(tag => tag.id);
+  public trackByFn = trackByFactory<Tag, string>(tag => tag.id);
 
   constructor(private _tagService: TagService) { }
 

@@ -3,8 +3,8 @@ import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
-import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
-import { IMenu } from '@models/interfaces/menu.interface';
+import { MenuDbo } from '@models/dbos/menu-dbo.interface';
+import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -55,13 +55,13 @@ export class MenuService {
     }
   }
 
-  public getMenu(): Observable<IMenu | undefined> {
+  public getMenu(): Observable<Menu | undefined> {
     return this._menuId$.pipe(
       switchMap(id => {
         if (!id) {
           return of(undefined);
         }
-        return this._firestoreService.getOne<IMenuDbo>(this._endpoint, id);
+        return this._firestoreService.getOne<MenuDbo>(this._endpoint, id);
       }),
       switchMap(menuDbo => {
         if (!menuDbo) {
@@ -72,9 +72,9 @@ export class MenuService {
     );
   }
 
-  public getMenus(): Observable<IMenu[]> {
+  public getMenus(): Observable<Menu[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
+      switchMap(uid => this._firestoreService.getMany<MenuDbo>(this._endpoint, uid)),
       switchMap(menus => combineLatest(
         menus.map(menu => this._transformMenuDbo(menu))
       )),
@@ -88,7 +88,7 @@ export class MenuService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<IMenuDbo>(
+          await this._firestoreService.create<MenuDbo>(
             this._endpoint,
             id,
             {
@@ -141,7 +141,7 @@ export class MenuService {
           return of(undefined);
         }
         return this._firestoreService
-          .getOne<IMenuDbo>(this._endpoint, menu.id)
+          .getOne<MenuDbo>(this._endpoint, menu.id)
           .pipe(first());
       }),
       tap(async menu => {
@@ -160,7 +160,7 @@ export class MenuService {
 
   public async deleteMenu(id?: string): Promise<void> {
     if (id) {
-      await this._firestoreService.delete<IMenuDbo>(this._endpoint, id);
+      await this._firestoreService.delete<MenuDbo>(this._endpoint, id);
     }
     this._localStorageService.deleteMenuId();
     this.updateSavedMenuId().pipe(
@@ -176,7 +176,7 @@ export class MenuService {
         if (!menu) {
           return;
         }
-        let menuUpdates: Partial<IMenu> = {};
+        let menuUpdates: Partial<Menu> = {};
         let dishUpdatePromises: (Promise<void> | undefined )[] = [];
 
         // Clear a single day's dishes and update those dishes' `menus`
@@ -244,7 +244,7 @@ export class MenuService {
     );
   }
 
-  private _transformMenuDbo(menu: IMenuDbo): Observable<IMenu> {
+  private _transformMenuDbo(menu: MenuDbo): Observable<Menu> {
     return combineLatest([
       this.getOrderedDays(),
       this._dishService.getDishes(),
@@ -264,8 +264,8 @@ export class MenuService {
     );
   }
 
-  private async _updateMenu(id: string, updates: Partial<IMenuDbo>): Promise<void> {
-    return await this._firestoreService.update<IMenuDbo>(this._endpoint, id, updates);
+  private async _updateMenu(id: string, updates: Partial<MenuDbo>): Promise<void> {
+    return await this._firestoreService.update<MenuDbo>(this._endpoint, id, updates);
   }
 
   private _setMenuId(id: string): void {

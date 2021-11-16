@@ -8,7 +8,7 @@
     [usages]="usages"
   ></app-dish-summary>
   <div class="schedule">
-    <app-checkbox *ngFor="let model of dayModels$ | async; trackBy: trackByFn"
+    <app-checkbox *ngFor="let model of entryModels$ | async; trackBy: trackByFn"
       [ngModel]="model.checked"
       (ngModelChange)="onChange($event, model.day)"
     >

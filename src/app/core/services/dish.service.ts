@@ -3,9 +3,9 @@ import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
-import { IDishDbo } from '@models/dbos/dish-dbo.interface';
-import { IDish } from '@models/interfaces/dish.interface';
-import { ITag } from '@models/interfaces/tag.interface';
+import { DishDbo } from '@models/dbos/dish-dbo.interface';
+import { Dish } from '@models/interfaces/dish.interface';
+import { Tag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -25,9 +25,9 @@ export class DishService {
     private _userService: UserService,
   ) { }
 
-  public getDish(id: string): Observable<IDish | undefined> {
+  public getDish(id: string): Observable<Dish | undefined> {
     return combineLatest([
-      this._firestoreService.getOne<IDishDbo>(this._endpoint, id),
+      this._firestoreService.getOne<DishDbo>(this._endpoint, id),
       this._tagService.getTags(),
     ]).pipe(
       map(([dish, tags]) => {
@@ -42,10 +42,10 @@ export class DishService {
     );
   }
 
-  public getDishes(): Observable<IDish[]> {
+  public getDishes(): Observable<Dish[]> {
     return combineLatest([
       this._userService.uid$.pipe(
-        switchMap(uid => this._firestoreService.getMany<IDishDbo>(this._endpoint, uid)),
+        switchMap(uid => this._firestoreService.getMany<DishDbo>(this._endpoint, uid)),
         map(dishes => sort(dishes, dish => lower(dish.name)))
       ),
       this._tagService.getTags(),
@@ -67,7 +67,7 @@ export class DishService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<IDishDbo>(
+          await this._firestoreService.create<DishDbo>(
             this._endpoint,
             id,
             {
@@ -93,8 +93,8 @@ export class DishService {
 
   public updateDishDetails(
     id: string,
-    updates: Partial<Omit<IDishDbo, 'usages' | 'menus'>>
-  ): Observable<IDish | undefined> {
+    updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>
+  ): Observable<Dish | undefined> {
     return this.getDish(id).pipe(
       first(),
       tap(async (dish) => {
@@ -115,12 +115,12 @@ export class DishService {
 
   public updateDishCounters(
     id: string,
-    updates: Partial<Pick<IDishDbo, 'usages' | 'menus'>>
+    updates: Partial<Pick<DishDbo, 'usages' | 'menus'>>
   ): Promise<void> {
     return this._updateDish(id, updates);
   }
 
-  public deleteDish(id: string): Observable<IDish | undefined> {
+  public deleteDish(id: string): Observable<Dish | undefined> {
     return this.getDish(id).pipe(
       first(),
       tap(async dish => {
@@ -128,19 +128,19 @@ export class DishService {
           return;
         }
         await Promise.all([
-          this._firestoreService.delete<IDishDbo>(this._endpoint, id),
+          this._firestoreService.delete<DishDbo>(this._endpoint, id),
           this._getTagUpdatePromises(dish.tags),
         ]);
       })
     );
   }
 
-  private _updateDish(id: string, updates: Partial<IDishDbo>): Promise<void> {
-    return this._firestoreService.update<IDishDbo>(this._endpoint, id, updates);
+  private _updateDish(id: string, updates: Partial<DishDbo>): Promise<void> {
+    return this._firestoreService.update<DishDbo>(this._endpoint, id, updates);
   }
 
   private _getTagUpdatePromises(
-    dishTags: ITag[],
+    dishTags: Tag[],
     updateTagIds: string[] = []
   ): Promise<void>[] {
     const dishTagIds = dishTags.map(dish => dish.id)
