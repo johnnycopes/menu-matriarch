@@ -1,4 +1,4 @@
-export enum ERoute {
+export enum Route {
 	planner = 'planner',
   demo = 'demo',
   dishes = 'dishes',

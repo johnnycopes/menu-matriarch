@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { environment } from '@env/environment';
-import { ERoute } from '@models/enums/route.enum';
+import { Route } from '@models/enums/route.enum';
 import { MenuService } from '@services/menu.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { MenuService } from '@services/menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  public ERoute: typeof ERoute = ERoute;
+  public ERoute: typeof Route = Route;
   public menuId$ = this._menuService.menuId$;
   public showDemo = !environment.production;
 

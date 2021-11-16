@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { ERoute } from '@models/enums/route.enum';
+import { Route } from '@models/enums/route.enum';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoggedInAuthGuard } from './core/guards/logged-in-auth.guard';
 import { DemoComponent } from './features/demo/demo.component';
@@ -17,19 +17,19 @@ import { ShellComponent } from './core/components/shell/shell.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 const routes: Routes = [
-  { path: 'welcome', component: WelcomeComponent, canActivate: [LoggedInAuthGuard], data: { state: ERoute.welcome } },
+  { path: 'welcome', component: WelcomeComponent, canActivate: [LoggedInAuthGuard], data: { state: Route.welcome } },
   { path: '', component: ShellComponent, canActivate: [AuthGuard], children: [
-    { path: 'demo', component: DemoComponent, data: { state: ERoute.demo } },
-    { path: 'planner/:menuId', component: PlannerComponent, data: { state: ERoute.planner } },
-    { path: 'menus', component: MenusComponent, data: { state: ERoute.menus } },
-    { path: 'dishes', component: DishesComponent, data: { state: ERoute.dishes }, children: [
+    { path: 'demo', component: DemoComponent, data: { state: Route.demo } },
+    { path: 'planner/:menuId', component: PlannerComponent, data: { state: Route.planner } },
+    { path: 'menus', component: MenusComponent, data: { state: Route.menus } },
+    { path: 'dishes', component: DishesComponent, data: { state: Route.dishes }, children: [
       { path: '', component: DishPlaceholderComponent, pathMatch: 'full' },
       { path: 'new', component: DishEditComponent },
       { path: ':id', component: DishDetailsComponent },
       { path: ':id/edit', component: DishEditComponent },
     ] },
-    { path: '', redirectTo: 'dishes', pathMatch: 'full', data: { state: ERoute.dishes } },
-    { path: 'settings', component: SettingsComponent, data: { state: ERoute.settings } },
+    { path: '', redirectTo: 'dishes', pathMatch: 'full', data: { state: Route.dishes } },
+    { path: 'settings', component: SettingsComponent, data: { state: Route.settings } },
   ]},
   { path: '**', component: PageNotFoundComponent },
 ];
