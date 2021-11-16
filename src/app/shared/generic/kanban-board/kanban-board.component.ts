@@ -4,14 +4,14 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { IKanbanBoardItemAdd, IKanbanBoardActionClick, IKanbanBoardItemMove } from './kanban-board-column/kanban-board-column.component';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
-export interface IKanbanBoardConfig<TColumn, TItem> {
+export interface KanbanBoard<TColumn, TItem> {
   getColumnId(node: TColumn): string;
   getColumnName(node: TColumn): string;
   getColumnItems(node: TColumn): TItem[];
   getItemId(node: TItem): string;
 }
 
-export interface IKanbanColumnMove {
+export interface KanbanColumnMove {
   columnId: string;
   currentIndex: number;
   previousIndex: number;
@@ -25,7 +25,7 @@ export interface IKanbanColumnMove {
 })
 export class KanbanBoardComponent<TColumn, TItem> {
   @Input() columns: TColumn[] = [];
-  @Input() config: IKanbanBoardConfig<TColumn, TItem> = {
+  @Input() config: KanbanBoard<TColumn, TItem> = {
     getColumnId: _ => '',
     getColumnName: _ => '',
     getColumnItems: _ => [],
@@ -36,7 +36,7 @@ export class KanbanBoardComponent<TColumn, TItem> {
   @Input() columnUnit: string = 'Column';
   @Input() itemUnit: string = 'Item';
   @Output() columnAdd: EventEmitter<string> = new EventEmitter();
-  @Output() columnMove: EventEmitter<IKanbanColumnMove> = new EventEmitter();
+  @Output() columnMove: EventEmitter<KanbanColumnMove> = new EventEmitter();
   @Output() itemAdd: EventEmitter<IKanbanBoardItemAdd> = new EventEmitter();
   @Output() itemMove: EventEmitter<IKanbanBoardItemMove> = new EventEmitter();
   @Output() actionClick: EventEmitter<IKanbanBoardActionClick> = new EventEmitter();

@@ -1,4 +1,4 @@
-import { IKanbanBoardConfig } from "@shared/generic/kanban-board/kanban-board.component";
+import { KanbanBoard } from "@shared/generic/kanban-board/kanban-board.component";
 
 export interface IKitchenLocation {
 	id: string;
@@ -6,7 +6,7 @@ export interface IKitchenLocation {
 	items: string[];
 }
 
-export class KanbanBoardConfig implements IKanbanBoardConfig<IKitchenLocation, string> {
+export class KanbanBoardConfig implements KanbanBoard<IKitchenLocation, string> {
 	getColumnId = (node: IKitchenLocation): string => node.id;
 	getColumnName = (node: IKitchenLocation): string => node.name;
 	getColumnItems = (node: IKitchenLocation): string[] => node.items;

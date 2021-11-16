@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from "@angular/core";
 import { faAppleAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { IKitchenLocation, KanbanBoardConfig } from "./kitchen-location";
-import { IKanbanBoardConfig } from "@shared/generic/kanban-board/kanban-board.component";
+import { KanbanBoard } from "@shared/generic/kanban-board/kanban-board.component";
 
 @Component({
 	selector: "app-demo",
@@ -74,7 +74,7 @@ export class DemoComponent implements OnInit {
 			]
 		}
 	];
-	public kanbanBoardConfig: IKanbanBoardConfig<IKitchenLocation, string> = new KanbanBoardConfig();
+	public kanbanBoardConfig: KanbanBoard<IKitchenLocation, string> = new KanbanBoardConfig();
 
   // OptionsMenuComponent
   public isOptionsMenuOpen: boolean = false;
