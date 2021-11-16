@@ -1,13 +1,9 @@
 import { IMenuDbo } from "@models/dbos/menu-dbo.interface";
-import { Day } from "@models/types/day.type";
 import { Orientation } from "@models/types/orientation.type";
-import { IDish } from "./dish.interface";
+import { IMenuEntry } from "./menu-entry.interface";
 
 export interface IMenu extends IMenuDbo {
-  entries: {
-    day: Day;
-    dishes: IDish[];
-  }[],
+  entries: IMenuEntry[],
   entryOrientation: Orientation,
   entryFallbackText: string;
 }

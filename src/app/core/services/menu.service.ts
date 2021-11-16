@@ -158,6 +158,16 @@ export class MenuService {
     );
   }
 
+  public async deleteMenu(id?: string): Promise<void> {
+    if (id) {
+      await this._firestoreService.delete<IMenuDbo>(this._endpoint, id);
+    }
+    this._localStorageService.deleteMenuId();
+    this.updateSavedMenuId().pipe(
+      first()
+    ).subscribe();
+  }
+
   // TODO: refactor to use batch updates instead of separate promises
   public clearMenuContents(day?: Day) {
     return this.getMenu().pipe(
@@ -225,16 +235,6 @@ export class MenuService {
         ]);
       }),
     );
-  }
-
-  public async deleteMenu(id?: string): Promise<void> {
-    if (id) {
-      await this._firestoreService.delete<IMenuDbo>(this._endpoint, id);
-    }
-    this._localStorageService.deleteMenuId();
-    this.updateSavedMenuId().pipe(
-      first()
-    ).subscribe();
   }
 
   public getOrderedDays(): Observable<Day[]> {

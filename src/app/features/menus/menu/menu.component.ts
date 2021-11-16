@@ -22,7 +22,6 @@ export class MenuComponent {
   @Input() entries: IMenuEntry[] = [];
   @Input() orientation: Orientation = 'horizontal';
   @Input() fallbackText = '';
-  @Input() days: Day[] = [];
   @Input() canDelete = true;
   public readonly faEllipsisV = faEllipsisV;
   public trackByFn = trackByFactory<IMenuEntry, Day>(entry => entry.day);
@@ -41,7 +40,6 @@ export class MenuComponent {
 
   public onPrint(): void {
     this._printService.printMenu({
-      id: this.id,
       name: this.name,
       entries: this.entries,
       entryFallbackText: this.fallbackText,

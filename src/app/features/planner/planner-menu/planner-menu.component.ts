@@ -29,7 +29,12 @@ export class PlannerMenuComponent {
         if (!menu) {
           return;
         }
-        this._printService.printMenu(menu);
+        this._printService.printMenu({
+          name: menu.name,
+          entries: menu.entries,
+          entryFallbackText: menu.entryFallbackText,
+          entryOrientation: menu.entryOrientation,
+        });
       })
     ).subscribe();
   }

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IMenuDisplay } from '@models/interfaces/menu-display.interface';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
+import { IMenu } from '@models/interfaces/menu.interface';
 import { Orientation } from '@models/types/orientation.type';
+
+interface IPrintMenu extends Pick<IMenu,
+  'name' | 'entries' | 'entryFallbackText' | 'entryOrientation'
+>{ }
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +14,7 @@ import { Orientation } from '@models/types/orientation.type';
 export class PrintService {
   private _popupWindow: Window | null = null;
 
-  public printMenu(menu: IMenuDisplay): void {
+  public printMenu(menu: IPrintMenu): void {
     if (this._popupWindow == null || this._popupWindow.closed) {
       this._popupWindow = window.open(undefined, '_blank', 'resizable,scrollbars,status');
       this._popupWindow?.document.open();
@@ -21,21 +25,21 @@ export class PrintService {
     };
   }
 
-  private _createDocument(menu: IMenuDisplay): string {
+  private _createDocument({ name, entries, entryFallbackText, entryOrientation }: IPrintMenu): string {
     return `
       <html>
         <head>
-          <title>${menu.name}</title>
+          <title>${name}</title>
           <style>
             ${this._createStyles()}
           </style>
         </head>
         <body onload="window.print()">
-          ${menu.entries
+          ${entries
             .map(entry => this._createEntry({
               entry,
-              fallbackText: menu.entryFallbackText,
-              orientation: menu.entryOrientation
+              entryFallbackText,
+              entryOrientation
             }))
             .join('')
           }
@@ -44,21 +48,21 @@ export class PrintService {
     `;
   }
 
-  private _createEntry({ entry, fallbackText, orientation }:
-    { entry: IMenuEntry, fallbackText: string, orientation: Orientation }
+  private _createEntry({ entry, entryFallbackText, entryOrientation }:
+    { entry: IMenuEntry, entryFallbackText: string, entryOrientation: Orientation }
   ): string {
     const mains = entry.dishes
       .filter(dish => dish.type === 'main')
-      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
-      .join(orientation === 'vertical' ? '' : ',');
+      .map((dish, index) => (entryOrientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(entryOrientation === 'vertical' ? '' : ',');
     const sides = entry.dishes
       .filter(dish => dish.type === 'side')
-      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
-      .join(orientation === 'vertical' ? '' : ',');
+      .map((dish, index) => (entryOrientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(entryOrientation === 'vertical' ? '' : ',');
     const content = entry.dishes.length
-      ? `<ul class="dishes mains ${orientation}">${mains}</ul>
-        <ul class="dishes sides ${orientation}">${sides}</ul>`
-      : `<p class="fallback">${fallbackText}</p>`;
+      ? `<ul class="dishes mains ${entryOrientation}">${mains}</ul>
+        <ul class="dishes sides ${entryOrientation}">${sides}</ul>`
+      : `<p class="fallback">${entryFallbackText}</p>`;
     return `<li class="entry">
       <h2 class="day">${entry.day}</h2>
       <div class="meals">
