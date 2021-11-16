@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { of } from 'rxjs';
-import { first, switchMap, tap } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 import { IMenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
@@ -15,14 +14,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerMenuComponent {
-  public menu$ = this._menuService.getMenu().pipe(
-    switchMap(menu => {
-      if (!menu) {
-        return of(undefined);
-      }
-      return this._menuService.getMenuDisplay(menu);
-    })
-  );
+  public menu$ = this._menuService.getMenu();
   public trackByFn = trackByFactory<IMenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(

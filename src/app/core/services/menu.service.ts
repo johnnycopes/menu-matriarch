@@ -5,7 +5,6 @@ import firebase from 'firebase/compat/app';
 
 import { IMenuDbo } from '@models/dbos/menu-dbo.interface';
 import { IMenu } from '@models/interfaces/menu.interface';
-import { IMenuDisplay } from '@models/interfaces/menu-display.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -62,36 +61,24 @@ export class MenuService {
         if (!id) {
           return of(undefined);
         }
-        return this._firestoreService.getOne<IMenuDbo>(this._endpoint, id)
-      })
-    );
-  }
-
-  public getMenuDisplay(menu: IMenu): Observable<IMenuDisplay> {
-    return combineLatest([
-      this.getOrderedDays(),
-      this._dishService.getDishes(),
-      this._userService.getPreferences(),
-    ]).pipe(
-      map(([days, dishes, preferences]) => {
-        return {
-          id: menu.id,
-          name: menu.name,
-          entries: days.map(day => ({
-            day,
-            dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-          })),
-          entryOrientation: preferences?.menuOrientation ?? 'horizontal',
-          entryFallbackText: preferences?.emptyDishText ?? '',
-        };
+        return this._firestoreService.getOne<IMenuDbo>(this._endpoint, id);
       }),
+      switchMap(menuDbo => {
+        if (!menuDbo) {
+          return of(undefined);
+        }
+        return this._transformMenuDbo(menuDbo);
+      })
     );
   }
 
   public getMenus(): Observable<IMenu[]> {
     return this._userService.uid$.pipe(
       switchMap(uid => this._firestoreService.getMany<IMenuDbo>(this._endpoint, uid)),
-      map(menus => sort(menus, menu => lower(menu.name)))
+      switchMap(menus => combineLatest(
+        menus.map(menu => this._transformMenuDbo(menu))
+      )),
+      map(menus => sort(menus, menu => lower(menu.name))),
     );
   }
 
@@ -254,6 +241,26 @@ export class MenuService {
     return this._userService.getPreferences().pipe(
       map(preferences => getDays(preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  private _transformMenuDbo(menu: IMenuDbo): Observable<IMenu> {
+    return combineLatest([
+      this.getOrderedDays(),
+      this._dishService.getDishes(),
+      this._userService.getPreferences(),
+    ]).pipe(
+      map(([days, dishes, preferences]) => {
+        return {
+          ...menu,
+          entries: days.map(day => ({
+            day,
+            dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+          })),
+          entryOrientation: preferences?.menuOrientation ?? 'horizontal',
+          entryFallbackText: preferences?.emptyDishText ?? '',
+        };
+      }),
     );
   }
 

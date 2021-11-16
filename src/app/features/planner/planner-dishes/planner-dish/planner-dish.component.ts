@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ITag } from '@models/interfaces/tag.interface';
@@ -27,15 +27,10 @@ export class PlannerDishComponent {
   @Input() tags: ITag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
-  public dayModels$: Observable<IDayModel[]> = combineLatest([
-    this._menuService.getOrderedDays(),
-    this._menuService.getMenu().pipe(
-      map(menu => menu),
-    ),
-  ]).pipe(
-    map(([days, menu]) => days.map(day => ({
-      day,
-      checked: menu?.contents[day].includes(this.id) ?? false,
+  public dayModels$: Observable<IDayModel[]> = this._menuService.getMenu().pipe(
+    map(menu => (menu?.entries ?? []).map(entry => ({
+      day: entry.day,
+      checked: !!entry.dishes.find(dish => dish.id === this.id),
     })))
   );
   public trackByFn = trackByFactory<IDayModel, Day>(model => model.day);
