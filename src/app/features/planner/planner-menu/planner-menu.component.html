@@ -20,8 +20,8 @@
       *ngFor="let entry of menu.entries; trackBy: trackByFn"
       [day]="entry.day"
       [dishes]="entry.dishes"
-      [fallbackText]="menu.entryFallbackText"
-      [orientation]="menu.entryOrientation"
+      [fallbackText]="menu.fallbackText"
+      [orientation]="menu.orientation"
       (clear)="onClearDay(entry)"
     ></li>
   </ul>

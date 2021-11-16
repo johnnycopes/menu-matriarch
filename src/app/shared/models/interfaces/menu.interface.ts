@@ -4,6 +4,6 @@ import { IMenuEntry } from "./menu-entry.interface";
 
 export interface IMenu extends IMenuDbo {
   entries: IMenuEntry[],
-  entryOrientation: Orientation,
-  entryFallbackText: string;
+  orientation: Orientation,
+  fallbackText: string;
 }

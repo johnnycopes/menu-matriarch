@@ -42,8 +42,8 @@ export class MenuComponent {
     this._printService.printMenu({
       name: this.name,
       entries: this.entries,
-      entryFallbackText: this.fallbackText,
-      entryOrientation: this.orientation,
+      fallbackText: this.fallbackText,
+      orientation: this.orientation,
     });
   }
 

@@ -5,7 +5,7 @@ import { IMenu } from '@models/interfaces/menu.interface';
 import { Orientation } from '@models/types/orientation.type';
 
 interface IPrintMenu extends Pick<IMenu,
-  'name' | 'entries' | 'entryFallbackText' | 'entryOrientation'
+  'name' | 'entries' | 'fallbackText' | 'orientation'
 >{ }
 
 @Injectable({
@@ -25,7 +25,7 @@ export class PrintService {
     };
   }
 
-  private _createDocument({ name, entries, entryFallbackText, entryOrientation }: IPrintMenu): string {
+  private _createDocument({ name, entries, fallbackText, orientation }: IPrintMenu): string {
     return `
       <html>
         <head>
@@ -38,8 +38,8 @@ export class PrintService {
           ${entries
             .map(entry => this._createEntry({
               entry,
-              entryFallbackText,
-              entryOrientation
+              fallbackText,
+              orientation,
             }))
             .join('')
           }
@@ -48,21 +48,21 @@ export class PrintService {
     `;
   }
 
-  private _createEntry({ entry, entryFallbackText, entryOrientation }:
-    { entry: IMenuEntry, entryFallbackText: string, entryOrientation: Orientation }
+  private _createEntry({ entry, fallbackText, orientation }:
+    { entry: IMenuEntry, fallbackText: string, orientation: Orientation }
   ): string {
     const mains = entry.dishes
       .filter(dish => dish.type === 'main')
-      .map((dish, index) => (entryOrientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
-      .join(entryOrientation === 'vertical' ? '' : ',');
+      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(orientation === 'vertical' ? '' : ',');
     const sides = entry.dishes
       .filter(dish => dish.type === 'side')
-      .map((dish, index) => (entryOrientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
-      .join(entryOrientation === 'vertical' ? '' : ',');
+      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(orientation === 'vertical' ? '' : ',');
     const content = entry.dishes.length
-      ? `<ul class="dishes mains ${entryOrientation}">${mains}</ul>
-        <ul class="dishes sides ${entryOrientation}">${sides}</ul>`
-      : `<p class="fallback">${entryFallbackText}</p>`;
+      ? `<ul class="dishes mains ${orientation}">${mains}</ul>
+        <ul class="dishes sides ${orientation}">${sides}</ul>`
+      : `<p class="fallback">${fallbackText}</p>`;
     return `<li class="entry">
       <h2 class="day">${entry.day}</h2>
       <div class="meals">

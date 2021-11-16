@@ -32,8 +32,8 @@ export class PlannerMenuComponent {
         this._printService.printMenu({
           name: menu.name,
           entries: menu.entries,
-          entryFallbackText: menu.entryFallbackText,
-          entryOrientation: menu.entryOrientation,
+          fallbackText: menu.fallbackText,
+          orientation: menu.orientation,
         });
       })
     ).subscribe();
