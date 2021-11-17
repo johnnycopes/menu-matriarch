@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { concatMap, first, map, switchMap } from 'rxjs/operators';
 
@@ -19,6 +20,11 @@ export class TagService {
     private _firestoreService: FirestoreService,
     private _userService: UserService,
   ) { }
+
+
+  public getTagDocRef(id: string): DocumentReference<TagDbo> {
+    return this._firestoreService.getDocRef<TagDbo>(this._endpoint, id);
+  }
 
   public getTag(id: string): Observable<Tag | undefined> {
     return this._firestoreService.getOne<TagDbo>(this._endpoint, id);

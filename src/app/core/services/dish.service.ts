@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
@@ -24,6 +25,10 @@ export class DishService {
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
+
+  public getDishDocRef(id: string): DocumentReference<DishDbo> {
+    return this._firestoreService.getDocRef<DishDbo>(this._endpoint, id);
+  }
 
   public getDish(id: string): Observable<Dish | undefined> {
     return combineLatest([
@@ -101,14 +106,12 @@ export class DishService {
         if (!dish) {
           return;
         }
-        let tagUpdatePromises: Promise<void>[] = [];
+        const batch = this._firestoreService.getBatch();
+        batch.update(this.getDishDocRef(dish.id), updates);
         if (updates.tags) {
-          tagUpdatePromises = this._getTagUpdatePromises(dish.tags, updates.tags);
+          this._updateTags(batch, dish.tags, updates.tags);
         }
-        await Promise.all([
-          this._updateDish(id, updates),
-          tagUpdatePromises,
-        ]);
+        await batch.commit();
       })
     );
   }
@@ -127,10 +130,10 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await Promise.all([
-          this._firestoreService.delete<DishDbo>(this._endpoint, id),
-          this._getTagUpdatePromises(dish.tags),
-        ]);
+        const batch = this._firestoreService.getBatch();
+        batch.delete(this.getDishDocRef(dish.id));
+        this._updateTags(batch, dish.tags);
+        await batch.commit();
       })
     );
   }
@@ -139,7 +142,8 @@ export class DishService {
     return this._firestoreService.update<DishDbo>(this._endpoint, id, updates);
   }
 
-  private _getTagUpdatePromises(
+  private _updateTags(
+    batch: firebase.firestore.WriteBatch,
     dishTags: Tag[],
     updateTagIds: string[] = []
   ): Promise<void>[] {
@@ -158,11 +162,9 @@ export class DishService {
         difference = 1;
       }
       if (difference !== 0) {
-        updates.push(this._tagService.updateTag(id,
-          {
-            usages: firebase.firestore.FieldValue.increment(difference) as unknown as number,
-          }
-        ));
+        batch.update(this._tagService.getTagDocRef(id), {
+          usages: firebase.firestore.FieldValue.increment(difference) as unknown as number,
+        })
       }
     }
 

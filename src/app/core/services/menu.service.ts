@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
@@ -53,6 +54,10 @@ export class MenuService {
         tap(firstMenuId => this._setMenuId(firstMenuId))
       );
     }
+  }
+
+  public getMenuDocRef(id: string): DocumentReference<MenuDbo> {
+    return this._firestoreService.getDocRef<MenuDbo>(this._endpoint, id);
   }
 
   public getMenu(): Observable<Menu | undefined> {
