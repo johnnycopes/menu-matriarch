@@ -173,40 +173,37 @@ export class MenuService {
     ).subscribe();
   }
 
-  // TODO: refactor to use batch updates instead of separate promises
-  public clearMenuContents(day?: Day) {
+  public deleteMenuContents(day?: Day) {
     return this.getMenu().pipe(
       first(),
       tap(async menu => {
         if (!menu) {
           return;
         }
-        let menuUpdates: Partial<Menu> = {};
-        let dishUpdatePromises: (Promise<void> | undefined )[] = [];
+        const batch = this._firestoreService.getBatch();
 
         // Clear a single day's dishes and update those dishes' `menus`
         if (day) {
-          menuUpdates = {
+          batch.update(this.getMenuDocRef(menu.id), {
             [`contents.${day}`]: []
-          };
-          const dayDishIds = menu.contents[day];
-          dishUpdatePromises = dayDishIds.map(dishId => {
+          });
+          menu.contents[day].forEach(dishId => {
             const dishInOtherDay = Object
               .entries(menu.contents)
               .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
-
             // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
-            return this._dishService.updateDishCounters(dishId, {
+            const updates = {
               usages: firebase.firestore.FieldValue.increment(-1) as unknown as number,
               ...!dishInOtherDay && {
                 menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
               }
-            });
+            };
+            batch.update(this._dishService.getDishDocRef(dishId), updates)
           });
         }
         // Clear all days' dishes and update those dishes' `menus`
         else {
-          menuUpdates = {
+          batch.update(this.getMenuDocRef(menu.id), {
             contents: {
               Monday: [],
               Tuesday: [],
@@ -216,7 +213,7 @@ export class MenuService {
               Saturday: [],
               Sunday: [],
             }
-          };
+          });
           const dishIds = Object
             .values(menu.contents)
             .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
@@ -224,20 +221,17 @@ export class MenuService {
               ...hashMap,
               [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
             }), {} as { [id: string] : number });
-          dishUpdatePromises = Object
+          Object
             .keys(dishIds)
-            .map(dishId => {
-              return this._dishService.updateDishCounters(dishId, {
+            .forEach(dishId => {
+              batch.update(this._dishService.getDishDocRef(dishId), {
                 usages: firebase.firestore.FieldValue.increment(-(dishIds[dishId])) as unknown as number,
                 menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
               });
             });
         }
 
-        await Promise.all([
-          this._updateMenu(menu.id, menuUpdates),
-          ...dishUpdatePromises
-        ]);
+        await batch.commit();
       }),
     );
   }

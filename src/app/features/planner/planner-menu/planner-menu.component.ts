@@ -41,13 +41,13 @@ export class PlannerMenuComponent {
 
   public onClearDay({ day }: MenuEntry): void {
     this._menuService
-      .clearMenuContents(day)
+      .deleteMenuContents(day)
       .subscribe();
   }
 
   public onClearAll(): void {
     this._menuService
-      .clearMenuContents()
+      .deleteMenuContents()
       .subscribe();
   }
 }
