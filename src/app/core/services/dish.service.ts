@@ -130,6 +130,7 @@ export class DishService {
         const batch = this._firestoreService.getBatch();
         batch.delete(this._docRefService.getDish(dish.id));
         this._updateTags(batch, dish);
+        // TODO: delete dish id from menus
         await batch.commit();
       })
     );

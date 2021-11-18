@@ -122,6 +122,7 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
+  // TODO: update this method to use batch writes
   public updateMenuContents({ day, dishId, selected }: {
     day: Day,
     dishId: string,
@@ -209,7 +210,7 @@ export class MenuService {
             })
           });
         }
-        // Clear all menu contents
+        // Clear all days' contents
         else {
           batch.update(this._docRefService.getMenu(menu.id), {
             contents: {
