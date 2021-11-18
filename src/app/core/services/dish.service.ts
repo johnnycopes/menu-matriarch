@@ -163,7 +163,7 @@ export class DishService {
       }
       if (difference !== 0) {
         batch.update(this._tagService.getTagDocRef(id), {
-          usages: firebase.firestore.FieldValue.increment(difference) as unknown as number,
+          usages: this._firestoreService.changeCounter(difference),
         })
       }
     }

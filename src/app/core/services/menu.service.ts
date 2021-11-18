@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import firebase from 'firebase/compat/app';
 
 import { MenuDbo } from '@models/dbos/menu-dbo.interface';
 import { Menu } from '@models/interfaces/menu.interface';
@@ -137,8 +136,8 @@ export class MenuService {
         }
         await this._updateMenu(menu.id, {
           [`contents.${day}`]: selected
-            ? firebase.firestore.FieldValue.arrayUnion(dishId)
-            : firebase.firestore.FieldValue.arrayRemove(dishId)
+            ? this._firestoreService.addToArray(dishId)
+            : this._firestoreService.removeFromArray(dishId)
         });
       }),
       concatMap(menu => {
@@ -154,10 +153,10 @@ export class MenuService {
           return;
         }
         await this._dishService.updateDishCounters(dishId, {
-          usages: firebase.firestore.FieldValue.increment(selected ? 1 : -1) as unknown as number,
+          usages: this._firestoreService.changeCounter(selected ? 1 : -1),
           menus: Object.values(menu.contents).some(dishIds => dishIds.includes(dishId))
-            ? firebase.firestore.FieldValue.arrayUnion(menu.id) as unknown as string[]
-            : firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+            ? this._firestoreService.addToArray(menu.id)
+            : this._firestoreService.removeFromArray(menu.id)
         });
       }),
     );
@@ -193,9 +192,9 @@ export class MenuService {
               .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
             // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
             const updates = {
-              usages: firebase.firestore.FieldValue.increment(-1) as unknown as number,
+              usages: this._firestoreService.changeCounter(-1),
               ...!dishInOtherDay && {
-                menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+                menus: this._firestoreService.removeFromArray(menu.id),
               }
             };
             batch.update(this._dishService.getDishDocRef(dishId), updates)
@@ -225,8 +224,8 @@ export class MenuService {
             .keys(dishIds)
             .forEach(dishId => {
               batch.update(this._dishService.getDishDocRef(dishId), {
-                usages: firebase.firestore.FieldValue.increment(-(dishIds[dishId])) as unknown as number,
-                menus: firebase.firestore.FieldValue.arrayRemove(menu.id) as unknown as string[]
+                usages: this._firestoreService.changeCounter(-(dishIds[dishId])),
+                menus: this._firestoreService.removeFromArray(menu.id),
               });
             });
         }

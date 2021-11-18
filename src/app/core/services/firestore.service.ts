@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
 import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
@@ -70,6 +71,18 @@ export class FirestoreService {
 
   public createId(): string {
     return this._firestore.createId();
+  }
+
+  public addToArray(id: string): string[] {
+    return firebase.firestore.FieldValue.arrayUnion(id) as unknown as string[]
+  }
+
+  public removeFromArray(id: string): string[] {
+    return firebase.firestore.FieldValue.arrayRemove(id) as unknown as string[]
+  }
+
+  public changeCounter(value: number): number {
+    return firebase.firestore.FieldValue.increment(value) as unknown as number;
   }
 
   private _getDoc<T>(endpoint: string, id: string): AngularFirestoreDocument<T> {
