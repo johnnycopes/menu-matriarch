@@ -11,10 +11,6 @@ export class FirestoreService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  public get firestore() {
-    return this._firestore;
-  }
-
   public getBatch() {
     return this._firestore.firestore.batch();
   }
