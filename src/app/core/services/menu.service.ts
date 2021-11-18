@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { MenuDbo } from '@models/dbos/menu-dbo.interface';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
@@ -11,6 +11,7 @@ import { sort } from '@shared/utility/sort';
 import { getDays } from '@utility/get-days';
 import { FirestoreService } from './firestore.service';
 import { LocalStorageService } from './local-storage.service';
+import { DocRefService } from './doc-ref.service';
 import { DishService } from './dish.service';
 import { UserService } from './user.service';
 
@@ -18,12 +19,13 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class MenuService {
-  private _endpoint = 'menus';
+  private _endpoint = Endpoint.menus;
   private _menuId$ = new BehaviorSubject<string>('');
 
   constructor(
     private _firestoreService: FirestoreService,
     private _localStorageService: LocalStorageService,
+    private _docRefService: DocRefService,
     private _dishService: DishService,
     private _userService: UserService,
   ) { }
@@ -53,10 +55,6 @@ export class MenuService {
         tap(firstMenuId => this._setMenuId(firstMenuId))
       );
     }
-  }
-
-  public getMenuDocRef(id: string): DocumentReference<MenuDbo> {
-    return this._firestoreService.getDocRef<MenuDbo>(this._endpoint, id);
   }
 
   public getMenu(): Observable<Menu | undefined> {
@@ -183,7 +181,7 @@ export class MenuService {
 
         // Clear a single day's dishes and update those dishes' `menus`
         if (day) {
-          batch.update(this.getMenuDocRef(menu.id), {
+          batch.update(this._docRefService.getMenu(menu.id), {
             [`contents.${day}`]: []
           });
           menu.contents[day].forEach(dishId => {
@@ -197,12 +195,12 @@ export class MenuService {
                 menus: this._firestoreService.removeFromArray(menu.id),
               }
             };
-            batch.update(this._dishService.getDishDocRef(dishId), updates)
+            batch.update(this._docRefService.getDish(dishId), updates)
           });
         }
         // Clear all days' dishes and update those dishes' `menus`
         else {
-          batch.update(this.getMenuDocRef(menu.id), {
+          batch.update(this._docRefService.getMenu(menu.id), {
             contents: {
               Monday: [],
               Tuesday: [],
@@ -223,7 +221,7 @@ export class MenuService {
           Object
             .keys(dishIds)
             .forEach(dishId => {
-              batch.update(this._dishService.getDishDocRef(dishId), {
+              batch.update(this._docRefService.getDish(dishId), {
                 usages: this._firestoreService.changeCounter(-(dishIds[dishId])),
                 menus: this._firestoreService.removeFromArray(menu.id),
               });

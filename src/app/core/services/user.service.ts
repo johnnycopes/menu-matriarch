@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { UserDbo } from '@models/dbos/user-dbo.interface';
 import { User } from '@models/interfaces/user.interface';
 import { UserPreferences } from '@models/interfaces/user-preferences.interface';
@@ -13,7 +13,7 @@ import { FirestoreService } from './firestore.service';
   providedIn: 'root'
 })
 export class UserService {
-  private _endpoint = 'users';
+  private _endpoint = Endpoint.users;
 
   constructor(
     private _auth: AngularFireAuth,
@@ -25,10 +25,6 @@ export class UserService {
       map(user => user?.uid),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
-  }
-
-  public getUserDocRef(id: string): DocumentReference<UserDbo> {
-    return this._firestoreService.getDocRef<UserDbo>(this._endpoint, id);
   }
 
   public getUser(): Observable<User | undefined> {

@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 import firebase from 'firebase/compat/app';
 
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
 import { Dish } from '@models/interfaces/dish.interface';
-import { Tag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
+import { DocRefService } from './doc-ref.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
@@ -18,17 +18,14 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class DishService {
-  private _endpoint = 'dishes';
+  private _endpoint = Endpoint.dishes;
 
   constructor(
     private _firestoreService: FirestoreService,
+    private _docRefService: DocRefService,
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
-
-  public getDishDocRef(id: string): DocumentReference<DishDbo> {
-    return this._firestoreService.getDocRef<DishDbo>(this._endpoint, id);
-  }
 
   public getDish(id: string): Observable<Dish | undefined> {
     return combineLatest([
@@ -107,7 +104,7 @@ export class DishService {
           return;
         }
         const batch = this._firestoreService.getBatch();
-        batch.update(this.getDishDocRef(dish.id), updates);
+        batch.update(this._docRefService.getDish(dish.id), updates);
         if (updates.tags) {
           this._updateTags(batch, dish, updates.tags);
         }
@@ -131,7 +128,7 @@ export class DishService {
           return;
         }
         const batch = this._firestoreService.getBatch();
-        batch.delete(this.getDishDocRef(dish.id));
+        batch.delete(this._docRefService.getDish(dish.id));
         this._updateTags(batch, dish);
         await batch.commit();
       })
@@ -162,7 +159,7 @@ export class DishService {
       }
 
       if (dishesUpdate) {
-        batch.update(this._tagService.getTagDocRef(id), {
+        batch.update(this._docRefService.getTag(id), {
           dishes: dishesUpdate,
         });
       }
