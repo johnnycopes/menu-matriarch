@@ -172,7 +172,7 @@ export class MenuService {
           }
           const batch = this._firestoreService.getBatch();
           batch.delete(this._docRefService.getMenu(id));
-          this._deleteMenuContents(batch, menu);
+          this._deleteAllDaysMenuContents(batch, menu);
           await batch.commit();
         })
       ).subscribe();
@@ -202,12 +202,13 @@ export class MenuService {
               .entries(menu.contents)
               .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
             // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
-            batch.update(this._docRefService.getDish(dishId), {
-              usages: this._firestoreService.changeCounter(-1),
-              ...!dishInOtherDay && {
-                menus: this._firestoreService.removeFromArray(menu.id),
-              }
-            })
+            this._updateOneDayMenuContents({
+              batch,
+              dishId,
+              menuId: menu.id,
+              daysChange: -1,
+              menusChange: dishInOtherDay ? 0 : -1,
+            });
           });
         }
         // Clear all days' contents
@@ -223,7 +224,7 @@ export class MenuService {
               Sunday: [],
             }
           });
-          this._deleteMenuContents(batch, menu);
+          this._deleteAllDaysMenuContents(batch, menu);
         }
 
         await batch.commit();
@@ -262,10 +263,29 @@ export class MenuService {
     return await this._firestoreService.update<MenuDbo>(this._endpoint, id, updates);
   }
 
-  private _deleteMenuContents<T extends MenuDbo>(
+  private _updateOneDayMenuContents({ batch, dishId, menuId, daysChange, menusChange }: {
+    batch: firebase.firestore.WriteBatch,
+    dishId: string,
+    menuId: string,
+    daysChange: number,
+    menusChange: number,
+  }): void {
+    batch.update(this._docRefService.getDish(dishId), {
+      usages: this._firestoreService.changeCounter(daysChange),
+    });
+    if (menusChange !== 0) {
+      batch.update(this._docRefService.getDish(dishId), {
+        menus: menusChange > 0
+          ? this._firestoreService.addToArray(menuId)
+          : this._firestoreService.removeFromArray(menuId)
+      });
+    }
+  }
+
+  private _deleteAllDaysMenuContents<T extends MenuDbo>(
     batch: firebase.firestore.WriteBatch,
     menu: T,
-  ) {
+  ): void {
     const dishIdHashMap = Object
       .values(menu.contents)
       .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
@@ -276,10 +296,13 @@ export class MenuService {
     Object
       .keys(dishIdHashMap)
       .forEach(dishId => {
-        batch.update(this._docRefService.getDish(dishId), {
-          usages: this._firestoreService.changeCounter(-(dishIdHashMap[dishId])),
-          menus: this._firestoreService.removeFromArray(menu.id),
-        });
+        this._updateOneDayMenuContents({
+          batch,
+          dishId,
+          menuId: menu.id,
+          daysChange: -(dishIdHashMap[dishId]),
+          menusChange: -1,
+        })
       });
   }
 
