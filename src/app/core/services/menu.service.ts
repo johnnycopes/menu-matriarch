@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
 import { MenuDbo } from '@models/dbos/menu-dbo.interface';
@@ -162,7 +163,18 @@ export class MenuService {
 
   public async deleteMenu(id?: string): Promise<void> {
     if (id) {
-      await this._firestoreService.delete<MenuDbo>(this._endpoint, id);
+      this._firestoreService.getOne<MenuDbo>(this._endpoint, id).pipe(
+        first(),
+        tap(async menu => {
+          if (!menu) {
+            return;
+          }
+          const batch = this._firestoreService.getBatch();
+          batch.delete(this._docRefService.getMenu(id));
+          this._deleteMenuContents(batch, menu);
+          await batch.commit();
+        })
+      ).subscribe();
     }
     this._localStorageService.deleteMenuId();
     this.updateSavedMenuId().pipe(
@@ -179,7 +191,7 @@ export class MenuService {
         }
         const batch = this._firestoreService.getBatch();
 
-        // Clear a single day's dishes and update those dishes' `menus`
+        // Clear a single day's contents
         if (day) {
           batch.update(this._docRefService.getMenu(menu.id), {
             [`contents.${day}`]: []
@@ -189,16 +201,15 @@ export class MenuService {
               .entries(menu.contents)
               .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
             // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
-            const updates = {
+            batch.update(this._docRefService.getDish(dishId), {
               usages: this._firestoreService.changeCounter(-1),
               ...!dishInOtherDay && {
                 menus: this._firestoreService.removeFromArray(menu.id),
               }
-            };
-            batch.update(this._docRefService.getDish(dishId), updates)
+            })
           });
         }
-        // Clear all days' dishes and update those dishes' `menus`
+        // Clear all menu contents
         else {
           batch.update(this._docRefService.getMenu(menu.id), {
             contents: {
@@ -211,21 +222,7 @@ export class MenuService {
               Sunday: [],
             }
           });
-          const dishIds = Object
-            .values(menu.contents)
-            .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
-            .reduce((hashMap, dishId) => ({
-              ...hashMap,
-              [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
-            }), {} as { [id: string] : number });
-          Object
-            .keys(dishIds)
-            .forEach(dishId => {
-              batch.update(this._docRefService.getDish(dishId), {
-                usages: this._firestoreService.changeCounter(-(dishIds[dishId])),
-                menus: this._firestoreService.removeFromArray(menu.id),
-              });
-            });
+          this._deleteMenuContents(batch, menu);
         }
 
         await batch.commit();
@@ -262,6 +259,27 @@ export class MenuService {
 
   private async _updateMenu(id: string, updates: Partial<MenuDbo>): Promise<void> {
     return await this._firestoreService.update<MenuDbo>(this._endpoint, id, updates);
+  }
+
+  private _deleteMenuContents<T extends MenuDbo>(
+    batch: firebase.firestore.WriteBatch,
+    menu: T,
+  ) {
+    const dishIdHashMap = Object
+      .values(menu.contents)
+      .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
+      .reduce((hashMap, dishId) => ({
+        ...hashMap,
+        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
+      }), {} as { [id: string]: number });
+    Object
+      .keys(dishIdHashMap)
+      .forEach(dishId => {
+        batch.update(this._docRefService.getDish(dishId), {
+          usages: this._firestoreService.changeCounter(-(dishIdHashMap[dishId])),
+          menus: this._firestoreService.removeFromArray(menu.id),
+        });
+      });
   }
 
   private _setMenuId(id: string): void {
