@@ -4,4 +4,5 @@ export interface TagDbo {
   name: string;
   color: string;
   usages: number;
+  dishes: string[];
 }

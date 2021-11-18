@@ -52,6 +52,7 @@ export class TagService {
               name,
               color: '',
               usages: 0,
+              dishes: [],
             }
           );
           return id;

@@ -109,7 +109,7 @@ export class DishService {
         const batch = this._firestoreService.getBatch();
         batch.update(this.getDishDocRef(dish.id), updates);
         if (updates.tags) {
-          this._updateTags(batch, dish.tags, updates.tags);
+          this._updateTags(batch, dish, updates.tags);
         }
         await batch.commit();
       })
@@ -132,7 +132,7 @@ export class DishService {
         }
         const batch = this._firestoreService.getBatch();
         batch.delete(this.getDishDocRef(dish.id));
-        this._updateTags(batch, dish.tags);
+        this._updateTags(batch, dish);
         await batch.commit();
       })
     );
@@ -144,30 +144,28 @@ export class DishService {
 
   private _updateTags(
     batch: firebase.firestore.WriteBatch,
-    dishTags: Tag[],
+    dish: Dish,
     updateTagIds: string[] = []
-  ): Promise<void>[] {
-    const dishTagIds = dishTags.map(dish => dish.id)
+  ): void {
+    const dishTagIds = dish.tags.map(dish => dish.id)
     const allIds = [...new Set([
       ...dishTagIds,
       ...updateTagIds
     ])];
-    const updates: Promise<void>[] = [];
-
     for (let id of allIds) {
-      let difference = 0;
+      let dishesUpdate = undefined;
+
       if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
-        difference = -1;
+        dishesUpdate = this._firestoreService.removeFromArray(dish.id);
       } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
-        difference = 1;
+        dishesUpdate = this._firestoreService.addToArray(dish.id);
       }
-      if (difference !== 0) {
+
+      if (dishesUpdate) {
         batch.update(this._tagService.getTagDocRef(id), {
-          usages: this._firestoreService.changeCounter(difference),
-        })
+          dishes: dishesUpdate,
+        });
       }
     }
-
-    return updates;
   }
 }
