@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
-import firebase from 'firebase/compat/app';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
@@ -99,7 +98,9 @@ export class DishService {
         const batch = this._firestoreService.getBatch();
         batch.update(this._docRefService.getDish(dish.id), updates);
         if (updates.tags) {
-          this._updateTags(batch, dish, updates.tags);
+          this._getTagUpdates(dish, updates.tags).forEach(
+            ({ docRef, dishes }) => batch.update(docRef, { dishes })
+          );
         }
         await batch.commit();
       })
@@ -144,12 +145,11 @@ export class DishService {
             }
           }
           menuUpdates.forEach(({ docRef, contents }) => {
-            transaction.update(docRef, {
-              contents: contents
-            });
-          })
-          // TODO: adapt tag deletion logic to transaction rather than batch
-          // this._updateTags(batch, dish);
+            transaction.update(docRef, { contents });
+          });
+          this._getTagUpdates(dish).forEach(
+            ({ docRef, dishes }) => transaction.update(docRef, { dishes })
+          );
           transaction.delete(this._docRefService.getDish(dish.id));
         });
       })
@@ -167,16 +167,17 @@ export class DishService {
     return this._firestoreService.update<DishDbo>(this._endpoint, id, updates);
   }
 
-  private _updateTags(
-    batch: firebase.firestore.WriteBatch,
+
+  private _getTagUpdates(
     dish: Dish,
     updateTagIds: string[] = []
-  ): void {
+  ) {
     const dishTagIds = dish.tags.map(dish => dish.id)
     const allIds = [...new Set([
       ...dishTagIds,
       ...updateTagIds
     ])];
+    const tagUpdates = [];
     for (let id of allIds) {
       let dishesUpdate = undefined;
 
@@ -187,10 +188,12 @@ export class DishService {
       }
 
       if (dishesUpdate) {
-        batch.update(this._docRefService.getTag(id), {
+        tagUpdates.push({
+          docRef: this._docRefService.getTag(id),
           dishes: dishesUpdate,
         });
       }
     }
+    return tagUpdates;
   }
 }
