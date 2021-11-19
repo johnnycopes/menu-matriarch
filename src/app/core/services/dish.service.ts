@@ -85,7 +85,7 @@ export class DishService {
     );
   }
 
-  public updateDishDetails(
+  public updateDish(
     id: string,
     updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>
   ): Observable<Dish | undefined> {
@@ -105,13 +105,6 @@ export class DishService {
         await batch.commit();
       })
     );
-  }
-
-  public updateDishCounters(
-    id: string,
-    updates: Partial<Pick<DishDbo, 'usages' | 'menus'>>
-  ): Promise<void> {
-    return this._updateDish(id, updates);
   }
 
   public deleteDish(id: string): Observable<Dish | undefined> {
@@ -161,10 +154,6 @@ export class DishService {
       ...dish,
       tags: tags.filter(tag => dish.tags.includes(tag.id))
     };
-  }
-
-  private _updateDish(id: string, updates: Partial<DishDbo>): Promise<void> {
-    return this._firestoreService.update<DishDbo>(this._endpoint, id, updates);
   }
 
 

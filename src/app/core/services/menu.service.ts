@@ -122,7 +122,6 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
-  // TODO: update this method to use batch writes
   public updateMenuContents({ day, dishId, selected }: {
     day: Day,
     dishId: string,
@@ -134,31 +133,31 @@ export class MenuService {
         if (!menu) {
           return;
         }
-        await this._updateMenu(menu.id, {
+        const batch = this._firestoreService.getBatch();
+        const dishIdCount = Object
+          .values(menu.contents)
+          .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
+          .reduce((accum, curr) => accum + (curr === dishId ? 1 : 0), 0);
+        let menusChange = 0;
+        if (dishIdCount === 0 && selected) {
+          menusChange = 1;
+        } else if (dishIdCount === 1 && !selected) {
+          menusChange = -1;
+        }
+        this._updateOneDayMenuContents({
+          batch,
+          dishId,
+          menuId: menu.id,
+          daysChange: selected ? 1 : -1,
+          menusChange: menusChange,
+        });
+        batch.update(this._docRefService.getMenu(menu.id), {
           [`contents.${day}`]: selected
             ? this._firestoreService.addToArray(dishId)
             : this._firestoreService.removeFromArray(dishId)
         });
-      }),
-      concatMap(menu => {
-        if (!menu) {
-          return of(undefined);
-        }
-        return this._firestoreService
-          .getOne<MenuDbo>(this._endpoint, menu.id)
-          .pipe(first());
-      }),
-      tap(async menu => {
-        if (!menu) {
-          return;
-        }
-        await this._dishService.updateDishCounters(dishId, {
-          usages: this._firestoreService.changeCounter(selected ? 1 : -1),
-          menus: Object.values(menu.contents).some(dishIds => dishIds.includes(dishId))
-            ? this._firestoreService.addToArray(menu.id)
-            : this._firestoreService.removeFromArray(menu.id)
-        });
-      }),
+        await batch.commit();
+      })
     );
   }
 
