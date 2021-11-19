@@ -120,11 +120,38 @@ export class DishService {
         if (!dish) {
           return;
         }
-        const batch = this._firestoreService.getBatch();
-        batch.delete(this._docRefService.getDish(dish.id));
-        this._updateTags(batch, dish);
-        // TODO: delete dish id from menus
-        await batch.commit();
+        await this._firestoreService.getTransaction(async transaction => {
+          const isNotDishId = (dishId: string) => dishId !== dish.id;
+          let menuUpdates = [];
+          for (const menuId of dish.menus) {
+            const menuDoc = this._docRefService.getMenu(menuId);
+            const menu = await transaction.get(menuDoc);
+            const menuContents = menu.data()?.contents;
+            if (menuContents) {
+              const contents = {
+                Monday: menuContents.Monday.filter(isNotDishId),
+                Tuesday: menuContents.Tuesday.filter(isNotDishId),
+                Wednesday: menuContents.Wednesday.filter(isNotDishId),
+                Thursday: menuContents.Thursday.filter(isNotDishId),
+                Friday: menuContents.Friday.filter(isNotDishId),
+                Saturday: menuContents.Saturday.filter(isNotDishId),
+                Sunday: menuContents.Sunday.filter(isNotDishId),
+              };
+              menuUpdates.push({
+                docRef: menuDoc,
+                contents,
+              });
+            }
+          }
+          menuUpdates.forEach(({ docRef, contents }) => {
+            transaction.update(docRef, {
+              contents: contents
+            });
+          })
+          // TODO: adapt tag deletion logic to transaction rather than batch
+          // this._updateTags(batch, dish);
+          transaction.delete(this._docRefService.getDish(dish.id));
+        });
       })
     );
   }
