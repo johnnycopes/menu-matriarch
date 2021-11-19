@@ -6,6 +6,7 @@ import firebase from 'firebase/compat/app';
 import { Endpoint } from '@models/enums/endpoint.enum';
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
 import { Dish } from '@models/interfaces/dish.interface';
+import { Tag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -36,10 +37,7 @@ export class DishService {
         if (!dish) {
           return undefined;
         }
-        return {
-          ...dish,
-          tags: tags.filter(tag => dish.tags.includes(tag.id))
-        };
+        return this._getDish(dish, tags);
       })
     );
   }
@@ -52,12 +50,7 @@ export class DishService {
       ),
       this._tagService.getTags(),
     ]).pipe(
-      map(([dishes, tags]) => {
-        return dishes.map(dish => ({
-          ...dish,
-          tags: tags.filter(tag => dish.tags.includes(tag.id))
-        }));
-      })
+      map(([dishes, tags]) => dishes.map(dish => this._getDish(dish, tags)))
     );
   }
 
@@ -134,6 +127,13 @@ export class DishService {
         await batch.commit();
       })
     );
+  }
+
+  private _getDish(dish: DishDbo, tags: Tag[]): Dish {
+    return {
+      ...dish,
+      tags: tags.filter(tag => dish.tags.includes(tag.id))
+    };
   }
 
   private _updateDish(id: string, updates: Partial<DishDbo>): Promise<void> {
