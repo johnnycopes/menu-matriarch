@@ -60,7 +60,7 @@ export class BatchService {
     batch.update(this._docRefService.getDish(dish.id), updates);
     if (updates.tags) {
       this._getTagsUpdates(dish, updates.tags).forEach(
-        ({ docRef, dishes }) => batch.update(docRef, { dishes })
+        ({ docRef, updates }) => batch.update(docRef, updates)
       );
     }
     await batch.commit();
@@ -70,10 +70,7 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._docRefService.getMenu(menu.id));
     this._getDishesUpdates(menu).forEach(
-      ({ docRef, usages, menus }) => batch.update(docRef, {
-        usages,
-        ...(menus && { menus }),
-      })
+      ({ docRef, updates }) => batch.update(docRef, updates)
     );
     await batch.commit();
   }
@@ -106,10 +103,7 @@ export class BatchService {
         this._getMenuDaysUpdates(),
       );
       this._getDishesUpdates(menu).forEach(
-        ({ docRef, usages, menus }) => batch.update(docRef, {
-          usages,
-          ...(menus && { menus }),
-        })
+        ({ docRef, updates }) => batch.update(docRef, updates)
       );
     }
 
@@ -138,7 +132,7 @@ export class BatchService {
         transaction.update(docRef, { contents });
       });
       this._getTagsUpdates(dish).forEach(
-        ({ docRef, dishes }) => transaction.update(docRef, { dishes })
+        ({ docRef, updates }) => transaction.update(docRef, updates)
       );
       transaction.delete(this._docRefService.getDish(dish.id));
     });
@@ -191,25 +185,31 @@ export class BatchService {
 
   private _getDishesUpdates<T extends MenuDbo>(menu: T): {
     docRef: DocumentReference<DishDbo>,
-    usages: number,
-    menus?: string[],
+    updates: {
+      usages: number,
+      menus?: string[],
+    },
   }[] {
     const dishCounts = this._countDishes(menu);
     return Object
       .keys(dishCounts)
       .map(dishId => ({
         docRef: this._docRefService.getDish(dishId),
-        ...this._getDishUpdates({
-          menuId: menu.id,
-          daysChange: -(dishCounts[dishId]),
-          menusChange: -1,
-        })
+        updates: {
+          ...this._getDishUpdates({
+            menuId: menu.id,
+            daysChange: -(dishCounts[dishId]),
+            menusChange: -1,
+          })
+        }
       }));
   }
 
   private _getTagsUpdates(dish: Dish, updateTagIds: string[] = []): {
     docRef: DocumentReference<TagDbo>,
-    dishes: string[],
+    updates: {
+      dishes: string[],
+    },
   }[] {
     const dishTagIds = dish.tags.map(dish => dish.id)
     const allIds = [...new Set([
@@ -229,7 +229,7 @@ export class BatchService {
       if (dishes) {
         tagUpdates.push({
           docRef: this._docRefService.getTag(id),
-          dishes,
+          updates: { dishes },
         });
       }
     }
