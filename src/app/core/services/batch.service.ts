@@ -41,13 +41,14 @@ export class BatchService {
         menusChange,
       })
     );
-    batch.update(this._getMenuDoc(menu.id),
-      this._getMenuDayUpdates({
-        day,
-        dishes: selected
-          ? this._firestoreService.addToArray(dishId)
-          : this._firestoreService.removeFromArray(dishId)
-      })
+    this._getMenusUpdates({
+      menuIds: [menu.id],
+      day,
+      getDishes: selected
+        ? () => this._firestoreService.addToArray(dishId)
+        : () => this._firestoreService.removeFromArray(dishId)
+    }).forEach(
+      ({ docRef, updates }) => batch.update(docRef, updates)
     );
     await batch.commit();
   }
@@ -77,9 +78,8 @@ export class BatchService {
 
     // Clear a single day's contents
     if (day) {
-      batch.update(
-        this._getMenuDoc(menu.id),
-        this._getMenuDayUpdates({ day, dishes: [] })
+      this._getMenusUpdates({ menuIds: [menu.id], day }).forEach(
+        ({ docRef, updates }) => batch.update(docRef, updates)
       );
       const dishCounts = this._countDishes(menu);
       menu.contents[day].forEach(dishId => {
@@ -95,7 +95,7 @@ export class BatchService {
     }
     // Clear all days' contents
     else {
-      this._getMenusUpdates([menu.id]).forEach(
+      this._getMenusUpdates({ menuIds: [menu.id] }).forEach(
         ({ docRef, updates }) => batch.update(docRef, updates)
       );
       this._getDishesUpdates(menu).forEach(
@@ -109,10 +109,10 @@ export class BatchService {
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._getDishDoc(dish.id));
-    this._getMenusUpdates(
-      dish.menus,
-      () => this._firestoreService.removeFromArray(dish.id)
-    ).forEach(
+    this._getMenusUpdates({
+      menuIds: dish.menus,
+      getDishes: () => this._firestoreService.removeFromArray(dish.id)
+    }).forEach(
       ({ docRef, updates }) => batch.update(docRef, updates)
     );
     this._getTagsUpdates(dish).forEach(
@@ -132,23 +132,30 @@ export class BatchService {
     await batch.commit();
   }
 
-  private _getMenusUpdates(
+  private _getMenusUpdates({ menuIds, day, getDishes = () => [] }: {
     menuIds: string[],
-    getDishes: () => string[] = () => [],
-  ): {
+    day?: Day,
+    getDishes?: () => string[],
+  }): {
     docRef: DocumentReference<MenuDbo>,
     updates: { [key: string]: string[] },
   }[] {
+    if (day) {
+      return menuIds.map(menuId => ({
+        docRef: this._getMenuDoc(menuId),
+        updates: this._getMenuDayDishes(day, getDishes())
+      }));
+    }
     return menuIds.map(menuId => ({
       docRef: this._getMenuDoc(menuId),
       updates: {
-        ...this._getMenuDayUpdates({ day: 'Monday', dishes: getDishes() }),
-        ...this._getMenuDayUpdates({ day: 'Tuesday', dishes: getDishes() }),
-        ...this._getMenuDayUpdates({ day: 'Wednesday', dishes: getDishes() }),
-        ...this._getMenuDayUpdates({ day: 'Thursday', dishes: getDishes() }),
-        ...this._getMenuDayUpdates({ day: 'Friday', dishes: getDishes() }),
-        ...this._getMenuDayUpdates({ day: 'Saturday', dishes: getDishes() }),
-        ...this._getMenuDayUpdates({ day: 'Sunday', dishes: getDishes() }),
+        ...this._getMenuDayDishes('Monday', getDishes()),
+        ...this._getMenuDayDishes('Tuesday', getDishes()),
+        ...this._getMenuDayDishes('Wednesday', getDishes()),
+        ...this._getMenuDayDishes('Thursday', getDishes()),
+        ...this._getMenuDayDishes('Friday', getDishes()),
+        ...this._getMenuDayDishes('Saturday', getDishes()),
+        ...this._getMenuDayDishes('Sunday', getDishes()),
       }
     }));
   }
@@ -206,10 +213,7 @@ export class BatchService {
     return tagUpdates;
   }
 
-  private _getMenuDayUpdates({ day, dishes }: {
-    day: Day,
-    dishes: string[]
-  }): { [key: string]: string[] } {
+  private _getMenuDayDishes(day: Day, dishes: string[]): { [key: string]: string[] } {
     return { [`contents.${day}`]: dishes };
   }
 
