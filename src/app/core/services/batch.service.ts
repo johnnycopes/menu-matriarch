@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
 
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
 import { MenuDbo } from '@models/dbos/menu-dbo.interface';
@@ -34,22 +35,21 @@ export class BatchService {
     } else if (dishCount === 1 && !selected) {
       menusChange = -1;
     }
-    const dishUpdates = this._getDishUpdates({
-      dishId,
-      menuId: menu.id,
-      daysChange: selected ? 1 : -1,
-      menusChange,
-    });
-    batch.update(dishUpdates.docRef, dishUpdates.updates);
-    this._getMenusUpdates({
-      menuIds: [menu.id],
-      day,
-      getDishes: selected
-        ? () => this._firestoreService.addToArray(dishId)
-        : () => this._firestoreService.removeFromArray(dishId)
-    }).forEach(
-      ({ docRef, updates }) => batch.update(docRef, updates)
-    );
+    this._processUpdates(batch, [
+      this._getDishUpdates({
+        dishId,
+        menuId: menu.id,
+        daysChange: selected ? 1 : -1,
+        menusChange,
+      }),
+      ...this._getMenusUpdates({
+        menuIds: [menu.id],
+        day,
+        getDishes: selected
+          ? () => this._firestoreService.addToArray(dishId)
+          : () => this._firestoreService.removeFromArray(dishId)
+      }),
+    ]);
     await batch.commit();
   }
 
@@ -57,9 +57,7 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.update(this._getDishDoc(dish.id), updates);
     if (updates.tags) {
-      this._getTagsUpdates(dish, updates.tags).forEach(
-        ({ docRef, updates }) => batch.update(docRef, updates)
-      );
+      this._processUpdates(batch, this._getTagsUpdates(dish, updates.tags));
     }
     await batch.commit();
   }
@@ -67,9 +65,7 @@ export class BatchService {
   public async deleteMenu(menu: MenuDbo): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._getMenuDoc(menu.id));
-    this._getDishesUpdates(menu).forEach(
-      ({ docRef, updates }) => batch.update(docRef, updates)
-    );
+    this._processUpdates(batch, this._getDishesUpdates(menu));
     await batch.commit();
   }
 
@@ -95,12 +91,10 @@ export class BatchService {
     }
     // Clear all days' contents
     else {
-      this._getMenusUpdates({ menuIds: [menu.id] }).forEach(
-        ({ docRef, updates }) => batch.update(docRef, updates)
-      );
-      this._getDishesUpdates(menu).forEach(
-        ({ docRef, updates }) => batch.update(docRef, updates)
-      );
+      this._processUpdates(batch, [
+        ...this._getMenusUpdates({ menuIds: [menu.id] }),
+        ...this._getDishesUpdates(menu),
+      ]);
     }
 
     await batch.commit();
@@ -109,15 +103,13 @@ export class BatchService {
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._getDishDoc(dish.id));
-    this._getMenusUpdates({
-      menuIds: dish.menus,
-      getDishes: () => this._firestoreService.removeFromArray(dish.id)
-    }).forEach(
-      ({ docRef, updates }) => batch.update(docRef, updates)
-    );
-    this._getTagsUpdates(dish).forEach(
-      ({ docRef, updates }) => batch.update(docRef, updates)
-    );
+    this._processUpdates(batch, [
+      ...this._getMenusUpdates({
+        menuIds: dish.menus,
+        getDishes: () => this._firestoreService.removeFromArray(dish.id)
+      }),
+      ...this._getTagsUpdates(dish),
+    ]);
     await batch.commit();
   }
 
@@ -255,5 +247,14 @@ export class BatchService {
 
   private _getTagDoc(id: string): DocumentReference<TagDbo> {
     return this._firestoreService.getDocRef<TagDbo>(Endpoint.tags, id);
+  }
+
+  private _processUpdates(
+    batch: firebase.firestore.WriteBatch,
+    docRefUpdates: { docRef: DocumentReference, updates: {} }[]
+  ): void {
+    docRefUpdates.forEach(
+      ({ docRef, updates }) => batch.update(docRef, updates)
+    );
   }
 }
