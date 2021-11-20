@@ -31,7 +31,7 @@ export class BatchService {
     selected: boolean,
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    const dishCount = this._getDishCount(menu, dishId);
+    const dishCount = this._getDishCounts(menu)[dishId];
     let menusChange = 0;
     if (dishCount === 0 && selected) {
       menusChange = 1;
@@ -80,7 +80,7 @@ export class BatchService {
         [`contents.${day}`]: []
       });
       menu.contents[day].forEach(dishId => {
-        const dishInOtherDay = this._getDishCount(menu, dishId) > 1;
+        const dishInOtherDay = this._getDishCounts(menu)[dishId] > 1;
         // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
         batch.update(this._docRefService.getDish(dishId),
           this._getDishMenusAndUsages({
@@ -171,21 +171,14 @@ export class BatchService {
     batch: firebase.firestore.WriteBatch,
     menu: T,
   ): void {
-    const dishIdHashMap = Object
-      .values(menu.contents)
-      .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
-      .reduce((hashMap, dishId) => ({
-        ...hashMap,
-        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
-      }), {} as { [id: string]: number });
+    const dishCounts = this._getDishCounts(menu);
     Object
-      .keys(dishIdHashMap)
+      .keys(dishCounts)
       .forEach(dishId => {
-        batch.update(
-          this._docRefService.getDish(dishId),
+        batch.update(this._docRefService.getDish(dishId),
           this._getDishMenusAndUsages({
             menuId: menu.id,
-            daysChange: -(dishIdHashMap[dishId]),
+            daysChange: -(dishCounts[dishId]),
             menusChange: -1,
           })
         );
@@ -221,10 +214,13 @@ export class BatchService {
     return tagUpdates;
   }
 
-  private _getDishCount(menu: Menu, dishId: string): number {
+  private _getDishCounts<TMenu extends MenuDbo>(menu: TMenu): { [dishId: string]: number } {
     return Object
       .values(menu.contents)
       .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
-      .reduce((accum, curr) => accum + (curr === dishId ? 1 : 0), 0);
+      .reduce((hashMap, dishId) => ({
+        ...hashMap,
+        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
+      }), {} as { [dishId: string]: number });
   }
 }
