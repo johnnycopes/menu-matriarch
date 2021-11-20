@@ -98,9 +98,8 @@ export class BatchService {
     }
     // Clear all days' contents
     else {
-      batch.update(
-        this._docRefService.getMenu(menu.id),
-        this._getMenuDaysUpdates(),
+      this._getMenusUpdates([menu.id]).forEach(
+        ({ docRef, updates }) => batch.update(docRef, updates)
       );
       this._getDishesUpdates(menu).forEach(
         ({ docRef, updates }) => batch.update(docRef, updates)
@@ -111,31 +110,18 @@ export class BatchService {
   }
 
   public async deleteDish(dish: Dish): Promise<void> {
-    await this._firestoreService.getTransaction(async transaction => {
-      const isNotDishId = (dishId: string) => dishId !== dish.id;
-      let menusUpdates = [];
-      for (const menuId of dish.menus) {
-        const docRef = this._docRefService.getMenu(menuId);
-        const menuSnapshot = await transaction.get(docRef);
-        const menu = menuSnapshot.data();
-        if (menu) {
-          menusUpdates.push({
-            docRef,
-            ...this._getMenuDaysUpdates(
-              menu,
-              (dishes) => dishes.filter(isNotDishId)
-            ),
-          });
-        }
-      }
-      menusUpdates.forEach(({ docRef, contents }) => {
-        transaction.update(docRef, { contents });
-      });
-      this._getTagsUpdates(dish).forEach(
-        ({ docRef, updates }) => transaction.update(docRef, updates)
-      );
-      transaction.delete(this._docRefService.getDish(dish.id));
-    });
+    const batch = this._firestoreService.getBatch();
+    batch.delete(this._docRefService.getDish(dish.id));
+    this._getMenusUpdates(
+      dish.menus,
+      () => this._firestoreService.removeFromArray(dish.id)
+    ).forEach(
+      ({ docRef, updates }) => batch.update(docRef, updates)
+    );
+    this._getTagsUpdates(dish).forEach(
+      ({ docRef, updates }) => batch.update(docRef, updates)
+    );
+    await batch.commit();
   }
 
   public async deleteTag(tag: Tag): Promise<void> {
@@ -149,38 +135,25 @@ export class BatchService {
     await batch.commit();
   }
 
-  private _getMenuDayUpdates({ day, dishes }: {
-    day: Day,
-    dishes: string[]
-  }): { [key: string]: string[] } {
-    return { [`contents.${day}`]: dishes };
-  }
-
-  private _getMenuDaysUpdates(
-    menu?: MenuDbo,
-    getDishes?: (dishes: string[]) => string[]
-  ): { contents: { [day in Day]: string[] }} {
-    return { contents: {
-      Monday: (menu && getDishes) ? getDishes(menu.contents.Monday) : [],
-      Tuesday: (menu && getDishes) ? getDishes(menu.contents.Tuesday) : [],
-      Wednesday: (menu && getDishes) ? getDishes(menu.contents.Wednesday) : [],
-      Thursday: (menu && getDishes) ? getDishes(menu.contents.Thursday) : [],
-      Friday: (menu && getDishes) ? getDishes(menu.contents.Friday) : [],
-      Saturday: (menu && getDishes) ? getDishes(menu.contents.Saturday) : [],
-      Sunday: (menu && getDishes) ? getDishes(menu.contents.Sunday) : [],
-    }};
-  }
-
-  private _getDishUpdates({ menuId, daysChange, menusChange }: {
-    menuId: string,
-    daysChange: number,
-    menusChange: number,
-  }): { usages: number, menus?: string[] } {
-    const usages = this._firestoreService.changeCounter(daysChange);
-    const menus = menusChange > 0
-      ? this._firestoreService.addToArray(menuId)
-      : this._firestoreService.removeFromArray(menuId);
-    return { usages, ...(menusChange !== 0 && { menus }) }; // only include `menus` if `menusChange` isn't 0
+  private _getMenusUpdates(
+    menuIds: string[],
+    getDishes: () => string[] = () => [],
+  ): {
+    docRef: DocumentReference<MenuDbo>,
+    updates: { [key: string]: string[] },
+  }[] {
+    return menuIds.map(menuId => ({
+      docRef: this._docRefService.getMenu(menuId),
+      updates: {
+        ...this._getMenuDayUpdates({ day: 'Monday', dishes: getDishes() }),
+        ...this._getMenuDayUpdates({ day: 'Tuesday', dishes: getDishes() }),
+        ...this._getMenuDayUpdates({ day: 'Wednesday', dishes: getDishes() }),
+        ...this._getMenuDayUpdates({ day: 'Thursday', dishes: getDishes() }),
+        ...this._getMenuDayUpdates({ day: 'Friday', dishes: getDishes() }),
+        ...this._getMenuDayUpdates({ day: 'Saturday', dishes: getDishes() }),
+        ...this._getMenuDayUpdates({ day: 'Sunday', dishes: getDishes() }),
+      }
+    }));
   }
 
   private _getDishesUpdates<T extends MenuDbo>(menu: T): {
@@ -234,6 +207,25 @@ export class BatchService {
       }
     }
     return tagUpdates;
+  }
+
+  private _getMenuDayUpdates({ day, dishes }: {
+    day: Day,
+    dishes: string[]
+  }): { [key: string]: string[] } {
+    return { [`contents.${day}`]: dishes };
+  }
+
+  private _getDishUpdates({ menuId, daysChange, menusChange }: {
+    menuId: string,
+    daysChange: number,
+    menusChange: number,
+  }): { usages: number, menus?: string[] } {
+    const usages = this._firestoreService.changeCounter(daysChange);
+    const menus = menusChange > 0
+      ? this._firestoreService.addToArray(menuId)
+      : this._firestoreService.removeFromArray(menuId);
+    return { usages, ...(menusChange !== 0 && { menus }) }; // only include `menus` if `menusChange` isn't 0
   }
 
   private _countDishes<TMenu extends MenuDbo>(menu: TMenu): { [dishId: string]: number } {
