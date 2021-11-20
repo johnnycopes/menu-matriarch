@@ -34,13 +34,13 @@ export class BatchService {
     } else if (dishCount === 1 && !selected) {
       menusChange = -1;
     }
-    batch.update(this._getDishDoc(dishId),
-      this._getDishUpdates({
-        menuId: menu.id,
-        daysChange: selected ? 1 : -1,
-        menusChange,
-      })
-    );
+    const dishUpdates = this._getDishUpdates({
+      dishId,
+      menuId: menu.id,
+      daysChange: selected ? 1 : -1,
+      menusChange,
+    });
+    batch.update(dishUpdates.docRef, dishUpdates.updates);
     this._getMenusUpdates({
       menuIds: [menu.id],
       day,
@@ -84,13 +84,13 @@ export class BatchService {
       const dishCounts = this._countDishes(menu);
       menu.contents[day].forEach(dishId => {
         const dishInOtherDay = dishCounts[dishId] > 1;
-        batch.update(this._getDishDoc(dishId),
-          this._getDishUpdates({
-            menuId: menu.id,
-            daysChange: -1,
-            menusChange: dishInOtherDay ? 0 : -1,
-          })
-        );
+        const dishUpdates = this._getDishUpdates({
+          dishId,
+          menuId: menu.id,
+          daysChange: -1,
+          menusChange: dishInOtherDay ? 0 : -1,
+        });
+        batch.update(dishUpdates.docRef, dishUpdates.updates);
       });
     }
     // Clear all days' contents
@@ -170,16 +170,34 @@ export class BatchService {
     const dishCounts = this._countDishes(menu);
     return Object
       .keys(dishCounts)
-      .map(dishId => ({
-        docRef: this._getDishDoc(dishId),
-        updates: {
-          ...this._getDishUpdates({
-            menuId: menu.id,
-            daysChange: -(dishCounts[dishId]),
-            menusChange: -1,
-          })
-        }
+      .map(dishId => this._getDishUpdates({
+        dishId,
+        menuId: menu.id,
+        daysChange: -(dishCounts[dishId]),
+        menusChange: -1,
       }));
+  }
+
+  private _getDishUpdates({ dishId, menuId, daysChange, menusChange }: {
+    dishId: string,
+    menuId: string,
+    daysChange: number,
+    menusChange: number,
+  }): {
+    docRef: DocumentReference<DishDbo>,
+    updates: { usages: number, menus?: string[] }
+  } {
+    const usages = this._firestoreService.changeCounter(daysChange);
+    const menus = menusChange > 0
+      ? this._firestoreService.addToArray(menuId)
+      : this._firestoreService.removeFromArray(menuId);
+    return {
+      docRef: this._getDishDoc(dishId),
+      updates: {
+        usages,
+        ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
+      },
+    };
   }
 
   private _getTagsUpdates(dish: Dish, updateTagIds: string[] = []): {
@@ -215,18 +233,6 @@ export class BatchService {
 
   private _getMenuDayDishes(day: Day, dishes: string[]): { [key: string]: string[] } {
     return { [`contents.${day}`]: dishes };
-  }
-
-  private _getDishUpdates({ menuId, daysChange, menusChange }: {
-    menuId: string,
-    daysChange: number,
-    menusChange: number,
-  }): { usages: number, menus?: string[] } {
-    const usages = this._firestoreService.changeCounter(daysChange);
-    const menus = menusChange > 0
-      ? this._firestoreService.addToArray(menuId)
-      : this._firestoreService.removeFromArray(menuId);
-    return { usages, ...(menusChange !== 0 && { menus }) }; // only include `menus` if `menusChange` isn't 0
   }
 
   private _countDishes<TMenu extends MenuDbo>(menu: TMenu): { [dishId: string]: number } {
