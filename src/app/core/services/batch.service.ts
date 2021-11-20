@@ -31,22 +31,18 @@ export class BatchService {
     selected: boolean,
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    const dishIdCount = Object
-      .values(menu.contents)
-      .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
-      .reduce((accum, curr) => accum + (curr === dishId ? 1 : 0), 0);
+    const dishCount = this._getDishCount(menu, dishId);
     let menusChange = 0;
-    if (dishIdCount === 0 && selected) {
+    if (dishCount === 0 && selected) {
       menusChange = 1;
-    } else if (dishIdCount === 1 && !selected) {
+    } else if (dishCount === 1 && !selected) {
       menusChange = -1;
     }
-    batch.update(
-      this._docRefService.getDish(dishId),
+    batch.update(this._docRefService.getDish(dishId),
       this._getDishMenusAndUsages({
         menuId: menu.id,
         daysChange: selected ? 1 : -1,
-        menusChange: menusChange,
+        menusChange,
       })
     );
     batch.update(this._docRefService.getMenu(menu.id), {
@@ -84,12 +80,9 @@ export class BatchService {
         [`contents.${day}`]: []
       });
       menu.contents[day].forEach(dishId => {
-        const dishInOtherDay = Object
-          .entries(menu.contents)
-          .some(([ menuDay, menuDishIds ]) => day !== menuDay && menuDishIds.includes(dishId));
+        const dishInOtherDay = this._getDishCount(menu, dishId) > 1;
         // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
-        batch.update(
-          this._docRefService.getDish(dishId),
+        batch.update(this._docRefService.getDish(dishId),
           this._getDishMenusAndUsages({
             menuId: menu.id,
             daysChange: -1,
@@ -226,5 +219,12 @@ export class BatchService {
       }
     }
     return tagUpdates;
+  }
+
+  private _getDishCount(menu: Menu, dishId: string): number {
+    return Object
+      .values(menu.contents)
+      .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
+      .reduce((accum, curr) => accum + (curr === dishId ? 1 : 0), 0);
   }
 }
