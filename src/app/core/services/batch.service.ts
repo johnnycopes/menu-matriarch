@@ -44,11 +44,14 @@ export class BatchService {
         menusChange,
       })
     );
-    batch.update(this._docRefService.getMenu(menu.id), {
-      [`contents.${day}`]: selected
-        ? this._firestoreService.addToArray(dishId)
-        : this._firestoreService.removeFromArray(dishId)
-    });
+    batch.update(this._docRefService.getMenu(menu.id),
+      this._getMenuDayUpdates({
+        day,
+        dishes: selected
+          ? this._firestoreService.addToArray(dishId)
+          : this._firestoreService.removeFromArray(dishId)
+      })
+    );
     await batch.commit();
   }
 
@@ -80,9 +83,10 @@ export class BatchService {
 
     // Clear a single day's contents
     if (day) {
-      batch.update(this._docRefService.getMenu(menu.id), {
-        [`contents.${day}`]: []
-      });
+      batch.update(
+        this._docRefService.getMenu(menu.id),
+        this._getMenuDayUpdates({ day, dishes: [] })
+      );
       const dishCounts = this._countDishes(menu);
       menu.contents[day].forEach(dishId => {
         const dishInOtherDay = dishCounts[dishId] > 1;
@@ -97,17 +101,10 @@ export class BatchService {
     }
     // Clear all days' contents
     else {
-      batch.update(this._docRefService.getMenu(menu.id), {
-        contents: {
-          Monday: [],
-          Tuesday: [],
-          Wednesday: [],
-          Thursday: [],
-          Friday: [],
-          Saturday: [],
-          Sunday: [],
-        }
-      });
+      batch.update(
+        this._docRefService.getMenu(menu.id),
+        this._getMenuDaysUpdates(),
+      );
       this._getDishesUpdates(menu).forEach(
         ({ docRef, usages, menus }) => batch.update(docRef, {
           usages,
@@ -122,28 +119,22 @@ export class BatchService {
   public async deleteDish(dish: Dish): Promise<void> {
     await this._firestoreService.getTransaction(async transaction => {
       const isNotDishId = (dishId: string) => dishId !== dish.id;
-      let menuUpdates = [];
+      let menusUpdates = [];
       for (const menuId of dish.menus) {
-        const menuDoc = this._docRefService.getMenu(menuId);
-        const menu = await transaction.get(menuDoc);
-        const menuContents = menu.data()?.contents;
-        if (menuContents) {
-          const contents = {
-            Monday: menuContents.Monday.filter(isNotDishId),
-            Tuesday: menuContents.Tuesday.filter(isNotDishId),
-            Wednesday: menuContents.Wednesday.filter(isNotDishId),
-            Thursday: menuContents.Thursday.filter(isNotDishId),
-            Friday: menuContents.Friday.filter(isNotDishId),
-            Saturday: menuContents.Saturday.filter(isNotDishId),
-            Sunday: menuContents.Sunday.filter(isNotDishId),
-          };
-          menuUpdates.push({
-            docRef: menuDoc,
-            contents,
+        const docRef = this._docRefService.getMenu(menuId);
+        const menuSnapshot = await transaction.get(docRef);
+        const menu = menuSnapshot.data();
+        if (menu) {
+          menusUpdates.push({
+            docRef,
+            ...this._getMenuDaysUpdates(
+              menu,
+              (dishes) => dishes.filter(isNotDishId)
+            ),
           });
         }
       }
-      menuUpdates.forEach(({ docRef, contents }) => {
+      menusUpdates.forEach(({ docRef, contents }) => {
         transaction.update(docRef, { contents });
       });
       this._getTagsUpdates(dish).forEach(
@@ -162,6 +153,28 @@ export class BatchService {
         tags: this._firestoreService.removeFromArray(tag.id)
       }));
     await batch.commit();
+  }
+
+  private _getMenuDayUpdates({ day, dishes }: {
+    day: Day,
+    dishes: string[]
+  }): { [key: string]: string[] } {
+    return { [`contents.${day}`]: dishes };
+  }
+
+  private _getMenuDaysUpdates(
+    menu?: MenuDbo,
+    getDishes?: (dishes: string[]) => string[]
+  ): { contents: { [day in Day]: string[] }} {
+    return { contents: {
+      Monday: (menu && getDishes) ? getDishes(menu.contents.Monday) : [],
+      Tuesday: (menu && getDishes) ? getDishes(menu.contents.Tuesday) : [],
+      Wednesday: (menu && getDishes) ? getDishes(menu.contents.Wednesday) : [],
+      Thursday: (menu && getDishes) ? getDishes(menu.contents.Thursday) : [],
+      Friday: (menu && getDishes) ? getDishes(menu.contents.Friday) : [],
+      Saturday: (menu && getDishes) ? getDishes(menu.contents.Saturday) : [],
+      Sunday: (menu && getDishes) ? getDishes(menu.contents.Sunday) : [],
+    }};
   }
 
   private _getDishUpdates({ menuId, daysChange, menusChange }: {
@@ -196,7 +209,7 @@ export class BatchService {
 
   private _getTagsUpdates(dish: Dish, updateTagIds: string[] = []): {
     docRef: DocumentReference<TagDbo>,
-    dishes: string[]
+    dishes: string[],
   }[] {
     const dishTagIds = dish.tags.map(dish => dish.id)
     const allIds = [...new Set([
