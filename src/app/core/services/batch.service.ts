@@ -4,9 +4,9 @@ import { DocumentReference } from '@angular/fire/compat/firestore';
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
 import { MenuDbo } from '@models/dbos/menu-dbo.interface';
 import { TagDbo } from '@models/dbos/tag-dbo.interface';
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Tag } from '@models/interfaces/tag.interface';
-import { DocRefService } from './doc-ref.service';
 import { FirestoreService } from './firestore.service';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
@@ -16,10 +16,7 @@ import { Day } from '@models/types/day.type';
 })
 export class BatchService {
 
-  constructor(
-    private _firestoreService: FirestoreService,
-    private _docRefService: DocRefService,
-  ) { }
+  constructor(private _firestoreService: FirestoreService) { }
 
   public async updateMenuContents({
     menu, dishId, day, selected
@@ -37,14 +34,14 @@ export class BatchService {
     } else if (dishCount === 1 && !selected) {
       menusChange = -1;
     }
-    batch.update(this._docRefService.getDish(dishId),
+    batch.update(this._getDishDoc(dishId),
       this._getDishUpdates({
         menuId: menu.id,
         daysChange: selected ? 1 : -1,
         menusChange,
       })
     );
-    batch.update(this._docRefService.getMenu(menu.id),
+    batch.update(this._getMenuDoc(menu.id),
       this._getMenuDayUpdates({
         day,
         dishes: selected
@@ -57,7 +54,7 @@ export class BatchService {
 
   public async updateDish(dish: Dish, updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>) {
     const batch = this._firestoreService.getBatch();
-    batch.update(this._docRefService.getDish(dish.id), updates);
+    batch.update(this._getDishDoc(dish.id), updates);
     if (updates.tags) {
       this._getTagsUpdates(dish, updates.tags).forEach(
         ({ docRef, updates }) => batch.update(docRef, updates)
@@ -68,7 +65,7 @@ export class BatchService {
 
   public async deleteMenu(menu: MenuDbo): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    batch.delete(this._docRefService.getMenu(menu.id));
+    batch.delete(this._getMenuDoc(menu.id));
     this._getDishesUpdates(menu).forEach(
       ({ docRef, updates }) => batch.update(docRef, updates)
     );
@@ -81,13 +78,13 @@ export class BatchService {
     // Clear a single day's contents
     if (day) {
       batch.update(
-        this._docRefService.getMenu(menu.id),
+        this._getMenuDoc(menu.id),
         this._getMenuDayUpdates({ day, dishes: [] })
       );
       const dishCounts = this._countDishes(menu);
       menu.contents[day].forEach(dishId => {
         const dishInOtherDay = dishCounts[dishId] > 1;
-        batch.update(this._docRefService.getDish(dishId),
+        batch.update(this._getDishDoc(dishId),
           this._getDishUpdates({
             menuId: menu.id,
             daysChange: -1,
@@ -111,7 +108,7 @@ export class BatchService {
 
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    batch.delete(this._docRefService.getDish(dish.id));
+    batch.delete(this._getDishDoc(dish.id));
     this._getMenusUpdates(
       dish.menus,
       () => this._firestoreService.removeFromArray(dish.id)
@@ -126,9 +123,9 @@ export class BatchService {
 
   public async deleteTag(tag: Tag): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    batch.delete(this._docRefService.getTag(tag.id));
+    batch.delete(this._getTagDoc(tag.id));
     tag.dishes
-      .map(dishId => this._docRefService.getDish(dishId))
+      .map(dishId => this._getDishDoc(dishId))
       .forEach(dish => batch.update(dish, {
         tags: this._firestoreService.removeFromArray(tag.id)
       }));
@@ -143,7 +140,7 @@ export class BatchService {
     updates: { [key: string]: string[] },
   }[] {
     return menuIds.map(menuId => ({
-      docRef: this._docRefService.getMenu(menuId),
+      docRef: this._getMenuDoc(menuId),
       updates: {
         ...this._getMenuDayUpdates({ day: 'Monday', dishes: getDishes() }),
         ...this._getMenuDayUpdates({ day: 'Tuesday', dishes: getDishes() }),
@@ -167,7 +164,7 @@ export class BatchService {
     return Object
       .keys(dishCounts)
       .map(dishId => ({
-        docRef: this._docRefService.getDish(dishId),
+        docRef: this._getDishDoc(dishId),
         updates: {
           ...this._getDishUpdates({
             menuId: menu.id,
@@ -201,7 +198,7 @@ export class BatchService {
 
       if (dishes) {
         tagUpdates.push({
-          docRef: this._docRefService.getTag(id),
+          docRef: this._getTagDoc(id),
           updates: { dishes },
         });
       }
@@ -236,5 +233,17 @@ export class BatchService {
         ...hashMap,
         [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
       }), {} as { [dishId: string]: number });
+  }
+
+  private _getDishDoc(id: string): DocumentReference<DishDbo> {
+    return this._firestoreService.getDocRef<DishDbo>(Endpoint.dishes, id);
+  }
+
+  private _getMenuDoc(id: string): DocumentReference<MenuDbo> {
+    return this._firestoreService.getDocRef<MenuDbo>(Endpoint.menus, id);
+  }
+
+  private _getTagDoc(id: string): DocumentReference<TagDbo> {
+    return this._firestoreService.getDocRef<TagDbo>(Endpoint.tags, id);
   }
 }
