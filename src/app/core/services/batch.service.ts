@@ -35,6 +35,7 @@ export class BatchService {
     } else if (dishCount === 1 && !selected) {
       menusChange = -1;
     }
+
     this._processUpdates(batch, [
       this._getDishUpdates({
         dishId,
@@ -74,20 +75,19 @@ export class BatchService {
 
     // Clear a single day's contents
     if (day) {
-      this._getMenusUpdates({ menuIds: [menu.id], day }).forEach(
-        ({ docRef, updates }) => batch.update(docRef, updates)
-      );
       const dishCounts = this._countDishes(menu);
-      menu.contents[day].forEach(dishId => {
-        const dishInOtherDay = dishCounts[dishId] > 1;
-        const dishUpdates = this._getDishUpdates({
-          dishId,
-          menuId: menu.id,
-          daysChange: -1,
-          menusChange: dishInOtherDay ? 0 : -1,
-        });
-        batch.update(dishUpdates.docRef, dishUpdates.updates);
-      });
+      this._processUpdates(batch, [
+        ...this._getMenusUpdates({ menuIds: [menu.id], day }),
+        ...menu.contents[day].map(dishId => {
+          const dishInOtherDay = dishCounts[dishId] > 1;
+          return this._getDishUpdates({
+            dishId,
+            menuId: menu.id,
+            daysChange: -1,
+            menusChange: dishInOtherDay ? 0 : -1,
+          });
+        })
+      ]);
     }
     // Clear all days' contents
     else {
@@ -132,15 +132,11 @@ export class BatchService {
     docRef: DocumentReference<MenuDbo>,
     updates: { [key: string]: string[] },
   }[] {
+    let updates = {};
     if (day) {
-      return menuIds.map(menuId => ({
-        docRef: this._getMenuDoc(menuId),
-        updates: this._getMenuDayDishes(day, getDishes())
-      }));
-    }
-    return menuIds.map(menuId => ({
-      docRef: this._getMenuDoc(menuId),
-      updates: {
+      updates = this._getMenuDayDishes(day, getDishes());
+    } else {
+      updates = {
         ...this._getMenuDayDishes('Monday', getDishes()),
         ...this._getMenuDayDishes('Tuesday', getDishes()),
         ...this._getMenuDayDishes('Wednesday', getDishes()),
@@ -148,7 +144,11 @@ export class BatchService {
         ...this._getMenuDayDishes('Friday', getDishes()),
         ...this._getMenuDayDishes('Saturday', getDishes()),
         ...this._getMenuDayDishes('Sunday', getDishes()),
-      }
+      };
+    }
+    return menuIds.map(menuId => ({
+      docRef: this._getMenuDoc(menuId),
+      updates,
     }));
   }
 
