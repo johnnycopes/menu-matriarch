@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
-import firebase from 'firebase/compat/app';
 
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
 import { MenuDbo } from '@models/dbos/menu-dbo.interface';
@@ -31,7 +30,7 @@ export class BatchService {
     selected: boolean,
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    const dishCount = this._getDishCounts(menu)[dishId];
+    const dishCount = this._countDishes(menu)[dishId] ?? 0;
     let menusChange = 0;
     if (dishCount === 0 && selected) {
       menusChange = 1;
@@ -39,7 +38,7 @@ export class BatchService {
       menusChange = -1;
     }
     batch.update(this._docRefService.getDish(dishId),
-      this._getDishMenusAndUsages({
+      this._getDishUpdates({
         menuId: menu.id,
         daysChange: selected ? 1 : -1,
         menusChange,
@@ -57,7 +56,7 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.update(this._docRefService.getDish(dish.id), updates);
     if (updates.tags) {
-      this._getTagUpdates(dish, updates.tags).forEach(
+      this._getTagsUpdates(dish, updates.tags).forEach(
         ({ docRef, dishes }) => batch.update(docRef, { dishes })
       );
     }
@@ -67,7 +66,12 @@ export class BatchService {
   public async deleteMenu(menu: MenuDbo): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._docRefService.getMenu(menu.id));
-    this._deleteAllDaysMenuContents(batch, menu);
+    this._getDishesUpdates(menu).forEach(
+      ({ docRef, usages, menus }) => batch.update(docRef, {
+        usages,
+        ...(menus && { menus }),
+      })
+    );
     await batch.commit();
   }
 
@@ -79,11 +83,11 @@ export class BatchService {
       batch.update(this._docRefService.getMenu(menu.id), {
         [`contents.${day}`]: []
       });
+      const dishCounts = this._countDishes(menu);
       menu.contents[day].forEach(dishId => {
-        const dishInOtherDay = this._getDishCounts(menu)[dishId] > 1;
-        // Always decrement `usages`, but only update `menus` if the dish isn't in any other day
+        const dishInOtherDay = dishCounts[dishId] > 1;
         batch.update(this._docRefService.getDish(dishId),
-          this._getDishMenusAndUsages({
+          this._getDishUpdates({
             menuId: menu.id,
             daysChange: -1,
             menusChange: dishInOtherDay ? 0 : -1,
@@ -104,7 +108,12 @@ export class BatchService {
           Sunday: [],
         }
       });
-      this._deleteAllDaysMenuContents(batch, menu);
+      this._getDishesUpdates(menu).forEach(
+        ({ docRef, usages, menus }) => batch.update(docRef, {
+          usages,
+          ...(menus && { menus }),
+        })
+      );
     }
 
     await batch.commit();
@@ -137,7 +146,7 @@ export class BatchService {
       menuUpdates.forEach(({ docRef, contents }) => {
         transaction.update(docRef, { contents });
       });
-      this._getTagUpdates(dish).forEach(
+      this._getTagsUpdates(dish).forEach(
         ({ docRef, dishes }) => transaction.update(docRef, { dishes })
       );
       transaction.delete(this._docRefService.getDish(dish.id));
@@ -155,7 +164,7 @@ export class BatchService {
     await batch.commit();
   }
 
-  private _getDishMenusAndUsages({ menuId, daysChange, menusChange }: {
+  private _getDishUpdates({ menuId, daysChange, menusChange }: {
     menuId: string,
     daysChange: number,
     menusChange: number,
@@ -167,28 +176,28 @@ export class BatchService {
     return { usages, ...(menusChange !== 0 && { menus }) }; // only include `menus` if `menusChange` isn't 0
   }
 
-  private _deleteAllDaysMenuContents<T extends MenuDbo>(
-    batch: firebase.firestore.WriteBatch,
-    menu: T,
-  ): void {
-    const dishCounts = this._getDishCounts(menu);
-    Object
+  private _getDishesUpdates<T extends MenuDbo>(menu: T): {
+    docRef: DocumentReference<DishDbo>,
+    usages: number,
+    menus?: string[],
+  }[] {
+    const dishCounts = this._countDishes(menu);
+    return Object
       .keys(dishCounts)
-      .forEach(dishId => {
-        batch.update(this._docRefService.getDish(dishId),
-          this._getDishMenusAndUsages({
-            menuId: menu.id,
-            daysChange: -(dishCounts[dishId]),
-            menusChange: -1,
-          })
-        );
-      });
+      .map(dishId => ({
+        docRef: this._docRefService.getDish(dishId),
+        ...this._getDishUpdates({
+          menuId: menu.id,
+          daysChange: -(dishCounts[dishId]),
+          menusChange: -1,
+        })
+      }));
   }
 
-  private _getTagUpdates(
-    dish: Dish,
-    updateTagIds: string[] = []
-  ): { docRef: DocumentReference<TagDbo>, dishes: string[] }[] {
+  private _getTagsUpdates(dish: Dish, updateTagIds: string[] = []): {
+    docRef: DocumentReference<TagDbo>,
+    dishes: string[]
+  }[] {
     const dishTagIds = dish.tags.map(dish => dish.id)
     const allIds = [...new Set([
       ...dishTagIds,
@@ -196,25 +205,25 @@ export class BatchService {
     ])];
     const tagUpdates = [];
     for (let id of allIds) {
-      let dishesUpdate = undefined;
+      let dishes = undefined;
 
       if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
-        dishesUpdate = this._firestoreService.removeFromArray(dish.id);
+        dishes = this._firestoreService.removeFromArray(dish.id);
       } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
-        dishesUpdate = this._firestoreService.addToArray(dish.id);
+        dishes = this._firestoreService.addToArray(dish.id);
       }
 
-      if (dishesUpdate) {
+      if (dishes) {
         tagUpdates.push({
           docRef: this._docRefService.getTag(id),
-          dishes: dishesUpdate,
+          dishes,
         });
       }
     }
     return tagUpdates;
   }
 
-  private _getDishCounts<TMenu extends MenuDbo>(menu: TMenu): { [dishId: string]: number } {
+  private _countDishes<TMenu extends MenuDbo>(menu: TMenu): { [dishId: string]: number } {
     return Object
       .values(menu.contents)
       .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
