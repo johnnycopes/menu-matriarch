@@ -10,7 +10,7 @@ import { DishType } from '@models/types/dish-type.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
-import { DocRefService } from './doc-ref.service';
+import { BatchService } from './batch.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
@@ -22,7 +22,7 @@ export class DishService {
 
   constructor(
     private _firestoreService: FirestoreService,
-    private _docRefService: DocRefService,
+    private _batchService: BatchService,
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
@@ -91,18 +91,11 @@ export class DishService {
   ): Observable<Dish | undefined> {
     return this.getDish(id).pipe(
       first(),
-      tap(async (dish) => {
+      tap(async dish => {
         if (!dish) {
           return;
         }
-        const batch = this._firestoreService.getBatch();
-        batch.update(this._docRefService.getDish(dish.id), updates);
-        if (updates.tags) {
-          this._getTagUpdates(dish, updates.tags).forEach(
-            ({ docRef, dishes }) => batch.update(docRef, { dishes })
-          );
-        }
-        await batch.commit();
+        await this._batchService.updateDish(dish, updates);
       })
     );
   }
@@ -114,37 +107,7 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await this._firestoreService.getTransaction(async transaction => {
-          const isNotDishId = (dishId: string) => dishId !== dish.id;
-          let menuUpdates = [];
-          for (const menuId of dish.menus) {
-            const menuDoc = this._docRefService.getMenu(menuId);
-            const menu = await transaction.get(menuDoc);
-            const menuContents = menu.data()?.contents;
-            if (menuContents) {
-              const contents = {
-                Monday: menuContents.Monday.filter(isNotDishId),
-                Tuesday: menuContents.Tuesday.filter(isNotDishId),
-                Wednesday: menuContents.Wednesday.filter(isNotDishId),
-                Thursday: menuContents.Thursday.filter(isNotDishId),
-                Friday: menuContents.Friday.filter(isNotDishId),
-                Saturday: menuContents.Saturday.filter(isNotDishId),
-                Sunday: menuContents.Sunday.filter(isNotDishId),
-              };
-              menuUpdates.push({
-                docRef: menuDoc,
-                contents,
-              });
-            }
-          }
-          menuUpdates.forEach(({ docRef, contents }) => {
-            transaction.update(docRef, { contents });
-          });
-          this._getTagUpdates(dish).forEach(
-            ({ docRef, dishes }) => transaction.update(docRef, { dishes })
-          );
-          transaction.delete(this._docRefService.getDish(dish.id));
-        });
+        await this._batchService.deleteDish(dish);
       })
     );
   }
@@ -154,35 +117,5 @@ export class DishService {
       ...dish,
       tags: tags.filter(tag => dish.tags.includes(tag.id))
     };
-  }
-
-
-  private _getTagUpdates(
-    dish: Dish,
-    updateTagIds: string[] = []
-  ) {
-    const dishTagIds = dish.tags.map(dish => dish.id)
-    const allIds = [...new Set([
-      ...dishTagIds,
-      ...updateTagIds
-    ])];
-    const tagUpdates = [];
-    for (let id of allIds) {
-      let dishesUpdate = undefined;
-
-      if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
-        dishesUpdate = this._firestoreService.removeFromArray(dish.id);
-      } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
-        dishesUpdate = this._firestoreService.addToArray(dish.id);
-      }
-
-      if (dishesUpdate) {
-        tagUpdates.push({
-          docRef: this._docRefService.getTag(id),
-          dishes: dishesUpdate,
-        });
-      }
-    }
-    return tagUpdates;
   }
 }
