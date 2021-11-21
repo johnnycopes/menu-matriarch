@@ -11,7 +11,13 @@ import { Tag } from '@models/interfaces/tag.interface';
 import { FirestoreService } from './firestore.service';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
+import { dedupe } from '@shared/utility/dedupe';
 import { flattenValues } from '@shared/utility/flatten-values';
+
+interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
+  docRef: DocumentReference<TDocRef>;
+  updates: TUpdates;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -46,11 +52,17 @@ export class BatchService {
     await batch.commit();
   }
 
-  public async updateDish(dish: Dish, updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>) {
+  public async updateDish(
+    dish: Dish,
+    updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>
+  ): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.update(this._getDishDoc(dish.id), updates);
     if (updates.tags) {
-      this._processUpdates(batch, this._getTagsUpdates(dish, updates.tags));
+      this._processUpdates(batch, this._getTagsUpdates({
+        dish,
+        updateTagIds: updates.tags
+      }));
     }
     await batch.commit();
   }
@@ -68,7 +80,7 @@ export class BatchService {
     await batch.commit();
   }
 
-  public async deleteMenuContents(menu: Menu, day?: Day) {
+  public async deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
     const batch = this._firestoreService.getBatch();
     // Clear a single day's contents
     if (day) {
@@ -103,7 +115,7 @@ export class BatchService {
         menuIds: dish.menus,
         getDishes: () => this._firestoreService.removeFromArray(dish.id)
       }),
-      ...this._getTagsUpdates(dish),
+      ...this._getTagsUpdates({ dish }),
     ]);
     await batch.commit();
   }
@@ -123,10 +135,7 @@ export class BatchService {
     menuIds: string[],
     day?: Day,
     getDishes?: () => string[],
-  }): {
-    docRef: DocumentReference<MenuDbo>,
-    updates: { [key: string]: string[] },
-  }[] {
+  }): DocRefUpdate<MenuDbo, { [key: string]: string[] }>[] {
     let updates = {};
     if (day) {
       updates = this._getMenuDayDishes(day, getDishes());
@@ -151,15 +160,13 @@ export class BatchService {
     dishIds: string[],
     menu: TMenu,
     change: 'increment' | 'decrement' | 'clear',
-  }): {
-    docRef: DocumentReference<DishDbo>,
-    updates: { usages: number, menus?: string[] }
-  }[] {
+  }): DocRefUpdate<DishDbo, { usages: number, menus?: string[] }>[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({
         ...hashMap,
         [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
       }), {} as { [dishId: string]: number });
+
     return dishIds.map(dishId => {
       const dishCount = dishCounts[dishId] ?? 0;
       let menusChange = 0;
@@ -181,24 +188,18 @@ export class BatchService {
     });
   }
 
-  private _getTagsUpdates(dish: Dish, updateTagIds: string[] = []): {
-    docRef: DocumentReference<TagDbo>,
-    updates: {
-      dishes: string[],
-    },
-  }[] {
-    const dishTagIds = dish.tags.map(dish => dish.id)
-    const allIds = [...new Set([
-      ...dishTagIds,
-      ...updateTagIds
-    ])];
+  private _getTagsUpdates({ dish, updateTagIds = [] }: {
+    dish: Dish,
+    updateTagIds?: string[],
+  }): DocRefUpdate<TagDbo, { dishes: string[] }>[] {
+    const tagIds = dish.tags.map(tag => tag.id)
     const tagUpdates = [];
-    for (let id of allIds) {
+    for (let id of dedupe(tagIds, updateTagIds)) {
       let dishes = undefined;
 
-      if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
+      if (tagIds.includes(id) && !updateTagIds.includes(id)) {
         dishes = this._firestoreService.removeFromArray(dish.id);
-      } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
+      } else if (!tagIds.includes(id) && updateTagIds.includes(id)) {
         dishes = this._firestoreService.addToArray(dish.id);
       }
 
@@ -212,7 +213,7 @@ export class BatchService {
     return tagUpdates;
   }
 
-  private _getMenuDayDishes(day: Day, dishes: string[]): { [key: string]: string[] } {
+  private _getMenuDayDishes(day: Day, dishes: string[]): { [contentsDay: string]: string[] } {
     return { [`contents.${day}`]: dishes };
   }
 
@@ -230,7 +231,7 @@ export class BatchService {
 
   private _processUpdates(
     batch: firebase.firestore.WriteBatch,
-    docRefUpdates: { docRef: DocumentReference, updates: {} }[]
+    docRefUpdates: DocRefUpdate<any, any>[]
   ): void {
     docRefUpdates.forEach(
       ({ docRef, updates }) => batch.update(docRef, updates)
