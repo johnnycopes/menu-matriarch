@@ -11,6 +11,7 @@ import { Tag } from '@models/interfaces/tag.interface';
 import { FirestoreService } from './firestore.service';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
+import { flattenValues } from '@shared/utility/flatten-values';
 
 @Injectable({
   providedIn: 'root'
@@ -59,9 +60,7 @@ export class BatchService {
     batch.delete(this._getMenuDoc(menu.id));
     this._processUpdates(batch,
       this._getDishesUpdates({
-        dishIds: Object
-          .values(menu.contents)
-          .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), []),
+        dishIds: flattenValues(menu.contents),
         menu,
         change: 'clear'
       }),
@@ -71,7 +70,6 @@ export class BatchService {
 
   public async deleteMenuContents(menu: Menu, day?: Day) {
     const batch = this._firestoreService.getBatch();
-
     // Clear a single day's contents
     if (day) {
       this._processUpdates(batch, [
@@ -88,15 +86,12 @@ export class BatchService {
       this._processUpdates(batch, [
         ...this._getMenusUpdates({ menuIds: [menu.id] }),
         ...this._getDishesUpdates({
-          dishIds: Object
-            .values(menu.contents)
-            .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), []),
+          dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear'
         }),
       ]);
     }
-
     await batch.commit();
   }
 
@@ -160,7 +155,11 @@ export class BatchService {
     docRef: DocumentReference<DishDbo>,
     updates: { usages: number, menus?: string[] }
   }[] {
-    const dishCounts = this._countDishes(menu);
+    const dishCounts = flattenValues(menu.contents)
+      .reduce((hashMap, dishId) => ({
+        ...hashMap,
+        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
+      }), {} as { [dishId: string]: number });
     return dishIds.map(dishId => {
       const dishCount = dishCounts[dishId] ?? 0;
       let menusChange = 0;
@@ -215,16 +214,6 @@ export class BatchService {
 
   private _getMenuDayDishes(day: Day, dishes: string[]): { [key: string]: string[] } {
     return { [`contents.${day}`]: dishes };
-  }
-
-  private _countDishes<TMenu extends MenuDbo>(menu: TMenu): { [dishId: string]: number } {
-    return Object
-      .values(menu.contents)
-      .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), [])
-      .reduce((hashMap, dishId) => ({
-        ...hashMap,
-        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
-      }), {} as { [dishId: string]: number });
   }
 
   private _getDishDoc(id: string): DocumentReference<DishDbo> {
