@@ -28,20 +28,11 @@ export class BatchService {
     selected: boolean,
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    const dishCount = this._countDishes(menu)[dishId] ?? 0;
-    let menusChange = 0;
-    if (dishCount === 0 && selected) {
-      menusChange = 1;
-    } else if (dishCount === 1 && !selected) {
-      menusChange = -1;
-    }
-
     this._processUpdates(batch, [
-      this._getDishUpdates({
-        dishId,
-        menuId: menu.id,
-        daysChange: selected ? 1 : -1,
-        menusChange,
+      ...this._getDishesUpdates({
+        dishIds: [dishId],
+        menu,
+        change: selected ? 'increment' : 'decrement'
       }),
       ...this._getMenusUpdates({
         menuIds: [menu.id],
@@ -66,7 +57,15 @@ export class BatchService {
   public async deleteMenu(menu: MenuDbo): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._getMenuDoc(menu.id));
-    this._processUpdates(batch, this._getDishesUpdates(menu));
+    this._processUpdates(batch,
+      this._getDishesUpdates({
+        dishIds: Object
+          .values(menu.contents)
+          .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), []),
+        menu,
+        change: 'clear'
+      }),
+    );
     await batch.commit();
   }
 
@@ -75,25 +74,26 @@ export class BatchService {
 
     // Clear a single day's contents
     if (day) {
-      const dishCounts = this._countDishes(menu);
       this._processUpdates(batch, [
         ...this._getMenusUpdates({ menuIds: [menu.id], day }),
-        ...menu.contents[day].map(dishId => {
-          const dishInOtherDay = dishCounts[dishId] > 1;
-          return this._getDishUpdates({
-            dishId,
-            menuId: menu.id,
-            daysChange: -1,
-            menusChange: dishInOtherDay ? 0 : -1,
-          });
-        })
+        ...this._getDishesUpdates({
+          dishIds: menu.contents[day],
+          menu,
+          change: 'decrement'
+        }),
       ]);
     }
     // Clear all days' contents
     else {
       this._processUpdates(batch, [
         ...this._getMenusUpdates({ menuIds: [menu.id] }),
-        ...this._getDishesUpdates(menu),
+        ...this._getDishesUpdates({
+          dishIds: Object
+            .values(menu.contents)
+            .reduce((allDishIds, dayDishIds) => ([...allDishIds, ...dayDishIds]), []),
+          menu,
+          change: 'clear'
+        }),
       ]);
     }
 
@@ -152,44 +152,34 @@ export class BatchService {
     }));
   }
 
-  private _getDishesUpdates<T extends MenuDbo>(menu: T): {
-    docRef: DocumentReference<DishDbo>,
-    updates: {
-      usages: number,
-      menus?: string[],
-    },
-  }[] {
-    const dishCounts = this._countDishes(menu);
-    return Object
-      .keys(dishCounts)
-      .map(dishId => this._getDishUpdates({
-        dishId,
-        menuId: menu.id,
-        daysChange: -(dishCounts[dishId]),
-        menusChange: -1,
-      }));
-  }
-
-  private _getDishUpdates({ dishId, menuId, daysChange, menusChange }: {
-    dishId: string,
-    menuId: string,
-    daysChange: number,
-    menusChange: number,
+  private _getDishesUpdates<TMenu extends MenuDbo>({ dishIds, menu, change }: {
+    dishIds: string[],
+    menu: TMenu,
+    change: 'increment' | 'decrement' | 'clear',
   }): {
     docRef: DocumentReference<DishDbo>,
     updates: { usages: number, menus?: string[] }
-  } {
-    const usages = this._firestoreService.changeCounter(daysChange);
-    const menus = menusChange > 0
-      ? this._firestoreService.addToArray(menuId)
-      : this._firestoreService.removeFromArray(menuId);
-    return {
-      docRef: this._getDishDoc(dishId),
-      updates: {
-        usages,
-        ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
-      },
-    };
+  }[] {
+    const dishCounts = this._countDishes(menu);
+    return dishIds.map(dishId => {
+      const dishCount = dishCounts[dishId] ?? 0;
+      let menusChange = 0;
+      if (dishCount === 0 && change === 'increment') {
+        menusChange = 1;
+      } else if ((dishCount === 1 && change === 'decrement') || change === 'clear') {
+        menusChange = -1;
+      }
+      const menus = menusChange > 0
+        ? this._firestoreService.addToArray(menu.id)
+        : this._firestoreService.removeFromArray(menu.id);
+      return {
+        docRef: this._getDishDoc(dishId),
+        updates: {
+          usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
+          ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
+        },
+      };
+    });
   }
 
   private _getTagsUpdates(dish: Dish, updateTagIds: string[] = []): {
