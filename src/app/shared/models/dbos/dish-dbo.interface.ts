@@ -10,5 +10,5 @@ export interface DishDbo {
   ingredients: string[];
   tags: string[];
   menus: string[];
-  usages: number; // TODO: rename this to 'days'
+  usages: number;
 }
