@@ -1,5 +1,5 @@
 
-import { Component, AfterContentInit, ContentChildren, QueryList, Input, TemplateRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterContentInit, ContentChildren, QueryList, Input, TemplateRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
@@ -21,10 +21,18 @@ export class TabsetComponent extends AnimatedComponent implements AfterContentIn
   @Input() contentVisibility: TabsetContentVisibility = 'visible';
   @ContentChildren(TabComponent)
   public tabs: QueryList<TabComponent> | undefined;
+  public contentMaxHeight = '100%';
   private _destroy$ = new Subject();
+
+  @ViewChild('tabsElement')
+  public tabsElement: ElementRef | undefined;
 
   constructor(private _changeDetectorRef: ChangeDetectorRef) {
     super();
+  }
+
+  public ngAfterViewInit(): void {
+    this.contentMaxHeight = `calc(100% - ${this.tabsElement?.nativeElement?.clientHeight ?? 0}px)`;
   }
 
   public ngAfterContentInit(): void {

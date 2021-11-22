@@ -21,7 +21,7 @@
         name="Mains ({{ vm.mains.length }})"
         [selected]="vm.initialTab === 'main'"
       >
-        <ng-container *ngIf="vm.mains.length; else noMainsPlaceholder">
+        <ul *ngIf="vm.mains.length; else noMainsPlaceholder">
           <li app-dish
             *ngFor="let main of vm.mains; trackBy: trackByFn"
             [id]="main.id"
@@ -34,7 +34,7 @@
             [menus]="main.menus"
             [usages]="main.usages"
           ></li>
-        </ng-container>
+        </ul>
         <ng-template #noMainsPlaceholder>
           <div class="placeholder">
             No main dishes to display
@@ -45,7 +45,7 @@
         name="Sides ({{ vm.sides.length }})"
         [selected]="vm.initialTab === 'side'"
       >
-        <ng-container *ngIf="vm.sides.length; else noSidesPlaceholder">
+        <ul *ngIf="vm.sides.length; else noSidesPlaceholder">
           <li app-dish
             *ngFor="let side of vm.sides; trackBy: trackByFn"
             [id]="side.id"
@@ -58,7 +58,7 @@
             [menus]="side.menus"
             [usages]="side.usages"
           ></li>
-        </ng-container>
+        </ul>
         <ng-template #noSidesPlaceholder>
           <div class="placeholder">
             No side dishes to display

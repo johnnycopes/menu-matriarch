@@ -1,11 +1,18 @@
 @import 'main';
 
+:host {
+  display: block;
+  height: 100%;
+}
+
 .tabs {
   display: flex;
   justify-content: center;
-  cursor: pointer;
-  font-size: font-size(16);
+  max-height: 100%;
+  padding: 0 16px;
   gap: 8px;
+  font-size: font-size(16);
+  cursor: pointer;
 }
 
 .tab {
@@ -41,5 +48,6 @@
 }
 
 .content {
-  margin: spacing(16) auto;
+  padding: spacing(8) spacing(16) spacing(16);
+  overflow: auto;
 }

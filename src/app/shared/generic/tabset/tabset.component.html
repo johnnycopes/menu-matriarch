@@ -1,5 +1,7 @@
 <ng-template #defaultControlsTemplate>
-  <ul class="tabs">
+  <ul class="tabs"
+    #tabsElement
+  >
     <li *ngFor="let tab of tabs"
       class="tab"
       [class.tab--selected]="tab.selected"
@@ -16,6 +18,7 @@
 "></ng-container>
 <div class="content"
   @fadeIn
+  [style.maxHeight]="contentMaxHeight"
   [@visibility]="contentVisibility"
   (@fadeIn.start)="onAnimationStart($event)"
   (@fadeIn.done)="onAnimationFinish($event)"

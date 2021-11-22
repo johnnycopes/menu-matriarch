@@ -21,9 +21,11 @@
 }
 
 .app-section__content {
-  li[app-planner-dish]:not(:last-of-type) {
-    margin-bottom: spacing(8);
-  }
+  padding: unset;
+}
+
+li[app-planner-dish]:not(:last-of-type) {
+  margin-bottom: spacing(8);
 }
 
 .placeholder {
