@@ -14,11 +14,13 @@ app-input {
 
 .tags {
   display: flex;
+  flex-wrap: wrap;
   margin-top: spacing(8);
 }
 
 .tag {
   margin-right: spacing(16);
+  margin-bottom: spacing(8);
 }
 
 .placeholder {
