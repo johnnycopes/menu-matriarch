@@ -38,6 +38,8 @@ export class TagsFormComponent {
   }
 
   public onTagDelete(id: string): void {
-    this._tagService.deleteTag(id);
+    this._tagService
+      .deleteTag(id)
+      .subscribe();
   }
 }

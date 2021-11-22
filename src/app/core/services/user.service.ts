@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { UserDbo } from '@models/dbos/user-dbo.interface';
 import { User } from '@models/interfaces/user.interface';
 import { UserPreferences } from '@models/interfaces/user-preferences.interface';
@@ -12,7 +13,7 @@ import { FirestoreService } from './firestore.service';
   providedIn: 'root'
 })
 export class UserService {
-  private _endpoint = 'users';
+  private _endpoint = Endpoint.users;
 
   constructor(
     private _auth: AngularFireAuth,

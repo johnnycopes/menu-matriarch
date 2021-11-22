@@ -11,7 +11,7 @@ import { mapTo, shareReplay } from 'rxjs/operators';
 export class TagsFormItemComponent {
   @Input() id = '';
   @Input() name = '';
-  @Input() usages = 0;
+  @Input() dishes: string[] = [];
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<void>();
   public startEdit$ = new Subject<void>();

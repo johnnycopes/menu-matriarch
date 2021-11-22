@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { concatMap, first, map, switchMap } from 'rxjs/operators';
+import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { TagDbo } from '@models/dbos/tag-dbo.interface';
 import { Tag } from '@models/interfaces/tag.interface';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
+import { BatchService } from './batch.service';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TagService {
-  private _endpoint = 'tags';
+  private _endpoint = Endpoint.tags;
 
   constructor(
     private _firestoreService: FirestoreService,
+    private _batchService: BatchService,
     private _userService: UserService,
   ) { }
 
@@ -45,7 +48,7 @@ export class TagService {
               uid,
               name,
               color: '',
-              usages: 0,
+              dishes: [],
             }
           );
           return id;
@@ -60,7 +63,15 @@ export class TagService {
     return this._firestoreService.update<TagDbo>(this._endpoint, id, updates);
   }
 
-  public deleteTag(id: string): Promise<void> {
-    return this._firestoreService.delete<TagDbo>(this._endpoint, id);
+  public deleteTag(id: string): Observable<Tag | undefined> {
+    return this.getTag(id).pipe(
+      first(),
+      tap(async tag => {
+        if (!tag) {
+          return;
+        }
+        await this._batchService.deleteTag(tag);
+      })
+    );
   }
 }

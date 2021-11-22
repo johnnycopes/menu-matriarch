@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
-import firebase from 'firebase/compat/app';
 
+import { Endpoint } from '@models/enums/endpoint.enum';
 import { DishDbo } from '@models/dbos/dish-dbo.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Tag } from '@models/interfaces/tag.interface';
@@ -10,6 +10,7 @@ import { DishType } from '@models/types/dish-type.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
+import { BatchService } from './batch.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
@@ -17,10 +18,11 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class DishService {
-  private _endpoint = 'dishes';
+  private _endpoint = Endpoint.dishes;
 
   constructor(
     private _firestoreService: FirestoreService,
+    private _batchService: BatchService,
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
@@ -34,10 +36,7 @@ export class DishService {
         if (!dish) {
           return undefined;
         }
-        return {
-          ...dish,
-          tags: tags.filter(tag => dish.tags.includes(tag.id))
-        };
+        return this._getDish(dish, tags);
       })
     );
   }
@@ -50,12 +49,7 @@ export class DishService {
       ),
       this._tagService.getTags(),
     ]).pipe(
-      map(([dishes, tags]) => {
-        return dishes.map(dish => ({
-          ...dish,
-          tags: tags.filter(tag => dish.tags.includes(tag.id))
-        }));
-      })
+      map(([dishes, tags]) => dishes.map(dish => this._getDish(dish, tags)))
     );
   }
 
@@ -91,33 +85,19 @@ export class DishService {
     );
   }
 
-  public updateDishDetails(
+  public updateDish(
     id: string,
     updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>
   ): Observable<Dish | undefined> {
     return this.getDish(id).pipe(
       first(),
-      tap(async (dish) => {
+      tap(async dish => {
         if (!dish) {
           return;
         }
-        let tagUpdatePromises: Promise<void>[] = [];
-        if (updates.tags) {
-          tagUpdatePromises = this._getTagUpdatePromises(dish.tags, updates.tags);
-        }
-        await Promise.all([
-          this._updateDish(id, updates),
-          tagUpdatePromises,
-        ]);
+        await this._batchService.updateDish(dish, updates);
       })
     );
-  }
-
-  public updateDishCounters(
-    id: string,
-    updates: Partial<Pick<DishDbo, 'usages' | 'menus'>>
-  ): Promise<void> {
-    return this._updateDish(id, updates);
   }
 
   public deleteDish(id: string): Observable<Dish | undefined> {
@@ -127,45 +107,15 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await Promise.all([
-          this._firestoreService.delete<DishDbo>(this._endpoint, id),
-          this._getTagUpdatePromises(dish.tags),
-        ]);
+        await this._batchService.deleteDish(dish);
       })
     );
   }
 
-  private _updateDish(id: string, updates: Partial<DishDbo>): Promise<void> {
-    return this._firestoreService.update<DishDbo>(this._endpoint, id, updates);
-  }
-
-  private _getTagUpdatePromises(
-    dishTags: Tag[],
-    updateTagIds: string[] = []
-  ): Promise<void>[] {
-    const dishTagIds = dishTags.map(dish => dish.id)
-    const allIds = [...new Set([
-      ...dishTagIds,
-      ...updateTagIds
-    ])];
-    const updates: Promise<void>[] = [];
-
-    for (let id of allIds) {
-      let difference = 0;
-      if (dishTagIds.includes(id) && !updateTagIds.includes(id)) {
-        difference = -1;
-      } else if (!dishTagIds.includes(id) && updateTagIds.includes(id)) {
-        difference = 1;
-      }
-      if (difference !== 0) {
-        updates.push(this._tagService.updateTag(id,
-          {
-            usages: firebase.firestore.FieldValue.increment(difference) as unknown as number,
-          }
-        ));
-      }
-    }
-
-    return updates;
+  private _getDish(dish: DishDbo, tags: Tag[]): Dish {
+    return {
+      ...dish,
+      tags: tags.filter(tag => dish.tags.includes(tag.id))
+    };
   }
 }
