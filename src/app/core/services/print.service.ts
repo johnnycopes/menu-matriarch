@@ -29,12 +29,13 @@ export class PrintService {
     return `
       <html>
         <head>
-          <title>${name}</title>
+          <title>Menu Matriarch | ${name}</title>
           <style>
             ${this._createStyles()}
           </style>
         </head>
         <body onload="window.print()">
+          <h1 class="menu-name">${name}</h1>
           ${entries
             .map(entry => this._createEntry({
               entry,
@@ -84,6 +85,10 @@ export class PrintService {
         color: #222;
       }
 
+      @page {
+        size: landscape;
+      }
+
       @media print {
         body {
           margin: 0;
@@ -105,6 +110,11 @@ export class PrintService {
         font-family: 'Georgia';
       }
 
+      .menu-name {
+        margin-bottom: 8pt;
+        font-size: 14pt;
+      }
+
       .entry {
         margin-bottom: 8pt;
       }
@@ -117,7 +127,7 @@ export class PrintService {
       .day {
         max-width: 256pt;
         font-size: 8pt;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.5pt;
         text-transform: uppercase;
         border-bottom: 1px solid #e2e2e2;
       }
