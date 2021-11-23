@@ -9,7 +9,8 @@
     "test": "ng test",
     "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev",
     "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
-    "reset-dev": "node scripts/dev/delete-users-dev.js && firebase firestore:delete --all-collections -y --project menu-matriarch-dev"
+    "delete-user": "node scripts/dev/delete-user.js",
+    "reset-dev": "node scripts/dev/delete-all-users.js && firebase firestore:delete --all-collections -y --project menu-matriarch-dev"
   },
   "private": true,
   "dependencies": {
