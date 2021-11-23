@@ -1,5 +1,5 @@
 <div class="container">
-  <a class="link"
+  <a class="dish-link"
     routerLink="/dishes/{{ id }}"
   >
     <h3 class="name">
@@ -7,6 +7,15 @@
     </h3>
   </a>
   <div class="details">
+    <a *ngIf="link"
+      class="external-link"
+      [href]="link"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <fa-icon [icon]="faLink">
+      </fa-icon>
+    </a>
     <app-count
       type="days"
       [count]="usages"

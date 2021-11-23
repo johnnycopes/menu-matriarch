@@ -13,6 +13,7 @@ export class DishComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() description = '';
+  @Input() link = '';
   @Input() type: DishType = 'main';
   @Input() favorited: boolean = false;
   @Input() ingredients: string[] = [];

@@ -23,6 +23,7 @@ export class PlannerDishComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() description = '';
+  @Input() link = '';
   @Input() type: DishType = 'main';
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];

@@ -11,6 +11,7 @@ import { TagService } from '@services/tag.service';
 interface IDishEditForm {
   name: string;
   description: string;
+  link: string;
   type: DishType;
   tags: string[];
 }
@@ -36,6 +37,7 @@ export class DishEditComponent {
         return {
           name: '',
           description: '',
+          link: '',
           type: 'main',
           tags: tags.map(tag => ({
             id: tag.id,
@@ -67,6 +69,7 @@ export class DishEditComponent {
     const details: IDishEditForm = {
       name: form.value.name,
       description: form.value.description,
+      link: form.value.link,
       type: form.value.type,
       tags: Object
         .entries<boolean>(form.value.tags)

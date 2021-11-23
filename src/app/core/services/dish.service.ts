@@ -69,6 +69,7 @@ export class DishService {
               uid,
               name,
               description,
+              link: '',
               type,
               favorited: false,
               ingredients: [],
