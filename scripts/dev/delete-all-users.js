@@ -16,7 +16,7 @@ function deleteUser(uid) {
     });
 }
 
-function getAllUsers(nextPageToken) {
+function deleteAllUsers(nextPageToken) {
   admin.auth().listUsers(100, nextPageToken)
     .then(function (listUsersResult) {
       listUsersResult.users.forEach(function (userRecord) {
@@ -24,7 +24,7 @@ function getAllUsers(nextPageToken) {
         deleteUser(uid);
       });
       if (listUsersResult.pageToken) {
-        getAllUsers(listUsersResult.pageToken);
+        deleteAllUsers(listUsersResult.pageToken);
       }
     })
     .catch(function (error) {
@@ -32,4 +32,4 @@ function getAllUsers(nextPageToken) {
     });
 }
 
-getAllUsers();
+deleteAllUsers();
