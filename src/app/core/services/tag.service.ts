@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
-import { TagDbo } from '@models/dbos/tag-dbo.interface';
+import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/interfaces/tag.interface';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
@@ -24,12 +24,12 @@ export class TagService {
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
-    return this._firestoreService.getOne<TagDbo>(this._endpoint, id);
+    return this._firestoreService.getOne<TagDto>(this._endpoint, id);
   }
 
   public getTags(): Observable<Tag[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<TagDbo>(this._endpoint, uid)),
+      switchMap(uid => this._firestoreService.getMany<TagDto>(this._endpoint, uid)),
       map(tags => sort(tags, tag => lower(tag.name)))
     );
   }
@@ -40,7 +40,7 @@ export class TagService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<TagDbo>(
+          await this._firestoreService.create<TagDto>(
             this._endpoint,
             id,
             {
@@ -59,8 +59,8 @@ export class TagService {
     );
   }
 
-  public updateTag(id: string, updates: Partial<TagDbo>): Promise<void> {
-    return this._firestoreService.update<TagDbo>(this._endpoint, id, updates);
+  public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
+    return this._firestoreService.update<TagDto>(this._endpoint, id, updates);
   }
 
   public deleteTag(id: string): Observable<Tag | undefined> {

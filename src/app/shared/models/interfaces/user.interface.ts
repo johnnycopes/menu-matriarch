@@ -1,3 +1,3 @@
-import { UserDbo } from "@models/dbos/user-dbo.interface";
+import { UserDto } from "@models/dtos/user-dto.interface";
 
-export interface User extends UserDbo { }
+export interface User extends UserDto { }

@@ -1,4 +1,4 @@
-export interface TagDbo {
+export interface TagDto {
   id: string;
   uid: string;
   name: string;

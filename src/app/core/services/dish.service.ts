@@ -3,7 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
-import { DishDbo } from '@models/dbos/dish-dbo.interface';
+import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Tag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
@@ -29,7 +29,7 @@ export class DishService {
 
   public getDish(id: string): Observable<Dish | undefined> {
     return combineLatest([
-      this._firestoreService.getOne<DishDbo>(this._endpoint, id),
+      this._firestoreService.getOne<DishDto>(this._endpoint, id),
       this._tagService.getTags(),
     ]).pipe(
       map(([dish, tags]) => {
@@ -44,7 +44,7 @@ export class DishService {
   public getDishes(): Observable<Dish[]> {
     return combineLatest([
       this._userService.uid$.pipe(
-        switchMap(uid => this._firestoreService.getMany<DishDbo>(this._endpoint, uid)),
+        switchMap(uid => this._firestoreService.getMany<DishDto>(this._endpoint, uid)),
         map(dishes => sort(dishes, dish => lower(dish.name)))
       ),
       this._tagService.getTags(),
@@ -61,7 +61,7 @@ export class DishService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<DishDbo>(
+          await this._firestoreService.create<DishDto>(
             this._endpoint,
             id,
             {
@@ -87,7 +87,7 @@ export class DishService {
 
   public updateDish(
     id: string,
-    updates: Partial<Omit<DishDbo, 'usages' | 'menus'>>
+    updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Observable<Dish | undefined> {
     return this.getDish(id).pipe(
       first(),
@@ -112,7 +112,7 @@ export class DishService {
     );
   }
 
-  private _getDish(dish: DishDbo, tags: Tag[]): Dish {
+  private _getDish(dish: DishDto, tags: Tag[]): Dish {
     return {
       ...dish,
       tags: tags.filter(tag => dish.tags.includes(tag.id))

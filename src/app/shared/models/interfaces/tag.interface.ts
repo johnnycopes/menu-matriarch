@@ -1,3 +1,3 @@
-import { TagDbo } from "@models/dbos/tag-dbo.interface";
+import { TagDto } from "@models/dtos/tag-dto.interface";
 
-export interface Tag extends TagDbo { }
+export interface Tag extends TagDto { }

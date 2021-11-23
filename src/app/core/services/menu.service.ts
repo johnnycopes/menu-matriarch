@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
-import { MenuDbo } from '@models/dbos/menu-dbo.interface';
+import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
 import { lower } from '@shared/utility/format';
@@ -63,7 +63,7 @@ export class MenuService {
         if (!id) {
           return of(undefined);
         }
-        return this._firestoreService.getOne<MenuDbo>(this._endpoint, id);
+        return this._firestoreService.getOne<MenuDto>(this._endpoint, id);
       }),
       switchMap(menuDbo => {
         if (!menuDbo) {
@@ -76,7 +76,7 @@ export class MenuService {
 
   public getMenus(): Observable<Menu[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<MenuDbo>(this._endpoint, uid)),
+      switchMap(uid => this._firestoreService.getMany<MenuDto>(this._endpoint, uid)),
       switchMap(menus => combineLatest(
         menus.map(menu => this._transformMenuDbo(menu))
       )),
@@ -90,7 +90,7 @@ export class MenuService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<MenuDbo>(
+          await this._firestoreService.create<MenuDto>(
             this._endpoint,
             id,
             {
@@ -139,7 +139,7 @@ export class MenuService {
 
   public async deleteMenu(id?: string): Promise<void> {
     if (id) {
-      this._firestoreService.getOne<MenuDbo>(this._endpoint, id).pipe(
+      this._firestoreService.getOne<MenuDto>(this._endpoint, id).pipe(
         first(),
         tap(async menu => {
           if (!menu) {
@@ -174,7 +174,7 @@ export class MenuService {
     );
   }
 
-  private _transformMenuDbo(menu: MenuDbo): Observable<Menu> {
+  private _transformMenuDbo(menu: MenuDto): Observable<Menu> {
     return combineLatest([
       this.getOrderedDays(),
       this._dishService.getDishes(),
@@ -194,8 +194,8 @@ export class MenuService {
     );
   }
 
-  private async _updateMenu(id: string, updates: Partial<MenuDbo>): Promise<void> {
-    return await this._firestoreService.update<MenuDbo>(this._endpoint, id, updates);
+  private async _updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {
+    return await this._firestoreService.update<MenuDto>(this._endpoint, id, updates);
   }
 
   private _setMenuId(id: string): void {
