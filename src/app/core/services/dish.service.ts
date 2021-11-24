@@ -59,11 +59,7 @@ export class DishService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<DishDto>(
-            this._endpoint,
-            id,
-            createDishDto({ id, uid, ...dish })
-          );
+          await this._batchService.createDish({ uid, id, dish });
           return id;
         } else {
           return undefined;

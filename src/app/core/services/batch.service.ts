@@ -4,6 +4,7 @@ import firebase from 'firebase/compat/app';
 
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
+import { createDishDto } from '@models/dtos/create-dtos';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Endpoint } from '@models/enums/endpoint.enum';
@@ -41,6 +42,22 @@ export class BatchService {
 
   public getTagDoc(id: string): DocumentReference<TagDto> {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
+  }
+
+  public async createDish({ uid, id, dish }: {
+    uid: string,
+    id: string,
+    dish: Partial<Omit<DishDto, 'id' | 'uid'>>
+  }): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    batch.set(this.getDishDoc(id), createDishDto({ id, uid, ...dish }));
+    if (dish.tags) {
+      dish.tags.forEach(tagId => batch.update(
+        this.getTagDoc(tagId),
+        { dishes: this._firestoreService.addToArray(id) }
+      ));
+    }
+    await batch.commit();
   }
 
   public async updateMenuContents({
