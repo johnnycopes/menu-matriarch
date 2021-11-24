@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
+import { createTagDto } from '@models/dtos/create-dtos';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/interfaces/tag.interface';
 import { lower } from '@shared/utility/format';
@@ -34,7 +35,7 @@ export class TagService {
     );
   }
 
-  public createTag(name: string): Observable<string | undefined> {
+  public createTag(tag: Partial<Omit<TagDto, 'id' | 'uid'>>): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
       concatMap(async uid => {
@@ -43,13 +44,7 @@ export class TagService {
           await this._firestoreService.create<TagDto>(
             this._endpoint,
             id,
-            {
-              id,
-              uid,
-              name,
-              color: '',
-              dishes: [],
-            }
+            createTagDto({ id, uid, ...tag })
           );
           return id;
         } else {

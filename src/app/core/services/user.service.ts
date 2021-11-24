@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
+import { createUserDto } from '@models/dtos/create-dtos';
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { User } from '@models/interfaces/user.interface';
 import { UserPreferences } from '@models/interfaces/user-preferences.interface';
@@ -34,7 +35,7 @@ export class UserService {
   }
 
   public createUser(
-    { name, email }: { name: string, email: string }
+    user: Partial<Omit<UserDto, 'uid'>>
   ): Observable<string | undefined> {
     return this.uid$.pipe(
       first(),
@@ -43,18 +44,7 @@ export class UserService {
           await this._firestoreService.create<UserDto>(
             this._endpoint,
             uid,
-            {
-              uid,
-              name,
-              email,
-              preferences: {
-                darkMode: false,
-                dayNameDisplay: 'full',
-                emptyDishText: 'undecided',
-                menuOrientation: 'horizontal',
-                menuStartDay: 'Monday',
-              },
-            }
+            createUserDto({ uid, ...user }),
           );
         }
       })

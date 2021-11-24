@@ -6,7 +6,6 @@ import { Endpoint } from '@models/enums/endpoint.enum';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Tag } from '@models/interfaces/tag.interface';
-import { DishType } from '@models/types/dish-type.type';
 import { lower } from '@shared/utility/format';
 import { sort } from '@shared/utility/sort';
 import { FirestoreService } from './firestore.service';
@@ -53,31 +52,13 @@ export class DishService {
     );
   }
 
-  public createDish(
-    { name, description, type, tags }: { name: string, description: string, type: DishType, tags: string[] }
-  ): Observable<string | undefined> {
+  public createDish(dish: Partial<Omit<DishDto, 'id' | 'uid'>>): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          await this._firestoreService.create<DishDto>(
-            this._endpoint,
-            id,
-            {
-              id,
-              uid,
-              name,
-              description,
-              link: '',
-              type,
-              favorited: false,
-              ingredients: [],
-              tags,
-              menus: [],
-              usages: 0,
-            }
-          );
+          await this._batchService.createDish({ uid, id, dish });
           return id;
         } else {
           return undefined;

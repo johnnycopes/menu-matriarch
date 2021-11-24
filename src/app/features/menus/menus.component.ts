@@ -28,7 +28,7 @@ export class MenusComponent {
 
   public onSave(name: string): void {
     this._menuService
-      .createMenu(name)
+      .createMenu({ name })
       .subscribe();
     this.finishAdd$.next();
   }

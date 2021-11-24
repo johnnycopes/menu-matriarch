@@ -28,7 +28,7 @@ export class TagsFormComponent {
 
   public onNewTagSave(name: string): void {
     this._tagService
-      .createTag(name)
+      .createTag({ name })
       .subscribe();
     this.finishAdd$.next();
   }

@@ -20,7 +20,7 @@ admin.initializeApp({
     collections.map(collection => {
       return db.collection(collection)
         .where('uid', '==', uid)
-        .get()
+        .get();
     })
   );
   snapshots.forEach(snapshot => {
@@ -32,5 +32,5 @@ admin.initializeApp({
   await Promise.all([
     deleteUserAccount(admin, uid),
     batch.commit(),
-  ])
+  ]);
 })();
