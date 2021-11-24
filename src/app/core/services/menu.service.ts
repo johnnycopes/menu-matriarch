@@ -84,7 +84,7 @@ export class MenuService {
     );
   }
 
-  public createMenu(name: string): Observable<string | undefined> {
+  public createMenu(menu: Partial<Omit<MenuDto, 'id' | 'uid'>>): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
       concatMap(async uid => {
@@ -93,21 +93,7 @@ export class MenuService {
           await this._firestoreService.create<MenuDto>(
             this._endpoint,
             id,
-            {
-              id,
-              uid,
-              name,
-              favorited: false,
-              contents: {
-                Monday: [],
-                Tuesday: [],
-                Wednesday: [],
-                Thursday: [],
-                Friday: [],
-                Saturday: [],
-                Sunday: [],
-              },
-            }
+            this._createMenu({ id, uid, ...menu }),
           );
           return id;
         } else {
@@ -192,6 +178,24 @@ export class MenuService {
         };
       }),
     );
+  }
+
+  private _createMenu({ id, uid, name, favorited, contents }: Partial<MenuDto>): MenuDto {
+    return {
+      id: id ?? '',
+      uid: uid ?? '',
+      name: name ?? '',
+      favorited: favorited ?? false,
+      contents: contents ?? {
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saturday: [],
+        Sunday: [],
+      },
+    };
   }
 
   private async _updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {

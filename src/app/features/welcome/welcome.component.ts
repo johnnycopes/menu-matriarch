@@ -34,7 +34,7 @@ export class WelcomeComponent {
         const { name, email } = user;
         forkJoin([
           this._userService.createUser({ name, email }),
-          this._menuService.createMenu('My First Menu'),
+          this._menuService.createMenu({ name: 'My First Menu' }),
           this._tagService.createTag({ name: 'Vegetarian' }),
           this._tagService.createTag({ name: 'Vegan' }),
           this._dishService.createDish({ name: 'Bagels', description: 'Delicious round vessels from Poland', type: 'main', tags: [] }),
