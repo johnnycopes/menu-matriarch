@@ -34,7 +34,7 @@ export class TagService {
     );
   }
 
-  public createTag(name: string): Observable<string | undefined> {
+  public createTag(tag: Partial<Omit<TagDto, 'id' | 'uid'>>): Observable<string | undefined> {
     return this._userService.uid$.pipe(
       first(),
       concatMap(async uid => {
@@ -43,13 +43,7 @@ export class TagService {
           await this._firestoreService.create<TagDto>(
             this._endpoint,
             id,
-            {
-              id,
-              uid,
-              name,
-              color: '',
-              dishes: [],
-            }
+            this._createTag({ id, uid, ...tag })
           );
           return id;
         } else {
@@ -73,5 +67,15 @@ export class TagService {
         await this._batchService.deleteTag(tag);
       })
     );
+  }
+
+  private _createTag({ id, uid, name, color, dishes }: Partial<TagDto>): TagDto {
+    return {
+      id: id ?? '',
+      uid: uid ?? '',
+      name: name ?? '',
+      color: color ?? '',
+      dishes: dishes ?? [],
+    };
   }
 }

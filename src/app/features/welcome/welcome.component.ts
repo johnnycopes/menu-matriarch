@@ -35,8 +35,8 @@ export class WelcomeComponent {
         forkJoin([
           this._userService.createUser({ name, email }),
           this._menuService.createMenu('My First Menu'),
-          this._tagService.createTag('Vegetarian'),
-          this._tagService.createTag('Vegan'),
+          this._tagService.createTag({ name: 'Vegetarian' }),
+          this._tagService.createTag({ name: 'Vegan' }),
           this._dishService.createDish({ name: 'Bagels', description: 'Delicious round vessels from Poland', type: 'main', tags: [] }),
           this._dishService.createDish({ name: 'Mashed Potatoes', description: "Delicious squishy vessel from the U.K.", type: 'side', tags: [] }),
           this._dishService.createDish({ name: 'Pizza', description: 'Delicious flat vessel from Italy', type: 'main', tags: [] }),
