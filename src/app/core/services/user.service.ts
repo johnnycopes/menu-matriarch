@@ -35,7 +35,7 @@ export class UserService {
   }
 
   public createUser(
-    user: Partial<Omit<UserDto, 'id' | 'uid'>>
+    user: Partial<Omit<UserDto, 'uid'>>
   ): Observable<string | undefined> {
     return this.uid$.pipe(
       first(),

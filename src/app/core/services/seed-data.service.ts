@@ -19,8 +19,7 @@ export class SeedDataService {
     email: string,
   }): Promise<string> {
     const batch = this._firestoreService.getBatch();
-    const firstMenuId = this._firestoreService.createId();
-    const secondMenuId = this._firestoreService.createId();
+    const menuId = this._firestoreService.createId();
     const cornbreadDishId = this._firestoreService.createId();
     const enchiladasDishId = this._firestoreService.createId();
     const friedChickenDishId = this._firestoreService.createId();
@@ -44,8 +43,8 @@ export class SeedDataService {
         createUserDto({ uid, name, email }),
       )
       .set(
-        this._batchService.getMenuDoc(firstMenuId),
-        createMenuDto({ id: firstMenuId, uid, name: 'Menu #1', contents: {
+        this._batchService.getMenuDoc(menuId),
+        createMenuDto({ id: menuId, uid, name: 'Menu #1', contents: {
           Monday: [enchiladasDishId],
           Tuesday: [sushiDishId, misoSoupDishId],
           Wednesday: [salmonBurgersDishId, sweetPotatoFriesDishId],
@@ -53,18 +52,6 @@ export class SeedDataService {
           Friday: [pizzaDishId],
           Saturday: [thaiCurryDishId],
           Sunday: [friedChickenDishId, cornbreadDishId, macAndCheeseDishId],
-        }}),
-      )
-      .set(
-        this._batchService.getMenuDoc(secondMenuId),
-        createMenuDto({ id: secondMenuId, uid, name: 'Menu #2', contents: {
-          Monday: [],
-          Tuesday: [],
-          Wednesday: [],
-          Thursday: [],
-          Friday: [],
-          Saturday: [],
-          Sunday: [],
         }}),
       )
       .set(
@@ -76,7 +63,7 @@ export class SeedDataService {
           description: 'Made in the skillet with brown butter',
           type: 'side',
           link: 'https://cooking.nytimes.com/recipes/1016965-brown-butter-skillet-cornbread',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [vegetarianTagId],
           usages: 1,
         })
@@ -88,7 +75,7 @@ export class SeedDataService {
           uid,
           name: 'Enchiladas',
           link: 'https://cooking.nytimes.com/recipes/1018152-enchiladas-con-carne',
-          menus: [firstMenuId],
+          menus: [menuId],
           usages: 1,
         })
       )
@@ -99,7 +86,7 @@ export class SeedDataService {
           uid,
           name: 'Fried Chicken',
           link: 'https://cooking.nytimes.com/recipes/1018219-buttermilk-fried-chicken',
-          menus: [firstMenuId],
+          menus: [menuId],
           usages: 1,
         })
       )
@@ -121,7 +108,7 @@ export class SeedDataService {
           description: 'Delicious baked noodles from the USA',
           type: 'side',
           link: 'https://cooking.nytimes.com/recipes/1015825-creamy-macaroni-and-cheese',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [vegetarianTagId],
           usages: 1,
         })
@@ -133,7 +120,7 @@ export class SeedDataService {
           uid,
           name: 'Miso Soup',
           type: 'side',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
         })
@@ -146,7 +133,7 @@ export class SeedDataService {
           name: 'Pizza',
           description: 'Delicious round vessel from Italy',
           link: 'https://cooking.nytimes.com/guides/1-how-to-make-pizza',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [vegetarianTagId],
           usages: 1,
         })
@@ -158,7 +145,7 @@ export class SeedDataService {
           uid,
           name: 'Red Lentil Soup',
           link: 'https://cooking.nytimes.com/recipes/1016062-red-lentil-soup-with-lemon',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
         })
@@ -181,7 +168,7 @@ export class SeedDataService {
           uid,
           name: 'Salmon Burgers',
           link: 'https://cooking.nytimes.com/recipes/7131-salmon-burgers',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [pescatarianTagId],
           usages: 1,
         })
@@ -193,7 +180,7 @@ export class SeedDataService {
           uid,
           name: 'Sushi',
           description: 'Delicious tiny vessels from Japan',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [pescatarianTagId],
           usages: 1,
         })
@@ -205,7 +192,7 @@ export class SeedDataService {
           uid,
           name: 'Sweet Potato Fries',
           type: 'side',
-          menus: [firstMenuId],
+          menus: [menuId],
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
         })
@@ -218,7 +205,7 @@ export class SeedDataService {
           name: 'Thai Curry',
           description: 'Delicious fragrant stew from Thailand',
           link: 'https://cooking.nytimes.com/recipes/1015694-vegan-thai-curry-vegetables',
-          menus: [secondMenuId],
+          menus: [menuId],
           tags: [easyTagId, veganTagId, vegetarianTagId],
           usages: 1,
         })
@@ -256,6 +243,6 @@ export class SeedDataService {
         ]}),
       );
     await batch.commit();
-    return firstMenuId;
+    return menuId;
   }
 }
