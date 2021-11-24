@@ -34,7 +34,7 @@ export class UserService {
   }
 
   public createUser(
-    { name, email }: { name: string, email: string }
+    user: Partial<Omit<UserDto, 'id' | 'uid'>>
   ): Observable<string | undefined> {
     return this.uid$.pipe(
       first(),
@@ -43,18 +43,7 @@ export class UserService {
           await this._firestoreService.create<UserDto>(
             this._endpoint,
             uid,
-            {
-              uid,
-              name,
-              email,
-              preferences: {
-                darkMode: false,
-                dayNameDisplay: 'full',
-                emptyDishText: 'undecided',
-                menuOrientation: 'horizontal',
-                menuStartDay: 'Monday',
-              },
-            }
+            this._createUser({ uid, ...user }),
           );
         }
       })
@@ -96,5 +85,20 @@ export class UserService {
         );
       }),
     );
+  }
+
+  private _createUser({ uid, name, email, preferences }: Partial<UserDto>): UserDto {
+    return {
+      uid: uid ?? '',
+      name: name ?? '',
+      email: email ?? '',
+      preferences: {
+        darkMode: preferences?.darkMode ?? false,
+        dayNameDisplay: preferences?.dayNameDisplay ?? 'full',
+        emptyDishText: preferences?.emptyDishText ?? 'undecided',
+        menuOrientation: preferences?.menuOrientation ?? 'horizontal',
+        menuStartDay: preferences?.menuStartDay ?? 'Monday',
+      },
+    }
   }
 }
