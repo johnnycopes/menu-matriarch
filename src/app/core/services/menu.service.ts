@@ -3,6 +3,7 @@ import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
+import { createMenuDto } from '@models/dtos/create-dtos';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
@@ -93,7 +94,7 @@ export class MenuService {
           await this._firestoreService.create<MenuDto>(
             this._endpoint,
             id,
-            this._createMenu({ id, uid, ...menu }),
+            createMenuDto({ id, uid, ...menu }),
           );
           return id;
         } else {
@@ -178,24 +179,6 @@ export class MenuService {
         };
       }),
     );
-  }
-
-  private _createMenu({ id, uid, name, favorited, contents }: Partial<MenuDto>): MenuDto {
-    return {
-      id: id ?? '',
-      uid: uid ?? '',
-      name: name ?? '',
-      favorited: favorited ?? false,
-      contents: contents ?? {
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saturday: [],
-        Sunday: [],
-      },
-    };
   }
 
   private async _updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {

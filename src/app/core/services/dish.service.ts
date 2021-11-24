@@ -3,6 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
+import { createDishDto } from '@models/dtos/create-dtos';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Tag } from '@models/interfaces/tag.interface';
@@ -61,7 +62,7 @@ export class DishService {
           await this._firestoreService.create<DishDto>(
             this._endpoint,
             id,
-            this._createDish({ id, uid, ...dish })
+            createDishDto({ id, uid, ...dish })
           );
           return id;
         } else {
@@ -96,24 +97,6 @@ export class DishService {
         await this._batchService.deleteDish(dish);
       })
     );
-  }
-
-  private _createDish(
-    { id, uid, type, name, favorited, description, link, ingredients, tags, menus, usages }: Partial<DishDto>
-  ): DishDto {
-    return {
-      id: id ?? '',
-      uid: uid ?? '',
-      type: type ?? 'main',
-      name: name ?? '',
-      favorited: favorited ?? false,
-      description: description ?? '',
-      link: link ?? '',
-      ingredients: ingredients ?? [],
-      tags: tags ?? [],
-      menus: menus ?? [],
-      usages: usages ?? 0,
-    };
   }
 
   private _getDish(dish: DishDto, tags: Tag[]): Dish {
