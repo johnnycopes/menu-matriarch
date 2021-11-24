@@ -57,7 +57,7 @@ export class SeedDataService {
       )
       .set(
         this._batchService.getMenuDoc(secondMenuId),
-        createMenuDto({ id: firstMenuId, uid, name: 'Menu #2', contents: {
+        createMenuDto({ id: secondMenuId, uid, name: 'Menu #2', contents: {
           Monday: [],
           Tuesday: [],
           Wednesday: [],

@@ -3,7 +3,6 @@ import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/enums/endpoint.enum';
-import { createDishDto } from '@models/dtos/create-dtos';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Tag } from '@models/interfaces/tag.interface';
