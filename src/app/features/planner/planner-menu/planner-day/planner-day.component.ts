@@ -7,6 +7,7 @@ import { Orientation } from '@models/types/orientation.type';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[app-planner-day]',
   templateUrl: './planner-day.component.html',
   styleUrls: ['./planner-day.component.scss'],

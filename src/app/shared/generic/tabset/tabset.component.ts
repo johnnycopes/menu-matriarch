@@ -1,5 +1,5 @@
 
-import { Component, AfterContentInit, ContentChildren, QueryList, Input, TemplateRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterContentInit, ContentChildren, QueryList, Input, TemplateRef, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export type TabsetContentVisibility = 'visible' | 'invisible';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [fadeInAnimation, visibilityAnimation]
 })
-export class TabsetComponent extends AnimatedComponent implements AfterContentInit, OnDestroy {
+export class TabsetComponent extends AnimatedComponent implements AfterViewInit, AfterContentInit, OnDestroy {
   @Input() controlsTemplate: TemplateRef<unknown> | undefined;
   @Input() contentVisibility: TabsetContentVisibility = 'visible';
   @ContentChildren(TabComponent)

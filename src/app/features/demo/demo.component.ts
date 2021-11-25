@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { faAppleAlt, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { IKitchenLocation, KanbanBoardConfig } from "./kitchen-location";
@@ -9,7 +9,7 @@ import { KanbanBoard } from "@shared/generic/kanban-board/kanban-board.component
 	templateUrl: "./demo.component.html",
 	styleUrls: ["./demo.component.scss"]
 })
-export class DemoComponent implements OnInit {
+export class DemoComponent {
 	// AccordionComponent
 	public sections: { title: string, description: string; }[] = [
 		{
@@ -78,13 +78,6 @@ export class DemoComponent implements OnInit {
 
   // OptionsMenuComponent
   public isOptionsMenuOpen: boolean = false;
-
-	constructor(
-		private _viewContainerRef: ViewContainerRef
-	) { }
-
-	ngOnInit(): void {
-	}
 
 	public onButtonClick(): void {
 		this.counter++;

@@ -10,7 +10,7 @@ import { optionsMenuAnimation } from './options-menu-animation';
 	animations: [optionsMenuAnimation]
 })
 export class OptionsMenuComponent {
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
 
   @ViewChild(TemplateRef)
   public templateRef: TemplateRef<any> | undefined;

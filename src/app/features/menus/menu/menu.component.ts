@@ -11,6 +11,7 @@ import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[app-menu]',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],

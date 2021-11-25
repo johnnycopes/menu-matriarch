@@ -38,7 +38,7 @@ export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
           }
         ]),
     })
-    this.menu?.close.pipe(
+    this.menu?.closed.pipe(
       takeUntil(this._destroy$)
     ).subscribe(
       () => this._overlayRef?.detach()

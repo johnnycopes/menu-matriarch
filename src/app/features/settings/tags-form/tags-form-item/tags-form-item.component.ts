@@ -3,6 +3,7 @@ import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[app-tags-form-item]',
   templateUrl: './tags-form-item.component.html',
   styleUrls: ['./tags-form-item.component.scss'],

@@ -14,6 +14,7 @@ interface EntryModel {
 }
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[app-planner-dish]',
   templateUrl: './planner-dish.component.html',
   styleUrls: ['./planner-dish.component.scss'],

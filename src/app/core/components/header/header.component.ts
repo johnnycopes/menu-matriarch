@@ -5,6 +5,7 @@ import { Route } from '@models/enums/route.enum';
 import { MenuService } from '@services/menu.service';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'header[app-header]',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
