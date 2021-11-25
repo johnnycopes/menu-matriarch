@@ -118,9 +118,21 @@
         "deploy": {
           "builder": "@angular/fire:deploy",
           "options": {}
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "menu-matriarch"
+  "defaultProject": "menu-matriarch",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
