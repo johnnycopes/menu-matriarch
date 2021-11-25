@@ -8,7 +8,7 @@
     "lint": "ng lint",
     "test": "ng test",
     "watch": "ng build --watch --configuration development",
-    "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev",
+    "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev --only hosting",
     "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
     "delete-user": "node scripts/dev/delete-user.js",
     "reset-dev": "node scripts/dev/delete-all-users.js && firebase firestore:delete --all-collections -y --project menu-matriarch-dev"
