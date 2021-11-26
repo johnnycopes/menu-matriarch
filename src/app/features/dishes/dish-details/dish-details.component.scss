@@ -30,9 +30,5 @@
 .tags {
   display: flex;
   flex-wrap: wrap;
-}
-
-.tag {
-  margin-right: spacing(8);
-  margin-bottom: spacing(4);
+  gap: spacing(8);
 }

@@ -34,9 +34,5 @@
   margin-top: spacing(8);
   display: flex;
   flex-wrap: wrap;
-
-  app-tag {
-    margin-right: spacing(8);
-    margin-bottom: spacing(4);
-  }
+  gap: spacing(8);
 }

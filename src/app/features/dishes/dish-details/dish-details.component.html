@@ -40,9 +40,7 @@
       <ul *ngIf="dish.tags.length; else noTagsTemplate"
         class="tags"
       >
-        <li *ngFor="let tag of dish.tags; trackBy: tagTrackByFn"
-          class="tag"
-        >
+        <li *ngFor="let tag of dish.tags; trackBy: tagTrackByFn">
           <app-tag
             [id]="tag.id"
             [name]="tag.name"
