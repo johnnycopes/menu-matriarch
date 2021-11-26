@@ -85,3 +85,21 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: font-weight(bold);
+}
+
+.notes {
+  ul, ol {
+    list-style: circle;
+  }
+
+  li {
+    list-style: inherit;
+  }
+}

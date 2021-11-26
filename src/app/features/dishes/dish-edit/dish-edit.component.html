@@ -101,5 +101,26 @@
         </div>
       </ng-template>
     </app-input>
+    <app-input
+      label="notes"
+    >
+      <editor
+        name="notes"
+        apiKey="4yfx3pv3xaz2njb6vj43b4grlu0qfmodc0l9xvuw4elb3ijx"
+        [init]="{
+          height: 500,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+          ],
+          toolbar:
+            'undo redo | formatselect | bold italic backcolor |
+            bullist numlist outdent indent | removeformat | help'
+        }"
+        [ngModel]="vm.notes"
+      ></editor>
+    </app-input>
   </form>
 </app-section>
