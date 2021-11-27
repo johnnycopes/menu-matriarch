@@ -58,6 +58,19 @@ export class DishEditComponent {
       }
     })
   );
+  public readonly tinyMceConfig = {
+    height: 300,
+    menubar: false,
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste code help wordcount'
+    ],
+    toolbar:
+      `undo redo | formatselect | bold italic backcolor |
+      bullist numlist outdent indent | removeformat | help`,
+    // content_css: 'http://localhost:4200/assets/tiny-mce.css',
+  };
 
   constructor(
     private _route: ActivatedRoute,

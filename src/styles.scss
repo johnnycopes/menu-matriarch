@@ -95,8 +95,18 @@ strong {
 }
 
 .notes {
-  ul, ol {
+  ul {
     list-style: circle;
+    padding-left: 40px;
+  }
+
+  ol {
+    list-style: decimal;
+    padding-left: 40px;
+  }
+
+  p {
+    margin-bottom: 20px;
   }
 
   li {
