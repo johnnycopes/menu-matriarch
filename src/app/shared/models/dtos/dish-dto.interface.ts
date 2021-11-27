@@ -10,7 +10,7 @@ export interface DishDto {
   link: string;
   ingredients: string[];
   tags: string[];
-  notes?: string;
+  notes: string;
   menus: string[];
   usages: number;
 }

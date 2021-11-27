@@ -67,7 +67,7 @@ export class DishEditComponent {
       'insertdatetime media table paste code help wordcount'
     ],
     toolbar:
-      `undo redo | formatselect | bold italic backcolor |
+      `undo redo | formatselect | bold italic underline backcolor |
       bullist numlist outdent indent | removeformat | help`,
     // content_css: 'http://localhost:4200/assets/tiny-mce.css',
   };

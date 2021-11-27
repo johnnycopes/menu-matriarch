@@ -49,6 +49,7 @@ export function createDishDto(
     link: link ?? '',
     ingredients: ingredients ?? [],
     tags: tags ?? [],
+    notes: '',
     menus: menus ?? [],
     usages: usages ?? 0,
   };
