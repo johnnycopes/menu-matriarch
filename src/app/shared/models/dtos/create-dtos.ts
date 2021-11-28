@@ -37,7 +37,7 @@ export function createMenuDto({ id, uid, name, favorited, contents }: Partial<Me
 }
 
 export function createDishDto(
-  { id, uid, type, name, favorited, description, link, ingredients, tags, menus, usages }: Partial<DishDto>
+  { id, uid, type, name, favorited, description, link, ingredients, tags, notes, menus, usages }: Partial<DishDto>
 ): DishDto {
   return {
     id: id ?? '',
@@ -49,7 +49,7 @@ export function createDishDto(
     link: link ?? '',
     ingredients: ingredients ?? [],
     tags: tags ?? [],
-    notes: '',
+    notes: notes ?? '',
     menus: menus ?? [],
     usages: usages ?? 0,
   };

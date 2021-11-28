@@ -69,7 +69,6 @@ export class DishEditComponent {
     toolbar:
       `undo redo | formatselect | bold italic underline forecolor backcolor |
       bullist numlist outdent indent | removeformat | help`,
-    // content_css: 'http://localhost:4200/assets/tiny-mce.css',
   };
 
   constructor(
