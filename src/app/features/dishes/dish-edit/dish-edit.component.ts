@@ -44,7 +44,7 @@ export class DishEditComponent {
             name: tag.name,
             checked: false,
           })),
-          notes: 'asdf',
+          notes: '',
         };
       } else {
         return {
