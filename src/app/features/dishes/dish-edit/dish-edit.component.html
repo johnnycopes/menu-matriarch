@@ -101,5 +101,15 @@
         </div>
       </ng-template>
     </app-input>
+    <app-input
+      label="notes"
+    >
+      <editor
+        name="notes"
+        apiKey="4yfx3pv3xaz2njb6vj43b4grlu0qfmodc0l9xvuw4elb3ijx"
+        [init]="tinyMceConfig"
+        [ngModel]="vm.notes"
+      ></editor>
+    </app-input>
   </form>
 </app-section>

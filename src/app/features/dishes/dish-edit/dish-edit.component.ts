@@ -14,6 +14,7 @@ interface IDishEditForm {
   link: string;
   type: DishType;
   tags: string[];
+  notes: string;
 }
 
 @Component({
@@ -43,6 +44,7 @@ export class DishEditComponent {
             name: tag.name,
             checked: false,
           })),
+          notes: '',
         };
       } else {
         return {
@@ -56,6 +58,19 @@ export class DishEditComponent {
       }
     })
   );
+  public readonly tinyMceConfig = {
+    height: 300,
+    menubar: false,
+    plugins: [
+      'lists',
+      'searchreplace',
+      'wordcount'
+    ],
+    toolbar:
+      `undo redo | formatselect | bold italic underline forecolor backcolor |
+      bullist numlist outdent indent | removeformat | help`,
+    // content_css: 'http://localhost:4200/assets/tiny-mce.css',
+  };
 
   constructor(
     private _route: ActivatedRoute,
@@ -73,7 +88,8 @@ export class DishEditComponent {
       tags: Object
         .entries<boolean>(form.value.tags)
         .filter(([key, checked]) => checked)
-        .map(([key, checked]) => key)
+        .map(([key, checked]) => key),
+      notes: form.value.notes,
     };
     if (!this._routeId) {
       this._dishService.createDish(details).pipe(

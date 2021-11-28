@@ -21,6 +21,7 @@ import { OptionsMenuTriggerDirective } from './options-menu/options-menu-trigger
 import { PanelComponent } from './panel/panel.component';
 import { PluralPipe } from './plural/plural.pipe';
 import { RangeDirective } from './range/range.directive';
+import { SafePipe } from 'src/app/generic/safe.pipe';
 import { SearchInputComponent } from './search-input/search-input.component';
 import { SectionComponent } from './section/section.component';
 import { SmallCapsLabelComponent } from './small-caps-label/small-caps-label.component';
@@ -54,6 +55,7 @@ import { TabsetComponent } from './tabset/tabset.component';
     PanelComponent,
     PluralPipe,
     RangeDirective,
+    SafePipe,
     SearchInputComponent,
     SectionComponent,
     SmallCapsLabelComponent,
@@ -78,6 +80,7 @@ import { TabsetComponent } from './tabset/tabset.component';
     PanelComponent,
     PluralPipe,
     RangeDirective,
+    SafePipe,
     SearchInputComponent,
     SectionComponent,
     SmallCapsLabelComponent,
