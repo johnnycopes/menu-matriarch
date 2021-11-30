@@ -22,12 +22,12 @@ export class PlannerDishesComponent {
   private _searchText$ = new BehaviorSubject<string>('');
   public vm$ = combineLatest([
     this._route.paramMap.pipe(
-      map(paramMap => paramMap.get('id')),
-      switchMap(id => {
-        if (!id) {
+      map(paramMap => paramMap.get('menuId')),
+      switchMap(menuId => {
+        if (!menuId) {
           return of(undefined);
         }
-        return this._menuService.getMenu(id);
+        return this._menuService.getMenu(menuId);
       })
     ),
     this._dishService.getDishes(),
