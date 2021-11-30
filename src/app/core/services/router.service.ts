@@ -52,24 +52,6 @@ export class RouterService {
     ).subscribe();
   }
 
-  public getAllParams(): Record<string, string> {
-    const params: Record<string, string> = {};
-    let route: ActivatedRouteSnapshot | null = this._router.routerState.snapshot.root;
-
-    do {
-      for (let key in route.params) {
-        params[key] = route.params[key];
-      }
-      route = route.firstChild;
-    } while (route);
-
-    return params;
-  }
-
-  public getParam(key: string) {
-    return this.getAllParams()[key];
-  }
-
   public getPlannerRoute(): Observable<string[]> {
     return this._localStorageService.watchMenuId().pipe(
       map(menuId => {
