@@ -23,23 +23,3 @@ app-planner-menu {
   height: 100%;
   background: $white;
 }
-
-.invalid-menu {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding-bottom: app-size(header);
-
-  &__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    p {
-      margin-bottom: spacing(24);
-    }
-  }
-}

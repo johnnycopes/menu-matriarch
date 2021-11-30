@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { Menu } from '@models/interfaces/menu.interface';
 import { Tag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { Day } from '@models/types/day.type';
-import { MenuService } from '@services/menu.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 interface EntryModel {
@@ -29,23 +27,15 @@ export class PlannerDishComponent {
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
-  public entryModels$: Observable<EntryModel[]> = this._menuService.getMenu().pipe(
-    map(menu => (menu?.entries ?? []).map(entry => ({
+  @Input()
+  public set menu(menu: Menu | undefined) {
+    this.entryModels = menu?.entries.map(entry => ({
       day: entry.day,
       checked: !!entry.dishes.find(dish => dish.id === this.id),
-    })))
-  );
+    })) ?? undefined;
+  };
+  @Output() dayChange = new EventEmitter<{ id: string, day: Day, selected: boolean }>();
+
+  public entryModels: EntryModel[] | undefined;
   public trackByFn = trackByFactory<EntryModel, Day>(model => model.day);
-
-  constructor(private _menuService: MenuService) {}
-
-  public onChange(selected: boolean, day: Day): void {
-    this._menuService
-      .updateMenuContents({
-        day,
-        dishId: this.id,
-        selected,
-      })
-      .subscribe();
-  }
 }

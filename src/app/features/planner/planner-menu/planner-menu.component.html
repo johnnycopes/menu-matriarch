@@ -5,12 +5,12 @@
     </h2>
     <button app-button
       buttonStyle="secondary"
-      (click)="onClearAll()"
+      (click)="onClearAll(menu)"
     >
       Clear All
     </button>
     <button app-button
-      (click)="onPrint()"
+      (click)="onPrint(menu)"
     >
       Print
     </button>
@@ -22,7 +22,7 @@
       [dishes]="entry.dishes"
       [fallbackText]="menu.fallbackText"
       [orientation]="menu.orientation"
-      (clear)="onClearDay(entry)"
+      (clear)="onClearDay(menu, entry)"
     ></li>
   </ul>
 </app-section>

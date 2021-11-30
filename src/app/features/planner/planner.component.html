@@ -1,19 +1,2 @@
-<ng-container *ngIf="menu$ | async as menu">
-  <ng-container *ngIf="menu !== 'INVALID'">
-    <app-planner-dishes></app-planner-dishes>
-    <app-planner-menu></app-planner-menu>
-  </ng-container>
-
-  <div *ngIf="menu === 'INVALID'"
-    class="invalid-menu"
-  >
-    <div class="invalid-menu__container">
-      <p>Menu is either invalid or no longer exists</p>
-      <a app-button
-        routerLink="/menus"
-      >
-        Go To Menus
-      </a>
-    </div>
-  </div>
-</ng-container>
+<app-planner-dishes></app-planner-dishes>
+<app-planner-menu></app-planner-menu>
