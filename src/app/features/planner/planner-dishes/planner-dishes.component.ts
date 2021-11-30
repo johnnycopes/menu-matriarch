@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
 import { Menu } from '@models/interfaces/menu.interface';
@@ -19,17 +18,15 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerDishesComponent {
+  private _menu$ = new BehaviorSubject<Menu | undefined>(undefined);
   private _searchText$ = new BehaviorSubject<string>('');
+
+  @Input()
+  public set menu(value: Menu | undefined) {
+    this._menu$.next(value);
+  }
   public vm$ = combineLatest([
-    this._route.paramMap.pipe(
-      map(paramMap => paramMap.get('menuId')),
-      switchMap(menuId => {
-        if (!menuId) {
-          return of(undefined);
-        }
-        return this._menuService.getMenu(menuId);
-      })
-    ),
+    this._menu$.asObservable(),
     this._dishService.getDishes(),
     this._searchText$.asObservable().pipe(
       distinctUntilChanged(),
@@ -46,7 +43,6 @@ export class PlannerDishesComponent {
   public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
-    private _route: ActivatedRoute,
     private _dishService: DishService,
     private _menuService: MenuService,
   ) { }

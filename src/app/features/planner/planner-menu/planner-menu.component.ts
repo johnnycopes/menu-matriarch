@@ -1,7 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Menu } from '@models/interfaces/menu.interface';
 import { MenuEntry } from '@models/interfaces/menu-entry.interface';
@@ -17,45 +14,38 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerMenuComponent {
-  public menu$ = this._route.params.pipe(
-    switchMap(({ menuId }) => {
-      if (!menuId) {
-        return of(undefined);
-      }
-      return this._menuService.getMenu(menuId);
-    })
-  );
+  @Input() menu: Menu | undefined;
   public trackByFn = trackByFactory<MenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
-    private _route: ActivatedRoute,
     private _menuService: MenuService,
     private _printService: PrintService,
   ) { }
 
-  public onPrint(menu: Menu | undefined): void {
-    if (!menu) {
+  public onPrint(): void {
+    if (!this.menu) {
       return;
     }
+    const { name, entries, fallbackText, orientation } = this.menu;
     this._printService.printMenu({
-      name: menu.name,
-      entries: menu.entries,
-      fallbackText: menu.fallbackText,
-      orientation: menu.orientation,
+      name,
+      entries,
+      fallbackText,
+      orientation,
     });
   }
 
-  public async onClearDay(menu: Menu | undefined, { day }: MenuEntry): Promise<void> {
-    if (!menu) {
+  public async onClearDay({ day }: MenuEntry): Promise<void> {
+    if (!this.menu) {
       return;
     }
-    return this._menuService.deleteMenuContents(menu, day);
+    return this._menuService.deleteMenuContents(this.menu, day);
   }
 
-  public async onClearAll(menu: Menu | undefined): Promise<void> {
-    if (!menu) {
+  public async onClearAll(): Promise<void> {
+    if (!this.menu) {
       return;
     }
-    return this._menuService.deleteMenuContents(menu);
+    return this._menuService.deleteMenuContents(this.menu);
   }
 }

@@ -1,16 +1,16 @@
-<app-section *ngIf="menu$ | async as menu">
+<app-section *ngIf="menu">
   <div class="app-section__toolbar">
     <h2 class="title">
       {{ menu.name }}
     </h2>
     <button app-button
       buttonStyle="secondary"
-      (click)="onClearAll(menu)"
+      (click)="onClearAll()"
     >
       Clear All
     </button>
     <button app-button
-      (click)="onPrint(menu)"
+      (click)="onPrint()"
     >
       Print
     </button>
@@ -22,7 +22,7 @@
       [dishes]="entry.dishes"
       [fallbackText]="menu.fallbackText"
       [orientation]="menu.orientation"
-      (clear)="onClearDay(menu, entry)"
+      (clear)="onClearDay(entry)"
     ></li>
   </ul>
 </app-section>

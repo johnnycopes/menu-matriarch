@@ -1,2 +1,6 @@
-<app-planner-dishes></app-planner-dishes>
-<app-planner-menu></app-planner-menu>
+<ng-container *ngIf="menu$ | async as menu">
+  <app-planner-dishes [menu]="menu">
+  </app-planner-dishes>
+  <app-planner-menu [menu]="menu">
+  </app-planner-menu>
+</ng-container>
