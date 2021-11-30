@@ -27,6 +27,8 @@
             [tags]="main.tags"
             [menus]="main.menus"
             [usages]="main.usages"
+            [menu]="vm.menu"
+            (dayChange)="onDayChange(vm.menu, $event)"
           ></li>
         </ul>
         <ng-template #noMainsPlaceholder>
@@ -47,6 +49,8 @@
             [tags]="side.tags"
             [menus]="side.menus"
             [usages]="side.usages"
+            [menu]="vm.menu"
+            (dayChange)="onDayChange(vm.menu, $event)"
           ></li>
         </ul>
         <ng-template #noSidesPlaceholder>

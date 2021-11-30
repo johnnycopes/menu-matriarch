@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { combineLatest, Observable } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { first, map, switchMap } from 'rxjs/operators';
 
 import { AuthService } from '@services/auth.service';
-import { MenuService } from '@services/menu.service';
+import { RouterService } from '@services/router.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,22 +14,21 @@ export class LoggedInAuthGuard implements CanActivate {
   constructor(
     private _router: Router,
     private _authService: AuthService,
-    private _menuService: MenuService,
+    private _routerService: RouterService,
   ) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return combineLatest([
-      this._authService.loggedIn$,
-      this._menuService.menuId$,
-    ]).pipe(
+    return this._authService.loggedIn$.pipe(
       first(),
-      map(([loggedIn, menuId]) => {
+      switchMap(loggedIn => {
         if (loggedIn) {
-          return this._router.createUrlTree(['/planner', menuId]);
+          return this._routerService.getPlannerRoute().pipe(
+            map(route => this._router.createUrlTree(route))
+          );
         }
-        return true;
+        return of(true);
       })
     );
   }

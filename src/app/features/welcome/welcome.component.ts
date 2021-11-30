@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { first, tap } from 'rxjs/operators';
 
 import { AuthService } from '@services/auth.service';
-import { MenuService } from '@services/menu.service';
 import { UserService } from '@services/user.service';
+import { RouterService } from '@services/router.service';
 import { SeedDataService } from '@services/seed-data.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class WelcomeComponent {
   constructor(
     private _router: Router,
     private _authService: AuthService,
-    private _menuService: MenuService,
+    private _routerService: RouterService,
     private _seedDataService: SeedDataService,
     private _userService: UserService,
   ) { }
@@ -39,9 +39,8 @@ export class WelcomeComponent {
           })
         ).subscribe();
       } else {
-        this._menuService.menuId$.pipe(
-          first(),
-          tap(menuId => this._router.navigate(['/planner', menuId]))
+        this._routerService.getPlannerRoute().pipe(
+          tap(route => this._router.navigate(route))
         ).subscribe();
       }
     } catch (e) {

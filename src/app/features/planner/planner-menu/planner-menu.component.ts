@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { first, tap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { Menu } from '@models/interfaces/menu.interface';
 import { MenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
@@ -14,7 +14,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerMenuComponent {
-  public menu$ = this._menuService.getMenu();
+  @Input() menu: Menu | undefined;
   public trackByFn = trackByFactory<MenuEntry, Day>(menuEntry => menuEntry.day);
 
   constructor(
@@ -23,31 +23,29 @@ export class PlannerMenuComponent {
   ) { }
 
   public onPrint(): void {
-    this.menu$.pipe(
-      first(),
-      tap(menu => {
-        if (!menu) {
-          return;
-        }
-        this._printService.printMenu({
-          name: menu.name,
-          entries: menu.entries,
-          fallbackText: menu.fallbackText,
-          orientation: menu.orientation,
-        });
-      })
-    ).subscribe();
+    if (!this.menu) {
+      return;
+    }
+    const { name, entries, fallbackText, orientation } = this.menu;
+    this._printService.printMenu({
+      name,
+      entries,
+      fallbackText,
+      orientation,
+    });
   }
 
-  public onClearDay({ day }: MenuEntry): void {
-    this._menuService
-      .deleteMenuContents(day)
-      .subscribe();
+  public async onClearDay({ day }: MenuEntry): Promise<void> {
+    if (!this.menu) {
+      return;
+    }
+    return this._menuService.deleteMenuContents(this.menu, day);
   }
 
-  public onClearAll(): void {
-    this._menuService
-      .deleteMenuContents()
-      .subscribe();
+  public async onClearAll(): Promise<void> {
+    if (!this.menu) {
+      return;
+    }
+    return this._menuService.deleteMenuContents(this.menu);
   }
 }

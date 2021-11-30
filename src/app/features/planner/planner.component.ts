@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { catchError, concatMap, first, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
 
@@ -11,29 +11,15 @@ import { MenuService } from '@services/menu.service';
   styleUrls: ['./planner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlannerComponent implements OnInit {
-  public menu$ = this._menuService.getMenu().pipe(
-    first(),
-    catchError(_ => of('INVALID')),
-    tap(menu => {
-      if (menu === 'INVALID') {
-        this._menuService.deleteMenu();
-      }
-    }),
+export class PlannerComponent {
+  public menu$ = this._route.paramMap.pipe(
+    map(paramMap => paramMap.get('menuId') ?? 'NO_ID'),
+    switchMap(menuId => this._menuService.getMenu(menuId)),
+    catchError(_ => of<'INVALID'>('INVALID')),
   );
 
   constructor(
     private _route: ActivatedRoute,
     private _menuService: MenuService,
   ) { }
-
-  public ngOnInit(): void {
-    this._route.paramMap.pipe(
-      first(),
-      concatMap(paramMap => {
-        const menuId = paramMap.get('menuId') ?? undefined;
-        return this._menuService.updateSavedMenuId(menuId);
-      }),
-    ).subscribe();
-  }
 }

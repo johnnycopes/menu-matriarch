@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { environment } from '@env/environment';
 import { Route } from '@models/enums/route.enum';
-import { MenuService } from '@services/menu.service';
+import { RouterService } from '@services/router.service';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -12,9 +12,9 @@ import { MenuService } from '@services/menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  public ERoute: typeof Route = Route;
-  public menuId$ = this._menuService.menuId$;
+  public Route: typeof Route = Route;
   public showDemo = !environment.production;
+  public plannerRoute$ = this._routerService.getPlannerRoute();
 
-  constructor(private _menuService: MenuService) { }
+  constructor(private _routerService: RouterService) { }
 }

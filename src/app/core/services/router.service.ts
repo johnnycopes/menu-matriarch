@@ -1,7 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError } from "@angular/router";
+import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError, ActivatedRouteSnapshot } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
-import { map, filter, delay, tap } from "rxjs/operators";
+import { map, filter, tap } from "rxjs/operators";
+
+import { Route } from "@models/enums/route.enum";
+import { LocalStorageService } from "./local-storage.service";
 
 // interface IRouterState {
 //   currentRoute: string;
@@ -13,28 +16,19 @@ import { map, filter, delay, tap } from "rxjs/operators";
 })
 export class RouterService {
   private _loading$ = new BehaviorSubject<boolean>(true);
+  private _routerEvents$ = this._router.events.pipe(
+    filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+  );
 
   get loading$(): Observable<boolean> {
     return this._loading$;
   }
 
-  constructor(private _router: Router) {
-    this._intialize();
-  }
-
-  private _intialize(): void {
-    // this._router.events.pipe(
-      // filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      // map((navigationEnd: NavigationEnd) => {
-        // const routeUrl = navigationEnd.urlAfterRedirects;
-        // return routeUrl;
-      // })
-    // ).subscribe(
-      // route => this._state.set(lens => lens.to("currentRoute").value(route))
-    // );
-
-    this._router.events.pipe(
-      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+  constructor(
+    private _router: Router,
+    private _localStorageService: LocalStorageService,
+  ) {
+    this._routerEvents$.pipe(
       map((routerEvent: RouterEvent) => {
         if (routerEvent instanceof NavigationEnd ||
           routerEvent instanceof NavigationCancel ||
@@ -43,8 +37,29 @@ export class RouterService {
         }
         return true;
       }),
-    ).subscribe(
-      loading => this._loading$.next(loading)
+      tap(loading => this._loading$.next(loading))
+    ).subscribe();
+
+    this._routerEvents$.pipe(
+      filter(({ url }) => url.includes(Route.planner)),
+      tap(event => {
+        const divviedUrl = event.urlAfterRedirects.split('/');
+        const menuId = divviedUrl[divviedUrl.length - 1];
+        if (menuId !== Route.planner) {
+          this._localStorageService.setMenuId(menuId);
+        }
+      })
+    ).subscribe();
+  }
+
+  public getPlannerRoute(): Observable<string[]> {
+    return this._localStorageService.watchMenuId().pipe(
+      map(menuId => {
+        if (!menuId) {
+          return [Route.planner];
+        }
+        return [Route.planner, menuId];
+      })
     );
   }
 }
