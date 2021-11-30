@@ -8,7 +8,9 @@
     [menus]="menus"
     [usages]="usages"
   ></app-dish-summary>
-  <div class="schedule">
+  <div *ngIf="entryModels.length"
+    class="schedule"
+  >
     <app-checkbox *ngFor="let model of entryModels; trackBy: trackByFn"
       [ngModel]="model.checked"
       (ngModelChange)="dayChange.emit({ id, day: model.day, selected: $event })"

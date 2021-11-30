@@ -32,10 +32,10 @@ export class PlannerDishComponent {
     this.entryModels = menu?.entries.map(entry => ({
       day: entry.day,
       checked: !!entry.dishes.find(dish => dish.id === this.id),
-    })) ?? undefined;
+    })) ?? [];
   };
   @Output() dayChange = new EventEmitter<{ id: string, day: Day, selected: boolean }>();
 
-  public entryModels: EntryModel[] | undefined;
+  public entryModels: EntryModel[] = [];
   public trackByFn = trackByFactory<EntryModel, Day>(model => model.day);
 }

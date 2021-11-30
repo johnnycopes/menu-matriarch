@@ -1,25 +1,24 @@
 <ng-container *ngIf="menu$ | async as menu">
-  <div *ngIf="menu === 'INVALID'; else plannerTemplate"
-    class="invalid-menu"
-  >
-    <div class="invalid-menu__container">
-      <p>
-        Menu is either invalid or no longer exists.<br />
-        Please select a different menu to view the planner.
-      </p>
-      <a app-button
-        routerLink="/menus"
-      >
-        Go To Menus
-      </a>
-    </div>
-  </div>
-
-  <ng-template #plannerTemplate>
+  <ng-container *ngIf="menu !== 'INVALID'; else invalidMenuTemplate">
     <app-planner-dishes [menu]="menu">
     </app-planner-dishes>
     <app-planner-menu [menu]="menu">
     </app-planner-menu>
-  </ng-template>
+  </ng-container>
 
+  <ng-template #invalidMenuTemplate>
+    <div class="invalid-menu">
+      <div class="invalid-menu__container">
+        <p>
+          Menu is either invalid or no longer exists.<br />
+          Please select a different menu to view the planner.
+        </p>
+        <a app-button
+          routerLink="/menus"
+        >
+          Go To Menus
+        </a>
+      </div>
+    </div>
+  </ng-template>
 </ng-container>
