@@ -1,31 +1,31 @@
 <nav class="container">
   <a class="link"
-    [routerLink]="[ERoute.planner, menuId$ | async]"
+    [routerLink]="[Route.planner, menuId$ | async]"
     routerLinkActive="link--active"
   >
     Planner
   </a>
   <a class="link"
-    [routerLink]="ERoute.menus"
+    [routerLink]="Route.menus"
     routerLinkActive="link--active"
   >
     Menus
   </a>
   <a class="link"
-    [routerLink]="ERoute.dishes"
+    [routerLink]="Route.dishes"
     routerLinkActive="link--active"
   >
     Dishes
   </a>
   <a *ngIf="showDemo"
     class="link"
-    [routerLink]="ERoute.demo"
+    [routerLink]="Route.demo"
     routerLinkActive="link--active"
   >
     Demo
   </a>
   <a class="link"
-    [routerLink]="ERoute.settings"
+    [routerLink]="Route.settings"
     routerLinkActive="link--active"
   >
     Settings

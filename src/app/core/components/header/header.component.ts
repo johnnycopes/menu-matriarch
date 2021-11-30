@@ -12,7 +12,7 @@ import { MenuService } from '@services/menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  public ERoute: typeof Route = Route;
+  public Route: typeof Route = Route;
   public menuId$ = this._menuService.menuId$;
   public showDemo = !environment.production;
 
