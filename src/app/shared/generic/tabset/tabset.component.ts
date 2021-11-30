@@ -3,6 +3,7 @@ import { Component, AfterContentInit, ContentChildren, QueryList, Input, Templat
 import { merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
+import { trackByFactory } from '@shared/utility/track-by-factory';
 import { fadeInAnimation, visibilityAnimation } from '@utility/animations';
 import { AnimatedComponent } from '@utility/animated.component';
 import { TabComponent } from './tab/tab.component';
@@ -22,6 +23,7 @@ export class TabsetComponent extends AnimatedComponent implements AfterViewInit,
   @ContentChildren(TabComponent)
   public tabs: QueryList<TabComponent> | undefined;
   public contentMaxHeight = '100%';
+  public trackByFn = trackByFactory<TabComponent, string>(tab => tab.name);
   private _destroy$ = new Subject();
 
   @ViewChild('tabsElement')

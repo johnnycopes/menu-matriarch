@@ -7,6 +7,7 @@ import { concatMap, first, map, tap } from 'rxjs/operators';
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 interface IDishEditForm {
   name: string;
@@ -15,6 +16,12 @@ interface IDishEditForm {
   type: DishType;
   tags: string[];
   notes: string;
+}
+
+interface TagModel {
+  id: string,
+  name: string;
+  checked: boolean;
 }
 
 @Component({
@@ -39,7 +46,7 @@ export class DishEditComponent {
           description: '',
           link: '',
           type: 'main',
-          tags: tags.map(tag => ({
+          tags: tags.map<TagModel>(tag => ({
             id: tag.id,
             name: tag.name,
             checked: false,
@@ -49,7 +56,7 @@ export class DishEditComponent {
       } else {
         return {
           ...dish,
-          tags: tags.map(tag => ({
+          tags: tags.map<TagModel>(tag => ({
             id: tag.id,
             name: tag.name,
             checked: !!dish?.tags.find(dishTag => dishTag.id === tag.id)
@@ -70,6 +77,7 @@ export class DishEditComponent {
       `undo redo | formatselect | bold italic underline forecolor backcolor |
       bullist numlist outdent indent | removeformat | help`,
   };
+  public trackByFn = trackByFactory<TagModel, string>(tag => tag.id);
 
   constructor(
     private _route: ActivatedRoute,

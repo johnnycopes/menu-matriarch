@@ -2,7 +2,7 @@
   <ul class="tabs"
     #tabsElement
   >
-    <li *ngFor="let tab of tabs"
+    <li *ngFor="let tab of tabs; trackBy: trackByFn"
       class="tab"
       [class.tab--selected]="tab.selected"
       (click)="onSelectTab(tab)"

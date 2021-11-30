@@ -36,7 +36,7 @@
 <ul *ngIf="tags.length"
   class="tags"
 >
-  <li *ngFor="let tag of tags">
+  <li *ngFor="let tag of tags; trackBy: trackByFn">
     <app-tag
       [id]="tag.id"
       [name]="tag.name"

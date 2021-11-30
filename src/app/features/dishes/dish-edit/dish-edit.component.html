@@ -76,7 +76,7 @@
         class="tags"
         ngModelGroup="tags"
       >
-        <li *ngFor="let tag of vm.tags"
+        <li *ngFor="let tag of vm.tags; trackBy: trackByFn"
           class="tag"
         >
           <app-checkbox
