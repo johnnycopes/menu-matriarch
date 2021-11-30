@@ -21,4 +21,5 @@ export class DishComponent {
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
+  @Input() active = false;
 }

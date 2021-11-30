@@ -2,7 +2,9 @@
   <a class="dish-link"
     routerLink="/dishes/{{ id }}"
   >
-    <h3 class="name">
+    <h3 class="name"
+      [class.name--active]="active"
+    >
       {{ name }}
     </h3>
   </a>

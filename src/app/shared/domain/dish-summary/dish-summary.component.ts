@@ -18,6 +18,7 @@ export class DishSummaryComponent {
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
   @Input() usages: number = 0;
+  @Input() active: boolean = false;
   public readonly faLink = faLink;
   public trackByFn = trackByFactory<Tag, string>(tag => tag.id);
 }

@@ -23,16 +23,18 @@ export class DishesComponent {
     this._searchText$.asObservable().pipe(
       distinctUntilChanged(),
     ),
+    this._route.firstChild?.paramMap.pipe(
+      map(paramMap => paramMap.get('id'))
+    ) ?? of(),
   ]).pipe(
-    map(([dishes, routeId, searchText]) => {
+    map(([dishes, routeId, searchText, activeId]) => {
       return {
         searchText,
         total: dishes.length,
         mains: dishes.filter(dish => this._filterDish(dish, 'main', searchText)),
         sides: dishes.filter(dish => this._filterDish(dish, 'side', searchText)),
-        initialTab: dishes
-          .find(dish => dish.id === routeId)
-          ?.type ?? 'main',
+        activeDish: dishes.find(dish => dish.id === activeId),
+        initialTab: dishes.find(dish => dish.id === routeId)?.type ?? 'main',
       };
     })
   );

@@ -5,6 +5,13 @@
   justify-content: space-between;
 }
 
+.name {
+
+  &--active {
+    font-weight: font-weight(semibold);
+  }
+}
+
 .dish-link {
   width: 100%;
 }
