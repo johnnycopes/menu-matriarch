@@ -101,7 +101,7 @@ export class BatchService {
     await batch.commit();
   }
 
-  public async deleteMenu(menu: MenuDto): Promise<void> {
+  public async deleteMenu(menu: Menu): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this.getMenuDoc(menu.id));
     this._processUpdates(batch,
@@ -190,9 +190,9 @@ export class BatchService {
     }));
   }
 
-  private _getDishesUpdates<TMenu extends MenuDto>({ dishIds, menu, change }: {
+  private _getDishesUpdates({ dishIds, menu, change }: {
     dishIds: string[],
-    menu: TMenu,
+    menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
   }): DocRefUpdate<DishDto, { usages: number, menus?: string[] }>[] {
     const dishCounts = flattenValues(menu.contents)
