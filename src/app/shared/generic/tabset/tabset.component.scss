@@ -22,7 +22,7 @@
   flex: 1;
   padding: spacing(16);
   background: $white;
-  border-bottom: border(thin) solid color($neutral, 9);
+  border-bottom: border(thin) solid transparent;
   color: color($neutral, 6);
   @include small-caps;
 
