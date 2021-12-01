@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 import { Tag } from '@models/interfaces/tag.interface';
@@ -11,13 +11,13 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishSummaryComponent {
-  @Input() id: string = '';
-  @Input() name: string = '';
-  @Input() description: string = '';
-  @Input() link: string = '';
+  @Input() id = '';
+  @Input() name = '';
+  @Input() description = '';
+  @Input() link = '';
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
-  @Input() usages: number = 0;
+  @Input() usages = 0;
   public readonly faLink = faLink;
   public trackByFn = trackByFactory<Tag, string>(tag => tag.id);
 }
