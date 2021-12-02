@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError, ActivatedRouteSnapshot } from "@angular/router";
+import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
-import { map, filter, tap } from "rxjs/operators";
+import { map, filter, tap, distinctUntilChanged } from "rxjs/operators";
 
 import { Route } from "@models/enums/route.enum";
 import { LocalStorageService } from "./local-storage.service";
@@ -16,12 +16,19 @@ import { LocalStorageService } from "./local-storage.service";
 })
 export class RouterService {
   private _loading$ = new BehaviorSubject<boolean>(true);
+  private _activeDishId$ = new BehaviorSubject<string>('');
   private _routerEvents$ = this._router.events.pipe(
     filter((e): e is NavigationEnd => e instanceof NavigationEnd)
   );
 
-  get loading$(): Observable<boolean> {
+  public get loading$(): Observable<boolean> {
     return this._loading$;
+  }
+
+  public get activeDishId$(): Observable<string> {
+    return this._activeDishId$.pipe(
+      distinctUntilChanged()
+    );
   }
 
   constructor(
@@ -49,6 +56,15 @@ export class RouterService {
           this._localStorageService.setMenuId(menuId);
         }
       })
+    ).subscribe();
+
+    this._routerEvents$.pipe(
+      filter(({ url }) => url.includes(Route.dishes)),
+      tap(event => {
+        const divviedUrl = event.urlAfterRedirects.split('/');
+        const dishId = divviedUrl[2];
+        this._activeDishId$.next(dishId ?? '');
+      }),
     ).subscribe();
   }
 

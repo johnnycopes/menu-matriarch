@@ -6,6 +6,7 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Dish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
+import { RouterService } from '@services/router.service';
 import { lower } from '@shared/utility/format';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
@@ -23,17 +24,15 @@ export class DishesComponent {
     this._searchText$.asObservable().pipe(
       distinctUntilChanged(),
     ),
-    this._route.firstChild?.paramMap.pipe(
-      map(paramMap => paramMap.get('id'))
-    ) ?? of(),
+    this._routerService.activeDishId$,
   ]).pipe(
-    map(([dishes, routeId, searchText, activeId]) => {
+    map(([dishes, routeId, searchText, activeDishId]) => {
       return {
         searchText,
         total: dishes.length,
         mains: dishes.filter(dish => this._filterDish(dish, 'main', searchText)),
         sides: dishes.filter(dish => this._filterDish(dish, 'side', searchText)),
-        activeDish: dishes.find(dish => dish.id === activeId),
+        activeDish: dishes.find(dish => dish.id === activeDishId),
         initialTab: dishes.find(dish => dish.id === routeId)?.type ?? 'main',
       };
     })
@@ -43,6 +42,7 @@ export class DishesComponent {
   constructor(
     private _route: ActivatedRoute,
     private _dishService: DishService,
+    private _routerService: RouterService,
   ) { }
 
   public onSearchTextChange(text: string): void {
