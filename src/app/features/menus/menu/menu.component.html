@@ -31,10 +31,10 @@
         <a app-options-menu-item
           routerLink="/planner/{{ id }}"
         >
-          Edit Dishes
+          Edit
         </a>
         <li app-options-menu-item
-          [disabled]="!canDelete"
+          *ngIf="canDelete"
           (click)="onDelete()"
         >
           Delete
