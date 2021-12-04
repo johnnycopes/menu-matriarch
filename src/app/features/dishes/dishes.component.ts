@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
@@ -20,27 +19,26 @@ export class DishesComponent {
   private _searchText$ = new BehaviorSubject<string>('');
   public vm$ = combineLatest([
     this._dishService.getDishes(),
-    of(this._route.snapshot.firstChild?.params.id),
     this._searchText$.asObservable().pipe(
       distinctUntilChanged(),
     ),
     this._routerService.activeDishId$,
   ]).pipe(
-    map(([dishes, routeId, searchText, activeDishId]) => {
+    map(([dishes, searchText, activeDishId]) => {
+      const activeDish = dishes.find(dish => dish.id === activeDishId);
       return {
         searchText,
         total: dishes.length,
         mains: dishes.filter(dish => this._filterDish(dish, 'main', searchText)),
         sides: dishes.filter(dish => this._filterDish(dish, 'side', searchText)),
-        activeDish: dishes.find(dish => dish.id === activeDishId),
-        initialTab: dishes.find(dish => dish.id === routeId)?.type ?? 'main',
+        activeDish,
+        initialTab: activeDish?.type ?? 'main',
       };
     })
   );
   public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
-    private _route: ActivatedRoute,
     private _dishService: DishService,
     private _routerService: RouterService,
   ) { }
