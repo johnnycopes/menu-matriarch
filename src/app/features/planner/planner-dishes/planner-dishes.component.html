@@ -1,24 +1,54 @@
 <app-section *ngIf="vm$ | async as vm">
   <div class="app-section__toolbar">
-    <h2 class="title">
-      Dishes ({{ vm.total }})
-    </h2>
-    <app-search-input
-      [text]="vm.searchText"
-      (textChange)="onSearchTextChange($event)"
-    ></app-search-input>
-    <a app-button
-      routerLink="/dishes/new"
+    <div class="controls">
+      <h2 class="title">
+        Dishes ({{ vm.total }})
+      </h2>
+      <app-search-input
+        [text]="vm.searchText"
+        (textChange)="onSearchTextChange($event)"
+      ></app-search-input>
+      <button app-button
+        buttonStyle="secondary"
+        (click)="toggleFilterPanel(vm.filterPanel)"
+      >
+        Filter
+      </button>
+      <app-options-menu #optionsMenu>
+        Stuff will go here
+      </app-options-menu>
+      <a app-button
+        routerLink="/dishes/new"
+      >
+        New Dish
+      </a>
+    </div>
+    <app-card *ngIf="vm.filterPanel"
+      class="filter-panel"
     >
-      New Dish
-    </a>
+      <ul class="filter-panel__tags">
+        <li *ngFor="let tag of vm.tags; trackBy: tagTrackByFn"
+          class="filter-panel__tag"
+        >
+          <app-checkbox
+            [name]="tag.id"
+            [ngModel]="false"
+          >
+            <app-tag
+              [id]="tag.id"
+              [name]="tag.name"
+            ></app-tag>
+          </app-checkbox>
+        </li>
+      </ul>
+    </app-card>
   </div>
   <ul class="app-section__content">
     <app-tabset contentVisibility="visible">
       <app-tab name="Mains ({{ vm.mains.length }})">
         <ul *ngIf="vm.mains.length; else noMainsPlaceholder">
           <li app-planner-dish
-            *ngFor="let main of vm.mains; trackBy: trackByFn"
+            *ngFor="let main of vm.mains; trackBy: dishTrackByFn"
             [id]="main.id"
             [type]="main.type"
             [name]="main.name"
@@ -40,7 +70,7 @@
       <app-tab name="Sides ({{ vm.sides.length }})">
         <ul *ngIf="vm.sides.length; else noSidesPlaceholder">
           <li app-planner-dish
-            *ngFor="let side of vm.sides; trackBy: trackByFn"
+            *ngFor="let side of vm.sides; trackBy: dishTrackByFn"
             [id]="side.id"
             [type]="side.type"
             [name]="side.name"

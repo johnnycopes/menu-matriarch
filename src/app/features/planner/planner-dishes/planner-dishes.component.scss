@@ -1,22 +1,39 @@
 @import "main";
 
 .app-section__toolbar {
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
 
-  .title {
-    margin-right: auto;
-    font-weight: font-weight(bold);
-    color: color($neutral, 4);
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .title {
+      margin-right: auto;
+      font-weight: font-weight(bold);
+      color: color($neutral, 4);
+    }
+
+    app-search-input {
+      position: relative;
+      top: 2px;
+    }
+
+    [app-button]:not(:first-child) {
+      margin-left: spacing(8);
+    }
   }
 
-  app-search-input {
-    position: relative;
-    top: 2px;
-  }
+  .filter-panel {
+    margin-top: spacing(16);
 
-  [app-button]:not(:first-child) {
-    margin-left: spacing(8);
+    &__tags {
+      display: flex;
+    }
+
+    &__tag:not(:last-of-type) {
+      margin-right: spacing(16);
+    }
   }
 }
 
