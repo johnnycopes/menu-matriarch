@@ -12,7 +12,7 @@
         buttonStyle="secondary"
         (click)="toggleFilterPanel(vm.filterPanel)"
       >
-        Filter
+        Filters ({{ vm.filters.length }})
       </button>
       <app-options-menu #optionsMenu>
         Stuff will go here
@@ -32,7 +32,8 @@
         >
           <app-checkbox
             [name]="tag.id"
-            [ngModel]="false"
+            [ngModel]="vm.filters.includes(tag.id)"
+            (ngModelChange)="onFilterChange(vm.filters, tag.id, $event)"
           >
             <app-tag
               [id]="tag.id"

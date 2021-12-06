@@ -22,6 +22,7 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 export class PlannerDishesComponent {
   private _menu$ = new BehaviorSubject<Menu | undefined>(undefined);
   private _filterPanel$ = new BehaviorSubject<boolean>(false);
+  private _filters$ = new BehaviorSubject<string[]>([]);
   private _searchText$ = new BehaviorSubject<string>('');
 
   @Input()
@@ -32,20 +33,26 @@ export class PlannerDishesComponent {
     this._menu$.asObservable(),
     this._dishService.getDishes(),
     this._filterPanel$.asObservable(),
+    this._filters$.asObservable(),
     this._searchText$.asObservable().pipe(
       distinctUntilChanged(),
     ),
     this._tagService.getTags(),
   ]).pipe(
-    map(([menu, dishes, filterPanel, searchText, tags]) => ({
-      menu,
-      searchText,
-      filterPanel,
-      total: dishes.length,
-      mains: dishes.filter(dish => this._filterDish(dish, 'main', searchText)),
-      sides: dishes.filter(dish => this._filterDish(dish, 'side', searchText)),
-      tags,
-    })),
+    map(([menu, dishes, filterPanel, filters, searchText, tags]) => {
+      const mains = dishes.filter(dish => this._filterDish(dish, 'main', searchText, filters));
+      const sides = dishes.filter(dish => this._filterDish(dish, 'side', searchText, filters));
+      return {
+        menu,
+        tags,
+        searchText,
+        filterPanel,
+        filters,
+        total: mains.length + sides.length,
+        mains,
+        sides,
+      };
+    }),
   );
   public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
   public tagTrackByFn = trackByFactory<Tag, string>(tag => tag.id);
@@ -79,8 +86,19 @@ export class PlannerDishesComponent {
     this._filterPanel$.next(!state);
   }
 
-  private _filterDish(dish: Dish, type: DishType, searchText: string): boolean {
+  public onFilterChange(filters: string[], id: string, state: boolean): void {
+    let updatedFilters: string[] = [];
+    if (state) {
+      updatedFilters = [...filters, id];
+    } else {
+      updatedFilters = filters.filter(filterId => filterId !== id);
+    }
+    this._filters$.next(updatedFilters);
+  }
+
+  private _filterDish(dish: Dish, type: DishType, searchText: string, filters: string[]): boolean {
     return dish.type === type &&
+      (filters.length === 0 || dish.tags.some(tag => filters.includes(tag.id))) &&
       (lower(dish.name).includes(lower(searchText)) ||
       lower(dish.description).includes(lower(searchText)) ||
       dish.tags.some(tag => lower(tag.name).includes(lower(searchText))));
