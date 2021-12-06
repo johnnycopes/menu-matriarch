@@ -32,10 +32,6 @@ export class FilterService {
     );
   }
 
-  public updatePanel(state: boolean): void {
-    this._panel$.next(state);
-  }
-
   public togglePanel(): void {
     this.panel$.pipe(
       first(),

@@ -2,18 +2,32 @@
   class="dishes"
 >
   <div class="app-section__toolbar">
-    <h2 class="title">
-      {{ vm.total }} total
-    </h2>
-    <app-search-input
-      [text]="vm.searchText"
-      (textChange)="onSearchTextChange($event)"
-    ></app-search-input>
-    <a app-button
-      routerLink="/dishes/new"
-    >
-      New Dish
-    </a>
+    <div class="controls">
+      <h2 class="title">
+        {{ vm.total }} total
+      </h2>
+      <app-search-input
+        [text]="vm.searchText"
+        (textChange)="onSearchTextChange($event)"
+      ></app-search-input>
+      <button app-button
+        buttonStyle="secondary"
+        (click)="onFiltersButtonClick()"
+      >
+        Filters ({{ vm.filters.length }})
+      </button>
+      <a app-button
+        routerLink="/dishes/new"
+      >
+        New Dish
+      </a>
+    </div>
+    <app-filters *ngIf="vm.filterPanel"
+      class="filters"
+      [tags]="vm.tags"
+      [selected]="vm.filters"
+      (selectedChange)="onFiltersChange($event)"
+    ></app-filters>
   </div>
   <ul class="app-section__content">
     <app-tabset>

@@ -68,7 +68,7 @@ export class PlannerDishesComponent {
     this._filterService.togglePanel();
   }
 
-  public onFilterChange(filters: string[]): void {
+  public onFiltersChange(filters: string[]): void {
     this._filterService.updateTagIds(filters);
   }
 

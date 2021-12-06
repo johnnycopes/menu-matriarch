@@ -27,9 +27,8 @@
       class="filters"
       [tags]="vm.tags"
       [selected]="vm.filters"
-      (selectedChange)="onFilterChange($event)"
-    >
-    </app-filters>
+      (selectedChange)="onFiltersChange($event)"
+    ></app-filters>
   </div>
   <ul class="app-section__content">
     <app-tabset contentVisibility="visible">
