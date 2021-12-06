@@ -4,7 +4,6 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
 import { Menu } from '@models/interfaces/menu.interface';
-import { Tag } from '@models/interfaces/tag.interface';
 import { Day } from '@models/types/day.type';
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
@@ -54,8 +53,7 @@ export class PlannerDishesComponent {
       };
     }),
   );
-  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
-  public tagTrackByFn = trackByFactory<Tag, string>(tag => tag.id);
+  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _dishService: DishService,
@@ -86,14 +84,8 @@ export class PlannerDishesComponent {
     this._filterPanel$.next(!state);
   }
 
-  public onFilterChange(filters: string[], id: string, state: boolean): void {
-    let updatedFilters: string[] = [];
-    if (state) {
-      updatedFilters = [...filters, id];
-    } else {
-      updatedFilters = filters.filter(filterId => filterId !== id);
-    }
-    this._filters$.next(updatedFilters);
+  public onFilterChange(filters: string[]): void {
+    this._filters$.next(filters);
   }
 
   private _filterDish(dish: Dish, type: DishType, searchText: string, filters: string[]): boolean {

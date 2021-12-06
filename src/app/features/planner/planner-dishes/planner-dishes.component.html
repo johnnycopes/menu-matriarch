@@ -23,33 +23,20 @@
         New Dish
       </a>
     </div>
-    <app-card *ngIf="vm.filterPanel"
-      class="filter-panel"
+    <app-filters *ngIf="vm.filterPanel"
+      class="filters"
+      [tags]="vm.tags"
+      [selected]="vm.filters"
+      (selectedChange)="onFilterChange($event)"
     >
-      <ul class="filter-panel__tags">
-        <li *ngFor="let tag of vm.tags; trackBy: tagTrackByFn"
-          class="filter-panel__tag"
-        >
-          <app-checkbox
-            [name]="tag.id"
-            [ngModel]="vm.filters.includes(tag.id)"
-            (ngModelChange)="onFilterChange(vm.filters, tag.id, $event)"
-          >
-            <app-tag
-              [id]="tag.id"
-              [name]="tag.name"
-            ></app-tag>
-          </app-checkbox>
-        </li>
-      </ul>
-    </app-card>
+    </app-filters>
   </div>
   <ul class="app-section__content">
     <app-tabset contentVisibility="visible">
       <app-tab name="Mains ({{ vm.mains.length }})">
         <ul *ngIf="vm.mains.length; else noMainsPlaceholder">
           <li app-planner-dish
-            *ngFor="let main of vm.mains; trackBy: dishTrackByFn"
+            *ngFor="let main of vm.mains; trackBy: trackByFn"
             [id]="main.id"
             [type]="main.type"
             [name]="main.name"
@@ -71,7 +58,7 @@
       <app-tab name="Sides ({{ vm.sides.length }})">
         <ul *ngIf="vm.sides.length; else noSidesPlaceholder">
           <li app-planner-dish
-            *ngFor="let side of vm.sides; trackBy: dishTrackByFn"
+            *ngFor="let side of vm.sides; trackBy: trackByFn"
             [id]="side.id"
             [type]="side.type"
             [name]="side.name"

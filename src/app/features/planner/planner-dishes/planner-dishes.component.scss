@@ -24,16 +24,8 @@
     }
   }
 
-  .filter-panel {
+  .filters {
     margin-top: spacing(16);
-
-    &__tags {
-      display: flex;
-    }
-
-    &__tag:not(:last-of-type) {
-      margin-right: spacing(16);
-    }
   }
 }
 

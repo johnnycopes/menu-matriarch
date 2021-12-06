@@ -1,0 +1,18 @@
+<app-card>
+  <ul class="tags">
+    <li *ngFor="let tag of tags; trackBy: trackByFn"
+      class="tag"
+    >
+      <app-checkbox
+        [name]="tag.id"
+        [ngModel]="selected.includes(tag.id)"
+        (ngModelChange)="onTagChange(tag.id, $event)"
+      >
+        <app-tag
+          [id]="tag.id"
+          [name]="tag.name"
+        ></app-tag>
+      </app-checkbox>
+    </li>
+  </ul>
+</app-card>

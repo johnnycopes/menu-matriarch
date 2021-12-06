@@ -1,0 +1,9 @@
+@import "main";
+
+.tags {
+  display: flex;
+}
+
+.tag:not(:last-of-type) {
+  margin-right: spacing(16);
+}
