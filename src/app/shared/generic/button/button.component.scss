@@ -41,11 +41,6 @@ $size: 40px;
     color: $white;
   };
 
-  &--icon {
-    height: $size;
-    width: $size;
-  }
-
   &--primary {
     @include button-style(color($pink, 7), color($pink, 6), color($pink, 5), color($pink, 8));
   }
@@ -70,6 +65,7 @@ $size: 40px;
   }
 
   fa-icon {
+    margin-left: spacing(4);
     pointer-events: none;
   }
 }
