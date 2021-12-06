@@ -19,7 +19,7 @@
       top: 2px;
     }
 
-    [app-button]:not(:first-child) {
+    .button:not(:first-child) {
       margin-left: spacing(8);
     }
   }

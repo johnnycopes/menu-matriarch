@@ -10,13 +10,13 @@
         [text]="vm.searchText"
         (textChange)="onSearchTextChange($event)"
       ></app-search-input>
-      <button app-button
-        buttonStyle="secondary"
-        (click)="onFiltersButtonClick()"
-      >
-        Filters ({{ vm.filters.length }})
-      </button>
+      <app-filters-button class="button"
+        [count]="vm.filters.length"
+        [open]="vm.filterPanel"
+        (clicked)="onFiltersButtonClick()"
+      ></app-filters-button>
       <a app-button
+        class="button"
         routerLink="/dishes/new"
       >
         New Dish
