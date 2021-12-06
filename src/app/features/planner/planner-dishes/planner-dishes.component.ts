@@ -64,8 +64,8 @@ export class PlannerDishesComponent {
     this._filterService.updateText(text);
   }
 
-  public toggleFilterPanel(state: boolean): void {
-    this._filterService.updatePanel(!state);
+  public onFiltersButtonClick(): void {
+    this._filterService.togglePanel();
   }
 
   public onFilterChange(filters: string[]): void {

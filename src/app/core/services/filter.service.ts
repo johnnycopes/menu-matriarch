@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, first } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
 import { DishType } from '@models/types/dish-type.type';
@@ -32,10 +32,14 @@ export class FilterService {
     );
   }
 
-  constructor() { }
-
   public updatePanel(state: boolean): void {
     this._panel$.next(state);
+  }
+
+  public togglePanel(): void {
+    this.panel$.pipe(
+      first(),
+    ).subscribe(value => this._panel$.next(!value));
   }
 
   public updateTagIds(ids: string[]): void {
