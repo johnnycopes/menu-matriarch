@@ -14,5 +14,14 @@
         ></app-tag>
       </app-checkbox>
     </li>
+    <li>
+      <button app-button
+        buttonStyle="ternary"
+        [disabled]="!selected.length"
+        (click)="selectedClear.emit()"
+      >
+        Clear All
+      </button>
+    </li>
   </ul>
 </app-card>

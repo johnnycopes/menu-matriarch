@@ -27,6 +27,7 @@
       [tags]="vm.tags"
       [selected]="vm.filters"
       (selectedChange)="onFiltersChange($event)"
+      (selectedClear)="onFiltersChange([])"
     ></app-filters>
   </div>
   <ul class="app-section__content">

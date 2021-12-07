@@ -2,8 +2,8 @@
 
 .tags {
   display: flex;
-}
-
-.tag:not(:last-of-type) {
-  margin-right: spacing(16);
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: spacing(16);
+  row-gap: spacing(8);
 }
