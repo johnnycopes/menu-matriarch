@@ -20,7 +20,6 @@ export class ButtonComponent {
     return {
       'app-button': true,
       [`app-button--${this.buttonStyle}`]: true,
-      'app-button--icon': !!this.icon,
     };
   }
 }

@@ -19,9 +19,32 @@ section {
 }
 
 .app-section__toolbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .title {
+      margin-right: auto;
+      font-weight: font-weight(bold);
+      color: color($neutral, 4);
+    }
+
+    app-search-input {
+      position: relative;
+      top: 2px;
+    }
+
+    .button:not(:first-child) {
+      margin-left: spacing(8);
+    }
+  }
+
+  .filters {
+    margin-top: spacing(16);
+  }
 
   .title {
     margin-right: auto;
@@ -30,7 +53,6 @@ section {
   }
 
   app-search-input {
-    margin-right: spacing(8);
     position: relative;
     top: 2px;
   }
@@ -42,6 +64,7 @@ section {
 
 li[app-dish]:not(:last-of-type) {
   margin-bottom: spacing(8);
+  flex-shrink: 0;
 }
 
 .placeholder {

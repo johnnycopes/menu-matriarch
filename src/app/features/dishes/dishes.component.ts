@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
-import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
+import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
-import { lower } from '@shared/utility/format';
+import { TagService } from '@services/tag.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
@@ -16,23 +16,32 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishesComponent {
-  private _searchText$ = new BehaviorSubject<string>('');
   public vm$ = combineLatest([
     this._dishService.getDishes(),
-    this._searchText$.asObservable().pipe(
-      distinctUntilChanged(),
-    ),
+    this._tagService.getTags(),
+    this._filterService.text$,
+    this._filterService.panel$,
+    this._filterService.tagIds$,
     this._routerService.activeDishId$,
   ]).pipe(
-    map(([dishes, searchText, activeDishId]) => {
+    map(([dishes, tags, searchText, panel, filters, activeDishId]) => {
       const activeDish = dishes.find(dish => dish.id === activeDishId);
+      const mains = dishes.filter(dish => this._filterService.filterDish({
+        dish, type: 'main', text: searchText, tagIds: filters,
+      }));
+      const sides = dishes.filter(dish => this._filterService.filterDish({
+        dish, type: 'side', text: searchText, tagIds: filters,
+      }));
       return {
+        tags,
         searchText,
-        total: dishes.length,
-        mains: dishes.filter(dish => this._filterDish(dish, 'main', searchText)),
-        sides: dishes.filter(dish => this._filterDish(dish, 'side', searchText)),
+        filters,
         activeDish,
+        filterPanel: panel,
         initialTab: activeDish?.type ?? 'main',
+        mains,
+        sides,
+        total: mains.length + sides.length,
       };
     })
   );
@@ -40,17 +49,20 @@ export class DishesComponent {
 
   constructor(
     private _dishService: DishService,
+    private _filterService: FilterService,
     private _routerService: RouterService,
+    private _tagService: TagService,
   ) { }
 
   public onSearchTextChange(text: string): void {
-    this._searchText$.next(text);
+    this._filterService.updateText(text);
   }
 
-  private _filterDish(dish: Dish, type: DishType, searchText: string): boolean {
-    return dish.type === type &&
-      (lower(dish.name).includes(lower(searchText)) ||
-      lower(dish.description).includes(lower(searchText)) ||
-      dish.tags.some(tag => lower(tag.name).includes(lower(searchText))));
+  public onFiltersButtonClick(): void {
+    this._filterService.togglePanel();
+  }
+
+  public onFiltersChange(filters: string[]): void {
+    this._filterService.updateTagIds(filters);
   }
 }

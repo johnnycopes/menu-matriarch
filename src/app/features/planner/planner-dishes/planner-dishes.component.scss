@@ -1,22 +1,32 @@
 @import "main";
 
 .app-section__toolbar {
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
 
-  .title {
-    margin-right: auto;
-    font-weight: font-weight(bold);
-    color: color($neutral, 4);
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .title {
+      margin-right: auto;
+      font-weight: font-weight(bold);
+      color: color($neutral, 4);
+    }
+
+    app-search-input {
+      position: relative;
+      top: 2px;
+    }
+
+    .button:not(:first-child) {
+      margin-left: spacing(8);
+      flex-shrink: 0;
+    }
   }
 
-  app-search-input {
-    position: relative;
-    top: 2px;
-  }
-
-  [app-button]:not(:first-child) {
-    margin-left: spacing(8);
+  .filters {
+    margin-top: spacing(16);
   }
 }
 

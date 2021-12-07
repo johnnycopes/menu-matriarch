@@ -1,17 +1,35 @@
 <app-section *ngIf="vm$ | async as vm">
   <div class="app-section__toolbar">
-    <h2 class="title">
-      Dishes ({{ vm.total }})
-    </h2>
-    <app-search-input
-      [text]="vm.searchText"
-      (textChange)="onSearchTextChange($event)"
-    ></app-search-input>
-    <a app-button
-      routerLink="/dishes/new"
-    >
-      New Dish
-    </a>
+    <div class="controls">
+      <h2 class="title">
+        Dishes ({{ vm.total }})
+      </h2>
+      <app-search-input
+        [text]="vm.searchText"
+        (textChange)="onSearchTextChange($event)"
+      ></app-search-input>
+      <app-filters-button class="button"
+        [count]="vm.filters.length"
+        [open]="vm.filterPanel"
+        (clicked)="onFiltersButtonClick()"
+      ></app-filters-button>
+      <app-options-menu #optionsMenu>
+        Stuff will go here
+      </app-options-menu>
+      <a app-button
+        class="button"
+        routerLink="/dishes/new"
+      >
+        New Dish
+      </a>
+    </div>
+    <app-filters *ngIf="vm.filterPanel"
+      class="filters"
+      [tags]="vm.tags"
+      [selected]="vm.filters"
+      (selectedChange)="onFiltersChange($event)"
+      (selectedClear)="onFiltersChange([])"
+    ></app-filters>
   </div>
   <ul class="app-section__content">
     <app-tabset contentVisibility="visible">

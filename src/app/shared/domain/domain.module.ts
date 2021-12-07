@@ -8,6 +8,8 @@ import { GenericModule } from '@shared/generic/generic.module';
 
 import { CountComponent } from './count/count.component';
 import { DishSummaryComponent } from './dish-summary/dish-summary.component';
+import { FiltersButtonComponent } from './filters-button/filters-button.component';
+import { FiltersComponent } from './filters/filters.component';
 import { InlineNameEditComponent } from './inline-name-edit/inline-name-edit.component';
 import { MealComponent } from './meal/meal.component';
 import { TagComponent } from './tag/tag.component';
@@ -18,6 +20,8 @@ import { TagComponent } from './tag/tag.component';
   declarations: [
     CountComponent,
     DishSummaryComponent,
+    FiltersButtonComponent,
+    FiltersComponent,
     InlineNameEditComponent,
     MealComponent,
     TagComponent,
@@ -25,6 +29,8 @@ import { TagComponent } from './tag/tag.component';
   exports: [
     CountComponent,
     DishSummaryComponent,
+    FiltersButtonComponent,
+    FiltersComponent,
     InlineNameEditComponent,
     MealComponent,
     TagComponent,

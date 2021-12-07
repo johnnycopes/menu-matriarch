@@ -1,0 +1,8 @@
+@import "main";
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: spacing(16);
+  row-gap: spacing(8);
+}

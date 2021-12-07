@@ -1,0 +1,32 @@
+<app-card>
+  <ul *ngIf="tags.length; else noTagsTemplate"
+    class="tags"
+  >
+    <li *ngFor="let tag of tags; trackBy: trackByFn"
+      class="tag"
+    >
+      <app-checkbox
+        [name]="tag.id"
+        [ngModel]="selected.includes(tag.id)"
+        (ngModelChange)="onTagChange(tag.id, $event)"
+      >
+        <app-tag
+          [id]="tag.id"
+          [name]="tag.name"
+        ></app-tag>
+      </app-checkbox>
+    </li>
+    <li>
+      <button app-button
+        buttonStyle="ternary"
+        [disabled]="!selected.length"
+        (click)="selectedClear.emit()"
+      >
+        Clear All
+      </button>
+    </li>
+  </ul>
+  <ng-template #noTagsTemplate>
+    <p>No filters to display</p>
+  </ng-template>
+</app-card>
