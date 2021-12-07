@@ -1,5 +1,7 @@
 <app-card>
-  <ul class="tags">
+  <ul *ngIf="tags.length; else noTagsTemplate"
+    class="tags"
+  >
     <li *ngFor="let tag of tags; trackBy: trackByFn"
       class="tag"
     >
@@ -24,4 +26,7 @@
       </button>
     </li>
   </ul>
+  <ng-template #noTagsTemplate>
+    <p>No filters to display</p>
+  </ng-template>
 </app-card>
