@@ -126,7 +126,7 @@ export class PrintService {
 
       .day {
         max-width: 256pt;
-        font-size: 8pt;
+        font-size: 9pt;
         letter-spacing: 0.5pt;
         text-transform: uppercase;
         border-bottom: 1px solid #e2e2e2;
