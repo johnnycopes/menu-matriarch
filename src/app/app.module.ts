@@ -38,6 +38,7 @@ import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
 import { TagsFormComponent } from './features/settings/tags-form/tags-form.component';
 import { TagsFormItemComponent } from './features/settings/tags-form/tags-form-item/tags-form-item.component';
+import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 @NgModule({
@@ -62,6 +63,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     PlannerMenuComponent,
     SettingsComponent,
     ShellComponent,
+    TagsComponent,
     TagsFormComponent,
     TagsFormItemComponent,
     WelcomeComponent,
