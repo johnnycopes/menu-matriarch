@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
@@ -7,12 +7,12 @@ import { TagService } from '@services/tag.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
-  selector: 'app-tags-form',
-  templateUrl: './tags-form.component.html',
-  styleUrls: ['./tags-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-tags',
+  templateUrl: './tags.component.html',
+  styleUrls: ['./tags.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagsFormComponent {
+export class TagsComponent {
   public tags$ = this._tagService.getTags();
   public startAdd$ = new Subject<void>();
   public finishAdd$ = new Subject<void>();

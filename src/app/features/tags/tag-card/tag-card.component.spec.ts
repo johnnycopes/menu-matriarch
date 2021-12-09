@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagsFormComponent } from './tags-form.component';
+import { TagCardComponent } from './tag-card.component';
 
-describe('TagsFormComponent', () => {
-  let component: TagsFormComponent;
-  let fixture: ComponentFixture<TagsFormComponent>;
+describe('TagCardComponent', () => {
+  let component: TagCardComponent;
+  let fixture: ComponentFixture<TagCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TagsFormComponent ]
+      declarations: [ TagCardComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagsFormComponent);
+    fixture = TestBed.createComponent(TagCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { merge, Subject } from 'rxjs';
+import { Component, ChangeDetectionStrategy, EventEmitter, Input, Output } from '@angular/core';
+import { Subject, merge } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[app-tags-form-item]',
-  templateUrl: './tags-form-item.component.html',
-  styleUrls: ['./tags-form-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: '[app-tag-card]',
+  templateUrl: './tag-card.component.html',
+  styleUrls: ['./tag-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagsFormItemComponent {
+export class TagCardComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() dishes: string[] = [];

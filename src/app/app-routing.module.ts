@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './core/components/page-not-found/page-not
 import { PlannerComponent } from './features/planner/planner.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
+import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
     { path: 'planner/:menuId', component: PlannerComponent, data: { state: Route.planner } },
     { path: 'planner', component: PlannerComponent, data: { state: Route.planner } },
     { path: 'menus', component: MenusComponent, data: { state: Route.menus } },
+    { path: 'tags', component: TagsComponent, data: { state: Route.tags } },
     { path: 'dishes', component: DishesComponent, data: { state: Route.dishes }, children: [
       { path: '', component: DishPlaceholderComponent, pathMatch: 'full' },
       { path: 'new', component: DishEditComponent },

@@ -5,12 +5,12 @@ import { DishType } from '@models/types/dish-type.type';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[app-dish]',
-  templateUrl: './dish.component.html',
-  styleUrls: ['./dish.component.scss'],
+  selector: '[app-dish-card]',
+  templateUrl: './dish-card.component.html',
+  styleUrls: ['./dish-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DishComponent {
+export class DishCardComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() description = '';

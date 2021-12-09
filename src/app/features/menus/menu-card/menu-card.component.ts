@@ -12,12 +12,12 @@ import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[app-menu]',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
+  selector: '[app-menu-card]',
+  templateUrl: './menu-card.component.html',
+  styleUrls: ['./menu-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuComponent {
+export class MenuCardComponent {
   @Input() id = '';
   @Input() name = '';
   @Input() entries: MenuEntry[] = [];

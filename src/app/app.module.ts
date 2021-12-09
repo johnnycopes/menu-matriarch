@@ -19,14 +19,14 @@ import { GenericModule } from '@shared/generic/generic.module';
 import { AppComponent } from './app.component';
 import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
-import { DishComponent } from './features/dishes/dish/dish.component';
+import { DishCardComponent } from './features/dishes/dish-card/dish-card.component';
 import { DishDetailsComponent } from './features/dishes/dish-details/dish-details.component';
 import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.component';
 import { DishesComponent } from './features/dishes/dishes.component';
 import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { ErrorComponent } from './core/components/error/error.component';
 import { HeaderComponent } from './core/components/header/header.component';
-import { MenuComponent } from './features/menus/menu/menu.component';
+import { MenuCardComponent } from './features/menus/menu-card/menu-card.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
@@ -36,8 +36,8 @@ import { PlannerDishesComponent } from './features/planner/planner-dishes/planne
 import { PlannerMenuComponent } from './features/planner/planner-menu/planner-menu.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
-import { TagsFormComponent } from './features/settings/tags-form/tags-form.component';
-import { TagsFormItemComponent } from './features/settings/tags-form/tags-form-item/tags-form-item.component';
+import { TagCardComponent } from './features/tags/tag-card/tag-card.component';
+import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
 @NgModule({
@@ -45,14 +45,14 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     AppComponent,
     DemoComponent,
     DemoComponentComponent,
-    DishComponent,
+    DishCardComponent,
     DishDetailsComponent,
     DishEditComponent,
     DishesComponent,
     DishPlaceholderComponent,
     ErrorComponent,
     HeaderComponent,
-    MenuComponent,
+    MenuCardComponent,
     MenusComponent,
     PageNotFoundComponent,
     PlannerComponent,
@@ -62,8 +62,8 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     PlannerMenuComponent,
     SettingsComponent,
     ShellComponent,
-    TagsFormComponent,
-    TagsFormItemComponent,
+    TagCardComponent,
+    TagsComponent,
     WelcomeComponent,
   ],
   imports: [

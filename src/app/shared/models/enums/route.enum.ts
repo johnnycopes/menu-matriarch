@@ -3,6 +3,7 @@ export enum Route {
   demo = 'demo',
   dishes = 'dishes',
   menus = 'menus',
+  tags = 'tags',
   settings = 'settings',
   welcome = 'welcome',
 }
