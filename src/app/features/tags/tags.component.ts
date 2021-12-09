@@ -26,10 +26,20 @@ export class TagsComponent {
 
   constructor(private _tagService: TagService) { }
 
-  public onSave(name: string): void {
-    // this._tagService
-    //   .createMenu({ name })
-    //   .subscribe();
-    // this.finishAdd$.next();
+  public onNewTagSave(name: string): void {
+    this._tagService
+      .createTag({ name })
+      .subscribe();
+    this.finishAdd$.next();
+  }
+
+  public onTagEdit(id: string, name: string): void {
+    this._tagService.updateTag(id, { name });
+  }
+
+  public onTagDelete(id: string): void {
+    this._tagService
+      .deleteTag(id)
+      .subscribe();
   }
 }

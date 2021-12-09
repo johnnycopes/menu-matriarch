@@ -13,21 +13,19 @@
     <app-inline-name-edit class="form"
       *ngIf="adding$ | async"
       (cancel)="finishAdd$.next()"
-      (save)="onSave($event)"
+      (save)="onNewTagSave($event)"
     ></app-inline-name-edit>
   </div>
   <ul class="app-section__content tags">
-    <p *ngFor="let tag of tags; trackBy: trackByFn">
-      {{ tag.name }}
-    </p>
-    <!-- <li app-menu
+    <li app-tag
       *ngFor="let tag of tags; trackBy: trackByFn"
       [id]="tag.id"
       [name]="tag.name"
-      [entries]="tag.entries"
-      [canDelete]="tags.length > 1"
-      [fallbackText]="tag.fallbackText"
-      [orientation]="tag.orientation"
-    ></li> -->
+      [dishes]="tag.dishes"
+      (edit)="onTagEdit(tag.id, $event)"
+      (delete)="onTagDelete(tag.id)"
+    >
+      {{ tag.name }}
+    </li>
   </ul>
 </app-section>
