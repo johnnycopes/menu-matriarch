@@ -6,7 +6,7 @@
 
 .app-section__content {
   display: grid;
-  grid-template-columns: 512px 512px;
+  grid-template-columns: spacing(512) spacing(512);
   grid-template-rows: auto;
   grid-gap: spacing(16);
   margin: 0 auto;
@@ -16,8 +16,7 @@
   grid-column: 1;
 }
 
-.settings,
-.tags {
+.settings {
   grid-column: 2;
 }
 
