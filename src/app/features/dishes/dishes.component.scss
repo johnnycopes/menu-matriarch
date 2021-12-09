@@ -62,7 +62,7 @@ section {
   padding: unset;
 }
 
-li[app-dish]:not(:last-of-type) {
+li[app-dish-card]:not(:last-of-type) {
   margin-bottom: spacing(8);
   flex-shrink: 0;
 }

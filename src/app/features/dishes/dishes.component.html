@@ -37,7 +37,7 @@
         [selected]="vm.initialTab === 'main'"
       >
         <ul *ngIf="vm.mains.length; else noMainsPlaceholder">
-          <li app-dish
+          <li app-dish-card
             *ngFor="let main of vm.mains; trackBy: trackByFn"
             [id]="main.id"
             [name]="main.name"
@@ -63,7 +63,7 @@
         [selected]="vm.initialTab === 'side'"
       >
         <ul *ngIf="vm.sides.length; else noSidesPlaceholder">
-          <li app-dish
+          <li app-dish-card
             *ngFor="let side of vm.sides; trackBy: trackByFn"
             [id]="side.id"
             [name]="side.name"

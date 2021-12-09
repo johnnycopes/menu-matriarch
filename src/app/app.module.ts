@@ -19,7 +19,7 @@ import { GenericModule } from '@shared/generic/generic.module';
 import { AppComponent } from './app.component';
 import { DemoComponent } from './features/demo/demo.component';
 import { DemoComponentComponent } from './features/demo/demo-component/demo-component.component';
-import { DishComponent } from './features/dishes/dish/dish.component';
+import { DishCardComponent } from './features/dishes/dish-card/dish-card.component';
 import { DishDetailsComponent } from './features/dishes/dish-details/dish-details.component';
 import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.component';
 import { DishesComponent } from './features/dishes/dishes.component';
@@ -45,7 +45,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     AppComponent,
     DemoComponent,
     DemoComponentComponent,
-    DishComponent,
+    DishCardComponent,
     DishDetailsComponent,
     DishEditComponent,
     DishesComponent,
