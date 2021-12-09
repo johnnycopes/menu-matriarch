@@ -1,1 +1,33 @@
-<p>tags works!</p>
+<app-section *ngIf="tags$ | async as tags">
+  <div class="app-section__toolbar">
+    <h2 class="title">
+      {{ tags.length }} total
+    </h2>
+    <button app-button
+      buttonStyle="primary"
+      [disabled]="adding$ | async"
+      (click)="startAdd$.next()"
+    >
+      New Tag
+    </button>
+    <app-inline-name-edit class="form"
+      *ngIf="adding$ | async"
+      (cancel)="finishAdd$.next()"
+      (save)="onSave($event)"
+    ></app-inline-name-edit>
+  </div>
+  <ul class="app-section__content tags">
+    <p *ngFor="let tag of tags; trackBy: trackByFn">
+      {{ tag.name }}
+    </p>
+    <!-- <li app-menu
+      *ngFor="let tag of tags; trackBy: trackByFn"
+      [id]="tag.id"
+      [name]="tag.name"
+      [entries]="tag.entries"
+      [canDelete]="tags.length > 1"
+      [fallbackText]="tag.fallbackText"
+      [orientation]="tag.orientation"
+    ></li> -->
+  </ul>
+</app-section>

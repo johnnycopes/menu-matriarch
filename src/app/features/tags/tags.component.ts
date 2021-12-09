@@ -1,4 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { merge, Subject } from 'rxjs';
+import { mapTo, shareReplay } from 'rxjs/operators';
+
+import { Tag } from '@models/interfaces/tag.interface';
+import { TagService } from '@services/tag.service';
+import { trackByFactory } from '@shared/utility/track-by-factory';
 
 @Component({
   selector: 'app-tags',
@@ -6,11 +12,24 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./tags.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagsComponent implements OnInit {
+export class TagsComponent {
+  public tags$ = this._tagService.getTags();
+  public startAdd$ = new Subject<void>();
+  public finishAdd$ = new Subject<void>();
+  public adding$ = merge(
+    this.startAdd$.pipe(mapTo(true)),
+    this.finishAdd$.pipe(mapTo(false)),
+  ).pipe(
+    shareReplay({ refCount: true, bufferSize: 1 })
+  );
+  public trackByFn = trackByFactory<Tag, string>(tag => tag.id);
 
-  constructor() { }
+  constructor(private _tagService: TagService) { }
 
-  ngOnInit(): void {
+  public onSave(name: string): void {
+    // this._tagService
+    //   .createMenu({ name })
+    //   .subscribe();
+    // this.finishAdd$.next();
   }
-
 }
