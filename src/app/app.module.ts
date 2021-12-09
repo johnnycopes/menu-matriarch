@@ -36,7 +36,7 @@ import { PlannerDishesComponent } from './features/planner/planner-dishes/planne
 import { PlannerMenuComponent } from './features/planner/planner-menu/planner-menu.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
-import { TagCardComponent } from './features/tags/tag/tag-card.component';
+import { TagCardComponent } from './features/tags/tag-card/tag-card.component';
 import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
 
