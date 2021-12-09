@@ -26,7 +26,7 @@ import { DishesComponent } from './features/dishes/dishes.component';
 import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { ErrorComponent } from './core/components/error/error.component';
 import { HeaderComponent } from './core/components/header/header.component';
-import { MenuComponent } from './features/menus/menu/menu.component';
+import { MenuCardComponent } from './features/menus/menu-card/menu-card.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
@@ -52,7 +52,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     DishPlaceholderComponent,
     ErrorComponent,
     HeaderComponent,
-    MenuComponent,
+    MenuCardComponent,
     MenusComponent,
     PageNotFoundComponent,
     PlannerComponent,
