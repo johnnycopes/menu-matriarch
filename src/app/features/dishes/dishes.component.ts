@@ -3,6 +3,7 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
+import { getDishTypes } from '@models/types/get-dish-types';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
@@ -45,6 +46,7 @@ export class DishesComponent {
       };
     })
   );
+  public dishTypes = getDishTypes();
   public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
