@@ -1,1 +1,1 @@
-export type DishType = 'main' | 'side';
+export type DishType = 'main' | 'side' | 'dessert';
