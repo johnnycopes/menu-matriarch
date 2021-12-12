@@ -40,6 +40,7 @@
 }
 
 .fallback {
+  min-height: spacing(24);
   color: color($neutral, 6);
   font-style: italic;
 }

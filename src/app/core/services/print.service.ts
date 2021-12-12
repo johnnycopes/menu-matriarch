@@ -164,6 +164,7 @@ export class PrintService {
       }
 
       .fallback {
+        min-height: 18pt;
         font-style: italic;
       }
     `;
