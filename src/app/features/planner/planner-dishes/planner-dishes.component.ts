@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
@@ -33,25 +34,22 @@ export class PlannerDishesComponent {
     this._filterService.text$,
   ]).pipe(
     map(([menu, dishes, tags, filterPanel, filters, searchText]) => {
-      const mains = dishes.filter(dish => this._filterService.filterDish({
-        dish, type: 'main', text: searchText, tagIds: filters,
-      }));
-      const sides = dishes.filter(dish => this._filterService.filterDish({
-        dish, type: 'side', text: searchText, tagIds: filters,
-      }));
+      const filteredDishes = this._filterService.filterDishes({
+        dishes, text: searchText, tagIds: filters,
+      });
       return {
         menu,
         tags,
         searchText,
-        filterPanel,
         filters,
-        total: mains.length + sides.length,
-        mains,
-        sides,
+        filteredDishes,
+        filterPanel,
+        total: filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0),
       };
     }),
   );
-  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public detailsTrackByFn = trackByFactory<FilteredDishes, string>(details => details.type);
+  public dishesTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _dishService: DishService,
