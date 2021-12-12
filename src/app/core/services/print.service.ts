@@ -5,6 +5,7 @@ import { Menu } from '@models/interfaces/menu.interface';
 import { MenuEntry } from '@models/interfaces/menu-entry.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { Orientation } from '@models/types/orientation.type';
+import { getDishTypes } from '@models/types/get-dish-types';
 
 interface PrintMenu extends Pick<Menu,
   'name' | 'entries' | 'fallbackText' | 'orientation'
@@ -54,30 +55,31 @@ export class PrintService {
   private _createEntry({ entry, fallbackText, orientation }:
     { entry: MenuEntry, fallbackText: string, orientation: Orientation }
   ): string {
-    const mains = this._createDishesList(entry.dishes, 'main', orientation);
-    const sides = this._createDishesList(entry.dishes, 'side', orientation);
-    const desserts = this._createDishesList(entry.dishes, 'dessert', orientation);
-    const meal = entry.dishes.length
-      ? `<ul class="dishes main ${orientation}">${mains}</ul>
-        <ul class="dishes side ${orientation}">${sides}</ul>
-        <ul class="dishes dessert ${orientation}">${desserts}</ul>
-        `
+    const content = entry.dishes.length
+      ? this._createDishesList(entry.dishes, orientation)
       : `<p class="fallback">${fallbackText}</p>`;
     return `<li class="entry">
       <h2 class="day">${entry.day}</h2>
       <div class="meal">
-        ${meal}
+        ${content}
       </div>
     </li>`;
   }
 
-  private _createDishesList(dishes: Dish[], type: DishType, orientation: Orientation) {
-    const list = dishes
+  private _createDishesList(dishes: Dish[], orientation: Orientation) {
+    return getDishTypes()
+      .map(type =>
+        `<ul class="dishes ${type} ${orientation}">
+          ${this._createDishes(dishes, type, orientation)}
+        </ul>`)
+      .join('');
+  }
+
+  private _createDishes(dishes: Dish[], type: DishType, orientation: Orientation): string {
+    return dishes
       .filter(dish => dish.type === type)
       .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
       .join(orientation === 'vertical' ? '' : ',');
-      console.log(list);
-    return list;
   }
 
   private _createStyles(): string {
