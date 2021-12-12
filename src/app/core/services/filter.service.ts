@@ -3,7 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
+import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
 import { DishType } from '@models/types/dish-type.type';
+import { getDishTypes } from '@models/types/get-dish-types';
 import { lower } from '@shared/utility/format';
 
 @Injectable({
@@ -44,6 +46,22 @@ export class FilterService {
 
   public updateText(text: string): void {
     this._text$.next(text);
+  }
+
+  public filterDishes({ dishes, text, tagIds }: {
+    dishes: Dish[],
+    text: string,
+    tagIds: string[],
+  }): FilteredDishes[] {
+    return getDishTypes().map(type => ({
+      type,
+      dishes: dishes.filter(dish => this.filterDish({
+        dish, type, text, tagIds
+      })),
+      placeholderText: `No ${type !== 'dessert'
+        ? `${type} dishes`
+        : `${type}s`} to display`,
+    }));
   }
 
   public filterDish({ dish, type, text, tagIds }: {
