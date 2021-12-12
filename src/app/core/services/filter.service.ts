@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
-import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
+import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { getDishTypes } from '@models/types/get-dish-types';
 import { lower } from '@shared/utility/format';
@@ -48,7 +48,7 @@ export class FilterService {
     this._text$.next(text);
   }
 
-  public getTotalCount(filteredDishes: FilteredDishes[]): number {
+  public getTotalCount(filteredDishes: FilteredDishesGroup[]): number {
     return filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0);
   }
 
@@ -56,7 +56,7 @@ export class FilterService {
     dishes: Dish[],
     text: string,
     tagIds: string[],
-  }): FilteredDishes[] {
+  }): FilteredDishesGroup[] {
     return getDishTypes().map(type => ({
       type,
       dishes: dishes.filter(dish => this._filterDish({

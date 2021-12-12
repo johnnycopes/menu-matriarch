@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
+import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Menu } from '@models/interfaces/menu.interface';
 import { DishType } from '@models/types/dish-type.type';
@@ -49,8 +49,8 @@ export class PlannerDishesComponent {
       };
     }),
   );
-  public detailsTrackByFn = trackByFactory<FilteredDishes, DishType>(details => details.type);
-  public dishesTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
+  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _dishService: DishService,

@@ -32,13 +32,13 @@
   </div>
   <ul class="app-section__content">
     <app-tabset>
-      <app-tab *ngFor="let dishesObj of vm.filteredDishes; trackBy: detailsTrackByFn"
-        name="{{ dishesObj.type }} ({{ dishesObj.dishes.length }})"
-        [selected]="vm.initialTab === dishesObj.type"
+      <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"
+        name="{{ group.type }} ({{ group.dishes.length }})"
+        [selected]="vm.initialTab === group.type"
       >
-        <ul *ngIf="dishesObj.dishes.length; else noDishesPlaceholder">
+        <ul *ngIf="group.dishes.length; else noDishesPlaceholder">
           <li app-dish-card
-            *ngFor="let dish of dishesObj.dishes; dishesTrackByFn"
+            *ngFor="let dish of group.dishes; trackBy: dishTrackByFn"
             [id]="dish.id"
             [name]="dish.name"
             [description]="dish.description"
@@ -54,7 +54,7 @@
         </ul>
         <ng-template #noDishesPlaceholder>
           <div class="placeholder">
-            {{ dishesObj.placeholderText }}
+            {{ group.placeholderText }}
           </div>
         </ng-template>
       </app-tab>

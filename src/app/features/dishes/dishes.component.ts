@@ -3,7 +3,7 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
-import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
+import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
@@ -43,8 +43,8 @@ export class DishesComponent {
       };
     })
   );
-  public detailsTrackByFn = trackByFactory<FilteredDishes, DishType>(details => details.type);
-  public dishesTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
+  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _dishService: DishService,
