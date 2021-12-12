@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
 import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
+import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
@@ -42,7 +43,7 @@ export class DishesComponent {
       };
     })
   );
-  public detailsTrackByFn = trackByFactory<FilteredDishes, string>(details => details.type);
+  public detailsTrackByFn = trackByFactory<FilteredDishes, DishType>(details => details.type);
   public dishesTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(

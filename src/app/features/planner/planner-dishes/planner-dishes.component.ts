@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { FilteredDishes } from '@models/interfaces/filtered-dishes.interface';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Menu } from '@models/interfaces/menu.interface';
+import { DishType } from '@models/types/dish-type.type';
 import { Day } from '@models/types/day.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
@@ -48,7 +49,7 @@ export class PlannerDishesComponent {
       };
     }),
   );
-  public detailsTrackByFn = trackByFactory<FilteredDishes, string>(details => details.type);
+  public detailsTrackByFn = trackByFactory<FilteredDishes, DishType>(details => details.type);
   public dishesTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
