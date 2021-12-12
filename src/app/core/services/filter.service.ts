@@ -48,6 +48,10 @@ export class FilterService {
     this._text$.next(text);
   }
 
+  public getTotalCount(filteredDishes: FilteredDishes[]): number {
+    return filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0);
+  }
+
   public filterDishes({ dishes, text, tagIds }: {
     dishes: Dish[],
     text: string,
@@ -55,7 +59,7 @@ export class FilterService {
   }): FilteredDishes[] {
     return getDishTypes().map(type => ({
       type,
-      dishes: dishes.filter(dish => this.filterDish({
+      dishes: dishes.filter(dish => this._filterDish({
         dish, type, text, tagIds
       })),
       placeholderText: `No ${type !== 'dessert'
@@ -64,7 +68,7 @@ export class FilterService {
     }));
   }
 
-  public filterDish({ dish, type, text, tagIds }: {
+  private _filterDish({ dish, type, text, tagIds }: {
     dish: Dish,
     type: DishType,
     text: string,

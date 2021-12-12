@@ -44,7 +44,7 @@ export class PlannerDishesComponent {
         filters,
         filteredDishes,
         filterPanel,
-        total: filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0),
+        total: this._filterService.getTotalCount(filteredDishes),
       };
     }),
   );
