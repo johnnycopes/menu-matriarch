@@ -30,7 +30,7 @@
       {{ dish.link }}
     </a>
     <div class="details">
-      <p>{{ dish.type | uppercase }} dish</p>
+      <p>{{ dish.type | uppercase }}</p>
       <p>
         Included {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
         {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}

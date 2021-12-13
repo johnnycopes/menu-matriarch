@@ -1,6 +1,6 @@
 import { Day } from "@models/types/day.type";
 
-export function getDays(startDay: Day = 'Monday'): Day[] {
+export function getDays(startDay: Day = 'Monday'): readonly Day[] {
   switch (startDay) {
     case 'Monday':
       return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

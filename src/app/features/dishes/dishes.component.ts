@@ -3,6 +3,8 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
+import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
+import { DishType } from '@models/types/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
@@ -24,28 +26,25 @@ export class DishesComponent {
     this._filterService.tagIds$,
     this._routerService.activeDishId$,
   ]).pipe(
-    map(([dishes, tags, searchText, panel, filters, activeDishId]) => {
+    map(([dishes, tags, searchText, filterPanel, filters, activeDishId]) => {
       const activeDish = dishes.find(dish => dish.id === activeDishId);
-      const mains = dishes.filter(dish => this._filterService.filterDish({
-        dish, type: 'main', text: searchText, tagIds: filters,
-      }));
-      const sides = dishes.filter(dish => this._filterService.filterDish({
-        dish, type: 'side', text: searchText, tagIds: filters,
-      }));
+      const filteredDishes = this._filterService.filterDishes({
+        dishes, text: searchText, tagIds: filters,
+      });
       return {
         tags,
         searchText,
         filters,
+        filteredDishes,
         activeDish,
-        filterPanel: panel,
+        filterPanel,
         initialTab: activeDish?.type ?? 'main',
-        mains,
-        sides,
-        total: mains.length + sides.length,
+        total: this._filterService.getTotalCount(filteredDishes),
       };
     })
   );
-  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
+  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _dishService: DishService,

@@ -59,13 +59,16 @@
       label="dish type"
     >
       <div class="radio-container">
-        <label class="radio-button">
-          <input type="radio" name="type" value="main" [ngModel]="vm.type" />
-          Main
-        </label>
-        <label class="radio-button">
-          <input type="radio" name="type" value="side" [ngModel]="vm.type" />
-          Side
+        <label *ngFor="let dishType of dishTypes"
+          class="radio-button"
+        >
+          <input
+            type="radio"
+            name="type"
+            [value]="dishType"
+            [ngModel]="vm.type"
+          />
+          {{ dishType | titlecase }}
         </label>
       </div>
     </app-input>

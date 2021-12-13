@@ -3,7 +3,9 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
+import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
 import { Menu } from '@models/interfaces/menu.interface';
+import { DishType } from '@models/types/dish-type.type';
 import { Day } from '@models/types/day.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
@@ -33,25 +35,22 @@ export class PlannerDishesComponent {
     this._filterService.text$,
   ]).pipe(
     map(([menu, dishes, tags, filterPanel, filters, searchText]) => {
-      const mains = dishes.filter(dish => this._filterService.filterDish({
-        dish, type: 'main', text: searchText, tagIds: filters,
-      }));
-      const sides = dishes.filter(dish => this._filterService.filterDish({
-        dish, type: 'side', text: searchText, tagIds: filters,
-      }));
+      const filteredDishes = this._filterService.filterDishes({
+        dishes, text: searchText, tagIds: filters,
+      });
       return {
         menu,
         tags,
         searchText,
-        filterPanel,
         filters,
-        total: mains.length + sides.length,
-        mains,
-        sides,
+        filteredDishes,
+        filterPanel,
+        total: this._filterService.getTotalCount(filteredDishes),
       };
     }),
   );
-  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
+  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
 
   constructor(
     private _dishService: DishService,

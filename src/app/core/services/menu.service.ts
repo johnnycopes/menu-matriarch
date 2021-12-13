@@ -104,7 +104,7 @@ export class MenuService {
     return this._batchService.deleteMenuContents(menu, day);
   }
 
-  public getOrderedDays(): Observable<Day[]> {
+  public getOrderedDays(): Observable<readonly Day[]> {
     return this._userService.getPreferences().pipe(
       map(preferences => getDays(preferences?.menuStartDay)),
       shareReplay({ bufferSize: 1, refCount: true })

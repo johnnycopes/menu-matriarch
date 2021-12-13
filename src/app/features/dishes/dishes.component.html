@@ -32,55 +32,29 @@
   </div>
   <ul class="app-section__content">
     <app-tabset>
-      <app-tab
-        name="Mains ({{ vm.mains.length }})"
-        [selected]="vm.initialTab === 'main'"
+      <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"
+        name="{{ group.type }} ({{ group.dishes.length }})"
+        [selected]="vm.initialTab === group.type"
       >
-        <ul *ngIf="vm.mains.length; else noMainsPlaceholder">
+        <ul *ngIf="group.dishes.length; else noDishesPlaceholder">
           <li app-dish-card
-            *ngFor="let main of vm.mains; trackBy: trackByFn"
-            [id]="main.id"
-            [name]="main.name"
-            [description]="main.description"
-            [link]="main.link"
-            [type]="main.type"
-            [favorited]="main.favorited"
-            [ingredients]="main.ingredients"
-            [tags]="main.tags"
-            [menus]="main.menus"
-            [usages]="main.usages"
-            [active]="vm.activeDish === main"
+            *ngFor="let dish of group.dishes; trackBy: dishTrackByFn"
+            [id]="dish.id"
+            [name]="dish.name"
+            [description]="dish.description"
+            [link]="dish.link"
+            [type]="dish.type"
+            [favorited]="dish.favorited"
+            [ingredients]="dish.ingredients"
+            [tags]="dish.tags"
+            [menus]="dish.menus"
+            [usages]="dish.usages"
+            [active]="vm.activeDish === dish"
           ></li>
         </ul>
-        <ng-template #noMainsPlaceholder>
+        <ng-template #noDishesPlaceholder>
           <div class="placeholder">
-            No main dishes to display
-          </div>
-        </ng-template>
-      </app-tab>
-      <app-tab
-        name="Sides ({{ vm.sides.length }})"
-        [selected]="vm.initialTab === 'side'"
-      >
-        <ul *ngIf="vm.sides.length; else noSidesPlaceholder">
-          <li app-dish-card
-            *ngFor="let side of vm.sides; trackBy: trackByFn"
-            [id]="side.id"
-            [name]="side.name"
-            [description]="side.description"
-            [link]="side.link"
-            [type]="side.type"
-            [favorited]="side.favorited"
-            [ingredients]="side.ingredients"
-            [tags]="side.tags"
-            [menus]="side.menus"
-            [usages]="side.usages"
-            [active]="vm.activeDish === side"
-          ></li>
-        </ul>
-        <ng-template #noSidesPlaceholder>
-          <div class="placeholder">
-            No side dishes to display
+            {{ group.placeholderText }}
           </div>
         </ng-template>
       </app-tab>

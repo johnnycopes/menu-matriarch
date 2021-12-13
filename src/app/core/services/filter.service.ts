@@ -3,7 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
 
 import { Dish } from '@models/interfaces/dish.interface';
+import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
 import { DishType } from '@models/types/dish-type.type';
+import { getDishTypes } from '@models/types/get-dish-types';
 import { lower } from '@shared/utility/format';
 
 @Injectable({
@@ -46,7 +48,27 @@ export class FilterService {
     this._text$.next(text);
   }
 
-  public filterDish({ dish, type, text, tagIds }: {
+  public getTotalCount(filteredDishes: FilteredDishesGroup[]): number {
+    return filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0);
+  }
+
+  public filterDishes({ dishes, text, tagIds }: {
+    dishes: Dish[],
+    text: string,
+    tagIds: string[],
+  }): FilteredDishesGroup[] {
+    return getDishTypes().map(type => ({
+      type,
+      dishes: dishes.filter(dish => this._filterDish({
+        dish, type, text, tagIds
+      })),
+      placeholderText: `No ${type !== 'dessert'
+        ? `${type} dishes`
+        : `${type}s`} to display`,
+    }));
+  }
+
+  private _filterDish({ dish, type, text, tagIds }: {
     dish: Dish,
     type: DishType,
     text: string,

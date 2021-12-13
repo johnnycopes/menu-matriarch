@@ -8,6 +8,15 @@
 .dishes {
   display: flex;
 
+  &:not(:first-child) {
+    padding-top: spacing(4);
+  }
+
+  &:not(:last-child) {
+    padding-bottom: spacing(4);
+    border-bottom: 1px solid color($neutral, 9);
+  }
+
   &--horizontal {
     flex-wrap: wrap;
   }
@@ -17,21 +26,21 @@
   }
 }
 
-.mains {
+.main {
+  font-weight: font-weight(semibold);
+  color: color($neutral, 4);
 
-  a {
-    font-weight: font-weight(semibold);
-    color: color($neutral, 4);
+  &:hover {
+    color: color($indigo, 5);
   }
 }
 
-.separator {
-  margin: spacing(4) 0;
-  border: 0;
-  border-bottom: 1px solid color($neutral, 9);
+.dessert {
+  font-style: italic;
 }
 
 .fallback {
+  min-height: spacing(24);
   color: color($neutral, 6);
   font-style: italic;
 }

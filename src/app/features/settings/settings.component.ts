@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public preferences$ = this._userService.getPreferences();
   public updateAction$ = new Subject<Partial<UserPreferences>>();
   public trackByFn = trackByFactory<Day, Day>(day => day);
-  public days: Day[] = getDays();
+  public days: readonly Day[] = getDays();
   private _destroy$ = new Subject<void>();
 
   constructor(

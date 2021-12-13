@@ -5,6 +5,7 @@ import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/types/dish-type.type';
+import { getDishTypes } from '@models/types/get-dish-types';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
 import { trackByFactory } from '@shared/utility/track-by-factory';
@@ -65,6 +66,7 @@ export class DishEditComponent {
       }
     })
   );
+  public readonly dishTypes = getDishTypes();
   public readonly tinyMceConfig = {
     height: 300,
     menubar: false,

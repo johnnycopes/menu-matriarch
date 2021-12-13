@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { MenuEntry } from '@models/interfaces/menu-entry.interface';
+import { Dish } from '@models/interfaces/dish.interface';
 import { Menu } from '@models/interfaces/menu.interface';
+import { MenuEntry } from '@models/interfaces/menu-entry.interface';
+import { DishType } from '@models/types/dish-type.type';
 import { Orientation } from '@models/types/orientation.type';
+import { getDishTypes } from '@models/types/get-dish-types';
 
 interface PrintMenu extends Pick<Menu,
   'name' | 'entries' | 'fallbackText' | 'orientation'
@@ -52,24 +55,31 @@ export class PrintService {
   private _createEntry({ entry, fallbackText, orientation }:
     { entry: MenuEntry, fallbackText: string, orientation: Orientation }
   ): string {
-    const mains = entry.dishes
-      .filter(dish => dish.type === 'main')
-      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
-      .join(orientation === 'vertical' ? '' : ',');
-    const sides = entry.dishes
-      .filter(dish => dish.type === 'side')
-      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
-      .join(orientation === 'vertical' ? '' : ',');
     const content = entry.dishes.length
-      ? `<ul class="dishes mains ${orientation}">${mains}</ul>
-        <ul class="dishes sides ${orientation}">${sides}</ul>`
+      ? this._createDishesList(entry.dishes, orientation)
       : `<p class="fallback">${fallbackText}</p>`;
     return `<li class="entry">
       <h2 class="day">${entry.day}</h2>
-      <div class="meals">
+      <div class="meal">
         ${content}
       </div>
     </li>`;
+  }
+
+  private _createDishesList(dishes: Dish[], orientation: Orientation) {
+    return getDishTypes()
+      .map(type =>
+        `<ul class="dishes ${type} ${orientation}">
+          ${this._createDishes(dishes, type, orientation)}
+        </ul>`)
+      .join('');
+  }
+
+  private _createDishes(dishes: Dish[], type: DishType, orientation: Orientation): string {
+    return dishes
+      .filter(dish => dish.type === type)
+      .map((dish, index) => (orientation === 'vertical' || index === 0 ? '' : '&nbsp') + `<li>${dish.name}</li>`)
+      .join(orientation === 'vertical' ? '' : ',');
   }
 
   private _createStyles(): string {
@@ -119,7 +129,7 @@ export class PrintService {
         margin-bottom: 8pt;
       }
 
-      .meals {
+      .meal {
         max-width: 256pt;
         margin-left: 4pt;
       }
@@ -145,11 +155,16 @@ export class PrintService {
         flex-direction: column;
       }
 
-      .mains {
+      .main {
         font-weight: bold;
       }
 
+      .dessert {
+        font-style: italic;
+      }
+
       .fallback {
+        min-height: 18pt;
         font-style: italic;
       }
     `;

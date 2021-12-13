@@ -1,31 +1,23 @@
-<ul *ngIf="mains.length"
-  class="dishes mains"
-  [class.dishes--horizontal]="orientation === 'horizontal'"
-  [class.dishes--vertical]="orientation === 'vertical'"
->
-  <li *ngFor="let dish of mains; let last = last; trackBy: trackByFn">
-    <a routerLink="/dishes/{{ dish.id }}">
-      {{ dish.name }}<span *ngIf="orientation === 'horizontal' && !last">,&nbsp;</span>
-    </a>
-  </li>
-</ul>
-<hr *ngIf="mains.length && sides.length"
-  class="separator"
-/>
-<ul *ngIf="sides.length"
-  class="dishes sides"
-  [class.dishes--horizontal]="orientation === 'horizontal'"
-  [class.dishes--vertical]="orientation === 'vertical'"
->
-  <li *ngFor="let dish of sides; let last = last; trackBy: trackByFn">
-    <a routerLink="/dishes/{{ dish.id }}">
-      {{ dish.name }}<span *ngIf="orientation === 'horizontal' && !last">,&nbsp;</span>
-    </a>
-  </li>
-</ul>
-
-<span *ngIf="showFallback"
+<span *ngIf="showFallback; else mealTemplate"
   class="fallback"
 >
   {{ fallbackText }}
 </span>
+
+<ng-template #mealTemplate>
+  <ng-container *ngFor="let group of dishesGroups; trackBy: groupTrackByFn">
+    <ul *ngIf="group.dishes.length"
+      class="dishes"
+      [class.dishes--horizontal]="orientation === 'horizontal'"
+      [class.dishes--vertical]="orientation === 'vertical'"
+    >
+      <li *ngFor="let dish of group.dishes; let last = last; trackBy: dishTrackByFn">
+        <a routerLink="/dishes/{{ dish.id }}"
+          [class]="group.type"
+        >
+          {{ dish.name }}<span *ngIf="orientation === 'horizontal' && !last">,&nbsp;</span>
+        </a>
+      </li>
+    </ul>
+  </ng-container>
+</ng-template>
