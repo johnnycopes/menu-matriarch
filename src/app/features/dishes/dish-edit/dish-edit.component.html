@@ -59,7 +59,7 @@
       label="dish type"
     >
       <div class="radio-container">
-        <label *ngFor="let dishType of dishTypes"
+        <label *ngFor="let dishType of dishTypes; trackBy: typeTrackByFn"
           class="radio-button"
         >
           <input
@@ -79,7 +79,7 @@
         class="tags"
         ngModelGroup="tags"
       >
-        <li *ngFor="let tag of vm.tags; trackBy: trackByFn"
+        <li *ngFor="let tag of vm.tags; trackBy: tagTrackByFn"
           class="tag"
         >
           <app-checkbox

@@ -32,6 +32,7 @@ export class SeedDataService {
     const salmonBurgersDishId = this._firestoreService.createId();
     const sushiDishId = this._firestoreService.createId();
     const sweetPotatoFriesDishId = this._firestoreService.createId();
+    const tiramisuDishId = this._firestoreService.createId();
     const thaiCurryDishId = this._firestoreService.createId();
     const easyTagId = this._firestoreService.createId();
     const pescatarianTagId = this._firestoreService.createId();
@@ -49,8 +50,8 @@ export class SeedDataService {
           Tuesday: [sushiDishId, misoSoupDishId],
           Wednesday: [salmonBurgersDishId, sweetPotatoFriesDishId],
           Thursday: [redLentilSoupDishId],
-          Friday: [pizzaDishId],
-          Saturday: [thaiCurryDishId],
+          Friday: [pizzaDishId, tiramisuDishId],
+          Saturday: [thaiCurryDishId, tiramisuDishId],
           Sunday: [friedChickenDishId, cornbreadDishId, macAndCheeseDishId],
         }}),
       )
@@ -195,6 +196,20 @@ export class SeedDataService {
           menus: [menuId],
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
+        })
+      )
+      .set(
+        this._batchService.getDishDoc(tiramisuDishId),
+        createDishDto({
+          id: tiramisuDishId,
+          uid,
+          name: 'Tiramisù',
+          description: 'Delicious coffee-flavored Italian cake',
+          link: 'https://cooking.nytimes.com/recipes/1018684-classic-tiramisu',
+          type: 'dessert',
+          menus: [menuId],
+          tags: [],
+          usages: 2,
         })
       )
       .set(

@@ -79,7 +79,8 @@ export class DishEditComponent {
       `undo redo | formatselect | bold italic underline forecolor backcolor |
       bullist numlist outdent indent | removeformat | help`,
   };
-  public trackByFn = trackByFactory<TagModel, string>(tag => tag.id);
+  public typeTrackByFn = trackByFactory<DishType, DishType>(type => type);
+  public tagTrackByFn = trackByFactory<TagModel, string>(tag => tag.id);
 
   constructor(
     private _route: ActivatedRoute,
