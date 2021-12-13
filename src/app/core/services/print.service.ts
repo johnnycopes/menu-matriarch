@@ -134,10 +134,6 @@ export class PrintService {
         margin-left: 4pt;
       }
 
-      .dessert {
-        font-style: italic;
-      }
-
       .day {
         max-width: 256pt;
         font-size: 9pt;
@@ -161,6 +157,10 @@ export class PrintService {
 
       .main {
         font-weight: bold;
+      }
+
+      .dessert {
+        font-style: italic;
       }
 
       .fallback {
