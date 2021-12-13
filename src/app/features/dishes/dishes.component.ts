@@ -26,7 +26,7 @@ export class DishesComponent {
     this._filterService.tagIds$,
     this._routerService.activeDishId$,
   ]).pipe(
-    map(([dishes, tags, searchText, panel, filters, activeDishId]) => {
+    map(([dishes, tags, searchText, filterPanel, filters, activeDishId]) => {
       const activeDish = dishes.find(dish => dish.id === activeDishId);
       const filteredDishes = this._filterService.filterDishes({
         dishes, text: searchText, tagIds: filters,
@@ -37,7 +37,7 @@ export class DishesComponent {
         filters,
         filteredDishes,
         activeDish,
-        filterPanel: panel,
+        filterPanel,
         initialTab: activeDish?.type ?? 'main',
         total: this._filterService.getTotalCount(filteredDishes),
       };
