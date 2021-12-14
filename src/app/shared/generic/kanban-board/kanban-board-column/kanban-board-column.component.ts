@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, Templa
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { Dictionary } from 'lodash';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 export interface IKanbanBoardActionClick {
   action: string;

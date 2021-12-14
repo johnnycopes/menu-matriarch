@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 import { Tag } from '@models/interfaces/tag.interface';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-dish-summary',

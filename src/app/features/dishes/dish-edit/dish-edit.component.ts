@@ -8,7 +8,7 @@ import { DishType } from '@models/types/dish-type.type';
 import { getDishTypes } from '@models/types/get-dish-types';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 interface IDishEditForm {
   name: string;

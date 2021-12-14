@@ -4,7 +4,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Dish } from '@models/interfaces/dish.interface';
 import { Day } from '@models/types/day.type';
 import { Orientation } from '@models/types/orientation.type';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector

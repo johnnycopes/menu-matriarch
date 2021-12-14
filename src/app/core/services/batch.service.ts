@@ -13,8 +13,8 @@ import { Tag } from '@models/interfaces/tag.interface';
 import { FirestoreService } from './firestore.service';
 import { Menu } from '@models/interfaces/menu.interface';
 import { Day } from '@models/types/day.type';
-import { dedupe } from '@shared/utility/dedupe';
-import { flattenValues } from '@shared/utility/flatten-values';
+import { dedupe } from '@utility/generic/dedupe';
+import { flattenValues } from '@utility/generic/flatten-values';
 
 interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
   docRef: DocumentReference<TDocRef>;

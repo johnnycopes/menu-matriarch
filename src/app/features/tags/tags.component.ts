@@ -4,7 +4,7 @@ import { mapTo, shareReplay } from 'rxjs/operators';
 
 import { Tag } from '@models/interfaces/tag.interface';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-tags',

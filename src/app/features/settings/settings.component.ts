@@ -7,8 +7,8 @@ import { UserPreferences } from '@models/interfaces/user-preferences.interface';
 import { Day } from '@models/types/day.type';
 import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
-import { getDays } from '@utility/get-days';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { getDays } from '@utility/domain/get-days';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-settings',

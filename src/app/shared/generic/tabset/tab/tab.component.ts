@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output } from '@angular/core';
 
-import { fadeInAnimation } from '@shared/utility/animations';
+import { fadeInAnimation } from '@utility/domain/animations';
 
 @Component({
   selector: 'app-tab',

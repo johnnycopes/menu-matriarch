@@ -4,7 +4,7 @@ import { Menu } from '@models/interfaces/menu.interface';
 import { Tag } from '@models/interfaces/tag.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { Day } from '@models/types/day.type';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 interface EntryModel {
   day: Day;

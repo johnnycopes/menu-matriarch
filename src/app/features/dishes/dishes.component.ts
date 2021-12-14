@@ -9,7 +9,7 @@ import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-dishes',

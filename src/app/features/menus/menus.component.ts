@@ -4,7 +4,7 @@ import { mapTo, shareReplay } from 'rxjs/operators';
 
 import { Menu } from '@models/interfaces/menu.interface';
 import { MenuService } from '@services/menu.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-menus',

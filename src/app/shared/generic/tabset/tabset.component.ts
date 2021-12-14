@@ -3,9 +3,9 @@ import { Component, AfterContentInit, ContentChildren, QueryList, Input, Templat
 import { merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
-import { trackByFactory } from '@shared/utility/track-by-factory';
-import { fadeInAnimation, visibilityAnimation } from '@utility/animations';
-import { AnimatedComponent } from '@utility/animated.component';
+import { AnimatedComponent } from '@utility/generic/animated.component';
+import { fadeInAnimation, visibilityAnimation } from '@utility/domain/animations';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 import { TabComponent } from './tab/tab.component';
 
 export type TabsetContentVisibility = 'visible' | 'invisible';

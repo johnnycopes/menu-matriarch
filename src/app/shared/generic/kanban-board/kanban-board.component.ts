@@ -2,7 +2,7 @@ import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, Templa
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { IKanbanBoardItemAdd, IKanbanBoardActionClick, IKanbanBoardItemMove } from './kanban-board-column/kanban-board-column.component';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 export interface KanbanBoard<TColumn, TItem> {
   getColumnId(node: TColumn): string;

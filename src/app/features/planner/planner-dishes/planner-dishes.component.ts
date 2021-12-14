@@ -11,7 +11,7 @@ import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { MenuService } from '@services/menu.service';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-planner-dishes',

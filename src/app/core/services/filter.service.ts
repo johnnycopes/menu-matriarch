@@ -6,7 +6,7 @@ import { Dish } from '@models/interfaces/dish.interface';
 import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
 import { DishType } from '@models/types/dish-type.type';
 import { getDishTypes } from '@models/types/get-dish-types';
-import { lower } from '@shared/utility/format';
+import { lower } from '@utility/generic/format';
 
 @Injectable({
   providedIn: 'root'

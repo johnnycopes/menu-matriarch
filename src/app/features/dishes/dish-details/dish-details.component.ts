@@ -5,7 +5,7 @@ import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Tag } from '@models/interfaces/tag.interface';
 import { DishService } from '@services/dish.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-dish-details',

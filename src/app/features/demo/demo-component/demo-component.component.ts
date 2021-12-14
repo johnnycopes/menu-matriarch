@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
-import { trackByFactory } from "@shared/utility/track-by-factory";
+import { trackByFactory } from "@utility/generic/track-by-factory";
 
 @Component({
 	selector: "app-demo-component",

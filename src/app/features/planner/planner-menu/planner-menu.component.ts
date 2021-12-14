@@ -5,7 +5,7 @@ import { MenuEntry } from '@models/interfaces/menu-entry.interface';
 import { Day } from '@models/types/day.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
-import { trackByFactory } from '@shared/utility/track-by-factory';
+import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({
   selector: 'app-planner-menu',
