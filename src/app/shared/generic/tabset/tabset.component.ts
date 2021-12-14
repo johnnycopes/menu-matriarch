@@ -45,7 +45,10 @@ export class TabsetComponent extends AnimatedComponent implements AfterViewInit,
     }
 
     if (this.tabs) {
-      merge(...this.tabs.map(tab => tab.nameChange)).pipe(
+      merge(
+        ...this.tabs.map(tab => tab.nameChange),
+        ...this.tabs.map(tab => tab.selectedChange),
+      ).pipe(
         takeUntil(this._destroy$),
         tap(() => this._changeDetectorRef.markForCheck())
       ).subscribe();
