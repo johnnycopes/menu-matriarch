@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/endpoint.enum';
-import { createTagDto } from '@shared/utility/domain/create-dtos';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/tag.interface';
+import { createTagDto } from '@shared/utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { FirestoreService } from './firestore.service';

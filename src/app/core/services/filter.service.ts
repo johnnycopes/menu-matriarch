@@ -4,8 +4,8 @@ import { distinctUntilChanged, first } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
 import { DishType } from '@models/dish-type.type';
-import { getDishTypes } from '@models/get-dish-types';
 import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
+import { getDishTypes } from '@shared/utility/domain/get-dish-types';
 import { lower } from '@utility/generic/format';
 
 @Injectable({

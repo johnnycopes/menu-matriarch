@@ -5,9 +5,9 @@ import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/dish-type.type';
-import { getDishTypes } from '@models/get-dish-types';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
+import { getDishTypes } from '@shared/utility/domain/get-dish-types';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 
 interface IDishEditForm {
