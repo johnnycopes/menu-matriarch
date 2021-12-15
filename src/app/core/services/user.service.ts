@@ -67,7 +67,7 @@ export class UserService {
         const fallbackPreferences = user?.preferences ?? {
           darkMode: false,
           dayNameDisplay: 'full',
-          emptyDishText: 'undecided',
+          emptyMealText: 'undecided',
           menuOrientation: 'horizontal',
           menuStartDay: 'Monday',
         };
@@ -78,7 +78,7 @@ export class UserService {
             {
               darkMode: updates?.darkMode ?? fallbackPreferences.darkMode,
               dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
-              emptyDishText: updates?.emptyDishText ?? fallbackPreferences.emptyDishText,
+              emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
               menuOrientation: updates?.menuOrientation ?? fallbackPreferences.menuOrientation,
               menuStartDay: updates?.menuStartDay ?? fallbackPreferences.menuStartDay,
             },

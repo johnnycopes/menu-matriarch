@@ -125,7 +125,7 @@ export class MenuService {
             dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
           })),
           orientation: preferences?.menuOrientation ?? 'horizontal',
-          fallbackText: preferences?.emptyDishText ?? '',
+          fallbackText: preferences?.emptyMealText ?? '',
         };
       }),
     );

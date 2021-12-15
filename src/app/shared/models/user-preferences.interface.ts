@@ -5,7 +5,7 @@ import { Orientation } from "./orientation.type";
 export interface UserPreferences {
   darkMode: boolean;
   dayNameDisplay: DayNameDisplay;
-  emptyDishText: string;
+  emptyMealText: string;
   menuOrientation: Orientation;
   menuStartDay: Day;
 }

@@ -11,7 +11,7 @@ export function createUserDto({ uid, name, email, preferences }: Partial<UserDto
     preferences: {
       darkMode: preferences?.darkMode ?? false,
       dayNameDisplay: preferences?.dayNameDisplay ?? 'full',
-      emptyDishText: preferences?.emptyDishText ?? 'undecided',
+      emptyMealText: preferences?.emptyMealText ?? 'undecided',
       menuOrientation: preferences?.menuOrientation ?? 'horizontal',
       menuStartDay: preferences?.menuStartDay ?? 'Monday',
     },
