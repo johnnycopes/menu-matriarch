@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { Tag } from '@models/interfaces/tag.interface';
-import { DishType } from '@models/types/dish-type.type';
+import { Tag } from '@models/tag.interface';
+import { DishType } from '@models/dish-type.type';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector

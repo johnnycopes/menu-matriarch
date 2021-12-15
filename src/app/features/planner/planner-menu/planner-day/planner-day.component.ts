@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import { Dish } from '@models/interfaces/dish.interface';
-import { Day } from '@models/types/day.type';
-import { Orientation } from '@models/types/orientation.type';
+import { Dish } from '@models/dish.interface';
+import { Day } from '@models/day.type';
+import { Orientation } from '@models/orientation.type';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({

@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Dish } from '@models/interfaces/dish.interface';
-import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
-import { DishType } from '@models/types/dish-type.type';
+import { Dish } from '@models/dish.interface';
+import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
+import { DishType } from '@models/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';

@@ -3,11 +3,11 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
-import { Endpoint } from '@models/enums/endpoint.enum';
-import { createUserDto } from '@models/dtos/create-dtos';
+import { Endpoint } from '@models/endpoint.enum';
+import { createUserDto } from '@shared/utility/domain/create-dtos';
 import { UserDto } from '@models/dtos/user-dto.interface';
-import { User } from '@models/interfaces/user.interface';
-import { UserPreferences } from '@models/interfaces/user-preferences.interface';
+import { User } from '@models/user.interface';
+import { UserPreferences } from '@models/user-preferences.interface';
 import { FirestoreService } from './firestore.service';
 
 @Injectable({

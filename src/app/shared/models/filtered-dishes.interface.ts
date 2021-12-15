@@ -1,4 +1,4 @@
-import { DishType } from "@models/types/dish-type.type";
+import { DishType } from "./dish-type.type";
 import { Dish } from "./dish.interface";
 
 export interface FilteredDishesGroup {

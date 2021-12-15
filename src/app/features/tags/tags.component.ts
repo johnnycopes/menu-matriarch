@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
-import { Tag } from '@models/interfaces/tag.interface';
+import { Tag } from '@models/tag.interface';
 import { TagService } from '@services/tag.service';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 

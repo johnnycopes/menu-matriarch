@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Dish } from '@models/interfaces/dish.interface';
-import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
-import { Menu } from '@models/interfaces/menu.interface';
-import { DishType } from '@models/types/dish-type.type';
-import { Day } from '@models/types/day.type';
+import { Dish } from '@models/dish.interface';
+import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
+import { Menu } from '@models/menu.interface';
+import { DishType } from '@models/dish-type.type';
+import { Day } from '@models/day.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { MenuService } from '@services/menu.service';

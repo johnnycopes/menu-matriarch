@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { Route } from '@models/enums/route.enum';
+import { Route } from '@models/route.enum';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoggedInAuthGuard } from './core/guards/logged-in-auth.guard';
 import { DemoComponent } from './features/demo/demo.component';

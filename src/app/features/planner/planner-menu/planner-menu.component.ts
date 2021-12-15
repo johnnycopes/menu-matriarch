@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { Menu } from '@models/interfaces/menu.interface';
-import { MenuEntry } from '@models/interfaces/menu-entry.interface';
-import { Day } from '@models/types/day.type';
+import { Menu } from '@models/menu.interface';
+import { MenuEntry } from '@models/menu-entry.interface';
+import { Day } from '@models/day.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@utility/generic/track-by-factory';

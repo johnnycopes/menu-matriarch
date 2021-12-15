@@ -3,9 +3,9 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
-import { MenuEntry } from '@models/interfaces/menu-entry.interface';
-import { Day } from '@models/types/day.type';
-import { Orientation } from '@models/types/orientation.type';
+import { MenuEntry } from '@models/menu-entry.interface';
+import { Day } from '@models/day.type';
+import { Orientation } from '@models/orientation.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
 import { trackByFactory } from '@utility/generic/track-by-factory';

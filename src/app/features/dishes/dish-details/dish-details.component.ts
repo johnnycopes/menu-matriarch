@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
-import { Tag } from '@models/interfaces/tag.interface';
+import { Tag } from '@models/tag.interface';
 import { DishService } from '@services/dish.service';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 

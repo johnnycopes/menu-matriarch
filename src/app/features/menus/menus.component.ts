@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
-import { Menu } from '@models/interfaces/menu.interface';
+import { Menu } from '@models/menu.interface';
 import { MenuService } from '@services/menu.service';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 

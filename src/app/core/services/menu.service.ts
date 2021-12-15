@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
-import { Endpoint } from '@models/enums/endpoint.enum';
-import { createMenuDto } from '@models/dtos/create-dtos';
+import { Endpoint } from '@models/endpoint.enum';
+import { createMenuDto } from '@shared/utility/domain/create-dtos';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { Menu } from '@models/interfaces/menu.interface';
-import { Day } from '@models/types/day.type';
+import { Menu } from '@models/menu.interface';
+import { Day } from '@models/day.type';
 import { getDays } from '@utility/domain/get-days';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';

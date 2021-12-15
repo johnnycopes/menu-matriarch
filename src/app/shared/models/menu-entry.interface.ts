@@ -1,4 +1,4 @@
-import { Day } from "@models/types/day.type";
+import { Day } from "./day.type";
 import { Dish } from "./dish.interface";
 
 export interface MenuEntry {

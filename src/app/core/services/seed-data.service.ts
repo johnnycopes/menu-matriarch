@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createDishDto, createMenuDto, createTagDto, createUserDto } from '@models/dtos/create-dtos';
+import { createDishDto, createMenuDto, createTagDto, createUserDto } from '@shared/utility/domain/create-dtos';
 import { BatchService } from './batch.service';
 import { FirestoreService } from './firestore.service';
 

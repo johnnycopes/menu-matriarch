@@ -1,7 +1,7 @@
-import { UserDto } from "./user-dto.interface";
-import { MenuDto } from "./menu-dto.interface";
-import { DishDto } from "./dish-dto.interface";
-import { TagDto } from "./tag-dto.interface";
+import { UserDto } from "@models/dtos/user-dto.interface";
+import { MenuDto } from "@models/dtos/menu-dto.interface";
+import { DishDto } from "@models/dtos/dish-dto.interface";
+import { TagDto } from "@models/dtos/tag-dto.interface";
 
 export function createUserDto({ uid, name, email, preferences }: Partial<UserDto>): UserDto {
   return {

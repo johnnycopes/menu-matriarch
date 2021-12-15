@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 
-import { Tag } from '@models/interfaces/tag.interface';
+import { Tag } from '@models/tag.interface';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({

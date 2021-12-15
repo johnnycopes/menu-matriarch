@@ -4,15 +4,15 @@ import firebase from 'firebase/compat/app';
 
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { createDishDto } from '@models/dtos/create-dtos';
+import { createDishDto } from '@shared/utility/domain/create-dtos';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
-import { Endpoint } from '@models/enums/endpoint.enum';
-import { Dish } from '@models/interfaces/dish.interface';
-import { Tag } from '@models/interfaces/tag.interface';
+import { Endpoint } from '@models/endpoint.enum';
+import { Dish } from '@models/dish.interface';
+import { Tag } from '@models/tag.interface';
 import { FirestoreService } from './firestore.service';
-import { Menu } from '@models/interfaces/menu.interface';
-import { Day } from '@models/types/day.type';
+import { Menu } from '@models/menu.interface';
+import { Day } from '@models/day.type';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
 

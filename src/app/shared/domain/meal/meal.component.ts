@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { Dish } from '@models/interfaces/dish.interface';
-import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
-import { DishType } from '@models/types/dish-type.type';
-import { getDishTypes } from '@models/types/get-dish-types';
-import { Orientation } from '@models/types/orientation.type';
+import { Dish } from '@models/dish.interface';
+import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
+import { DishType } from '@models/dish-type.type';
+import { getDishTypes } from '@models/get-dish-types';
+import { Orientation } from '@models/orientation.type';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
-import { Endpoint } from '@models/enums/endpoint.enum';
+import { Endpoint } from '@models/endpoint.enum';
 import { DishDto } from '@models/dtos/dish-dto.interface';
-import { Dish } from '@models/interfaces/dish.interface';
-import { Tag } from '@models/interfaces/tag.interface';
+import { Dish } from '@models/dish.interface';
+import { Tag } from '@models/tag.interface';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { FirestoreService } from './firestore.service';

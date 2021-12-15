@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 
-import { Tag } from '@models/interfaces/tag.interface';
+import { Tag } from '@models/tag.interface';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 
 @Component({

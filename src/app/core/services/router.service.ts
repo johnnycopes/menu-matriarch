@@ -3,7 +3,7 @@ import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError }
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter, tap, distinctUntilChanged } from "rxjs/operators";
 
-import { Route } from "@models/enums/route.enum";
+import { Route } from "@models/route.enum";
 import { LocalStorageService } from "./local-storage.service";
 
 // interface IRouterState {

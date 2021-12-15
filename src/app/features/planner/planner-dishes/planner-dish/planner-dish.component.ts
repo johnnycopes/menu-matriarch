@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Menu } from '@models/interfaces/menu.interface';
-import { Tag } from '@models/interfaces/tag.interface';
-import { DishType } from '@models/types/dish-type.type';
-import { Day } from '@models/types/day.type';
+import { Menu } from '@models/menu.interface';
+import { Tag } from '@models/tag.interface';
+import { DishType } from '@models/dish-type.type';
+import { Day } from '@models/day.type';
 import { trackByFactory } from '@utility/generic/track-by-factory';
 
 interface EntryModel {

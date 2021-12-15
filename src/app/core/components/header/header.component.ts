@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { environment } from '@env/environment';
-import { Route } from '@models/enums/route.enum';
+import { Route } from '@models/route.enum';
 import { RouterService } from '@services/router.service';
 
 @Component({

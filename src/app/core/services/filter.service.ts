@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
 
-import { Dish } from '@models/interfaces/dish.interface';
-import { FilteredDishesGroup } from '@models/interfaces/filtered-dishes.interface';
-import { DishType } from '@models/types/dish-type.type';
-import { getDishTypes } from '@models/types/get-dish-types';
+import { Dish } from '@models/dish.interface';
+import { DishType } from '@models/dish-type.type';
+import { getDishTypes } from '@models/get-dish-types';
+import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
 import { lower } from '@utility/generic/format';
 
 @Injectable({

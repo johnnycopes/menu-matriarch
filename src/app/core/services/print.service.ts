@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { Dish } from '@models/interfaces/dish.interface';
-import { Menu } from '@models/interfaces/menu.interface';
-import { MenuEntry } from '@models/interfaces/menu-entry.interface';
-import { DishType } from '@models/types/dish-type.type';
-import { Orientation } from '@models/types/orientation.type';
-import { getDishTypes } from '@models/types/get-dish-types';
+import { Dish } from '@models/dish.interface';
+import { Menu } from '@models/menu.interface';
+import { MenuEntry } from '@models/menu-entry.interface';
+import { DishType } from '@models/dish-type.type';
+import { Orientation } from '@models/orientation.type';
+import { getDishTypes } from '@models/get-dish-types';
 
 interface PrintMenu extends Pick<Menu,
   'name' | 'entries' | 'fallbackText' | 'orientation'

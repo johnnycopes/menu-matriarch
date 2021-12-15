@@ -1,4 +1,4 @@
-import { Day } from "@models/types/day.type";
+import { Day } from "@models/day.type";
 
 export function getDays(startDay: Day = 'Monday'): readonly Day[] {
   switch (startDay) {
