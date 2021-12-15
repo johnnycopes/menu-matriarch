@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
-import { Tag } from '@models/tag.interface';
 import { DishService } from '@services/dish.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-dish-details',
@@ -25,8 +24,8 @@ export class DishDetailsComponent {
       return this._dishService.getDish(id);
     })
   );
-  public ingredientTrackByFn = trackByFactory<string, string>(ingredient => ingredient);
-  public tagTrackByFn = trackByFactory<Tag, string>(tag => tag.id);
+  public readonly ingredientTrackByFn = trackBySelf;
+  public readonly tagTrackByFn = trackById;
 
   constructor(
     private _route: ActivatedRoute,

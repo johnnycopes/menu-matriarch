@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Menu } from '@models/menu.interface';
 import { MenuEntry } from '@models/menu-entry.interface';
-import { Day } from '@models/day.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackByDay } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-planner-menu',
@@ -15,7 +14,7 @@ import { trackByFactory } from '@utility/generic/track-by-factory';
 })
 export class PlannerMenuComponent {
   @Input() menu: Menu | undefined;
-  public trackByFn = trackByFactory<MenuEntry, Day>(menuEntry => menuEntry.day);
+  public readonly trackByFn = trackByDay;
 
   constructor(
     private _menuService: MenuService,

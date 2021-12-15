@@ -4,7 +4,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Dish } from '@models/dish.interface';
 import { Day } from '@models/day.type';
 import { Orientation } from '@models/orientation.type';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -20,7 +20,7 @@ export class PlannerDayComponent implements OnInit {
   @Input() orientation: Orientation = 'horizontal';
   @Output() clear = new EventEmitter<void>();
   public readonly faTimes = faTimes;
-  public trackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public readonly trackByFn = trackById;
 
   public ngOnInit(): void {
     if (!this.day) {

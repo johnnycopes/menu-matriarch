@@ -4,11 +4,10 @@ import { Subject } from 'rxjs';
 import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 
 import { UserPreferences } from '@models/user-preferences.interface';
-import { Day } from '@models/day.type';
 import { AuthService } from '@services/auth.service';
 import { UserService } from '@services/user.service';
 import { getDays } from '@utility/domain/get-days';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackBySelf } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-settings',
@@ -20,8 +19,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public user$ = this._userService.getUser();
   public preferences$ = this._userService.getPreferences();
   public updateAction$ = new Subject<Partial<UserPreferences>>();
-  public trackByFn = trackByFactory<Day, Day>(day => day);
-  public days: readonly Day[] = getDays();
+  public readonly trackByFn = trackBySelf;
+  public readonly days = getDays();
   private _destroy$ = new Subject<void>();
 
   constructor(

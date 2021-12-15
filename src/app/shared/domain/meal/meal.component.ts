@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Dish } from '@models/dish.interface';
-import { DishType } from '@models/dish-type.type';
 import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
 import { Orientation } from '@models/orientation.type';
 import { getDishTypes } from '@shared/utility/domain/get-dish-types';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackByDishType, trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-meal',
@@ -26,6 +25,6 @@ export class MealComponent {
   @Input() orientation: Orientation = 'horizontal';
   public dishesGroups: FilteredDishesGroup[] = [];
   public showFallback = true;
-  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
-  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public readonly groupTrackByFn = trackByDishType;
+  public readonly dishTrackByFn = trackById;
 }

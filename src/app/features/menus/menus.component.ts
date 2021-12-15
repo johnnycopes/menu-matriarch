@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
-import { Menu } from '@models/menu.interface';
 import { MenuService } from '@services/menu.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-menus',
@@ -22,7 +21,7 @@ export class MenusComponent {
   ).pipe(
     shareReplay({ refCount: true, bufferSize: 1 })
   );
-  public trackByFn = trackByFactory<Menu, string>(menu => menu.id);
+  public readonly trackByFn = trackById;
 
   constructor(private _menuService: MenuService) { }
 

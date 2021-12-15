@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 import { Tag } from '@models/tag.interface';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-dish-summary',
@@ -19,5 +19,5 @@ export class DishSummaryComponent {
   @Input() menus: string[] = [];
   @Input() usages = 0;
   public readonly faLink = faLink;
-  public trackByFn = trackByFactory<Tag, string>(tag => tag.id);
+  public readonly trackByFn = trackById;
 }

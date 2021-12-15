@@ -4,11 +4,10 @@ import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
 import { MenuEntry } from '@models/menu-entry.interface';
-import { Day } from '@models/day.type';
 import { Orientation } from '@models/orientation.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackByDay } from '@utility/domain/track-by-functions';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -25,7 +24,7 @@ export class MenuCardComponent {
   @Input() fallbackText = '';
   @Input() canDelete = true;
   public readonly faEllipsisV = faEllipsisV;
-  public trackByFn = trackByFactory<MenuEntry, Day>(entry => entry.day);
+  public readonly trackByFn = trackByDay;
   public renaming = false;
   public startRename$ = new Subject<void>();
   public finishRename$ = new Subject<void>();

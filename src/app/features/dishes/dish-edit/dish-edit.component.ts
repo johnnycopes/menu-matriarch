@@ -7,8 +7,8 @@ import { concatMap, first, map, tap } from 'rxjs/operators';
 import { DishType } from '@models/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
-import { getDishTypes } from '@shared/utility/domain/get-dish-types';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { getDishTypes } from '@utility/domain/get-dish-types';
+import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 
 interface IDishEditForm {
   name: string;
@@ -79,8 +79,8 @@ export class DishEditComponent {
       `undo redo | formatselect | bold italic underline forecolor backcolor |
       bullist numlist outdent indent | removeformat | help`,
   };
-  public typeTrackByFn = trackByFactory<DishType, DishType>(type => type);
-  public tagTrackByFn = trackByFactory<TagModel, string>(tag => tag.id);
+  public readonly typeTrackByFn = trackBySelf;
+  public readonly tagTrackByFn = trackById;
 
   constructor(
     private _route: ActivatedRoute,

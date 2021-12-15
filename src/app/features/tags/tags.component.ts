@@ -2,9 +2,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { merge, Subject } from 'rxjs';
 import { mapTo, shareReplay } from 'rxjs/operators';
 
-import { Tag } from '@models/tag.interface';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-tags',
@@ -22,7 +21,7 @@ export class TagsComponent {
   ).pipe(
     shareReplay({ refCount: true, bufferSize: 1 })
   );
-  public trackByFn = trackByFactory<Tag, string>(tag => tag.id);
+  public readonly trackByFn = trackById;
 
   constructor(private _tagService: TagService) { }
 

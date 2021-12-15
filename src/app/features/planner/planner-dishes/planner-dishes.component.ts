@@ -2,16 +2,13 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Dish } from '@models/dish.interface';
-import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
 import { Menu } from '@models/menu.interface';
-import { DishType } from '@models/dish-type.type';
 import { Day } from '@models/day.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { MenuService } from '@services/menu.service';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackByDishType, trackById } from '@shared/utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-planner-dishes',
@@ -49,8 +46,8 @@ export class PlannerDishesComponent {
       };
     }),
   );
-  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
-  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public readonly groupTrackByFn = trackByDishType;
+  public readonly dishTrackByFn = trackById;
 
   constructor(
     private _dishService: DishService,

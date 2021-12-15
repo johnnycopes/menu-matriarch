@@ -2,14 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Dish } from '@models/dish.interface';
-import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
-import { DishType } from '@models/dish-type.type';
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
 import { TagService } from '@services/tag.service';
-import { trackByFactory } from '@utility/generic/track-by-factory';
+import { trackByDishType, trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-dishes',
@@ -43,8 +40,8 @@ export class DishesComponent {
       };
     })
   );
-  public groupTrackByFn = trackByFactory<FilteredDishesGroup, DishType>(group => group.type);
-  public dishTrackByFn = trackByFactory<Dish, string>(dish => dish.id);
+  public readonly groupTrackByFn = trackByDishType;
+  public readonly dishTrackByFn = trackById;
 
   constructor(
     private _dishService: DishService,

@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
-import { trackByFactory } from "@utility/generic/track-by-factory";
+import { trackBySelf } from "@utility/domain/track-by-functions";
 
 @Component({
 	selector: "app-demo-component",
@@ -12,5 +12,5 @@ export class DemoComponentComponent {
 	@Input() description: string = '';
 	@Input() dependencies: string[] = [];
 	@Input() limitWidth: boolean = false;
-  public trackByFn = trackByFactory<string, string>(dependency => dependency);
+  public readonly trackByFn = trackBySelf;
 }
