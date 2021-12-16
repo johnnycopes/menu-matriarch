@@ -34,7 +34,7 @@ const routes: Routes = [
     { path: '', redirectTo: 'dishes', pathMatch: 'full', data: { state: Route.dishes } },
     { path: 'settings', component: SettingsComponent, data: { state: Route.settings } },
   ]},
-  { path: '**', component: PageNotFoundComponent },
+  { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

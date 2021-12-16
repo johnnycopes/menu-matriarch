@@ -32,5 +32,4 @@ export class LoggedInAuthGuard implements CanActivate {
       })
     );
   }
-
 }
