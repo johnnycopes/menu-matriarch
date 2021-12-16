@@ -7,18 +7,15 @@
   </ng-container>
 
   <ng-template #invalidMenuTemplate>
-    <div class="invalid-menu">
-      <div class="invalid-menu__container">
-        <p>
-          Menu is either invalid or no longer exists.<br />
-          Please select a different menu to view the planner.
-        </p>
-        <a app-button
-          routerLink="/menus"
-        >
-          Go To Menus
-        </a>
-      </div>
-    </div>
+    <app-empty-view-placeholder
+      headerText="Invalid Menu"
+      messageText="Please select a different menu to view the planner."
+    >
+      <a app-button
+        routerLink="/menus"
+      >
+        Go To Menus
+      </a>
+    </app-empty-view-placeholder>
   </ng-template>
 </ng-container>
