@@ -51,16 +51,21 @@ export class MenuService {
     );
   }
 
-  public createMenu(menu: Partial<Omit<MenuDto, 'id' | 'uid'>>): Observable<string | undefined> {
-    return this._userService.uid$.pipe(
+  public createMenu(menu: Partial<Omit<MenuDto, 'id' | 'uid' | 'startDay'>>): Observable<string | undefined> {
+    return this._userService.getUser().pipe(
       first(),
-      concatMap(async uid => {
-        if (uid) {
+      concatMap(async user => {
+        if (user) {
           const id = this._firestoreService.createId();
           await this._firestoreService.create<MenuDto>(
             this._endpoint,
             id,
-            createMenuDto({ id, uid, ...menu }),
+            createMenuDto({
+              ...menu,
+              id,
+              uid: user.uid,
+              startDay: user.preferences.menuStartDay,
+            }),
           );
           return id;
         } else {
@@ -108,26 +113,20 @@ export class MenuService {
     return this._batchService.deleteMenuContents(menu, day);
   }
 
-  public getOrderedDays(): Observable<readonly Day[]> {
-    return this._userService.getPreferences().pipe(
-      map(preferences => getDays(preferences?.menuStartDay)),
-      shareReplay({ bufferSize: 1, refCount: true })
-    );
-  }
-
   private _transformMenuDto(menu: MenuDto): Observable<Menu> {
     return combineLatest([
-      this.getOrderedDays(),
       this._dishService.getDishes(),
       this._userService.getPreferences(),
     ]).pipe(
-      map(([days, dishes, preferences]) => {
+      map(([dishes, preferences]) => {
         return {
           ...menu,
-          entries: days.map(day => ({
-            day,
-            dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-          })),
+          entries: getDays(menu.startDay)
+            .map(day => ({
+              day,
+              dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+            })
+          ),
           orientation: preferences?.menuOrientation ?? 'horizontal',
           fallbackText: preferences?.emptyMealText ?? '',
         };
