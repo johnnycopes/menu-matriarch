@@ -23,9 +23,8 @@ export class MenuCardComponent {
   @Input() orientation: Orientation = 'horizontal';
   @Input() fallbackText = '';
   @Input() canDelete = true;
-  public readonly faEllipsisV = faEllipsisV;
+  public readonly menuToggleIcon = faEllipsisV;
   public readonly trackByFn = trackByDay;
-  public renaming = false;
   public startRename$ = new Subject<void>();
   public finishRename$ = new Subject<void>();
   public renaming$ = merge(
@@ -50,6 +49,10 @@ export class MenuCardComponent {
   public async onRename(name: string): Promise<void> {
     await this._menuService.updateMenuName(this.id, name);
     this.finishRename$.next();
+  }
+
+  public onChangeStartDay(): void {
+    // TODO: save start day change here
   }
 
   public onDelete(): void {

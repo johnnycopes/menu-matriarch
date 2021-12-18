@@ -14,7 +14,7 @@
       </a>
       <button app-button
         buttonStyle="ternary"
-        [icon]="faEllipsisV"
+        [icon]="menuToggleIcon"
         [appOptionsMenuTrigger]="optionsMenu"
       ></button>
       <app-options-menu #optionsMenu>
@@ -28,10 +28,15 @@
         >
           Rename
         </li>
+        <li app-options-menu-item
+          (click)="onChangeStartDay()"
+        >
+          Change Start Day
+        </li>
         <a app-options-menu-item
           routerLink="/planner/{{ id }}"
         >
-          Edit
+          Plan Meals
         </a>
         <li app-options-menu-item
           *ngIf="canDelete"
