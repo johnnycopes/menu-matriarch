@@ -29,7 +29,7 @@
           Rename
         </li>
         <li app-options-menu-item
-          (click)="onChangeStartDay()"
+          (click)="startChangeStartDay$.next()"
         >
           Change Start Day
         </li>
@@ -47,9 +47,38 @@
       </app-options-menu>
     </ng-template>
   </div>
+  <form *ngIf="changing$ | async"
+    class="start-day-form"
+  >
+    <app-input class="start-day-form__input">
+      <select
+        name="menuStartDay"
+        [ngModel]="'Monday'"
+      >
+        <option *ngFor="let day of days; trackBy: dayTrackByFn"
+          [ngValue]="day"
+        >
+          {{ day }}
+        </option>
+      </select>
+    </app-input>
+    <div class="start-day-form__buttons">
+      <button app-button
+        type="button"
+        buttonStyle="secondary"
+        [icon]="cancelIcon"
+        (click)="finishChangeStartDay$.next()"
+      ></button>
+      <button app-button
+        buttonStyle="primary"
+        [icon]="saveIcon"
+        (click)="finishChangeStartDay$.next()"
+      ></button>
+    </div>
+  </form>
   <ul>
     <li class="entry"
-      *ngFor="let entry of entries; trackBy: trackByFn"
+      *ngFor="let entry of entries; trackBy: menuEntryTrackByFn"
     >
       <app-small-caps-label class="day">
         <h4>
