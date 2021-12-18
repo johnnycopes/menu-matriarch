@@ -13,7 +13,7 @@ import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishDetailsComponent {
-  public id$ = this._route.paramMap.pipe(
+  private _id$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('id'))
   );
   public dish$ = this._route.params.pipe(
@@ -34,7 +34,7 @@ export class DishDetailsComponent {
   ) { }
 
   public onDelete(): void {
-    this.id$.pipe(
+    this._id$.pipe(
       first(),
       concatMap(id => {
         if (!id) {

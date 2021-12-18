@@ -95,10 +95,6 @@ export class PrintService {
         color: #222;
       }
 
-      @page {
-        size: landscape;
-      }
-
       @media print {
         body {
           margin: 0;
