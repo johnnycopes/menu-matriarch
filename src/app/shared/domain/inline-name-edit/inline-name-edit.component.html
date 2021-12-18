@@ -15,12 +15,12 @@
   <button app-button
     type="button"
     buttonStyle="secondary"
-    [icon]="faTimes"
+    [icon]="cancelIcon"
     (click)="onCancel()"
   ></button>
   <button app-button
     buttonStyle="primary"
-    [icon]="faCheck"
+    [icon]="saveIcon"
     [disabled]="!form.valid"
     (click)="onSave(form)"
   ></button>

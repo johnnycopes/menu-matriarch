@@ -5,6 +5,11 @@
   justify-content: space-between;
 }
 
+input {
+  position: relative;
+  top: spacing(2);
+}
+
 .buttons {
   display: flex;
 
