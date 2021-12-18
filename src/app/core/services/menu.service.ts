@@ -74,6 +74,10 @@ export class MenuService {
     return this._updateMenu(id, { name });
   }
 
+  public updateMenuStartDay(id: string, startDay: Day): Promise<void> {
+    return this._updateMenu(id, { startDay });
+  }
+
   public updateMenuContents({ menu, day, dishId, selected }: {
     menu: Menu,
     day: Day,

@@ -18,12 +18,13 @@ export function createUserDto({ uid, name, email, preferences }: Partial<UserDto
   }
 }
 
-export function createMenuDto({ id, uid, name, favorited, contents }: Partial<MenuDto>): MenuDto {
+export function createMenuDto({ id, uid, name, favorited, startDay, contents }: Partial<MenuDto>): MenuDto {
   return {
     id: id ?? '',
     uid: uid ?? '',
     name: name ?? '',
     favorited: favorited ?? false,
+    startDay: startDay ?? 'Monday',
     contents: contents ?? {
       Monday: [],
       Tuesday: [],
