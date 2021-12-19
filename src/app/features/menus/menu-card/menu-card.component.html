@@ -1,10 +1,10 @@
-<app-card>
+<app-card *ngIf="state$ | async as state">
   <div class="top">
     <app-inline-name-edit
-      *ngIf="renaming$ | async; else toolbarTemplate"
+      *ngIf="state === 'renaming'; else toolbarTemplate"
       [name]="name"
-      (cancel)="finishRename$.next()"
-      (save)="onRename($event)"
+      (cancel)="onCancel()"
+      (save)="onRenameSave($event)"
     ></app-inline-name-edit>
     <ng-template #toolbarTemplate>
       <a routerLink="/planner/{{ id }}">
@@ -15,6 +15,7 @@
       <button app-button
         buttonStyle="ternary"
         [icon]="menuToggleIcon"
+        [disabled]="state !== 'default'"
         [appOptionsMenuTrigger]="optionsMenu"
       ></button>
       <app-options-menu #optionsMenu>
@@ -24,12 +25,12 @@
           Print
         </li>
         <li app-options-menu-item
-          (click)="startRename$.next()"
+          (click)="onRename()"
         >
           Rename
         </li>
         <li app-options-menu-item
-          (click)="startChangeStartDay$.next()"
+          (click)="onChangeStartDay()"
         >
           Change Start Day
         </li>
@@ -48,10 +49,10 @@
     </ng-template>
   </div>
   <app-inline-day-select class="start-day-form"
-    *ngIf="changing$ | async"
+    *ngIf="state === 'changingStartDay'"
     [startDay]="startDay"
-    (cancel)="finishChangeStartDay$.next()"
-    (save)="onChangeStartDay($event)"
+    (cancel)="onCancel()"
+    (save)="onChangeStartDaySave($event)"
   ></app-inline-day-select>
   <ul>
     <li class="entry"
