@@ -1,5 +1,6 @@
 <form app-inline-form
   #form="ngForm"
+  [disabled]="!(form.value.name?.length) || form.value.name === name"
   (cancel)="onCancel()"
   (save)="onSave(form)"
 >
@@ -8,7 +9,7 @@
       type="text"
       name="name"
       required
-      [(ngModel)]="name"
+      [ngModel]="name"
       (keydown.enter)="onSave(form)"
       (keydown.escape)="onCancel()"
       appAutofocus

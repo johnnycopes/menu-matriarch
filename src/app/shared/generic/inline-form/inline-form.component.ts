@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, EventEmitter, Output, ViewEncapsulation, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, EventEmitter, Output, ViewEncapsulation, HostBinding, Input } from '@angular/core';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -10,6 +10,7 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
   encapsulation: ViewEncapsulation.None,
 })
 export class InlineFormComponent {
+  @Input() disabled = false;
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<void>();
   public readonly cancelIcon = faTimes;
