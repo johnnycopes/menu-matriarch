@@ -58,6 +58,13 @@ $size: 40px;
       background: color($neutral, 10);
       @include box-shadow(color($neutral, 9));
     }
+
+    &:disabled {
+      color: color($neutral, 7);
+      background: none;
+      box-shadow: none;
+      cursor: default;
+    }
   }
 
   &--danger {
