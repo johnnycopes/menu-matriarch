@@ -1,18 +1,6 @@
 @import "main";
 
 :host {
-  display: flex;
-  align-items: center;
-}
-
-form {
-  width: 100%;
-}
-
-.buttons {
-  display: flex;
-
-  [app-button] {
-    margin-left: spacing(8);
-  }
+  display: block;
+  margin-bottom: spacing(16);
 }

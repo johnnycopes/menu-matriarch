@@ -1,27 +1,18 @@
 <form #form="ngForm">
-  <app-input>
-    <input
-      type="text"
-      name="name"
-      required
-      [(ngModel)]="name"
-      (keydown.enter)="onSave(form)"
-      (keydown.escape)="onCancel()"
-      appAutofocus
-    />
-  </app-input>
+  <app-inline-form
+    (cancel)="onCancel()"
+    (save)="onSave(form)"
+  >
+    <app-input>
+      <input
+        type="text"
+        name="name"
+        required
+        [(ngModel)]="name"
+        (keydown.enter)="onSave(form)"
+        (keydown.escape)="onCancel()"
+        appAutofocus
+      />
+    </app-input>
+  </app-inline-form>
 </form>
-<div class="buttons">
-  <button app-button
-    type="button"
-    buttonStyle="secondary"
-    [icon]="cancelIcon"
-    (click)="onCancel()"
-  ></button>
-  <button app-button
-    buttonStyle="primary"
-    [icon]="saveIcon"
-    [disabled]="!form.valid"
-    (click)="onSave(form)"
-  ></button>
-</div>
