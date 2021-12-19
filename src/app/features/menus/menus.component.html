@@ -21,6 +21,7 @@
       *ngFor="let menu of menus; trackBy: trackByFn"
       [id]="menu.id"
       [name]="menu.name"
+      [startDay]="menu.startDay"
       [entries]="menu.entries"
       [canDelete]="menus.length > 1"
       [fallbackText]="menu.fallbackText"

@@ -10,6 +10,7 @@ import { ButtonComponent } from './button/button.component';
 import { CardComponent } from './card/card.component';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { HoverDirective } from './hover/hover.directive';
+import { InlineFormComponent } from './inline-form/inline-form.component';
 import { InputComponent } from './input/input.component';
 import { KanbanBoardColumnComponent } from './kanban-board/kanban-board-column/kanban-board-column.component';
 import { KanbanBoardComponent } from './kanban-board/kanban-board.component';
@@ -44,6 +45,7 @@ import { TabsetComponent } from './tabset/tabset.component';
     CardComponent,
     CheckboxComponent,
     HoverDirective,
+    InlineFormComponent,
     InputComponent,
     KanbanBoardColumnComponent,
     KanbanBoardComponent,
@@ -69,6 +71,7 @@ import { TabsetComponent } from './tabset/tabset.component';
     CardComponent,
     CheckboxComponent,
     HoverDirective,
+    InlineFormComponent,
     InputComponent,
     KanbanBoardColumnComponent,
     KanbanBoardComponent,

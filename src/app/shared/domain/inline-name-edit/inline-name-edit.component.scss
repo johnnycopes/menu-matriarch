@@ -1,14 +1,6 @@
 @import "main";
 
-:host {
-  display: flex;
-  justify-content: space-between;
-}
-
-.buttons {
-  display: flex;
-
-  [app-button] {
-    margin-left: spacing(8);
-  }
+input {
+  position: relative;
+  top: spacing(2);
 }

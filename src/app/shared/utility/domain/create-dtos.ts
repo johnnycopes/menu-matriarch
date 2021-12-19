@@ -11,19 +11,20 @@ export function createUserDto({ uid, name, email, preferences }: Partial<UserDto
     preferences: {
       darkMode: preferences?.darkMode ?? false,
       dayNameDisplay: preferences?.dayNameDisplay ?? 'full',
+      defaultMenuStartDay: preferences?.defaultMenuStartDay ?? 'Monday',
       emptyMealText: preferences?.emptyMealText ?? 'undecided',
       menuOrientation: preferences?.menuOrientation ?? 'horizontal',
-      menuStartDay: preferences?.menuStartDay ?? 'Monday',
     },
   }
 }
 
-export function createMenuDto({ id, uid, name, favorited, contents }: Partial<MenuDto>): MenuDto {
+export function createMenuDto({ id, uid, name, favorited, startDay, contents }: Partial<MenuDto>): MenuDto {
   return {
     id: id ?? '',
     uid: uid ?? '',
     name: name ?? '',
     favorited: favorited ?? false,
+    startDay: startDay ?? 'Monday',
     contents: contents ?? {
       Monday: [],
       Tuesday: [],

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-inline-name-edit',
@@ -12,8 +11,6 @@ export class InlineNameEditComponent {
   @Input() name: string = '';
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<string>();
-  public readonly faCheck = faCheck;
-  public readonly faTimes = faTimes;
 
   public onCancel(): void {
     this.cancel.emit()

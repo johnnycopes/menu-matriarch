@@ -51,11 +51,11 @@
               </label>
             </div>
           </app-input>
-          <app-input label="Menu Start Day">
-            <select id="Menu Start Day"
+          <app-input label="Default Menu Start Day">
+            <select id="Default Menu Start Day"
               name="menuStartDay"
-              [ngModel]="user.preferences?.menuStartDay"
-              (ngModelChange)="updateAction$.next({ menuStartDay: $event })"
+              [ngModel]="user.preferences?.defaultMenuStartDay"
+              (ngModelChange)="updateAction$.next({ defaultMenuStartDay: $event })"
             >
               <option *ngFor="let day of days; trackBy: trackByFn"
                 [ngValue]="day"

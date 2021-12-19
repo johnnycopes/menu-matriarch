@@ -1,0 +1,15 @@
+<ng-content></ng-content>
+<button app-button
+  class="app-inline-form__button"
+  type="button"
+  buttonStyle="secondary"
+  [icon]="cancelIcon"
+  (click)="cancel.emit()"
+></button>
+<button app-button
+  class="app-inline-form__button"
+  buttonStyle="primary"
+  [disabled]="disabled"
+  [icon]="saveIcon"
+  (click)="save.emit()"
+></button>

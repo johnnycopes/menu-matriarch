@@ -17,6 +17,7 @@ $size: 40px;
 
   &:disabled {
     background: $disabled;
+    cursor: default;
     @include box-shadow($hover);
   }
 }
@@ -57,6 +58,13 @@ $size: 40px;
       color: color($neutral, 3);
       background: color($neutral, 10);
       @include box-shadow(color($neutral, 9));
+    }
+
+    &:disabled {
+      color: color($neutral, 7);
+      background: none;
+      box-shadow: none;
+      cursor: default;
     }
   }
 
