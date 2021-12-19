@@ -1,6 +1,6 @@
 <form app-inline-form
   #form="ngForm"
-  [disabled]="!(form.value.name?.length) || form.value.name === name"
+  [disabled]="!form.valid"
   (cancel)="onCancel()"
   (save)="onSave(form)"
 >
