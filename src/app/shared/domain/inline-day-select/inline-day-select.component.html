@@ -1,19 +1,18 @@
-<form #form="ngForm">
-  <app-inline-form
-    (cancel)="cancel.emit()"
-    (save)="save.emit(form.value.startDay)"
-  >
-    <app-input>
-      <select
-        name="startDay"
-        [ngModel]="startDay"
+<form app-inline-form
+  #form="ngForm"
+  (cancel)="cancel.emit()"
+  (save)="save.emit(form.value.startDay)"
+>
+  <app-input>
+    <select
+      name="startDay"
+      [ngModel]="startDay"
+    >
+      <option *ngFor="let day of days; trackBy: dayTrackByFn"
+        [ngValue]="day"
       >
-        <option *ngFor="let day of days; trackBy: dayTrackByFn"
-          [ngValue]="day"
-        >
-          {{ day }}
-        </option>
-      </select>
-    </app-input>
-  </app-inline-form>
+        {{ day }}
+      </option>
+    </select>
+  </app-input>
 </form>

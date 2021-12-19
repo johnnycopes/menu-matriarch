@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { Day } from '@models/day.type';
 import { getDays } from '@shared/utility/domain/get-days';
@@ -17,6 +16,4 @@ export class InlineDaySelectComponent {
   @Output() save = new EventEmitter<Day>();
   public readonly days = getDays();
   public readonly dayTrackByFn = trackBySelf;
-  public readonly cancelIcon = faTimes;
-  public readonly saveIcon = faCheck;
 }

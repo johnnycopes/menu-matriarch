@@ -12,8 +12,6 @@ export class InlineNameEditComponent {
   @Input() name: string = '';
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<string>();
-  public readonly cancelIcon = faTimes;
-  public readonly saveIcon = faCheck;
 
   public onCancel(): void {
     this.cancel.emit()

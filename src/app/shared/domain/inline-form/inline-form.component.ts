@@ -2,7 +2,8 @@ import { Component, ChangeDetectionStrategy, EventEmitter, Output, ViewEncapsula
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-inline-form',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'form[app-inline-form]',
   templateUrl: './inline-form.component.html',
   styleUrls: ['./inline-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
