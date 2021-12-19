@@ -28,5 +28,5 @@ db.collection('users')
     batch.commit();
   })
   .catch(err => {
-    console.log('error getting dishes', err)
+    console.log('error getting users', err)
   });
