@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
-import { concatMap, first, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { Endpoint } from '@models/endpoint.enum';
 import { createMenuDto } from '@shared/utility/domain/create-dtos';
@@ -64,7 +64,7 @@ export class MenuService {
               ...menu,
               id,
               uid: user.uid,
-              startDay: user.preferences.menuStartDay,
+              startDay: user.preferences.defaultMenuStartDay,
             }),
           );
           return id;
