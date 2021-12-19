@@ -3,6 +3,7 @@ import { faCheck, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons
 import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
+import { Day } from '@models/day.type';
 import { MenuEntry } from '@models/menu-entry.interface';
 import { Orientation } from '@models/orientation.type';
 import { MenuService } from '@services/menu.service';
@@ -22,6 +23,7 @@ type MenuCardAction = 'rename' | 'changeStartDay';
 export class MenuCardComponent {
   @Input() id = '';
   @Input() name = '';
+  @Input() startDay: Day = 'Monday';
   @Input() entries: MenuEntry[] = [];
   @Input() orientation: Orientation = 'horizontal';
   @Input() fallbackText = '';
@@ -67,8 +69,9 @@ export class MenuCardComponent {
     this.finishRename$.next();
   }
 
-  public onChangeStartDay(): void {
-    // TODO: save start day change here
+  public async onChangeStartDay(startDay: Day): Promise<void> {
+    await this._menuService.updateMenuStartDay(this.id, startDay);
+    this.finishChangeStartDay$.next();
   }
 
   public onDelete(): void {

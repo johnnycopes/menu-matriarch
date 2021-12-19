@@ -48,12 +48,13 @@
     </ng-template>
   </div>
   <form *ngIf="changing$ | async"
+    #dayForm="ngForm"
     class="start-day-form"
   >
     <app-input class="start-day-form__input">
       <select
-        name="menuStartDay"
-        [ngModel]="'Monday'"
+        name="startDay"
+        [ngModel]="startDay"
       >
         <option *ngFor="let day of days; trackBy: dayTrackByFn"
           [ngValue]="day"
@@ -72,7 +73,7 @@
       <button app-button
         buttonStyle="primary"
         [icon]="saveIcon"
-        (click)="finishChangeStartDay$.next()"
+        (click)="onChangeStartDay(dayForm.value.startDay)"
       ></button>
     </div>
   </form>
