@@ -47,39 +47,15 @@
       </app-options-menu>
     </ng-template>
   </div>
-  <form *ngIf="changing$ | async"
-    #dayForm="ngForm"
-    class="start-day-form"
-  >
-    <app-input class="start-day-form__input">
-      <select
-        name="startDay"
-        [ngModel]="startDay"
-      >
-        <option *ngFor="let day of days; trackBy: dayTrackByFn"
-          [ngValue]="day"
-        >
-          {{ day }}
-        </option>
-      </select>
-    </app-input>
-    <div class="start-day-form__buttons">
-      <button app-button
-        type="button"
-        buttonStyle="secondary"
-        [icon]="cancelIcon"
-        (click)="finishChangeStartDay$.next()"
-      ></button>
-      <button app-button
-        buttonStyle="primary"
-        [icon]="saveIcon"
-        (click)="onChangeStartDay(dayForm.value.startDay)"
-      ></button>
-    </div>
-  </form>
+  <app-inline-day-select class="start-day-form"
+    *ngIf="changing$ | async"
+    [startDay]="startDay"
+    (cancel)="finishChangeStartDay$.next()"
+    (save)="onChangeStartDay($event)"
+  ></app-inline-day-select>
   <ul>
     <li class="entry"
-      *ngFor="let entry of entries; trackBy: menuEntryTrackByFn"
+      *ngFor="let entry of entries; trackBy: trackByFn"
     >
       <app-small-caps-label class="day">
         <h4>

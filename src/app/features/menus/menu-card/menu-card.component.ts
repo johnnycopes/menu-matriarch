@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { faCheck, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { merge, Subject } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
@@ -8,8 +8,7 @@ import { MenuEntry } from '@models/menu-entry.interface';
 import { Orientation } from '@models/orientation.type';
 import { MenuService } from '@services/menu.service';
 import { PrintService } from '@services/print.service';
-import { getDays } from '@utility/domain/get-days';
-import { trackByDay, trackBySelf } from '@utility/domain/track-by-functions';
+import { trackByDay } from '@utility/domain/track-by-functions';
 
 type MenuCardAction = 'rename' | 'changeStartDay';
 
@@ -28,13 +27,8 @@ export class MenuCardComponent {
   @Input() orientation: Orientation = 'horizontal';
   @Input() fallbackText = '';
   @Input() canDelete = true;
-  public readonly cancelIcon = faTimes;
   public readonly menuToggleIcon = faEllipsisV;
-  public readonly saveIcon = faCheck;
-
-  public readonly days = getDays();
-  public readonly dayTrackByFn = trackBySelf;
-  public readonly menuEntryTrackByFn = trackByDay;
+  public readonly trackByFn = trackByDay;
 
   public startChangeStartDay$ = new Subject<MenuCardAction>();
   public finishChangeStartDay$ = new Subject<void>();
