@@ -6,7 +6,9 @@
   <app-input>
     <select
       name="startDay"
-      [ngModel]="startDay"
+      (keydown.enter)="save.emit(form.value.startDay)"
+      (keydown.escape)="cancel.emit()"
+      [(ngModel)]="startDay"
     >
       <option *ngFor="let day of days; trackBy: dayTrackByFn"
         [ngValue]="day"
