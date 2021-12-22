@@ -4,17 +4,18 @@ import firebase from 'firebase/compat/app';
 
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { createDishDto } from '@shared/utility/domain/create-dtos';
+import { MealDto } from '@models/dtos/meal-dto.interface';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Dish } from '@models/dish.interface';
 import { Tag } from '@models/tag.interface';
-import { FirestoreService } from './firestore.service';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
+import { createDishDto } from '@utility/domain/create-dtos';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
+import { FirestoreService } from './firestore.service';
 
 interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
   docRef: DocumentReference<TDocRef>;
@@ -30,6 +31,10 @@ export class BatchService {
 
   public getUserDoc(uid: string): DocumentReference<UserDto> {
     return this._firestoreService.getDocRef<UserDto>(Endpoint.users, uid);
+  }
+
+  public getMealDoc(id: string): DocumentReference<MealDto> {
+    return this._firestoreService.getDocRef<MealDto>(Endpoint.meals, id);
   }
 
   public getMenuDoc(id: string): DocumentReference<MenuDto> {
