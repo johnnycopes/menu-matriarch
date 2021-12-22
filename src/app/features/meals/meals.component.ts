@@ -1,4 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
+import { MealService } from '@services/meal.service';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-meals',
@@ -6,11 +9,9 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./meals.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MealsComponent implements OnInit {
+export class MealsComponent {
+  public meals$ = this._mealService.getMeals();
+  public readonly trackByFn = trackById;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  constructor(private _mealService: MealService) { }
 }

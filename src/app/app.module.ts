@@ -40,6 +40,7 @@ import { ShellComponent } from './core/components/shell/shell.component';
 import { TagCardComponent } from './features/tags/tag-card/tag-card.component';
 import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
+import { MealCardComponent } from './features/meals/meal-card/meal-card.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     TagCardComponent,
     TagsComponent,
     WelcomeComponent,
+    MealCardComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),

@@ -1,1 +1,18 @@
-<p>meals works!</p>
+<app-section *ngIf="meals$ | async as meals">
+  <div class="app-section__toolbar">
+    <h2 class="title">
+      {{ meals.length }} total
+    </h2>
+  </div>
+  <ul class="app-section__content meals">
+    <li app-meal-card
+      *ngFor="let meal of meals; trackBy: trackByFn"
+      [id]="meal.id"
+      [name]="meal.name"
+      [description]="meal.description"
+      [dishes]="meal.dishes"
+      [tags]="meal.tags"
+      [active]="false"
+    ></li>
+  </ul>
+</app-section>
