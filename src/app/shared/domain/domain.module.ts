@@ -13,7 +13,7 @@ import { FiltersButtonComponent } from './filters-button/filters-button.componen
 import { FiltersComponent } from './filters/filters.component';
 import { InlineDaySelectComponent } from './inline-day-select/inline-day-select.component';
 import { InlineNameEditComponent } from './inline-name-edit/inline-name-edit.component';
-import { MealComponent } from './meal/meal.component';
+import { MealSummaryComponent } from './meal-summary/meal-summary.component';
 import { TagComponent } from './tag/tag.component';
 
 
@@ -27,7 +27,7 @@ import { TagComponent } from './tag/tag.component';
     FiltersComponent,
     InlineDaySelectComponent,
     InlineNameEditComponent,
-    MealComponent,
+    MealSummaryComponent,
     TagComponent,
   ],
   exports: [
@@ -38,7 +38,7 @@ import { TagComponent } from './tag/tag.component';
     FiltersComponent,
     InlineDaySelectComponent,
     InlineNameEditComponent,
-    MealComponent,
+    MealSummaryComponent,
     TagComponent,
   ],
   imports: [
