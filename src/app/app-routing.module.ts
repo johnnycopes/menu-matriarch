@@ -9,6 +9,7 @@ import { DishDetailsComponent } from './features/dishes/dish-details/dish-detail
 import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.component';
 import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { DishesComponent } from './features/dishes/dishes.component';
+import { MealsComponent } from './features/meals/meals.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 import { PlannerComponent } from './features/planner/planner.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
     { path: 'planner', component: PlannerComponent, data: { state: Route.planner } },
     { path: 'menus', component: MenusComponent, data: { state: Route.menus } },
     { path: 'tags', component: TagsComponent, data: { state: Route.tags } },
+    { path: 'meals', component: MealsComponent, data: { state: Route.meals } },
     { path: 'dishes', component: DishesComponent, data: { state: Route.dishes }, children: [
       { path: '', component: DishPlaceholderComponent, pathMatch: 'full' },
       { path: 'new', component: DishEditComponent },
