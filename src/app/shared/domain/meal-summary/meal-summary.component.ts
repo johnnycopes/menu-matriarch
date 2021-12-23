@@ -21,6 +21,7 @@ export class MealSummaryComponent {
     }));
     this.showFallback = !dishes.length;
   }
+  @Input() boundaries: 'labeled' | 'unlabeled' = 'unlabeled';
   @Input() fallbackText = '';
   @Input() orientation: Orientation = 'horizontal';
   public dishesGroups: FilteredDishesGroup[] = [];

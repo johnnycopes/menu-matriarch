@@ -6,8 +6,15 @@
 
 <ng-template #mealTemplate>
   <ng-container *ngFor="let group of dishesGroups; trackBy: groupTrackByFn">
+    <app-small-caps-label *ngIf="boundaries === 'labeled'"
+      class="dish-type"
+    >
+      {{ group.type }}
+    </app-small-caps-label>
     <ul *ngIf="group.dishes.length"
       class="dishes"
+      [class.dishes--labeled]="boundaries === 'labeled'"
+      [class.dishes--unlabeled]="boundaries === 'unlabeled'"
       [class.dishes--horizontal]="orientation === 'horizontal'"
       [class.dishes--vertical]="orientation === 'vertical'"
     >

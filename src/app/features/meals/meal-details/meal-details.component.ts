@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 import { MealService } from '@services/meal.service';
 import { getDishTypes } from '@shared/utility/domain/get-dish-types';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-meal-details',
@@ -17,13 +18,22 @@ export class MealDetailsComponent {
   private _id$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('id'))
   );
-  public meal$ = this._route.params.pipe(
-    switchMap(({ id }) => {
-      if (!id) {
-        return of(undefined);
-      }
-      return this._mealService.getMeal(id);
-    })
+  public vm$ = combineLatest([
+    this._route.params.pipe(
+      switchMap(({ id }) => {
+        if (!id) {
+          return of(undefined);
+        }
+        return this._mealService.getMeal(id);
+      })
+    ),
+    this._userService.getPreferences(),
+  ]).pipe(
+    map(([meal, preferences]) => ({
+      meal,
+      fallbackText: preferences?.emptyMealText ?? '',
+      orientation: preferences?.menuOrientation ?? 'horizontal',
+    }))
   );
   public readonly dishTypes = getDishTypes();
   public readonly typeTrackByFn = trackBySelf;
@@ -32,7 +42,8 @@ export class MealDetailsComponent {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _mealService: MealService
+    private _mealService: MealService,
+    private _userService: UserService,
   ) { }
 
   // public onDelete(): void {
