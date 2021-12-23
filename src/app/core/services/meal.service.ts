@@ -29,6 +29,21 @@ export class MealService {
     private _userService: UserService,
   ) { }
 
+  public getMeal(id: string): Observable<Meal | undefined> {
+    return combineLatest([
+      this._firestoreService.getOne<MealDto>(this._endpoint, id),
+      this._dishService.getDishes(),
+      this._tagService.getTags(),
+    ]).pipe(
+      map(([meal, dishes, tags]) => {
+        if (!meal) {
+          return undefined;
+        }
+        return this._getMeal(meal, dishes, tags);
+      })
+    );
+  }
+
   public getMeals(): Observable<Meal[]> {
     return combineLatest([
       this._userService.uid$.pipe(

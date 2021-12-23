@@ -7,8 +7,10 @@ import { LoggedInAuthGuard } from './core/guards/logged-in-auth.guard';
 import { DemoComponent } from './features/demo/demo.component';
 import { DishDetailsComponent } from './features/dishes/dish-details/dish-details.component';
 import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.component';
-import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { DishesComponent } from './features/dishes/dishes.component';
+import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
+import { MealDetailsComponent } from './features/meals/meal-details/meal-details.component';
+import { MealPlaceholderComponent } from './features/meals/meal-placeholder/meal-placeholder.component';
 import { MealsComponent } from './features/meals/meals.component';
 import { MenusComponent } from './features/menus/menus.component';
 import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
@@ -26,13 +28,16 @@ const routes: Routes = [
     { path: 'planner', component: PlannerComponent, data: { state: Route.planner } },
     { path: 'menus', component: MenusComponent, data: { state: Route.menus } },
     { path: 'tags', component: TagsComponent, data: { state: Route.tags } },
-    { path: 'meals', component: MealsComponent, data: { state: Route.meals } },
+    { path: 'meals', component: MealsComponent, data: { state: Route.meals }, children: [
+      { path: '', component: MealPlaceholderComponent, pathMatch: 'full' },
+      { path: ':id', component: MealDetailsComponent },
+    ]},
     { path: 'dishes', component: DishesComponent, data: { state: Route.dishes }, children: [
       { path: '', component: DishPlaceholderComponent, pathMatch: 'full' },
       { path: 'new', component: DishEditComponent },
       { path: ':id', component: DishDetailsComponent },
       { path: ':id/edit', component: DishEditComponent },
-    ] },
+    ]},
     { path: '', redirectTo: 'dishes', pathMatch: 'full', data: { state: Route.dishes } },
     { path: 'settings', component: SettingsComponent, data: { state: Route.settings } },
   ]},

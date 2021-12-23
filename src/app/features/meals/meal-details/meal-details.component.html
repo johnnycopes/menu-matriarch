@@ -1,0 +1,45 @@
+<app-section *ngIf="meal$ | async as meal">
+  <div class="app-section__toolbar">
+    <!-- <button app-button
+      buttonStyle="danger"
+      (click)="onDelete()"
+    >
+      Delete
+    </button> -->
+    <a app-button
+      buttonStyle="secondary"
+      routerLink="edit"
+    >
+      Edit
+    </a>
+  </div>
+  <div class="app-section__content">
+    <h2 class="name">
+      {{ meal.name }}
+    </h2>
+    <p *ngIf="meal.description"
+      class="description"
+    >
+      {{ meal.description }}
+    </p>
+    <div class="details">
+      <ng-container *ngFor="let dishType of dishTypes; trackBy: typeTrackByFn">
+        <app-small-caps-label>
+          {{ dishType | appPlural : 0 }}
+        </app-small-caps-label>
+        <ul
+          class="dishes"
+        >
+          <li *ngFor="let dish of meal.dishes; let last = last; trackBy: dishTrackByFn">
+            <a routerLink="/dishes/{{ dish.id }}"
+              [class]="dish.type"
+            >
+              {{ dish.name }}
+              <!-- {{ dish.name }}<span *ngIf="orientation === 'horizontal' && !last">,&nbsp;</span> -->
+            </a>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+  </div>
+</app-section>

@@ -26,6 +26,9 @@ import { DishesComponent } from './features/dishes/dishes.component';
 import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { ErrorComponent } from './core/components/error/error.component';
 import { HeaderComponent } from './core/components/header/header.component';
+import { MealCardComponent } from './features/meals/meal-card/meal-card.component';
+import { MealDetailsComponent } from './features/meals/meal-details/meal-details.component';
+import { MealPlaceholderComponent } from './features/meals/meal-placeholder/meal-placeholder.component';
 import { MealsComponent } from './features/meals/meals.component';
 import { MenuCardComponent } from './features/menus/menu-card/menu-card.component';
 import { MenusComponent } from './features/menus/menus.component';
@@ -40,7 +43,6 @@ import { ShellComponent } from './core/components/shell/shell.component';
 import { TagCardComponent } from './features/tags/tag-card/tag-card.component';
 import { TagsComponent } from './features/tags/tags.component';
 import { WelcomeComponent } from './features/welcome/welcome.component';
-import { MealCardComponent } from './features/meals/meal-card/meal-card.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,9 @@ import { MealCardComponent } from './features/meals/meal-card/meal-card.componen
     DishPlaceholderComponent,
     ErrorComponent,
     HeaderComponent,
+    MealCardComponent,
+    MealDetailsComponent,
+    MealPlaceholderComponent,
     MealsComponent,
     MenuCardComponent,
     MenusComponent,
@@ -68,7 +73,6 @@ import { MealCardComponent } from './features/meals/meal-card/meal-card.componen
     TagCardComponent,
     TagsComponent,
     WelcomeComponent,
-    MealCardComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
