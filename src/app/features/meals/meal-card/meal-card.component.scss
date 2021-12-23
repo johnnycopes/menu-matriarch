@@ -1,0 +1,13 @@
+@import "main";
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: spacing(16);
+}
+
+.name {
+  font-weight: font-weight(bold);
+  color: color($neutral, 4);
+}

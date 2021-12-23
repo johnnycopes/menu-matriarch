@@ -1,18 +1,33 @@
-<app-section *ngIf="meals$ | async as meals">
+<app-section *ngIf="vm$ | async as vm"
+  class="meals"
+>
   <div class="app-section__toolbar">
     <h2 class="title">
-      {{ meals.length }} total
+      {{ vm.meals.length }} total
     </h2>
   </div>
-  <ul class="app-section__content meals">
+  <ul *ngIf="vm.meals.length; else noMealsPlaceholder"
+    class="app-section__content"
+  >
     <li app-meal-card
-      *ngFor="let meal of meals; trackBy: trackByFn"
+      *ngFor="let meal of vm.meals; trackBy: trackByFn"
       [id]="meal.id"
       [name]="meal.name"
       [description]="meal.description"
       [dishes]="meal.dishes"
       [tags]="meal.tags"
       [active]="false"
+      [fallbackText]="vm.fallbackText"
+      [orientation]="vm.orientation"
     ></li>
   </ul>
+  <ng-template #noMealsPlaceholder>
+    <div class="placeholder">
+      No meals to display
+    </div>
+  </ng-template>
 </app-section>
+
+<section>
+  <router-outlet></router-outlet>
+</section>

@@ -1,7 +1,14 @@
 <app-card [active]="active">
+  <div class="top">
+    <a routerLink="/meals/{{ id }}">
+      <h3 class="name">
+        {{ name }}
+      </h3>
+    </a>
+  </div>
   <app-meal-summary
     [dishes]="dishes"
-    [fallbackText]="''"
-    [orientation]="'vertical'"
+    [fallbackText]="fallbackText"
+    [orientation]="orientation"
   ></app-meal-summary>
 </app-card>
