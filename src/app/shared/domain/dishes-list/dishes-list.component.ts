@@ -2,12 +2,11 @@ import { Component, ChangeDetectionStrategy, ContentChild, TemplateRef } from '@
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-
 import { DishService } from '@services/dish.service';
 import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
 import { TagService } from '@services/tag.service';
-import { trackByDishType, trackById } from '@shared/utility/domain/track-by-functions';
+import { trackByDishType, trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-dishes-list',
