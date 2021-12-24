@@ -50,16 +50,4 @@ export class DishesListComponent {
     private _routerService: RouterService,
     private _tagService: TagService,
   ) { }
-
-  public onSearchTextChange(text: string): void {
-    this._filterService.updateText(text);
-  }
-
-  public onFiltersButtonClick(): void {
-    this._filterService.togglePanel();
-  }
-
-  public onFiltersChange(filters: string[]): void {
-    this._filterService.updateTagIds(filters);
-  }
 }

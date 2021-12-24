@@ -47,16 +47,4 @@ export class MealsListComponent {
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
-
-  public onSearchTextChange(text: string): void {
-    this._filterService.updateText(text);
-  }
-
-  public onFiltersButtonClick(): void {
-    this._filterService.togglePanel();
-  }
-
-  public onFiltersChange(filters: string[]): void {
-    this._filterService.updateTagIds(filters);
-  }
 }
