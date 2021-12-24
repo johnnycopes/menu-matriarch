@@ -1,0 +1,52 @@
+@import "main";
+
+.app-section__toolbar {
+  flex-direction: column;
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .title {
+      margin-right: auto;
+      font-weight: font-weight(bold);
+      color: color($neutral, 4);
+    }
+
+    app-search-input {
+      position: relative;
+      top: 2px;
+    }
+
+    .button:not(:first-child) {
+      margin-left: spacing(8);
+    }
+  }
+
+  .filters {
+    margin-top: spacing(16);
+  }
+
+  .title {
+    margin-right: auto;
+    font-weight: font-weight(bold);
+    color: color($neutral, 4);
+  }
+
+  app-search-input {
+    position: relative;
+    top: 2px;
+  }
+}
+
+li:not(:last-of-type) {
+  margin-bottom: spacing(8);
+  flex-shrink: 0;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  margin-top: spacing(24);
+}

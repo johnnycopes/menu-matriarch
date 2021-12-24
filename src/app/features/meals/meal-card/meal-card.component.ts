@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+
 import { Dish } from '@models/dish.interface';
 import { Orientation } from '@models/orientation.type';
 import { Tag } from '@models/tag.interface';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[app-meal-card]',
+  selector: 'app-meal-card',
   templateUrl: './meal-card.component.html',
   styleUrls: ['./meal-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -8,12 +8,6 @@
   height: 100%;
 }
 
-.title {
-  margin-right: spacing(16);
-  font-weight: font-weight(bold);
-  color: color($neutral, 4);
-}
-
 .meals {
   grid-column: list;
 }
@@ -22,15 +16,4 @@ section {
   grid-column: details;
   background: $white;
   overflow: hidden;
-}
-
-li[app-meal-card]:not(:last-of-type) {
-  margin-bottom: spacing(8);
-  flex-shrink: 0;
-}
-
-.placeholder {
-  display: grid;
-  place-items: center;
-  margin-top: spacing(24);
 }
