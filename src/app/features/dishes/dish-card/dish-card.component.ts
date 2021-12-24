@@ -20,6 +20,7 @@ export class DishCardComponent {
   @Input() ingredients: string[] = [];
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
+  @Input() meals: string[] = [];
   @Input() usages: number = 0;
   @Input() active = false;
 }

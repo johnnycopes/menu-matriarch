@@ -17,6 +17,7 @@ export class DishSummaryComponent {
   @Input() link = '';
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
+  @Input() meals: string[] = [];
   @Input() usages = 0;
   public readonly faLink = faLink;
   public readonly trackByFn = trackById;

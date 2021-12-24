@@ -33,7 +33,8 @@
       <p>{{ dish.type | uppercase }}</p>
       <p>
         Included {{ dish.usages }} {{ 'time' | appPlural : dish.usages }} in
-        {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}
+        {{ dish.menus.length }} different {{ 'menu' | appPlural : dish.menus.length }}.
+        Included in {{ dish.meals.length }} {{ 'meal' | appPlural : dish.meals.length}}.
       </p>
     </div>
     <div class="details">
