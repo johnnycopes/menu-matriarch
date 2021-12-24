@@ -1,43 +1,17 @@
-<app-section *ngIf="vm$ | async as vm"
-  class="dishes"
+<app-filterable-list *ngIf="vm$ | async as vm"
+  [total]="vm.meals.length"
+  entity="Meal"
+  newRoute="/meals/new"
 >
-  <div class="app-section__toolbar">
-    <div class="controls">
-      <h2 class="title">
-        {{ vm.meals.length }} total
-      </h2>
-      <app-search-input
-        [text]="vm.searchText"
-        (textChange)="onSearchTextChange($event)"
-      ></app-search-input>
-      <app-filters-button class="button"
-        [count]="vm.filters.length"
-        [open]="vm.filterPanel"
-        (clicked)="onFiltersButtonClick()"
-      ></app-filters-button>
-      <a app-button
-        class="button"
-        routerLink="/dishes/new"
-      >
-        New Dish
-      </a>
-    </div>
-    <app-filters *ngIf="vm.filterPanel"
-      class="filters"
-      [tags]="vm.tags"
-      [selected]="vm.filters"
-      (selectedChange)="onFiltersChange($event)"
-      (selectedClear)="onFiltersChange([])"
-    ></app-filters>
-  </div>
   <ul *ngIf="vm.meals.length; else noMealsPlaceholder"
     class="app-section__content"
-  >
+    >
     <li *ngFor="let meal of vm.meals; trackBy: trackByFn">
       <ng-container
         [ngTemplateOutlet]="mealTemplate"
         [ngTemplateOutletContext]="{
           $implicit: meal,
+          activeMeal: vm.activeMeal,
           fallbackText: vm.preferences?.emptyMealText ?? '',
           orientation: vm.preferences?.menuOrientation ?? 'horizontal'
         }"
@@ -49,4 +23,4 @@
       No meals to display
     </div>
   </ng-template>
-</app-section>
+</app-filterable-list>

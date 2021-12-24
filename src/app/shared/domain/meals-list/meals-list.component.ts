@@ -21,12 +21,14 @@ export class MealsListComponent {
     this._tagService.getTags(),
     this._userService.getPreferences(),
     this._filterService.state$,
+    this._routerService.activeMealId$,
   ]).pipe(
-    map(([meals, tags, preferences, filterState]) => {
+    map(([meals, tags, preferences, filterState, activeMealId]) => {
       return {
         meals,
         tags,
         preferences,
+        activeMeal: meals.find(meal => meal.id === activeMealId),
         searchText: filterState.text,
         filters: filterState.tagIds,
         filterPanel: filterState.panel,

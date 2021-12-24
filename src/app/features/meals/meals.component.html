@@ -1,6 +1,7 @@
 <app-meals-list>
   <ng-template #mealTemplate
     let-meal
+    let-activeMeal="activeMeal"
     let-fallbackText="fallbackText"
     let-orientation="orientation"
   >
@@ -10,7 +11,7 @@
       [description]="meal.description"
       [dishes]="meal.dishes"
       [tags]="meal.tags"
-      [active]="false"
+      [active]="meal === activeMeal"
       [fallbackText]="fallbackText"
       [orientation]="orientation"
     ></app-meal-card>

@@ -1,5 +1,7 @@
 <app-filterable-list *ngIf="vm$ | async as vm"
   [total]="vm.total"
+  entity="Dish"
+  newRoute="/dishes/new"
 >
   <app-tabset>
     <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"

@@ -17,9 +17,9 @@
       ></app-filters-button>
       <a app-button
         class="button"
-        routerLink="/dishes/new"
+        [routerLink]="newRoute"
       >
-        New Dish
+        New {{ entity }}
       </a>
     </div>
     <app-filters *ngIf="vm.filterPanel"
