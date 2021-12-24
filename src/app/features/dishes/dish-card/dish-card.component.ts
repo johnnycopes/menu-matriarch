@@ -4,8 +4,7 @@ import { Tag } from '@models/tag.interface';
 import { DishType } from '@models/dish-type.type';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[app-dish-card]',
+  selector: 'app-dish-card',
   templateUrl: './dish-card.component.html',
   styleUrls: ['./dish-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
