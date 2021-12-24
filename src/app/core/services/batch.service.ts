@@ -10,6 +10,7 @@ import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Dish } from '@models/dish.interface';
 import { Tag } from '@models/tag.interface';
+import { Meal } from '@models/meal.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
 import { createDishDto } from '@utility/domain/create-dtos';
@@ -75,7 +76,7 @@ export class BatchService {
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
     this._processUpdates(batch, [
-      ...this._getDishesUpdates({
+      ...this._getDishesMenuUpdates({
         dishIds: [dishId],
         menu,
         change: selected ? 'increment' : 'decrement'
@@ -110,7 +111,7 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this.getMenuDoc(menu.id));
     this._processUpdates(batch,
-      this._getDishesUpdates({
+      this._getDishesMenuUpdates({
         dishIds: flattenValues(menu.contents),
         menu,
         change: 'clear'
@@ -125,7 +126,7 @@ export class BatchService {
     if (day) {
       this._processUpdates(batch, [
         ...this._getMenusUpdates({ menuIds: [menu.id], day }),
-        ...this._getDishesUpdates({
+        ...this._getDishesMenuUpdates({
           dishIds: menu.contents[day],
           menu,
           change: 'decrement'
@@ -136,13 +137,25 @@ export class BatchService {
     else {
       this._processUpdates(batch, [
         ...this._getMenusUpdates({ menuIds: [menu.id] }),
-        ...this._getDishesUpdates({
+        ...this._getDishesMenuUpdates({
           dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear'
         }),
       ]);
     }
+    await batch.commit();
+  }
+
+  public async deleteMeal(meal: Meal): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    batch.delete(this.getMealDoc(meal.id));
+    this._processUpdates(batch, [
+      ...this._getDishesMealUpdates({
+        meal,
+        action: 'delete',
+      }),
+    ]);
     await batch.commit();
   }
 
@@ -195,7 +208,7 @@ export class BatchService {
     }));
   }
 
-  private _getDishesUpdates({ dishIds, menu, change }: {
+  private _getDishesMenuUpdates({ dishIds, menu, change }: {
     dishIds: string[],
     menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
@@ -225,6 +238,18 @@ export class BatchService {
         },
       };
     });
+  }
+
+  private _getDishesMealUpdates({ meal, action }: {
+    meal: Meal,
+    action: 'delete',
+  }): DocRefUpdate<DishDto, { meals: string[] }>[] {
+    return meal.dishes.map(dish => ({
+      docRef: this.getDishDoc(dish.id),
+      updates: {
+        meals: this._firestoreService.removeFromArray(meal.id),
+      },
+    }));
   }
 
   private _getTagsUpdates({ dish, updateTagIds = [] }: {

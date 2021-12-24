@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { first, map, switchMap, tap } from 'rxjs/operators';
 
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
@@ -54,6 +54,18 @@ export class MealService {
       this._tagService.getTags(),
     ]).pipe(
       map(([meals, dishes, tags]) => meals.map(meal => this._getMeal(meal, dishes, tags)))
+    );
+  }
+
+  public deleteMeal(id: string): Observable<Meal | undefined> {
+    return this.getMeal(id).pipe(
+      first(),
+      tap(async meal => {
+        if (!meal) {
+          return;
+        }
+        await this._batchService.deleteMeal(meal);
+      })
     );
   }
 

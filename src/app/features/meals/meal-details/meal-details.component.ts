@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
-import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 import { MealService } from '@services/meal.service';
-import { getDishTypes } from '@shared/utility/domain/get-dish-types';
 import { UserService } from '@services/user.service';
+import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
+import { getDishTypes } from '@utility/domain/get-dish-types';
 
 @Component({
   selector: 'app-meal-details',
@@ -46,16 +46,16 @@ export class MealDetailsComponent {
     private _userService: UserService,
   ) { }
 
-  // public onDelete(): void {
-  //   this._id$.pipe(
-  //     first(),
-  //     concatMap(id => {
-  //       if (!id) {
-  //         return of(undefined);
-  //       }
-  //       return this._mealService.deleteDish(id);
-  //     }),
-  //     tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
-  //   ).subscribe();
-  // }
+  public onDelete(): void {
+    this._id$.pipe(
+      first(),
+      concatMap(id => {
+        if (!id) {
+          return of(undefined);
+        }
+        return this._mealService.deleteMeal(id);
+      }),
+      tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
+    ).subscribe();
+  }
 }
