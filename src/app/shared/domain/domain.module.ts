@@ -10,6 +10,7 @@ import { CountComponent } from './count/count.component';
 import { DishesListComponent } from './dishes-list/dishes-list.component';
 import { DishSummaryComponent } from './dish-summary/dish-summary.component';
 import { EmptyViewPlaceholderComponent } from './empty-view-placeholder/empty-view-placeholder.component';
+import { FilterableListComponent } from './filterable-list/filterable-list.component';
 import { FiltersButtonComponent } from './filters-button/filters-button.component';
 import { FiltersComponent } from './filters/filters.component';
 import { InlineDaySelectComponent } from './inline-day-select/inline-day-select.component';
@@ -26,6 +27,7 @@ import { TagComponent } from './tag/tag.component';
     DishesListComponent,
     DishSummaryComponent,
     EmptyViewPlaceholderComponent,
+    FilterableListComponent,
     FiltersButtonComponent,
     FiltersComponent,
     InlineDaySelectComponent,
@@ -39,6 +41,7 @@ import { TagComponent } from './tag/tag.component';
     DishesListComponent,
     DishSummaryComponent,
     EmptyViewPlaceholderComponent,
+    FilterableListComponent,
     FiltersButtonComponent,
     FiltersComponent,
     InlineDaySelectComponent,

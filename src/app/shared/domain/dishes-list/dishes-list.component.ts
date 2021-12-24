@@ -18,23 +18,21 @@ export class DishesListComponent {
   public vm$ = combineLatest([
     this._dishService.getDishes(),
     this._tagService.getTags(),
-    this._filterService.text$,
-    this._filterService.panel$,
-    this._filterService.tagIds$,
+    this._filterService.state$,
     this._routerService.activeDishId$,
   ]).pipe(
-    map(([dishes, tags, searchText, filterPanel, filters, activeDishId]) => {
+    map(([dishes, tags, filterState, activeDishId]) => {
       const activeDish = dishes.find(dish => dish.id === activeDishId);
       const filteredDishes = this._filterService.filterDishes({
-        dishes, text: searchText, tagIds: filters,
+        dishes, text: filterState.text, tagIds: filterState.tagIds,
       });
       return {
         tags,
-        searchText,
-        filters,
+        searchText: filterState.text,
+        filters: filterState.tagIds,
         filteredDishes,
         activeDish,
-        filterPanel,
+        filterPanel: filterState.panel,
         initialTab: activeDish?.type ?? 'main',
         total: this._filterService.getTotalCount(filteredDishes),
       };

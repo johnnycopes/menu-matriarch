@@ -1,58 +1,27 @@
-<app-section *ngIf="vm$ | async as vm"
-  class="dishes"
+<app-filterable-list *ngIf="vm$ | async as vm"
+  [total]="vm.total"
 >
-  <div class="app-section__toolbar">
-    <div class="controls">
-      <h2 class="title">
-        {{ vm.total }} total
-      </h2>
-      <app-search-input
-        [text]="vm.searchText"
-        (textChange)="onSearchTextChange($event)"
-      ></app-search-input>
-      <app-filters-button class="button"
-        [count]="vm.filters.length"
-        [open]="vm.filterPanel"
-        (clicked)="onFiltersButtonClick()"
-      ></app-filters-button>
-      <a app-button
-        class="button"
-        routerLink="/dishes/new"
-      >
-        New Dish
-      </a>
-    </div>
-    <app-filters *ngIf="vm.filterPanel"
-      class="filters"
-      [tags]="vm.tags"
-      [selected]="vm.filters"
-      (selectedChange)="onFiltersChange($event)"
-      (selectedClear)="onFiltersChange([])"
-    ></app-filters>
-  </div>
-  <ul class="app-section__content">
-    <app-tabset>
-      <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"
-        name="{{ group.type }} ({{ group.dishes.length }})"
-        [selected]="vm.initialTab === group.type"
-      >
-        <ul *ngIf="group.dishes.length; else noDishesPlaceholder">
-          <li *ngFor="let dish of group.dishes; trackBy: dishTrackByFn">
-            <ng-container
-              [ngTemplateOutlet]="dishTemplate"
-              [ngTemplateOutletContext]="{
-                $implicit: dish,
-                activeDish: vm.activeDish
-              }"
-            ></ng-container>
-          </li>
-        </ul>
-        <ng-template #noDishesPlaceholder>
-          <div class="placeholder">
-            {{ group.placeholderText }}
-          </div>
-        </ng-template>
-      </app-tab>
-    </app-tabset>
-  </ul>
-</app-section>
+  <app-tabset>
+    <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"
+      name="{{ group.type }} ({{ group.dishes.length }})"
+      [selected]="vm.initialTab === group.type"
+    >
+      <ul *ngIf="group.dishes.length; else noDishesPlaceholder">
+        <li *ngFor="let dish of group.dishes; trackBy: dishTrackByFn">
+          <ng-container
+            [ngTemplateOutlet]="dishTemplate"
+            [ngTemplateOutletContext]="{
+              $implicit: dish,
+              activeDish: vm.activeDish
+            }"
+          ></ng-container>
+        </li>
+      </ul>
+      <ng-template #noDishesPlaceholder>
+        <div class="placeholder">
+          {{ group.placeholderText }}
+        </div>
+      </ng-template>
+    </app-tab>
+  </app-tabset>
+</app-filterable-list>

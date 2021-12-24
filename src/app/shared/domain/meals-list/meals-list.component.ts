@@ -6,8 +6,8 @@ import { FilterService } from '@services/filter.service';
 import { MealService } from '@services/meal.service';
 import { RouterService } from '@services/router.service';
 import { TagService } from '@services/tag.service';
-import { trackById } from '@utility/domain/track-by-functions';
 import { UserService } from '@services/user.service';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-meals-list',
@@ -20,18 +20,16 @@ export class MealsListComponent {
     this._mealService.getMeals(),
     this._tagService.getTags(),
     this._userService.getPreferences(),
-    this._filterService.text$,
-    this._filterService.panel$,
-    this._filterService.tagIds$,
+    this._filterService.state$,
   ]).pipe(
-    map(([meals, tags, preferences, searchText, filterPanel, filters]) => {
+    map(([meals, tags, preferences, filterState]) => {
       return {
         meals,
         tags,
         preferences,
-        searchText,
-        filters,
-        filterPanel,
+        searchText: filterState.text,
+        filters: filterState.tagIds,
+        filterPanel: filterState.panel,
       };
     })
   );

@@ -17,12 +17,19 @@ import { LocalStorageService } from "./local-storage.service";
 export class RouterService {
   private _loading$ = new BehaviorSubject<boolean>(true);
   private _activeDishId$ = new BehaviorSubject<string>('');
+  private _activeMealId$ = new BehaviorSubject<string>('');
   private _routerEvents$ = this._router.events.pipe(
     filter((e): e is NavigationEnd => e instanceof NavigationEnd)
   );
 
   public get loading$(): Observable<boolean> {
     return this._loading$;
+  }
+
+  public get activeMealId$(): Observable<string> {
+    return this._activeMealId$.pipe(
+      distinctUntilChanged()
+    );
   }
 
   public get activeDishId$(): Observable<string> {
@@ -56,6 +63,15 @@ export class RouterService {
           this._localStorageService.setMenuId(menuId);
         }
       })
+    ).subscribe();
+
+    this._routerEvents$.pipe(
+      filter(({ url }) => url.includes(Route.meals)),
+      tap(event => {
+        const divviedUrl = event.urlAfterRedirects.split('/');
+        const mealId = divviedUrl[2];
+        this._activeMealId$.next(mealId ?? '');
+      }),
     ).subscribe();
 
     this._routerEvents$.pipe(
