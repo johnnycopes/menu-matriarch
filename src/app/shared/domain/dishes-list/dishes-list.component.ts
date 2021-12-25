@@ -34,7 +34,7 @@ export class DishesListComponent {
         filters: filterState.tagIds,
         filterPanel: filterState.panel,
         initialTab: activeDish?.type ?? 'main',
-        total: this._filterService.getTotalCount(filteredDishes),
+        total: filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0),
       };
     })
   );
