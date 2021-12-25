@@ -4,6 +4,11 @@
       <h3 class="name">
         {{ name }}
       </h3>
+      <p *ngIf="description"
+        class="description"
+      >
+        {{ description }}
+      </p>
     </a>
   </div>
   <app-meal-summary

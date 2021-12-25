@@ -11,3 +11,9 @@
   font-weight: font-weight(bold);
   color: color($neutral, 4);
 }
+
+.description {
+  font-size: 14px;
+  color: color($neutral, 6);
+  margin-top: spacing(8);
+}
