@@ -21,11 +21,12 @@
             [meals]="dish.meals"
             [usages]="dish.usages"
           ></app-dish-summary>
-          <app-checkbox
-            [name]="dish.name"
-            [ngModel]="vm.mealDishesRecord[dish.id]"
+          <app-checkbox class="included"
+            [name]="dish.id"
+            [ngModel]="vm.dishesModel.includes(dish.id)"
+            (ngModelChange)="onDishChange(form.value.dishes)"
           >
-            Included in meal
+            Include in meal
           </app-checkbox>
         </app-card>
       </ng-template>

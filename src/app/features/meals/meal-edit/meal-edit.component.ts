@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, of } from 'rxjs';
-import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
-import { keyBy } from 'lodash-es';
+import { combineLatest, of, Subject } from 'rxjs';
+import { concatMap, distinctUntilChanged, first, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 import { DishService } from '@services/dish.service';
 import { MealService } from '@services/meal.service';
@@ -10,6 +9,7 @@ import { UserService } from '@services/user.service';
 import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 import { getDishTypes } from '@utility/domain/get-dish-types';
 import { NgForm } from '@angular/forms';
+import { Dish } from '@models/dish.interface';
 
 interface IMealEditForm {
   name: string;
@@ -17,6 +17,8 @@ interface IMealEditForm {
   dishes: string[];
   tags: string[];
 }
+
+type FormDishes = Record<string, boolean>;
 
 @Component({
   selector: 'app-meal-edit',
@@ -28,6 +30,7 @@ export class MealEditComponent {
   private _id$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('id'))
   );
+  private _dishChange$ = new Subject<FormDishes | null>();
   public vm$ = combineLatest([
     this._route.params.pipe(
       switchMap(({ id }) => {
@@ -39,29 +42,33 @@ export class MealEditComponent {
     ),
     this._dishService.getDishes(),
     this._userService.getPreferences(),
+    this._dishChange$.pipe(
+      startWith(null),
+      distinctUntilChanged(),
+    ),
   ]).pipe(
-    map(([meal, dishes, preferences]) => {
-      const mealDishesKeyedById = keyBy(meal?.dishes ?? {}, 'id');
-        const mealDishesRecord = dishes.reduce((accum, dish) => {
-          accum[dish.id] = !!mealDishesKeyedById[dish.id];
-          return accum;
-        }, {} as Record<string, boolean>);
+    map(([meal, allDishes, preferences, formDishes]) => {
+      const dishes = formDishes
+        ? this._transformFormDishes(allDishes, formDishes)
+        : meal?.dishes ?? [];
+      const dishesModel = dishes.map(dish => dish.id);
       const fallbackText = preferences?.emptyMealText ?? '';
       const orientation = preferences?.menuOrientation ?? 'horizontal';
       if (!meal) {
         return {
           name: '',
           description: '',
-          dishes: [],
+          dishes,
+          dishesModel,
           tags: [],
-          mealDishesRecord,
           fallbackText,
           orientation,
         };
       } else {
         return {
           ...meal,
-          mealDishesRecord,
+          dishes,
+          dishesModel,
           fallbackText,
           orientation,
         };
@@ -79,6 +86,10 @@ export class MealEditComponent {
     private _mealService: MealService,
     private _userService: UserService,
   ) { }
+
+  public onDishChange(dishesModel: FormDishes): void {
+    this._dishChange$.next(dishesModel);
+  }
 
   public async onSave(form: NgForm): Promise<void> {
     const details: IMealEditForm = {
@@ -115,4 +126,17 @@ export class MealEditComponent {
   //     })
   //   )
   // }
+
+  private _transformFormDishes(allDishes: Dish[], formDishes: Record<string, boolean>): Dish[] {
+    const dishes: Dish[] = [];
+    for (let dishId in formDishes) {
+      if (formDishes[dishId]) {
+        const dish = allDishes.find(dish => dish.id === dishId);
+        if (dish) {
+          dishes.push(dish);
+        }
+      }
+    }
+    return dishes;
+  }
 }
