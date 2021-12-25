@@ -28,6 +28,7 @@ import { ErrorComponent } from './core/components/error/error.component';
 import { HeaderComponent } from './core/components/header/header.component';
 import { MealCardComponent } from './features/meals/meal-card/meal-card.component';
 import { MealDetailsComponent } from './features/meals/meal-details/meal-details.component';
+import { MealEditComponent } from './features/meals/meal-edit/meal-edit.component';
 import { MealPlaceholderComponent } from './features/meals/meal-placeholder/meal-placeholder.component';
 import { MealsComponent } from './features/meals/meals.component';
 import { MenuCardComponent } from './features/menus/menu-card/menu-card.component';
@@ -58,6 +59,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     HeaderComponent,
     MealCardComponent,
     MealDetailsComponent,
+    MealEditComponent,
     MealPlaceholderComponent,
     MealsComponent,
     MenuCardComponent,

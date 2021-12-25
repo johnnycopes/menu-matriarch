@@ -10,6 +10,7 @@ import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.compone
 import { DishesComponent } from './features/dishes/dishes.component';
 import { DishPlaceholderComponent } from './features/dishes/dish-placeholder/dish-placeholder.component';
 import { MealDetailsComponent } from './features/meals/meal-details/meal-details.component';
+import { MealEditComponent } from './features/meals/meal-edit/meal-edit.component';
 import { MealPlaceholderComponent } from './features/meals/meal-placeholder/meal-placeholder.component';
 import { MealsComponent } from './features/meals/meals.component';
 import { MenusComponent } from './features/menus/menus.component';
@@ -30,6 +31,7 @@ const routes: Routes = [
     { path: 'tags', component: TagsComponent, data: { state: Route.tags } },
     { path: 'meals', component: MealsComponent, data: { state: Route.meals }, children: [
       { path: '', component: MealPlaceholderComponent, pathMatch: 'full' },
+      { path: 'new', component: MealEditComponent },
       { path: ':id', component: MealDetailsComponent },
     ]},
     { path: 'dishes', component: DishesComponent, data: { state: Route.dishes }, children: [
