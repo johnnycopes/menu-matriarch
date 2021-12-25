@@ -33,11 +33,11 @@ interface TagModel {
 })
 export class DishEditComponent {
   private _routeId = this._route.snapshot.paramMap.get('id');
-  public dish$ = this._routeId
+  private _dish$ = this._routeId
     ? this._dishService.getDish(this._routeId)
     : of(undefined);
   public vm$ = combineLatest([
-    this.dish$,
+    this._dish$,
     this._tagService.getTags(),
   ]).pipe(
     map(([dish, tags]) => {
@@ -106,7 +106,7 @@ export class DishEditComponent {
         tap(newId => this._router.navigate(['..', newId], { relativeTo: this._route }))
       ).subscribe();
     } else {
-      this.dish$.pipe(
+      this._dish$.pipe(
         first(),
         concatMap(dish => {
           if (dish) {
