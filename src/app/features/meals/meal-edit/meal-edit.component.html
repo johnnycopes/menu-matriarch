@@ -1,57 +1,84 @@
 <ng-container *ngIf="vm$ | async as vm">
-  <app-dishes-list class="dishes">
-    <ng-template #dishTemplate
-      let-dish
-      let-activeDish="activeDish"
+  <form id="ngForm"
+    #form="ngForm"
+    (keydown.enter)="$event.preventDefault()"
+    (ngSubmit)="onSave(form)"
+  >
+    <app-dishes-list class="dishes"
+      ngModelGroup="dishes"
     >
-      <app-dish-card
-        [id]="dish.id"
-        [name]="dish.name"
-        [description]="dish.description"
-        [link]="dish.link"
-        [type]="dish.type"
-        [favorited]="dish.favorited"
-        [ingredients]="dish.ingredients"
-        [tags]="dish.tags"
-        [menus]="dish.menus"
-        [meals]="dish.meals"
-        [usages]="dish.usages"
-        [active]="activeDish === dish"
-      ></app-dish-card>
-    </ng-template>
-  </app-dishes-list>
+      <ng-template #dishTemplate
+        let-dish
+      >
+        <app-card>
+          <app-dish-summary
+            [id]="dish.id"
+            [name]="dish.name"
+            [description]="dish.description"
+            [link]="dish.link"
+            [tags]="dish.tags"
+            [menus]="dish.menus"
+            [meals]="dish.meals"
+            [usages]="dish.usages"
+          ></app-dish-summary>
+          <app-checkbox
+            [name]="dish.name"
+            [ngModel]="vm.mealDishesRecord[dish.id]"
+          >
+            Included in meal
+          </app-checkbox>
+        </app-card>
+      </ng-template>
+    </app-dishes-list>
 
-  <app-section *ngIf="vm.meal as meal">
-    <div class="app-section__toolbar">
-      <a app-button
-        buttonStyle="secondary"
-        routerLink=".."
-      >
-        Cancel
-      </a>
-      <button app-button
-        buttonStyle="primary"
-      >
-        Save
-      </button>
-    </div>
-    <div class="app-section__content">
-      <h2 class="name">
-        {{ meal.name }}
-      </h2>
-      <p *ngIf="meal.description"
-        class="description"
-      >
-        {{ meal.description }}
-      </p>
-      <div class="details">
-        <app-meal-summary
-          [dishes]="meal.dishes"
-          [fallbackText]="vm.fallbackText"
-          [orientation]="vm.orientation"
-          boundaries="labeled"
-        ></app-meal-summary>
+    <app-section>
+      <div class="app-section__toolbar">
+        <a app-button
+          buttonStyle="secondary"
+          routerLink=".."
+        >
+          Cancel
+        </a>
+        <button app-button
+          buttonStyle="primary"
+        >
+          Save
+        </button>
       </div>
-    </div>
-  </app-section>
+      <div class="app-section__content">
+        <app-input
+          label="name"
+        >
+          <input
+            id="name"
+            type="text"
+            name="name"
+            required
+            [ngModel]="vm.name"
+            #name="ngModel"
+            appAutofocus
+          />
+        </app-input>
+        <app-input
+          label="description"
+        >
+          <input
+            id="description"
+            type="text"
+            name="description"
+            [ngModel]="vm.description"
+            #description="ngModel"
+          />
+        </app-input>
+        <div class="details">
+          <app-meal-summary
+            [dishes]="vm.dishes"
+            [fallbackText]="vm.fallbackText"
+            [orientation]="vm.orientation"
+            boundaries="labeled"
+          ></app-meal-summary>
+        </div>
+      </div>
+    </app-section>
+  </form>
 </ng-container>
