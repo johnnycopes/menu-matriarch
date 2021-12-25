@@ -229,7 +229,7 @@ export class SeedDataService {
         createDishDto({
           id: tiramisuDishId,
           uid,
-          name: 'Tiramisù',
+          name: 'Tiramisu',
           description: 'Delicious coffee-flavored Italian cake',
           link: 'https://cooking.nytimes.com/recipes/1018684-classic-tiramisu',
           type: 'dessert',
