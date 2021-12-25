@@ -33,6 +33,7 @@ const routes: Routes = [
       { path: '', component: MealPlaceholderComponent, pathMatch: 'full' },
       { path: 'new', component: MealEditComponent },
       { path: ':id', component: MealDetailsComponent },
+      { path: ':id/edit', component: MealEditComponent },
     ]},
     { path: 'dishes', component: DishesComponent, data: { state: Route.dishes }, children: [
       { path: '', component: DishPlaceholderComponent, pathMatch: 'full' },
