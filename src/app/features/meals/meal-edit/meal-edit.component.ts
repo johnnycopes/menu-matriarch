@@ -11,7 +11,7 @@ import { getDishTypes } from '@utility/domain/get-dish-types';
 import { NgForm } from '@angular/forms';
 import { Dish } from '@models/dish.interface';
 
-interface IMealEditForm {
+interface MealEditForm {
   name: string;
   description: string;
   dishes: string[];
@@ -30,7 +30,7 @@ export class MealEditComponent {
   private _id$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('id'))
   );
-  private _dishChange$ = new Subject<FormDishes | null>();
+  private _formDishes$ = new Subject<FormDishes | null>();
   public vm$ = combineLatest([
     this._route.params.pipe(
       switchMap(({ id }) => {
@@ -42,7 +42,7 @@ export class MealEditComponent {
     ),
     this._dishService.getDishes(),
     this._userService.getPreferences(),
-    this._dishChange$.pipe(
+    this._formDishes$.pipe(
       startWith(null),
       distinctUntilChanged(),
     ),
@@ -88,11 +88,11 @@ export class MealEditComponent {
   ) { }
 
   public onDishChange(dishesModel: FormDishes): void {
-    this._dishChange$.next(dishesModel);
+    this._formDishes$.next(dishesModel);
   }
 
   public async onSave(form: NgForm): Promise<void> {
-    const details: IMealEditForm = {
+    const details: MealEditForm = {
       name: form.value.name,
       description: form.value.description,
       dishes: form.value.dishes,
