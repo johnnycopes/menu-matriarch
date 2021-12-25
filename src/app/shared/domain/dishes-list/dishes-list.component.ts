@@ -27,11 +27,11 @@ export class DishesListComponent {
         dishes, text: filterState.text, tagIds: filterState.tagIds,
       });
       return {
+        filteredDishes,
+        activeDish,
         tags,
         searchText: filterState.text,
         filters: filterState.tagIds,
-        filteredDishes,
-        activeDish,
         filterPanel: filterState.panel,
         initialTab: activeDish?.type ?? 'main',
         total: this._filterService.getTotalCount(filteredDishes),

@@ -24,14 +24,18 @@ export class MealsListComponent {
     this._routerService.activeMealId$,
   ]).pipe(
     map(([meals, tags, preferences, filterState, activeMealId]) => {
+      const filteredMeals = this._filterService.filterMeals({
+        meals, text: filterState.text, tagIds: filterState.tagIds,
+      });
       return {
-        meals,
+        filteredMeals,
+        activeMeal: meals.find(meal => meal.id === activeMealId),
         tags,
         preferences,
-        activeMeal: meals.find(meal => meal.id === activeMealId),
         searchText: filterState.text,
         filters: filterState.tagIds,
         filterPanel: filterState.panel,
+        total: filteredMeals.length,
       };
     })
   );

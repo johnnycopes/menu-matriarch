@@ -1,12 +1,12 @@
 <app-filterable-list *ngIf="vm$ | async as vm"
-  [total]="vm.meals.length"
+  [total]="vm.total"
   entity="Meal"
   newRoute="/meals/new"
 >
-  <ul *ngIf="vm.meals.length; else noMealsPlaceholder"
+  <ul *ngIf="vm.total; else noMealsPlaceholder"
     class="app-section__content"
     >
-    <li *ngFor="let meal of vm.meals; trackBy: trackByFn">
+    <li *ngFor="let meal of vm.filteredMeals; trackBy: trackByFn">
       <ng-container
         [ngTemplateOutlet]="mealTemplate"
         [ngTemplateOutletContext]="{

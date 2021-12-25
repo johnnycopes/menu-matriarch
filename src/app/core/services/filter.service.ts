@@ -5,7 +5,8 @@ import { first } from 'rxjs/operators';
 import { Dish } from '@models/dish.interface';
 import { DishType } from '@models/dish-type.type';
 import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
-import { getDishTypes } from '@shared/utility/domain/get-dish-types';
+import { Meal } from '@models/meal.interface';
+import { getDishTypes } from '@utility/domain/get-dish-types';
 import { lower } from '@utility/generic/format';
 
 interface State {
@@ -48,6 +49,20 @@ export class FilterService {
 
   public getTotalCount(filteredDishes: FilteredDishesGroup[]): number {
     return filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0);
+  }
+
+  public filterMeals({ meals, text, tagIds }: {
+    meals: Meal[],
+    text: string,
+    tagIds: string[],
+  }): Meal[] {
+    return meals.filter(meal => {
+      return (tagIds.length === 0 || meal.tags.some(tag => tagIds.includes(tag.id))) &&
+      (lower(meal.name).includes(lower(text)) ||
+      lower(meal.description).includes(lower(text)) ||
+      meal.dishes.some(dish => lower(dish.name).includes(lower(text))) ||
+      meal.tags.some(tag => lower(tag.name).includes(lower(text))));
+    });
   }
 
   public filterDishes({ dishes, text, tagIds }: {
