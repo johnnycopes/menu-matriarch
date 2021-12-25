@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, of, Subject } from 'rxjs';
-import { concatMap, distinctUntilChanged, first, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { concatMap, distinctUntilChanged, first, map, startWith, tap } from 'rxjs/operators';
 
+import { Dish } from '@models/dish.interface';
 import { DishService } from '@services/dish.service';
 import { MealService } from '@services/meal.service';
 import { UserService } from '@services/user.service';
-import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 import { getDishTypes } from '@utility/domain/get-dish-types';
-import { NgForm } from '@angular/forms';
-import { Dish } from '@models/dish.interface';
+import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 
 interface MealEditForm {
   name: string;
@@ -27,19 +27,13 @@ type FormDishes = Record<string, boolean>;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MealEditComponent {
-  private _id$ = this._route.paramMap.pipe(
-    map(paramMap => paramMap.get('id'))
-  );
+  private _routeId = this._route.snapshot.paramMap.get('id');
   private _formDishes$ = new Subject<FormDishes | null>();
+  public _meal$ = this._routeId
+    ? this._mealService.getMeal(this._routeId)
+    : of(undefined);
   public vm$ = combineLatest([
-    this._route.params.pipe(
-      switchMap(({ id }) => {
-        if (!id) {
-          return of(undefined);
-        }
-        return this._mealService.getMeal(id);
-      })
-    ),
+    this._meal$,
     this._dishService.getDishes(),
     this._userService.getPreferences(),
     this._formDishes$.pipe(
@@ -95,37 +89,30 @@ export class MealEditComponent {
     const details: MealEditForm = {
       name: form.value.name,
       description: form.value.description,
-      dishes: form.value.dishes,
+      dishes: Object
+        .entries<boolean>(form.value.dishes)
+        .filter(([key, checked]) => checked)
+        .map(([key, checked]) => key),
       tags: [],
     };
-    console.log(details);
-    // if (!this._routeId) {
-    //   this._dishService.createDish(details).pipe(
-    //     tap(newId => this._router.navigate(['..', newId], { relativeTo: this._route }))
-    //   ).subscribe();
-    // } else {
-    //   this.dish$.pipe(
-    //     first(),
-    //     concatMap(dish => {
-    //       if (dish) {
-    //         return this._dishService.updateDish(dish.id, details);
-    //       } else {
-    //         return of(undefined);
-    //       }
-    //     }),
-    //     tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
-    //   ).subscribe();
-    // }
+    if (!this._routeId) {
+      this._mealService.createMeal(details).pipe(
+        tap(newId => this._router.navigate(['..', newId], { relativeTo: this._route }))
+      ).subscribe();
+    } else {
+      this._meal$.pipe(
+        first(),
+        concatMap(meal => {
+          if (meal) {
+            return this._dishService.updateDish(meal.id, details);
+          } else {
+            return of(undefined);
+          }
+        }),
+        tap(() => this._router.navigate(['..'], { relativeTo: this._route }))
+      ).subscribe();
+    }
   }
-
-  // public onMealDishChange(dishId: string): void {
-  //   this._id$.pipe(
-  //     first(),
-  //     tap(mealId => {
-  //       this._mealService.updateMeal(mealId, { dishes: })
-  //     })
-  //   )
-  // }
 
   private _transformFormDishes(allDishes: Dish[], formDishes: Record<string, boolean>): Dish[] {
     const dishes: Dish[] = [];

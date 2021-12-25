@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { first, map, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Dish } from '@models/dish.interface';
 import { Meal } from '@models/meal.interface';
 import { Tag } from '@models/tag.interface';
+import { createMealDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
 import { BatchService } from './batch.service';
@@ -54,6 +55,26 @@ export class MealService {
       this._tagService.getTags(),
     ]).pipe(
       map(([meals, dishes, tags]) => meals.map(meal => this._getMeal(meal, dishes, tags)))
+    );
+  }
+
+  public createMeal(meal: Partial<Omit<MealDto, 'id' | 'uid'>>): Observable<string | undefined> {
+    return this._userService.uid$.pipe(
+      first(),
+      concatMap(async uid => {
+        if (uid) {
+          const id = this._firestoreService.createId();
+          // TODO: need to write this method in batch service to properly update included dishes' meal counts (and eventually tag counts)
+          await this._firestoreService.create<MealDto>(
+            this._endpoint,
+            id,
+            createMealDto({ id, uid, ...meal })
+          );
+          return id;
+        } else {
+          return undefined;
+        }
+      })
     );
   }
 
