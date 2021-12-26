@@ -7,7 +7,6 @@ import { Endpoint } from '@models/endpoint.enum';
 import { Dish } from '@models/dish.interface';
 import { Meal } from '@models/meal.interface';
 import { Tag } from '@models/tag.interface';
-import { createMealDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
 import { BatchService } from './batch.service';
