@@ -1,11 +1,12 @@
 <app-filterable-list *ngIf="vm$ | async as vm"
   [total]="vm.total"
   entity="Dish"
+  pluralEntity="Dishes"
   newRoute="/dishes/new"
 >
   <app-tabset>
     <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"
-      name="{{ group.type | appPlural : group.dishes.length }} ({{ group.dishes.length }})"
+      name="{{ group.type + 's' }} ({{ group.dishes.length }})"
       [selected]="vm.initialTab === group.type"
     >
       <ul *ngIf="group.dishes.length; else noDishesPlaceholder">

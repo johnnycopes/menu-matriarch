@@ -1,7 +1,7 @@
 <app-section *ngIf="tags$ | async as tags">
   <div class="app-section__toolbar">
     <h2 class="title">
-      {{ tags.length }} total
+      Tags ({{ tags.length }})
     </h2>
     <button app-button
       buttonStyle="primary"

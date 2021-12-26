@@ -14,6 +14,7 @@ import { TagService } from '@services/tag.service';
 export class FilterableListComponent {
   @Input() total = 0;
   @Input() entity = 'Item';
+  @Input() pluralEntity: string | undefined;
   @Input() newRoute = '';
 
   public vm$ = combineLatest([

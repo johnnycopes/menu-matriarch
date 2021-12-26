@@ -10,7 +10,7 @@
       <app-small-caps-label *ngIf="boundaries === 'labeled'"
         class="dish-type"
       >
-        {{ group.type | appPlural : group.dishes.length }}
+        {{ group.type + 's' }} ({{ group.dishes.length }})
       </app-small-caps-label>
       <ul class="dishes"
         [class.dishes--labeled]="boundaries === 'labeled'"

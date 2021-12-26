@@ -4,7 +4,7 @@
   <div class="app-section__toolbar">
     <div class="controls">
       <h2 class="title">
-        {{ total }} total
+        {{ entity | appPlural : 0 : pluralEntity }} ({{ total }})
       </h2>
       <app-search-input
         [text]="vm.searchText"

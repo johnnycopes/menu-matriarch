@@ -1,7 +1,7 @@
 <app-section *ngIf="menus$ | async as menus">
   <div class="app-section__toolbar">
     <h2 class="title">
-      {{ menus.length }} total
+      Menus ({{ menus.length }})
     </h2>
     <button app-button
       buttonStyle="primary"
