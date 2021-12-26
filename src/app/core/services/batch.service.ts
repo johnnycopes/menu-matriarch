@@ -13,7 +13,7 @@ import { Tag } from '@models/tag.interface';
 import { Meal } from '@models/meal.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
-import { createDishDto } from '@utility/domain/create-dtos';
+import { createDishDto, createMealDto } from '@utility/domain/create-dtos';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { FirestoreService } from './firestore.service';
@@ -48,6 +48,22 @@ export class BatchService {
 
   public getTagDoc(id: string): DocumentReference<TagDto> {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
+  }
+
+  public async createMeal({ uid, id, meal }: {
+    uid: string,
+    id: string,
+    meal: Partial<Omit<MealDto, 'id' | 'uid'>>
+  }): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    batch.set(this.getMealDoc(id), createMealDto({ id, uid, ...meal }));
+    if (meal.dishes) {
+      meal.dishes.forEach(dishId => batch.update(
+        this.getDishDoc(dishId),
+        { meals: this._firestoreService.addToArray(id) }
+      ));
+    }
+    await batch.commit();
   }
 
   public async createDish({ uid, id, dish }: {

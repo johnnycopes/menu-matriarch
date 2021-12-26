@@ -64,12 +64,7 @@ export class MealService {
       concatMap(async uid => {
         if (uid) {
           const id = this._firestoreService.createId();
-          // TODO: need to write this method in batch service to properly update included dishes' meal counts (and eventually tag counts)
-          await this._firestoreService.create<MealDto>(
-            this._endpoint,
-            id,
-            createMealDto({ id, uid, ...meal })
-          );
+          await this._batchService.createMeal({ uid, id, meal });
           return id;
         } else {
           return undefined;
