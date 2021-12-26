@@ -104,7 +104,7 @@ export class MealEditComponent {
         first(),
         concatMap(meal => {
           if (meal) {
-            return this._dishService.updateDish(meal.id, details);
+            return this._mealService.updateMeal(meal.id, details);
           } else {
             return of(undefined);
           }

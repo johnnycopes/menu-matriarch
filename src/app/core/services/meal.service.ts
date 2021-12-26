@@ -72,6 +72,21 @@ export class MealService {
     );
   }
 
+  public updateMeal(
+    id: string,
+    updates: Partial<Omit<MealDto, 'usages' | 'menus'>>
+  ): Observable<Meal | undefined> {
+    return this.getMeal(id).pipe(
+      first(),
+      tap(async meal => {
+        if (!meal) {
+          return;
+        }
+        await this._batchService.updateMeal(meal, updates);
+      })
+    );
+  }
+
   public deleteMeal(id: string): Observable<Meal | undefined> {
     return this.getMeal(id).pipe(
       first(),

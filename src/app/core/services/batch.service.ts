@@ -108,6 +108,21 @@ export class BatchService {
     await batch.commit();
   }
 
+  public async updateMeal(
+    meal: Meal,
+    updates: Partial<MealDto>
+  ): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    batch.update(this.getMealDoc(meal.id), updates);
+    if (updates.dishes) {
+      this._processUpdates(batch, this._getDishUpdates({
+        meal,
+        updateDishIds: updates.dishes
+      }));
+    }
+    await batch.commit();
+  }
+
   public async updateDish(
     dish: Dish,
     updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
@@ -266,6 +281,31 @@ export class BatchService {
         meals: this._firestoreService.removeFromArray(meal.id),
       },
     }));
+  }
+
+  private _getDishUpdates({ meal, updateDishIds = [] }: {
+    meal: Meal,
+    updateDishIds?: string[],
+  }): DocRefUpdate<DishDto, { meals: string[] }>[] {
+    const dishIds = meal.dishes.map(dish => dish.id)
+    const dishUpdates = [];
+    for (let id of dedupe(dishIds, updateDishIds)) {
+      let meals = undefined;
+
+      if (dishIds.includes(id) && !updateDishIds.includes(id)) {
+        meals = this._firestoreService.removeFromArray(meal.id);
+      } else if (!dishIds.includes(id) && updateDishIds.includes(id)) {
+        meals = this._firestoreService.addToArray(meal.id);
+      }
+
+      if (meals) {
+        dishUpdates.push({
+          docRef: this.getDishDoc(id),
+          updates: { meals },
+        });
+      }
+    }
+    return dishUpdates;
   }
 
   private _getTagsUpdates({ dish, updateTagIds = [] }: {
