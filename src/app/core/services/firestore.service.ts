@@ -73,12 +73,12 @@ export class FirestoreService {
     return this._firestore.createId();
   }
 
-  public addToArray(id: string): string[] {
-    return firebase.firestore.FieldValue.arrayUnion(id) as unknown as string[]
+  public addToArray(...ids: string[]): string[] {
+    return firebase.firestore.FieldValue.arrayUnion(...ids) as unknown as string[]
   }
 
-  public removeFromArray(id: string): string[] {
-    return firebase.firestore.FieldValue.arrayRemove(id) as unknown as string[]
+  public removeFromArray(...ids: string[]): string[] {
+    return firebase.firestore.FieldValue.arrayRemove(...ids) as unknown as string[]
   }
 
   public changeCounter(value: number): number {

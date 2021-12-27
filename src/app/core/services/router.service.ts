@@ -3,6 +3,7 @@ import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError }
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter, tap, distinctUntilChanged } from "rxjs/operators";
 
+import { PlannerView } from "@models/planner-view.type";
 import { Route } from "@models/route.enum";
 import { LocalStorageService } from "./local-storage.service";
 
@@ -17,12 +18,23 @@ import { LocalStorageService } from "./local-storage.service";
 export class RouterService {
   private _loading$ = new BehaviorSubject<boolean>(true);
   private _activeDishId$ = new BehaviorSubject<string>('');
+  private _activeMealId$ = new BehaviorSubject<string>('');
   private _routerEvents$ = this._router.events.pipe(
     filter((e): e is NavigationEnd => e instanceof NavigationEnd)
   );
 
   public get loading$(): Observable<boolean> {
     return this._loading$;
+  }
+
+  public get activePlannerView$(): Observable<PlannerView> {
+    return this._localStorageService.watchPlannerView();
+  }
+
+  public get activeMealId$(): Observable<string> {
+    return this._activeMealId$.pipe(
+      distinctUntilChanged()
+    );
   }
 
   public get activeDishId$(): Observable<string> {
@@ -59,6 +71,15 @@ export class RouterService {
     ).subscribe();
 
     this._routerEvents$.pipe(
+      filter(({ url }) => url.includes(Route.meals)),
+      tap(event => {
+        const divviedUrl = event.urlAfterRedirects.split('/');
+        const mealId = divviedUrl[2];
+        this._activeMealId$.next(mealId ?? '');
+      }),
+    ).subscribe();
+
+    this._routerEvents$.pipe(
       filter(({ url }) => url.includes(Route.dishes)),
       tap(event => {
         const divviedUrl = event.urlAfterRedirects.split('/');
@@ -77,5 +98,9 @@ export class RouterService {
         return [Route.planner, menuId];
       })
     );
+  }
+
+  public updatePlannerView(view: PlannerView): void {
+    this._localStorageService.setPlannerView(view);
   }
 }

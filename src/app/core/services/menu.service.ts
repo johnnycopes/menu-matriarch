@@ -83,13 +83,13 @@ export class MenuService {
     return this._updateMenu(id, { startDay });
   }
 
-  public updateMenuContents({ menu, day, dishId, selected }: {
+  public updateMenuContents({ menu, day, dishIds, selected }: {
     menu: Menu,
     day: Day,
-    dishId: string,
+    dishIds: string[],
     selected: boolean,
   }): Promise<void> {
-    return this._batchService.updateMenuContents({ menu, day, dishId, selected });
+    return this._batchService.updateMenuContents({ menu, day, dishIds, selected });
   }
 
   public async deleteMenu(id?: string): Promise<void> {

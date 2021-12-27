@@ -18,7 +18,6 @@
 "></ng-container>
 <div class="content"
   @fadeIn
-  [style.maxHeight]="contentMaxHeight"
   [@visibility]="contentVisibility"
   (@fadeIn.start)="onAnimationStart($event)"
   (@fadeIn.done)="onAnimationFinish($event)"

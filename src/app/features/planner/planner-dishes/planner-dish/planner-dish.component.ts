@@ -12,8 +12,7 @@ interface EntryModel {
 }
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: '[app-planner-dish]',
+  selector: 'app-planner-dish',
   templateUrl: './planner-dish.component.html',
   styleUrls: ['./planner-dish.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +25,7 @@ export class PlannerDishComponent {
   @Input() type: DishType = 'main';
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
+  @Input() meals: string[] = [];
   @Input() usages: number = 0;
   @Input()
   public set menu(menu: Menu | undefined) {

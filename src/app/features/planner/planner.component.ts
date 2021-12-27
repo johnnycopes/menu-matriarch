@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
+import { PlannerView } from '@models/planner-view.type';
 import { MenuService } from '@services/menu.service';
+import { RouterService } from '@services/router.service';
 
 @Component({
   selector: 'app-planner',
@@ -12,6 +14,7 @@ import { MenuService } from '@services/menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent {
+  public view$ = this._routerService.activePlannerView$;
   public menu$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('menuId') ?? 'NO_ID'),
     switchMap(menuId => this._menuService.getMenu(menuId)),
@@ -21,5 +24,10 @@ export class PlannerComponent {
   constructor(
     private _route: ActivatedRoute,
     private _menuService: MenuService,
+    private _routerService: RouterService,
   ) { }
+
+  public updatePlannerView(view: PlannerView): void {
+    this._routerService.updatePlannerView(view);
+  }
 }

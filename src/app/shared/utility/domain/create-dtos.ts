@@ -1,5 +1,6 @@
 import { UserDto } from "@models/dtos/user-dto.interface";
 import { MenuDto } from "@models/dtos/menu-dto.interface";
+import { MealDto } from "@models/dtos/meal-dto.interface";
 import { DishDto } from "@models/dtos/dish-dto.interface";
 import { TagDto } from "@models/dtos/tag-dto.interface";
 
@@ -37,8 +38,21 @@ export function createMenuDto({ id, uid, name, favorited, startDay, contents }: 
   };
 }
 
+export function createMealDto(
+  { id, uid, name, description, dishes, tags }: Partial<MealDto>
+): MealDto {
+  return {
+    id: id ?? '',
+    uid: uid ?? '',
+    name: name ?? '',
+    description: description ?? '',
+    dishes: dishes ?? [],
+    tags: tags ?? [],
+  };
+}
+
 export function createDishDto(
-  { id, uid, type, name, favorited, description, link, ingredients, tags, notes, menus, usages }: Partial<DishDto>
+  { id, uid, type, name, favorited, description, link, ingredients, meals, tags, notes, menus, usages }: Partial<DishDto>
 ): DishDto {
   return {
     id: id ?? '',
@@ -49,6 +63,7 @@ export function createDishDto(
     description: description ?? '',
     link: link ?? '',
     ingredients: ingredients ?? [],
+    meals: meals ?? [],
     tags: tags ?? [],
     notes: notes ?? '',
     menus: menus ?? [],
@@ -56,12 +71,13 @@ export function createDishDto(
   };
 }
 
-export function createTagDto({ id, uid, name, color, dishes }: Partial<TagDto>): TagDto {
+export function createTagDto({ id, uid, name, color, meals, dishes }: Partial<TagDto>): TagDto {
   return {
     id: id ?? '',
     uid: uid ?? '',
     name: name ?? '',
     color: color ?? '',
+    meals: meals ?? [],
     dishes: dishes ?? [],
   };
 }

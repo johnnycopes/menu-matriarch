@@ -1,0 +1,29 @@
+@import "main";
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: spacing(16);
+}
+
+.name {
+  font-weight: font-weight(bold);
+  color: color($neutral, 4);
+}
+
+.description {
+  font-size: font-size(14);
+  color: color($neutral, 6);
+  margin-top: spacing(8);
+}
+
+.schedule {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: spacing(8);
+
+  app-checkbox {
+    margin-right: spacing(16);
+  }
+}

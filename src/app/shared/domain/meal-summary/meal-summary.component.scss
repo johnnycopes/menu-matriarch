@@ -8,13 +8,21 @@
 .dishes {
   display: flex;
 
-  &:not(:first-child) {
-    padding-top: spacing(4);
+  &--labeled {
+    margin-bottom: spacing(8);
+    padding: spacing(4) spacing(8);
   }
 
-  &:not(:last-child) {
-    padding-bottom: spacing(4);
-    border-bottom: 1px solid color($neutral, 9);
+  &--unlabeled {
+
+    &:not(:first-child) {
+      padding-top: spacing(4);
+    }
+
+    &:not(:last-child) {
+      padding-bottom: spacing(4);
+      border-bottom: 1px solid color($neutral, 9);
+    }
   }
 
   &--horizontal {
@@ -24,6 +32,10 @@
   &--vertical {
     flex-direction: column;
   }
+}
+
+.dish-type {
+  margin-bottom: spacing(8);
 }
 
 .main {

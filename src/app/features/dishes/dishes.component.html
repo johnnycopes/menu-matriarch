@@ -1,66 +1,24 @@
-<app-section *ngIf="vm$ | async as vm"
-  class="dishes"
->
-  <div class="app-section__toolbar">
-    <div class="controls">
-      <h2 class="title">
-        {{ vm.total }} total
-      </h2>
-      <app-search-input
-        [text]="vm.searchText"
-        (textChange)="onSearchTextChange($event)"
-      ></app-search-input>
-      <app-filters-button class="button"
-        [count]="vm.filters.length"
-        [open]="vm.filterPanel"
-        (clicked)="onFiltersButtonClick()"
-      ></app-filters-button>
-      <a app-button
-        class="button"
-        routerLink="/dishes/new"
-      >
-        New Dish
-      </a>
-    </div>
-    <app-filters *ngIf="vm.filterPanel"
-      class="filters"
-      [tags]="vm.tags"
-      [selected]="vm.filters"
-      (selectedChange)="onFiltersChange($event)"
-      (selectedClear)="onFiltersChange([])"
-    ></app-filters>
-  </div>
-  <ul class="app-section__content">
-    <app-tabset>
-      <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"
-        name="{{ group.type }} ({{ group.dishes.length }})"
-        [selected]="vm.initialTab === group.type"
-      >
-        <ul *ngIf="group.dishes.length; else noDishesPlaceholder">
-          <li app-dish-card
-            *ngFor="let dish of group.dishes; trackBy: dishTrackByFn"
-            [id]="dish.id"
-            [name]="dish.name"
-            [description]="dish.description"
-            [link]="dish.link"
-            [type]="dish.type"
-            [favorited]="dish.favorited"
-            [ingredients]="dish.ingredients"
-            [tags]="dish.tags"
-            [menus]="dish.menus"
-            [usages]="dish.usages"
-            [active]="vm.activeDish === dish"
-          ></li>
-        </ul>
-        <ng-template #noDishesPlaceholder>
-          <div class="placeholder">
-            {{ group.placeholderText }}
-          </div>
-        </ng-template>
-      </app-tab>
-    </app-tabset>
-  </ul>
-</app-section>
+<app-dishes-list>
+  <ng-template #dishTemplate
+    let-dish
+    let-activeDish="activeDish"
+  >
+    <app-dish-card
+      [id]="dish.id"
+      [name]="dish.name"
+      [description]="dish.description"
+      [link]="dish.link"
+      [type]="dish.type"
+      [favorited]="dish.favorited"
+      [ingredients]="dish.ingredients"
+      [tags]="dish.tags"
+      [menus]="dish.menus"
+      [meals]="dish.meals"
+      [usages]="dish.usages"
+      [active]="activeDish === dish"
+    ></app-dish-card>
+  </ng-template>
+</app-dishes-list>
 
 <section>
   <router-outlet></router-outlet>

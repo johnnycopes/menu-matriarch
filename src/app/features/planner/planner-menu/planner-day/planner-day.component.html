@@ -1,4 +1,4 @@
-<app-small-caps-label>
+<app-small-caps-label class="day">
   <h3>
     {{ day }}
   </h3>
@@ -8,8 +8,8 @@
   ></fa-icon>
 </app-small-caps-label>
 
-<app-meal
+<app-meal-summary class="meal"
   [dishes]="dishes"
   [fallbackText]="fallbackText"
   [orientation]="orientation"
-></app-meal>
+></app-meal-summary>

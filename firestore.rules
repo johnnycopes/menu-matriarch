@@ -8,34 +8,42 @@ service cloud.firestore {
 
     // Then allow specific read/write permissions for accessed documents
     match /users/{uid} {
-    	allow read: if belongsToUser(request, resource);
-    	allow create: if isFromUser(request);
+      allow read: if belongsToUser(request, resource);
+      allow create: if isFromUser(request);
       allow update: if isFromUser(request)
-      	&& belongsToUser(request, resource);
+        && belongsToUser(request, resource);
       allow delete: if false;
     }
 
     match /menus/{menuId} {
-    	allow read: if belongsToUser(request, resource);
-    	allow create: if isFromUser(request);
+      allow read: if belongsToUser(request, resource);
+      allow create: if isFromUser(request);
       allow update: if isFromUser(request)
-      	&& belongsToUser(request, resource);
+        && belongsToUser(request, resource);
+      allow delete: if belongsToUser(request, resource);
+    }
+
+    match /meals/{mealId} {
+      allow read: if belongsToUser(request, resource);
+      allow create: if isFromUser(request);
+      allow update: if isFromUser(request)
+        && belongsToUser(request, resource);
       allow delete: if belongsToUser(request, resource);
     }
 
     match /dishes/{dishId} {
-    	allow read: if belongsToUser(request, resource);
-    	allow create: if isFromUser(request);
+      allow read: if belongsToUser(request, resource);
+      allow create: if isFromUser(request);
       allow update: if isFromUser(request)
-      	&& belongsToUser(request, resource);
+        && belongsToUser(request, resource);
       allow delete: if belongsToUser(request, resource);
     }
 
     match /tags/{tagId} {
-    	allow read: if belongsToUser(request, resource);
-    	allow create: if isFromUser(request);
+      allow read: if belongsToUser(request, resource);
+      allow create: if isFromUser(request);
       allow update: if isFromUser(request)
-      	&& belongsToUser(request, resource);
+        && belongsToUser(request, resource);
       allow delete: if belongsToUser(request, resource);
     }
 

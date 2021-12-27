@@ -1,6 +1,6 @@
 @import "main";
 
-app-small-caps-label {
+.day {
   display: flex;
   justify-content: space-between;
   margin-bottom: spacing(8);
@@ -10,7 +10,7 @@ fa-icon {
   cursor: pointer;
 }
 
-app-meal {
+.meal {
   margin-bottom: spacing(8);
   padding: spacing(4) spacing(8);
 }

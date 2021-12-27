@@ -7,12 +7,12 @@ import { getDishTypes } from '@shared/utility/domain/get-dish-types';
 import { trackByDishType, trackById } from '@utility/domain/track-by-functions';
 
 @Component({
-  selector: 'app-meal',
-  templateUrl: './meal.component.html',
-  styleUrls: ['./meal.component.scss'],
+  selector: 'app-meal-summary',
+  templateUrl: './meal-summary.component.html',
+  styleUrls: ['./meal-summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MealComponent {
+export class MealSummaryComponent {
   @Input()
   set dishes(dishes: Dish[]) {
     this.dishesGroups = getDishTypes().map(type => ({
@@ -21,6 +21,7 @@ export class MealComponent {
     }));
     this.showFallback = !dishes.length;
   }
+  @Input() boundaries: 'labeled' | 'unlabeled' = 'unlabeled';
   @Input() fallbackText = '';
   @Input() orientation: Orientation = 'horizontal';
   public dishesGroups: FilteredDishesGroup[] = [];

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { createDishDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
+import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
 import { BatchService } from './batch.service';
 import { FirestoreService } from './firestore.service';
 
@@ -21,6 +21,8 @@ export class SeedDataService {
   }): Promise<string> {
     const batch = this._firestoreService.getBatch();
     const menuId = this._firestoreService.createId();
+    const southernClassicMealId = this._firestoreService.createId();
+    const sushiDinnerMealId = this._firestoreService.createId();
     const cornbreadDishId = this._firestoreService.createId();
     const enchiladasDishId = this._firestoreService.createId();
     const friedChickenDishId = this._firestoreService.createId();
@@ -57,6 +59,24 @@ export class SeedDataService {
         }}),
       )
       .set(
+        this._batchService.getMealDoc(southernClassicMealId),
+        createMealDto({
+          id: southernClassicMealId,
+          uid,
+          name: 'Southern Classic',
+          dishes: [cornbreadDishId, friedChickenDishId, macAndCheeseDishId],
+        })
+      )
+      .set(
+        this._batchService.getMealDoc(sushiDinnerMealId),
+        createMealDto({
+          id: sushiDinnerMealId,
+          uid,
+          name: 'Sushi Dinner',
+          dishes: [sushiDishId, misoSoupDishId],
+        })
+      )
+      .set(
         this._batchService.getDishDoc(cornbreadDishId),
         createDishDto({
           id: cornbreadDishId,
@@ -66,6 +86,7 @@ export class SeedDataService {
           type: 'side',
           link: 'https://cooking.nytimes.com/recipes/1016965-brown-butter-skillet-cornbread',
           menus: [menuId],
+          meals: [southernClassicMealId],
           tags: [vegetarianTagId],
           usages: 1,
         })
@@ -89,6 +110,7 @@ export class SeedDataService {
           name: 'Fried Chicken',
           link: 'https://cooking.nytimes.com/recipes/1018219-buttermilk-fried-chicken',
           menus: [menuId],
+          meals: [southernClassicMealId],
           usages: 1,
         })
       )
@@ -111,6 +133,7 @@ export class SeedDataService {
           type: 'side',
           link: 'https://cooking.nytimes.com/recipes/1015825-creamy-macaroni-and-cheese',
           menus: [menuId],
+          meals: [southernClassicMealId],
           tags: [vegetarianTagId],
           usages: 1,
         })
@@ -123,6 +146,7 @@ export class SeedDataService {
           name: 'Miso Soup',
           type: 'side',
           menus: [menuId],
+          meals: [sushiDinnerMealId],
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
         })
@@ -183,6 +207,7 @@ export class SeedDataService {
           name: 'Sushi',
           description: 'Delicious tiny vessels from Japan',
           menus: [menuId],
+          meals: [sushiDinnerMealId],
           tags: [pescatarianTagId],
           usages: 1,
         })
@@ -204,7 +229,7 @@ export class SeedDataService {
         createDishDto({
           id: tiramisuDishId,
           uid,
-          name: 'Tiramisù',
+          name: 'Tiramisu',
           description: 'Delicious coffee-flavored Italian cake',
           link: 'https://cooking.nytimes.com/recipes/1018684-classic-tiramisu',
           type: 'dessert',

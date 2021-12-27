@@ -1,55 +1,64 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
-import { DishType } from '@models/dish-type.type';
 import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
-import { getDishTypes } from '@shared/utility/domain/get-dish-types';
+import { Meal } from '@models/meal.interface';
+import { Tag } from '@models/tag.interface';
+import { getDishTypes } from '@utility/domain/get-dish-types';
 import { lower } from '@utility/generic/format';
+
+interface State {
+  panel: boolean;
+  tagIds: string[];
+  text: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
-  private _panel$ = new BehaviorSubject<boolean>(false);
-  private _tagIds$ = new BehaviorSubject<string[]>([]);
-  private _text$ = new BehaviorSubject<string>('');
+  private _state$ = new BehaviorSubject<State>({
+    panel: false,
+    tagIds: [],
+    text: '',
+  });
 
-  public get panel$(): Observable<boolean> {
-    return this._panel$.pipe(
-      distinctUntilChanged(),
-    );
-  }
-
-  public get tagIds$(): Observable<string[]> {
-    return this._tagIds$.pipe(
-      distinctUntilChanged(),
-    );
-  }
-
-  public get text$(): Observable<string> {
-    return this._text$.pipe(
-      distinctUntilChanged(),
-    );
+  public get state$(): Observable<State> {
+    return this._state$.asObservable();
   }
 
   public togglePanel(): void {
-    this.panel$.pipe(
+    this._state$.pipe(
       first(),
-    ).subscribe(value => this._panel$.next(!value));
+    ).subscribe(state => this._state$.next({ ...state, panel: !state.panel }));
   }
 
-  public updateTagIds(ids: string[]): void {
-    this._tagIds$.next(ids);
+  public updateTagIds(tagIds: string[]): void {
+    this._state$.pipe(
+      first(),
+    ).subscribe(state => this._state$.next({ ...state, tagIds }));
   }
 
   public updateText(text: string): void {
-    this._text$.next(text);
+    this._state$.pipe(
+      first(),
+    ).subscribe(state => this._state$.next({ ...state, text }));
   }
 
-  public getTotalCount(filteredDishes: FilteredDishesGroup[]): number {
-    return filteredDishes.reduce((total, { dishes }) => total + dishes.length, 0);
+  public filterMeals({ meals, text, tagIds }: {
+    meals: Meal[],
+    text: string,
+    tagIds: string[],
+  }): Meal[] {
+    return meals.filter(meal => {
+      return this._filterEntity({
+        name: meal.name, description: meal.description, tags: meal.tags, text, tagIds,
+      }) || meal.dishes.some(dish => this._filterEntity({
+        name: dish.name, description: dish.description, tags: [], text, tagIds,
+      }));
+    });
   }
 
   public filterDishes({ dishes, text, tagIds }: {
@@ -59,25 +68,35 @@ export class FilterService {
   }): FilteredDishesGroup[] {
     return getDishTypes().map(type => ({
       type,
-      dishes: dishes.filter(dish => this._filterDish({
-        dish, type, text, tagIds
-      })),
+      dishes: dishes.filter(dish =>
+        dish.type === type && this._filterEntity({
+          name: dish.name,
+          description: dish.description,
+          tags: dish.tags,
+          text,
+          tagIds,
+        })
+      ),
       placeholderText: `No ${type !== 'dessert'
         ? `${type} dishes`
         : `${type}s`} to display`,
     }));
   }
 
-  private _filterDish({ dish, type, text, tagIds }: {
-    dish: Dish,
-    type: DishType,
+  private _filterEntity({ name, description, tags, text, tagIds }: {
+    name: string,
+    description: string,
+    tags: Tag[],
     text: string,
     tagIds: string[],
-  }): boolean {
-    return dish.type === type &&
-      (tagIds.length === 0 || dish.tags.some(tag => tagIds.includes(tag.id))) &&
-      (lower(dish.name).includes(lower(text)) ||
-      lower(dish.description).includes(lower(text)) ||
-      dish.tags.some(tag => lower(tag.name).includes(lower(text))));
+  }) {
+    return (
+      (tagIds.length === 0 || tags.some(tag => tagIds.includes(tag.id)))) &&
+      (
+        lower(name).includes(lower(text)) ||
+        lower(description).includes(lower(text)) ||
+        tags.some(tag => lower(tag.name).includes(lower(text))
+      )
+    );
   }
 }
