@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { PlannerView } from '@models/planner-view.type';
 import { MenuService } from '@services/menu.service';
