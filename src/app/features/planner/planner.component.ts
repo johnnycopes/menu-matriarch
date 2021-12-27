@@ -14,7 +14,7 @@ import { RouterService } from '@services/router.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent {
-  public view$ = this._routerService.activePlannerView$.pipe(tap(console.log));
+  public view$ = this._routerService.activePlannerView$;
   public menu$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('menuId') ?? 'NO_ID'),
     switchMap(menuId => this._menuService.getMenu(menuId)),

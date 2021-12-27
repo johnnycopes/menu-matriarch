@@ -74,7 +74,7 @@ export class MealService {
 
   public updateMeal(
     id: string,
-    updates: Partial<Omit<MealDto, 'usages' | 'menus'>>
+    updates: Partial<MealDto>
   ): Observable<Meal | undefined> {
     return this.getMeal(id).pipe(
       first(),
