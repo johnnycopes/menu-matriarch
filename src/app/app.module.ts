@@ -38,6 +38,7 @@ import { PlannerComponent } from './features/planner/planner.component';
 import { PlannerDayComponent } from './features/planner/planner-menu/planner-day/planner-day.component';
 import { PlannerDishComponent } from './features/planner/planner-dishes/planner-dish/planner-dish.component';
 import { PlannerDishesComponent } from './features/planner/planner-dishes/planner-dishes.component';
+import { PlannerMealsComponent } from './features/planner/planner-meals/planner-meals.component';
 import { PlannerMenuComponent } from './features/planner/planner-menu/planner-menu.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { ShellComponent } from './core/components/shell/shell.component';
@@ -69,6 +70,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     PlannerDayComponent,
     PlannerDishComponent,
     PlannerDishesComponent,
+    PlannerMealsComponent,
     PlannerMenuComponent,
     SettingsComponent,
     ShellComponent,

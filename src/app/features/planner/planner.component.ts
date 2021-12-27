@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { MenuService } from '@services/menu.service';
+
+type PlannerView = 'dishes' | 'meals';
 
 @Component({
   selector: 'app-planner',
@@ -12,6 +14,7 @@ import { MenuService } from '@services/menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent {
+  public view$ = new BehaviorSubject<PlannerView>('meals');
   public menu$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('menuId') ?? 'NO_ID'),
     switchMap(menuId => this._menuService.getMenu(menuId)),

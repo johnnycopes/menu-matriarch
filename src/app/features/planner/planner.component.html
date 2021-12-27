@@ -1,9 +1,18 @@
 <ng-container *ngIf="menu$ | async as menu">
   <ng-container *ngIf="menu !== 'INVALID'; else invalidMenuTemplate">
-    <app-planner-dishes [menu]="menu">
-    </app-planner-dishes>
-    <app-planner-menu [menu]="menu">
-    </app-planner-menu>
+    <ng-container *ngIf="view$ | async as view">
+      <app-planner-dishes class="left"
+        *ngIf="view === 'dishes'"
+        [menu]="menu"
+      ></app-planner-dishes>
+      <app-planner-meals class="left"
+        *ngIf="view === 'meals'"
+        [menu]="menu"
+      ></app-planner-meals>
+    </ng-container>
+    <app-planner-menu class="right"
+      [menu]="menu"
+    ></app-planner-menu>
   </ng-container>
 
   <ng-template #invalidMenuTemplate>
