@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
@@ -12,6 +12,7 @@ import { MenuService } from '@services/menu.service';
 })
 export class PlannerDishesComponent {
   @Input() menu: Menu | undefined;
+  @Output() nameDblClick = new EventEmitter<void>();
 
   constructor(private _menuService: MenuService) { }
 

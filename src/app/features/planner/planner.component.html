@@ -4,10 +4,12 @@
       <app-planner-dishes class="left"
         *ngIf="view === 'dishes'"
         [menu]="menu"
+        (nameDblClick)="view$.next('meals')"
       ></app-planner-dishes>
       <app-planner-meals class="left"
         *ngIf="view === 'meals'"
         [menu]="menu"
+        (nameDblClick)="view$.next('dishes')"
       ></app-planner-meals>
     </ng-container>
     <app-planner-menu class="right"

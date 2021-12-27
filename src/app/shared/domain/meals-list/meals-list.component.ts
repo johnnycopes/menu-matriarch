@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ContentChild, TemplateRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ContentChild, TemplateRef, EventEmitter, Output } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,6 +16,7 @@ import { trackById } from '@utility/domain/track-by-functions';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MealsListComponent {
+  @Output() nameDblClick = new EventEmitter<void>();
   public vm$ = combineLatest([
     this._mealService.getMeals(),
     this._tagService.getTags(),

@@ -3,6 +3,7 @@
   entity="Dish"
   pluralEntity="Dishes"
   newRoute="/dishes/new"
+  (nameDblClick)="nameDblClick.emit()"
 >
   <app-tabset>
     <app-tab *ngFor="let group of vm.filteredDishes; trackBy: groupTrackByFn"

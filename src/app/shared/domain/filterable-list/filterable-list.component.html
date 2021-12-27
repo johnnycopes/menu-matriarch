@@ -3,7 +3,9 @@
 >
   <div class="app-section__toolbar">
     <div class="controls">
-      <h2 class="title">
+      <h2 class="title"
+        (dblclick)="nameDblClick.emit()"
+      >
         {{ entity | appPlural : 0 : pluralEntity }} ({{ total }})
       </h2>
       <app-search-input

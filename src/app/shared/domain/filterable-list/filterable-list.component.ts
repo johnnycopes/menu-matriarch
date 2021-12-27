@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, EventEmitter, Input, Output } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,6 +16,7 @@ export class FilterableListComponent {
   @Input() entity = 'Item';
   @Input() pluralEntity: string | undefined;
   @Input() newRoute = '';
+  @Output() nameDblClick = new EventEmitter<void>();
 
   public vm$ = combineLatest([
     this._filterService.state$,

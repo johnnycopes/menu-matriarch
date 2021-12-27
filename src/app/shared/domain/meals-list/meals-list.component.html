@@ -2,6 +2,7 @@
   [total]="vm.total"
   entity="Meal"
   newRoute="/meals/new"
+  (nameDblClick)="nameDblClick.emit()"
 >
   <ul *ngIf="vm.total; else noMealsPlaceholder"
     class="app-section__content"

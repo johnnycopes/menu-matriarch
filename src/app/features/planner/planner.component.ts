@@ -14,7 +14,7 @@ type PlannerView = 'dishes' | 'meals';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerComponent {
-  public view$ = new BehaviorSubject<PlannerView>('meals');
+  public view$ = new BehaviorSubject<PlannerView>('dishes');
   public menu$ = this._route.paramMap.pipe(
     map(paramMap => paramMap.get('menuId') ?? 'NO_ID'),
     switchMap(menuId => this._menuService.getMenu(menuId)),
