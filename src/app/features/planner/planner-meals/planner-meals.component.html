@@ -12,6 +12,8 @@
       [tags]="meal.tags"
       [fallbackText]="fallbackText"
       [orientation]="orientation"
+      [menu]="menu"
+      (dayChange)="onDayChange(menu, $event)"
     ></app-planner-meal>
   </ng-template>
 </app-meals-list>

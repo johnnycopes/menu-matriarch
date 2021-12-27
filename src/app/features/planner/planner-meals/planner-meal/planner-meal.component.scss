@@ -17,3 +17,13 @@
   color: color($neutral, 6);
   margin-top: spacing(8);
 }
+
+.schedule {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: spacing(8);
+
+  app-checkbox {
+    margin-right: spacing(16);
+  }
+}
