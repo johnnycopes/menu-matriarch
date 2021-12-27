@@ -4,6 +4,14 @@
     let-fallbackText="fallbackText"
     let-orientation="orientation"
   >
-    {{ meal.name }}
+    <app-planner-meal
+      [id]="meal.id"
+      [name]="meal.name"
+      [description]="meal.description"
+      [dishes]="meal.dishes"
+      [tags]="meal.tags"
+      [fallbackText]="fallbackText"
+      [orientation]="orientation"
+    ></app-planner-meal>
   </ng-template>
 </app-meals-list>
