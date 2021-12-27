@@ -3,6 +3,7 @@ import { Router, NavigationEnd, RouterEvent, NavigationCancel, NavigationError }
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter, tap, distinctUntilChanged } from "rxjs/operators";
 
+import { PlannerView } from "@models/planner-view.type";
 import { Route } from "@models/route.enum";
 import { LocalStorageService } from "./local-storage.service";
 
@@ -24,6 +25,10 @@ export class RouterService {
 
   public get loading$(): Observable<boolean> {
     return this._loading$;
+  }
+
+  public get activePlannerView$(): Observable<PlannerView> {
+    return this._localStorageService.watchPlannerView();
   }
 
   public get activeMealId$(): Observable<string> {
@@ -93,5 +98,9 @@ export class RouterService {
         return [Route.planner, menuId];
       })
     );
+  }
+
+  public updatePlannerView(view: PlannerView): void {
+    this._localStorageService.setPlannerView(view);
   }
 }
