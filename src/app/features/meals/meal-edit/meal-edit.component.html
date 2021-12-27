@@ -39,9 +39,10 @@
         >
           Cancel
         </a>
+        <!-- TODO: create form validator -->
         <button app-button
           buttonStyle="primary"
-          [disabled]="!form.valid"
+          [disabled]="!form.valid || !vm.dishesModel.length"
         >
           Save
         </button>
