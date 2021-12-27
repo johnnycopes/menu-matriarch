@@ -24,13 +24,11 @@ export class PlannerMealsComponent {
     if (!menu) {
       return;
     }
-    console.log({ dishes, day, selected });
-    // TODO: update menuService to handle multiple dish updates at once
-    // return this._menuService.updateMenuContents({
-    //   menu,
-    //   dishId: id,
-    //   day,
-    //   selected
-    // });
+    return this._menuService.updateMenuContents({
+      menu,
+      dishIds: dishes.map(dish => dish.id),
+      day,
+      selected
+    });
   }
 }

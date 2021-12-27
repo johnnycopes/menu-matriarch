@@ -83,17 +83,17 @@ export class BatchService {
   }
 
   public async updateMenuContents({
-    menu, dishId, day, selected
+    menu, dishIds, day, selected
   }: {
     menu: Menu,
-    dishId: string,
+    dishIds: string[],
     day: Day,
     selected: boolean,
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
     this._processUpdates(batch, [
       ...this._getDishesMenuUpdates({
-        dishIds: [dishId],
+        dishIds,
         menu,
         change: selected ? 'increment' : 'decrement'
       }),
@@ -101,8 +101,8 @@ export class BatchService {
         menuIds: [menu.id],
         day,
         getDishes: selected
-          ? () => this._firestoreService.addToArray(dishId)
-          : () => this._firestoreService.removeFromArray(dishId)
+          ? () => this._firestoreService.addToArray(...dishIds)
+          : () => this._firestoreService.removeFromArray(...dishIds)
       }),
     ]);
     await batch.commit();

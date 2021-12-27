@@ -25,7 +25,7 @@ export class PlannerDishesComponent {
     }
     return this._menuService.updateMenuContents({
       menu,
-      dishId: id,
+      dishIds: [id],
       day,
       selected
     });
