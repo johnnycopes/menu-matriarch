@@ -19,14 +19,14 @@ export class PlannerMealsComponent {
 
   public async onDayChange(
     menu: Menu | undefined,
-    { dishes, day, selected }: { dishes: Dish[], day: Day, selected: boolean }
+    { dishIds, day, selected }: { dishIds: string[], day: Day, selected: boolean }
   ): Promise<void> {
     if (!menu) {
       return;
     }
     return this._menuService.updateMenuContents({
       menu,
-      dishIds: dishes.map(dish => dish.id),
+      dishIds,
       day,
       selected
     });

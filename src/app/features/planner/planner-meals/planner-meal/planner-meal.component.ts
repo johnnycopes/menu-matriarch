@@ -9,7 +9,9 @@ import { trackByDay } from '@utility/domain/track-by-functions';
 
 interface EntryModel {
   day: Day;
+  dishIds: string[];
   checked: boolean;
+  indeterminate: boolean;
 }
 
 @Component({
@@ -29,16 +31,40 @@ export class PlannerMealComponent {
   @Input()
   public set menu(menu: Menu | undefined) {
     this.entryModels = menu?.entries.map(entry => {
+      const mealDishIds = this.dishes.map(dish => dish.id);
+      const entryDishIds = entry.dishes.map(dish => dish.id);
+      const { checked, indeterminate } = this._compare(mealDishIds, entryDishIds);
       return {
         day: entry.day,
-        // TODO: write correct states in model
-        // checked: !!entry.dishes.find(dish => dish.id === this.id),
-        checked: false,
+        dishIds: indeterminate
+          ? mealDishIds.filter(id => !entryDishIds.includes(id))
+          : mealDishIds
+        ,
+        checked,
+        indeterminate,
       };
     }) ?? [];
   };
-  @Output() dayChange = new EventEmitter<{ dishes: Dish[], day: Day, selected: boolean }>();
-
+  @Output() dayChange = new EventEmitter<{ dishIds: string[], day: Day, selected: boolean }>();
   public entryModels: EntryModel[] = [];
   public readonly trackByFn = trackByDay;
+
+  private _compare(
+    mealDishIds: string[],
+    entryDishIds: string[],
+  ): { checked: boolean, indeterminate: boolean } {
+    if (entryDishIds.length === 0) {
+      return { checked: false, indeterminate: false };
+    }
+    let matches = 0;
+    for (let mealDishId of mealDishIds) {
+      if (entryDishIds.includes(mealDishId)) {
+        matches++;
+      }
+    }
+    return {
+      checked: matches === mealDishIds.length,
+      indeterminate: matches > 0 && matches < mealDishIds.length,
+    };
+  }
 }
