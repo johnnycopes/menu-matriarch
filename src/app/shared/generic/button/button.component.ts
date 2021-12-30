@@ -15,6 +15,10 @@ export class ButtonComponent {
   @Input() buttonStyle: ButtonStyle = 'primary';
   @Input() icon: IconDefinition | undefined;
 
+  @Input()
+  @HostBinding('attr.type')
+  public type: 'submit' | 'button' | 'reset' = 'button';
+
   @HostBinding('class')
   public get hostClasses(): { [key: string]: boolean } {
     return {
