@@ -47,7 +47,7 @@ export class MealEditComponent {
         : meal?.dishes ?? [];
       const dishesModel = dishes.map(dish => dish.id);
       const fallbackText = preferences?.emptyMealText ?? '';
-      const orientation = preferences?.menuOrientation ?? 'horizontal';
+      const orientation = preferences?.mealOrientation ?? 'horizontal';
       if (!meal) {
         return {
           name: '',

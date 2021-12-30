@@ -32,7 +32,7 @@ export class MealDetailsComponent {
     map(([meal, preferences]) => ({
       meal,
       fallbackText: preferences?.emptyMealText ?? '',
-      orientation: preferences?.menuOrientation ?? 'horizontal',
+      orientation: preferences?.mealOrientation ?? 'horizontal',
     }))
   );
   public readonly dishTypes = getDishTypes();

@@ -14,7 +14,7 @@ export function createUserDto({ uid, name, email, preferences }: Partial<UserDto
       dayNameDisplay: preferences?.dayNameDisplay ?? 'full',
       defaultMenuStartDay: preferences?.defaultMenuStartDay ?? 'Monday',
       emptyMealText: preferences?.emptyMealText ?? 'undecided',
-      menuOrientation: preferences?.menuOrientation ?? 'horizontal',
+      mealOrientation: preferences?.mealOrientation ?? 'horizontal',
     },
   }
 }

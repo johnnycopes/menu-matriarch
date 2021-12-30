@@ -7,5 +7,5 @@ export interface UserPreferences {
   dayNameDisplay: DayNameDisplay;
   defaultMenuStartDay: Day;
   emptyMealText: string;
-  menuOrientation: Orientation;
+  mealOrientation: Orientation;
 }

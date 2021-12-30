@@ -69,7 +69,7 @@ export class UserService {
           dayNameDisplay: 'full',
           defaultMenuStartDay: 'Monday',
           emptyMealText: 'undecided',
-          menuOrientation: 'horizontal',
+          mealOrientation: 'horizontal',
         };
         await this._firestoreService.update<UserDto>(
           this._endpoint,
@@ -80,7 +80,7 @@ export class UserService {
               dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
               defaultMenuStartDay: updates?.defaultMenuStartDay ?? fallbackPreferences.defaultMenuStartDay,
               emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
-              menuOrientation: updates?.menuOrientation ?? fallbackPreferences.menuOrientation,
+              mealOrientation: updates?.mealOrientation ?? fallbackPreferences.mealOrientation,
             },
           }
         );
