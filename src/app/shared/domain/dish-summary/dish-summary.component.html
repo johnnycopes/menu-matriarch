@@ -37,13 +37,13 @@
   {{ description }}
 </p>
 
-<ul *ngIf="tags.length"
-  class="tags"
+<app-tags-list class="tags"
+  [tags]="tags"
 >
-  <li *ngFor="let tag of tags; trackBy: trackByFn">
+  <ng-template #tagTemplate let-tag>
     <app-tag
       [id]="tag.id"
       [name]="tag.name"
     ></app-tag>
-  </li>
-</ul>
+  </ng-template>
+</app-tags-list>

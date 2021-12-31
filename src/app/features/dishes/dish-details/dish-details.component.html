@@ -38,16 +38,17 @@
       </p>
     </div>
     <div class="details">
-      <ul *ngIf="dish.tags.length; else noTagsTemplate"
-        class="tags"
+      <app-tags-list
+        *ngIf="dish.tags.length; else noTagsTemplate"
+        [tags]="dish.tags"
       >
-        <li *ngFor="let tag of dish.tags; trackBy: tagTrackByFn">
+        <ng-template #tagTemplate let-tag>
           <app-tag
             [id]="tag.id"
             [name]="tag.name"
           ></app-tag>
-        </li>
-      </ul>
+        </ng-template>
+      </app-tags-list>
       <ng-template #noTagsTemplate>
         No tags selected
       </ng-template>
