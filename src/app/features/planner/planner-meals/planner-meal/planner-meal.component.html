@@ -4,12 +4,23 @@
       <h3 class="name">
         {{ name }}
       </h3>
-      <p *ngIf="description"
-        class="description"
-      >
-        {{ description }}
-      </p>
     </a>
+    <p *ngIf="description"
+      class="description"
+    >
+      {{ description }}
+    </p>
+    <app-tags-list *ngIf="tags.length"
+      class="tags"
+      [tags]="tags"
+    >
+      <ng-template #tagTemplate let-tag>
+        <app-tag
+          [id]="tag.id"
+          [name]="tag.name"
+        ></app-tag>
+      </ng-template>
+    </app-tags-list>
   </div>
   <app-meal-summary
     [dishes]="dishes"
