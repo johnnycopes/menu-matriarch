@@ -7,5 +7,10 @@
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: spacing(8);
+  column-gap: spacing(8);
+  row-gap: spacing(8);
+
+  &--interactive {
+    column-gap: spacing(16);
+  }
 }

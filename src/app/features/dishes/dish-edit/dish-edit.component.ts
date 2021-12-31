@@ -5,10 +5,11 @@ import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/dish-type.type';
+import { Tag } from '@models/tag.interface';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
-import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
+import { trackBySelf } from '@utility/domain/track-by-functions';
 
 interface DishEditForm {
   name: string;
@@ -19,9 +20,7 @@ interface DishEditForm {
   notes: string;
 }
 
-interface TagModel {
-  id: string,
-  name: string;
+interface TagModel extends Tag {
   checked: boolean;
 }
 
@@ -48,8 +47,7 @@ export class DishEditComponent {
           link: '',
           type: 'main',
           tags: tags.map<TagModel>(tag => ({
-            id: tag.id,
-            name: tag.name,
+            ...tag,
             checked: false,
           })),
           notes: '',
@@ -58,8 +56,7 @@ export class DishEditComponent {
         return {
           ...dish,
           tags: tags.map<TagModel>(tag => ({
-            id: tag.id,
-            name: tag.name,
+            ...tag,
             checked: !!dish?.tags.find(dishTag => dishTag.id === tag.id)
           })),
         };
@@ -80,7 +77,6 @@ export class DishEditComponent {
       bullist numlist outdent indent | removeformat | help`,
   };
   public readonly typeTrackByFn = trackBySelf;
-  public readonly tagTrackByFn = trackById;
 
   constructor(
     private _route: ActivatedRoute,

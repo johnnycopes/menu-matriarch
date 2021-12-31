@@ -8,8 +8,9 @@ import { trackById } from '@shared/utility/domain/track-by-functions';
   styleUrls: ['./tags-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagsListComponent {
-  @Input() tags: Tag[] = [];
+export class TagsListComponent<T extends Tag> {
+  @Input() tags: T[] = [];
+  @Input() interactive = false;
   public readonly trackByFn = trackById;
 
   @ContentChild('tagTemplate')

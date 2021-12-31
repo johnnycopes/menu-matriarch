@@ -76,13 +76,14 @@
     <app-input
       label="tags"
     >
-      <ul *ngIf="vm.tags.length; else noTagsPlaceholder"
+      <app-tags-list
+        *ngIf="vm.tags.length; else noTagsPlaceholder"
         class="tags"
         ngModelGroup="tags"
+        [tags]="vm.tags"
+        [interactive]="true"
       >
-        <li *ngFor="let tag of vm.tags; trackBy: tagTrackByFn"
-          class="tag"
-        >
+        <ng-template #tagTemplate let-tag>
           <app-checkbox
             [name]="tag.id"
             [ngModel]="tag.checked"
@@ -92,8 +93,8 @@
               [name]="tag.name"
             ></app-tag>
           </app-checkbox>
-        </li>
-      </ul>
+        </ng-template>
+      </app-tags-list>
       <ng-template #noTagsPlaceholder>
         <div class="placeholder">
           <p>No tags to display</p>
