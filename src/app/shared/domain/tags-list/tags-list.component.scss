@@ -1,0 +1,11 @@
+@import "main";
+
+:host {
+  display: block;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing(8);
+}
