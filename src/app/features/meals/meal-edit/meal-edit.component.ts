@@ -128,7 +128,10 @@ export class MealEditComponent {
     }
   }
 
-  private _transformFormDishes(allDishes: Dish[], formDishes: Record<string, boolean>): Dish[] {
+  private _transformFormDishes(
+    allDishes: Dish[],
+    formDishes: Record<string, boolean>,
+  ): Dish[] {
     const dishes: Dish[] = [];
     for (let dishId in formDishes) {
       if (formDishes[dishId]) {

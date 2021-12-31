@@ -12,6 +12,7 @@ import { mapTo, shareReplay } from 'rxjs/operators';
 export class TagCardComponent {
   @Input() id = '';
   @Input() name = '';
+  @Input() meals: string[] = [];
   @Input() dishes: string[] = [];
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<void>();
