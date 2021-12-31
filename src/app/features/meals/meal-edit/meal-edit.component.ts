@@ -5,8 +5,10 @@ import { combineLatest, of, Subject } from 'rxjs';
 import { concatMap, distinctUntilChanged, first, map, startWith, tap } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
+import { TagModel } from '@models/tag-model.interface';
 import { DishService } from '@services/dish.service';
 import { MealService } from '@services/meal.service';
+import { TagService } from '@services/tag.service';
 import { UserService } from '@services/user.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
 import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
@@ -35,13 +37,14 @@ export class MealEditComponent {
   public vm$ = combineLatest([
     this._meal$,
     this._dishService.getDishes(),
+    this._tagService.getTags(),
     this._userService.getPreferences(),
     this._formDishes$.pipe(
       startWith(null),
       distinctUntilChanged(),
     ),
   ]).pipe(
-    map(([meal, allDishes, preferences, formDishes]) => {
+    map(([meal, allDishes, tags, preferences, formDishes]) => {
       const dishes = formDishes
         ? this._transformFormDishes(allDishes, formDishes)
         : meal?.dishes ?? [];
@@ -52,15 +55,22 @@ export class MealEditComponent {
         return {
           name: '',
           description: '',
+          tags: tags.map<TagModel>(tag => ({
+            ...tag,
+            checked: false,
+          })),
           dishes,
           dishesModel,
-          tags: [],
           fallbackText,
           orientation,
         };
       } else {
         return {
           ...meal,
+          tags: tags.map<TagModel>(tag => ({
+            ...tag,
+            checked: !!meal?.tags.find(mealTag => mealTag.id === tag.id)
+          })),
           dishes,
           dishesModel,
           fallbackText,
@@ -78,6 +88,7 @@ export class MealEditComponent {
     private _router: Router,
     private _dishService: DishService,
     private _mealService: MealService,
+    private _tagService: TagService,
     private _userService: UserService,
   ) { }
 
@@ -89,11 +100,14 @@ export class MealEditComponent {
     const details: MealEditForm = {
       name: form.value.name,
       description: form.value.description,
+      tags: Object
+        .entries<boolean>(form.value.tags)
+        .filter(([key, checked]) => checked)
+        .map(([key, checked]) => key),
       dishes: Object
         .entries<boolean>(form.value.dishes)
         .filter(([key, checked]) => checked)
         .map(([key, checked]) => key),
-      tags: [],
     };
     if (!this._routeId) {
       this._mealService.createMeal(details).pipe(
