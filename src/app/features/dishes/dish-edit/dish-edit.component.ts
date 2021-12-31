@@ -5,7 +5,7 @@ import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/dish-type.type';
-import { Tag } from '@models/tag.interface';
+import { TagModel } from '@models/tag-model.interface';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
@@ -18,10 +18,6 @@ interface DishEditForm {
   type: DishType;
   tags: string[];
   notes: string;
-}
-
-interface TagModel extends Tag {
-  checked: boolean;
 }
 
 @Component({
