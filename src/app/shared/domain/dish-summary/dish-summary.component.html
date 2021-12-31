@@ -37,7 +37,8 @@
   {{ description }}
 </p>
 
-<app-tags-list class="tags"
+<app-tags-list *ngIf="tags.length"
+  class="tags"
   [tags]="tags"
 >
   <ng-template #tagTemplate let-tag>
