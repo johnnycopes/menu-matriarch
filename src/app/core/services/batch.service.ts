@@ -63,6 +63,12 @@ export class BatchService {
         { meals: this._firestoreService.addToArray(id) }
       ));
     }
+    if (meal.tags) {
+      meal.tags.forEach(tagId => batch.update(
+        this.getTagDoc(tagId),
+        { meals: this._firestoreService.addToArray(id) }
+      ));
+    }
     await batch.commit();
   }
 
@@ -119,6 +125,8 @@ export class BatchService {
         meal,
         updateDishIds: updates.dishes
       }));
+    }
+    if (updates.tags) {
       this._processUpdates(batch, this._getTagsMealUpdates({
         meal,
         updateTagIds: updates.tags
