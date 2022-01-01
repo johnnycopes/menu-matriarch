@@ -39,7 +39,7 @@
     </div>
     <div class="details">
       <app-tags-list
-        *ngIf="dish.tags.length; else noTagsTemplate"
+        *ngIf="dish.tags.length"
         [tags]="dish.tags"
       >
         <ng-template #tagTemplate let-tag>
@@ -49,9 +49,6 @@
           ></app-tag>
         </ng-template>
       </app-tags-list>
-      <ng-template #noTagsTemplate>
-        No tags selected
-      </ng-template>
     </div>
     <div *ngIf="dish?.notes"
       class="details notes"

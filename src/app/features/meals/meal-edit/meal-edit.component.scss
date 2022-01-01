@@ -28,3 +28,13 @@ app-input {
 .tags {
   margin-top: spacing(8);
 }
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  margin-top: spacing(8);
+
+  p {
+    margin-right: spacing(8);
+  }
+}
