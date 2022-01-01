@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 
 import { Day } from '@models/day.type';
-import { getDays } from '@shared/utility/domain/get-days';
-import { trackBySelf } from '@shared/utility/domain/track-by-functions';
+import { getDays } from '@utility/domain/get-days';
+import { trackBySelf } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-inline-day-select',

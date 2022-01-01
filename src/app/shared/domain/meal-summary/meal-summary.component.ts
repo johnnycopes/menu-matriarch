@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Dish } from '@models/dish.interface';
 import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
 import { Orientation } from '@models/orientation.type';
-import { getDishTypes } from '@shared/utility/domain/get-dish-types';
+import { getDishTypes } from '@utility/domain/get-dish-types';
 import { trackByDishType, trackById } from '@utility/domain/track-by-functions';
 
 @Component({
