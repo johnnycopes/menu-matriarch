@@ -30,6 +30,7 @@ type FormDishes = Record<string, boolean>;
 })
 export class MealEditComponent {
   private _routeId = this._route.snapshot.paramMap.get('id');
+  private _dishIds = this._route.snapshot.queryParamMap.get('dishes');
   private _formDishes$ = new Subject<FormDishes | null>();
   public _meal$ = this._routeId
     ? this._mealService.getMeal(this._routeId)
@@ -40,7 +41,10 @@ export class MealEditComponent {
     this._tagService.getTags(),
     this._userService.getPreferences(),
     this._formDishes$.pipe(
-      startWith(null),
+      startWith(this._dishIds
+        ? this._transformDishIds(JSON.parse(this._dishIds))
+        : null
+      ),
       distinctUntilChanged(),
     ),
   ]).pipe(
@@ -142,5 +146,12 @@ export class MealEditComponent {
       }
     }
     return dishes;
+  }
+
+  private _transformDishIds(dishIds: string[]): Record<string, boolean> {
+    return dishIds.reduce((accum, id) => {
+      accum[id] = true;
+      return accum;
+    }, {} as Record<string, boolean>);
   }
 }

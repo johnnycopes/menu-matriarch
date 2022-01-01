@@ -6,12 +6,17 @@
   margin-bottom: spacing(8);
 }
 
-fa-icon {
+.icon {
+  margin-left: spacing(16);
+  color: color($neutral, 5);
   cursor: pointer;
+
+  &:hover {
+    color: color($indigo, 5);
+  }
 }
 
 .meal {
   margin-bottom: spacing(8);
   padding: spacing(4) spacing(8);
 }
-
