@@ -101,7 +101,7 @@ export class MealEditComponent {
       name: form.value.name,
       description: form.value.description,
       tags: Object
-        .entries<boolean>(form.value.tags)
+        .entries<boolean>(form.value?.tags ?? [])
         .filter(([key, checked]) => checked)
         .map(([key, checked]) => key),
       dishes: Object

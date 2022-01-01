@@ -88,7 +88,7 @@ export class DishEditComponent {
       link: form.value.link,
       type: form.value.type,
       tags: Object
-        .entries<boolean>(form.value.tags)
+        .entries<boolean>(form.value?.tags ?? [])
         .filter(([key, checked]) => checked)
         .map(([key, checked]) => key),
       notes: form.value.notes,
