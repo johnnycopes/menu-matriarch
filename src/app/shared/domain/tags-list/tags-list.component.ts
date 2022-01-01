@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, TemplateRef, ContentChild } from '@angular/core';
+
 import { Tag } from '@models/tag.interface';
-import { trackById } from '@shared/utility/domain/track-by-functions';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-tags-list',
