@@ -38,7 +38,10 @@ export class BatchService {
     meal: Partial<Omit<MealDto, 'id' | 'uid'>>
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    batch.set(this._documentService.getMealDoc(id), createMealDto({ id, uid, ...meal }));
+    batch.set(
+      this._documentService.getMealDoc(id),
+      createMealDto({ id, uid, ...meal }),
+    );
     if (meal.dishes) {
       meal.dishes.forEach(dishId => batch.update(
         this._documentService.getDishDoc(dishId),
@@ -46,11 +49,15 @@ export class BatchService {
       ));
     }
     if (meal.tags) {
-      this._processUpdates(batch, this._getTagsMealUpdates({
-        id,
-        tagIds: [],
-        updateTagIds: meal.tags,
-      }));
+      this._processUpdates(
+        batch,
+        this._documentService.getUpdatedTags({
+          id,
+          updateKey: 'meals',
+          tagIds: [],
+          updateTagIds: meal.tags,
+        }),
+      );
     }
     await batch.commit();
   }
@@ -61,13 +68,20 @@ export class BatchService {
     dish: Partial<Omit<DishDto, 'id' | 'uid'>>
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
-    batch.set(this._documentService.getDishDoc(id), createDishDto({ id, uid, ...dish }));
+    batch.set(
+      this._documentService.getDishDoc(id),
+      createDishDto({ id, uid, ...dish }),
+    );
     if (dish.tags) {
-      this._processUpdates(batch, this._getTagsDishUpdates({
-        id,
-        tagIds: [],
-        updateTagIds: dish.tags,
-      }));
+      this._processUpdates(
+        batch,
+        this._documentService.getUpdatedTags({
+          id,
+          updateKey: 'dishes',
+          tagIds: [],
+          updateTagIds: dish.tags,
+        }),
+      );
     }
     await batch.commit();
   }
@@ -111,11 +125,15 @@ export class BatchService {
       }));
     }
     if (updates.tags) {
-      this._processUpdates(batch, this._getTagsMealUpdates({
-        id: meal.id,
-        tagIds: meal.tags.map(tag => tag.id),
-        updateTagIds: updates.tags
-      }));
+      this._processUpdates(
+        batch,
+        this._documentService.getUpdatedTags({
+          id: meal.id,
+          updateKey: 'meals',
+          tagIds: meal.tags.map(tag => tag.id),
+          updateTagIds: updates.tags
+        }),
+      );
     }
     await batch.commit();
   }
@@ -127,11 +145,15 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.update(this._documentService.getDishDoc(dish.id), updates);
     if (updates.tags) {
-      this._processUpdates(batch, this._getTagsDishUpdates({
-        id: dish.id,
-        tagIds: dish.tags.map(dish => dish.id),
-        updateTagIds: updates.tags
-      }));
+      this._processUpdates(
+        batch,
+        this._documentService.getUpdatedTags({
+          id: dish.id,
+          updateKey: 'dishes',
+          tagIds: dish.tags.map(dish => dish.id),
+          updateTagIds: updates.tags
+        }),
+      );
     }
     await batch.commit();
   }
@@ -184,8 +206,9 @@ export class BatchService {
         meal,
         action: 'delete',
       }),
-      ...this._getTagsMealUpdates({
+      ...this._documentService.getUpdatedTags({
         id: meal.id,
+        updateKey: 'meals',
         tagIds: meal.tags.map(tag => tag.id),
       }),
     ]);
@@ -200,8 +223,9 @@ export class BatchService {
         menuIds: dish.menus,
         getDishes: () => this._firestoreService.removeFromArray(dish.id)
       }),
-      ...this._getTagsDishUpdates({
+      ...this._documentService.getUpdatedTags({
         id: dish.id,
+        updateKey: 'dishes',
         tagIds: dish.tags.map(dish => dish.id),
       }),
     ]);
@@ -316,56 +340,6 @@ export class BatchService {
       }
     }
     return dishUpdates;
-  }
-
-  private _getTagsMealUpdates({ id, tagIds, updateTagIds = [] }: {
-    id: string,
-    tagIds: string[],
-    updateTagIds?: string[],
-  }): DocRefUpdate<TagDto, { meals: string[] }>[] {
-    const tagUpdates = [];
-    for (let tagId of dedupe(tagIds, updateTagIds)) {
-      let meals = undefined;
-
-      if (tagIds.includes(tagId) && !updateTagIds.includes(tagId)) {
-        meals = this._firestoreService.removeFromArray(id);
-      } else if (!tagIds.includes(tagId) && updateTagIds.includes(tagId)) {
-        meals = this._firestoreService.addToArray(id);
-      }
-
-      if (meals) {
-        tagUpdates.push({
-          docRef: this._documentService.getTagDoc(tagId),
-          updates: { meals },
-        });
-      }
-    }
-    return tagUpdates;
-  }
-
-  private _getTagsDishUpdates({ id, tagIds, updateTagIds = [] }: {
-    id: string,
-    tagIds: string[],
-    updateTagIds?: string[],
-  }): DocRefUpdate<TagDto, { dishes: string[] }>[] {
-    const tagUpdates = [];
-    for (let tagId of dedupe(tagIds, updateTagIds)) {
-      let dishes = undefined;
-
-      if (tagIds.includes(tagId) && !updateTagIds.includes(tagId)) {
-        dishes = this._firestoreService.removeFromArray(id);
-      } else if (!tagIds.includes(tagId) && updateTagIds.includes(tagId)) {
-        dishes = this._firestoreService.addToArray(id);
-      }
-
-      if (dishes) {
-        tagUpdates.push({
-          docRef: this._documentService.getTagDoc(tagId),
-          updates: { dishes },
-        });
-      }
-    }
-    return tagUpdates;
   }
 
   private _getMenuDayDishes(day: Day, dishes: string[]): { [contentsDay: string]: string[] } {
