@@ -18,6 +18,10 @@ app-card {
 .name {
   font-weight: font-weight(bold);
   color: color($neutral, 4);
+
+  &:hover {
+    color: color($indigo, 5);
+  }
 }
 
 .entry {

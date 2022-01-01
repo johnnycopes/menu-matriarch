@@ -5,10 +5,11 @@ import { combineLatest, of } from 'rxjs';
 import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishType } from '@models/dish-type.type';
+import { TagModel } from '@models/tag-model.interface';
 import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
-import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
+import { trackBySelf } from '@utility/domain/track-by-functions';
 
 interface DishEditForm {
   name: string;
@@ -17,12 +18,6 @@ interface DishEditForm {
   type: DishType;
   tags: string[];
   notes: string;
-}
-
-interface TagModel {
-  id: string,
-  name: string;
-  checked: boolean;
 }
 
 @Component({
@@ -48,8 +43,7 @@ export class DishEditComponent {
           link: '',
           type: 'main',
           tags: tags.map<TagModel>(tag => ({
-            id: tag.id,
-            name: tag.name,
+            ...tag,
             checked: false,
           })),
           notes: '',
@@ -58,8 +52,7 @@ export class DishEditComponent {
         return {
           ...dish,
           tags: tags.map<TagModel>(tag => ({
-            id: tag.id,
-            name: tag.name,
+            ...tag,
             checked: !!dish?.tags.find(dishTag => dishTag.id === tag.id)
           })),
         };
@@ -80,7 +73,6 @@ export class DishEditComponent {
       bullist numlist outdent indent | removeformat | help`,
   };
   public readonly typeTrackByFn = trackBySelf;
-  public readonly tagTrackByFn = trackById;
 
   constructor(
     private _route: ActivatedRoute,
@@ -96,7 +88,7 @@ export class DishEditComponent {
       link: form.value.link,
       type: form.value.type,
       tags: Object
-        .entries<boolean>(form.value.tags)
+        .entries<boolean>(form.value?.tags ?? [])
         .filter(([key, checked]) => checked)
         .map(([key, checked]) => key),
       notes: form.value.notes,

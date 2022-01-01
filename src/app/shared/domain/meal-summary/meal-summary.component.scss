@@ -15,11 +15,11 @@
 
   &--unlabeled {
 
-    &:not(:first-child) {
+    &:not(:first-of-type) {
       padding-top: spacing(4);
     }
 
-    &:not(:last-child) {
+    &:not(:last-of-type) {
       padding-bottom: spacing(4);
       border-bottom: 1px solid color($neutral, 9);
     }

@@ -18,6 +18,7 @@ import { InlineNameEditComponent } from './inline-name-edit/inline-name-edit.com
 import { MealsListComponent } from './meals-list/meals-list.component';
 import { MealSummaryComponent } from './meal-summary/meal-summary.component';
 import { TagComponent } from './tag/tag.component';
+import { TagsListComponent } from './tags-list/tags-list.component';
 
 
 
@@ -35,6 +36,7 @@ import { TagComponent } from './tag/tag.component';
     MealsListComponent,
     MealSummaryComponent,
     TagComponent,
+    TagsListComponent,
   ],
   exports: [
     CountComponent,
@@ -49,6 +51,7 @@ import { TagComponent } from './tag/tag.component';
     MealsListComponent,
     MealSummaryComponent,
     TagComponent,
+    TagsListComponent,
   ],
   imports: [
     CommonModule,

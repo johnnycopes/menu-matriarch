@@ -74,6 +74,7 @@ export class SeedDataService {
           uid,
           name: 'Sushi Dinner',
           dishes: [sushiDishId, misoSoupDishId],
+          tags: [pescatarianTagId],
         })
       )
       .set(
@@ -253,11 +254,22 @@ export class SeedDataService {
       )
       .set(
         this._batchService.getTagDoc(easyTagId),
-        createTagDto({ id: easyTagId, uid, name: 'Easy', dishes: [roastedCauliflowerDishId, thaiCurryDishId] }),
+        createTagDto({
+          id: easyTagId,
+          uid,
+          name: 'Easy',
+          dishes: [roastedCauliflowerDishId, thaiCurryDishId]
+        }),
       )
       .set(
         this._batchService.getTagDoc(pescatarianTagId),
-        createTagDto({ id: pescatarianTagId, uid, name: 'Pescatarian', dishes: [salmonBurgersDishId, sushiDishId] }),
+        createTagDto({
+          id: pescatarianTagId,
+          uid,
+          name: 'Pescatarian',
+          dishes: [salmonBurgersDishId, sushiDishId],
+          meals: [sushiDinnerMealId],
+        }),
       )
       .set(
         this._batchService.getTagDoc(veganTagId),

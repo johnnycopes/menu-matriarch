@@ -2,18 +2,25 @@
 
 .top {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   margin-bottom: spacing(16);
 }
 
 .name {
   font-weight: font-weight(bold);
   color: color($neutral, 4);
+
+  &:hover {
+    color: color($indigo, 5);
+  }
 }
 
 .description {
   font-size: 14px;
   color: color($neutral, 6);
+  margin-top: spacing(8);
+}
+
+.tags {
   margin-top: spacing(8);
 }

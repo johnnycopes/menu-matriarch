@@ -23,6 +23,17 @@
       >
         {{ meal.description }}
       </p>
+      <app-tags-list
+        *ngIf="meal.tags.length"
+        [tags]="meal.tags"
+      >
+        <ng-template #tagTemplate let-tag>
+          <app-tag
+            [id]="tag.id"
+            [name]="tag.name"
+          ></app-tag>
+        </ng-template>
+      </app-tags-list>
       <div class="details">
         <app-meal-summary
           [dishes]="meal.dishes"

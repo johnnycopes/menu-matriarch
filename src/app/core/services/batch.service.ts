@@ -119,6 +119,10 @@ export class BatchService {
         meal,
         updateDishIds: updates.dishes
       }));
+      this._processUpdates(batch, this._getTagsMealUpdates({
+        meal,
+        updateTagIds: updates.tags
+      }));
     }
     await batch.commit();
   }
@@ -130,7 +134,7 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.update(this.getDishDoc(dish.id), updates);
     if (updates.tags) {
-      this._processUpdates(batch, this._getTagsUpdates({
+      this._processUpdates(batch, this._getTagsDishUpdates({
         dish,
         updateTagIds: updates.tags
       }));
@@ -186,6 +190,7 @@ export class BatchService {
         meal,
         action: 'delete',
       }),
+      ...this._getTagsMealUpdates({ meal }),
     ]);
     await batch.commit();
   }
@@ -198,7 +203,7 @@ export class BatchService {
         menuIds: dish.menus,
         getDishes: () => this._firestoreService.removeFromArray(dish.id)
       }),
-      ...this._getTagsUpdates({ dish }),
+      ...this._getTagsDishUpdates({ dish }),
     ]);
     await batch.commit();
   }
@@ -206,6 +211,11 @@ export class BatchService {
   public async deleteTag(tag: Tag): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this.getTagDoc(tag.id));
+    tag.meals
+      .map(mealId => this.getMealDoc(mealId))
+      .forEach(meal => batch.update(meal, {
+        tags: this._firestoreService.removeFromArray(tag.id)
+      }));
     tag.dishes
       .map(dishId => this.getDishDoc(dishId))
       .forEach(dish => batch.update(dish, {
@@ -308,7 +318,32 @@ export class BatchService {
     return dishUpdates;
   }
 
-  private _getTagsUpdates({ dish, updateTagIds = [] }: {
+  private _getTagsMealUpdates({ meal, updateTagIds = [] }: {
+    meal: Meal,
+    updateTagIds?: string[],
+  }): DocRefUpdate<TagDto, { meals: string[] }>[] {
+    const tagIds = meal.tags.map(tag => tag.id)
+    const tagUpdates = [];
+    for (let id of dedupe(tagIds, updateTagIds)) {
+      let meals = undefined;
+
+      if (tagIds.includes(id) && !updateTagIds.includes(id)) {
+        meals = this._firestoreService.removeFromArray(meal.id);
+      } else if (!tagIds.includes(id) && updateTagIds.includes(id)) {
+        meals = this._firestoreService.addToArray(meal.id);
+      }
+
+      if (meals) {
+        tagUpdates.push({
+          docRef: this.getTagDoc(id),
+          updates: { meals },
+        });
+      }
+    }
+    return tagUpdates;
+  }
+
+  private _getTagsDishUpdates({ dish, updateTagIds = [] }: {
     dish: Dish,
     updateTagIds?: string[],
   }): DocRefUpdate<TagDto, { dishes: string[] }>[] {

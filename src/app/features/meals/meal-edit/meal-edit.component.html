@@ -73,6 +73,39 @@
             #description="ngModel"
           />
         </app-input>
+        <app-input
+          label="tags"
+        >
+          <app-tags-list
+            *ngIf="vm.tags.length; else noTagsPlaceholder"
+            class="tags"
+            ngModelGroup="tags"
+            [tags]="vm.tags"
+            [interactive]="true"
+          >
+            <ng-template #tagTemplate let-tag>
+              <app-checkbox
+                [name]="tag.id"
+                [ngModel]="tag.checked"
+              >
+                <app-tag
+                  [id]="tag.id"
+                  [name]="tag.name"
+                ></app-tag>
+              </app-checkbox>
+            </ng-template>
+          </app-tags-list>
+          <ng-template #noTagsPlaceholder>
+            <div class="placeholder">
+              <p>No tags to display</p>
+              <a app-button
+                routerLink="/tags"
+              >
+                New Tag
+              </a>
+            </div>
+          </ng-template>
+        </app-input>
         <div class="details">
           <app-meal-summary
             [dishes]="vm.dishes"

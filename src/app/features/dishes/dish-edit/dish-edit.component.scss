@@ -13,11 +13,7 @@ app-input {
 }
 
 .tags {
-  display: flex;
-  flex-wrap: wrap;
   margin-top: spacing(8);
-  column-gap: spacing(16);
-  row-gap: spacing(8);
 }
 
 .placeholder {

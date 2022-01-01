@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { DishService } from '@services/dish.service';
-import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
+import { trackBySelf } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-dish-details',
@@ -25,7 +25,6 @@ export class DishDetailsComponent {
     })
   );
   public readonly ingredientTrackByFn = trackBySelf;
-  public readonly tagTrackByFn = trackById;
 
   constructor(
     private _route: ActivatedRoute,
