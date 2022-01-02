@@ -5,7 +5,6 @@ import firebase from 'firebase/compat/app';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { DishDto } from '@models/dtos/dish-dto.interface';
-import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Dish } from '@models/dish.interface';
 import { Tag } from '@models/tag.interface';
 import { Meal } from '@models/meal.interface';
@@ -43,10 +42,14 @@ export class BatchService {
       createMealDto({ id, uid, ...meal }),
     );
     if (meal.dishes) {
-      meal.dishes.forEach(dishId => batch.update(
-        this._documentService.getDishDoc(dishId),
-        { meals: this._firestoreService.addToArray(id) }
-      ));
+      this._processUpdates(
+        batch,
+        this._getUpdatedDishDocs({
+          initialDishIds: [],
+          finalDishIds: meal.dishes,
+          mealId: id,
+        }),
+      );
     }
     if (meal.tags) {
       this._processUpdates(
@@ -119,10 +122,14 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.update(this._documentService.getMealDoc(meal.id), updates);
     if (updates.dishes) {
-      this._processUpdates(batch, this._getDishUpdates({
-        meal,
-        updateDishIds: updates.dishes
-      }));
+      this._processUpdates(
+        batch,
+        this._getUpdatedDishDocs({
+          initialDishIds: meal.dishes.map(dish => dish.id),
+          finalDishIds: updates.dishes,
+          mealId: meal.id,
+        }),
+      );
     }
     if (updates.tags) {
       this._processUpdates(
@@ -202,9 +209,10 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._documentService.getMealDoc(meal.id));
     this._processUpdates(batch, [
-      ...this._getDishesMealUpdates({
-        meal,
-        action: 'delete',
+      ...this._getUpdatedDishDocs({
+        initialDishIds: meal.dishes.map(dish => dish.id),
+        finalDishIds: [],
+        mealId: meal.id,
       }),
       ...this._documentService.getUpdatedTagDocs({
         key: 'meals',
@@ -307,37 +315,26 @@ export class BatchService {
     });
   }
 
-  private _getDishesMealUpdates({ meal, action }: {
-    meal: Meal,
-    action: 'delete',
+  private _getUpdatedDishDocs({ initialDishIds, finalDishIds, mealId }: {
+    initialDishIds: string[],
+    finalDishIds: string[],
+    mealId: string,
   }): DocRefUpdate<DishDto, { meals: string[] }>[] {
-    return meal.dishes.map(dish => ({
-      docRef: this._documentService.getDishDoc(dish.id),
-      updates: {
-        meals: this._firestoreService.removeFromArray(meal.id),
-      },
-    }));
-  }
-
-  private _getDishUpdates({ meal, updateDishIds = [] }: {
-    meal: Meal,
-    updateDishIds?: string[],
-  }): DocRefUpdate<DishDto, { meals: string[] }>[] {
-    const dishIds = meal.dishes.map(dish => dish.id)
+    debugger;
     const dishUpdates = [];
-    for (let id of dedupe(dishIds, updateDishIds)) {
-      let meals = undefined;
+    for (let dishId of dedupe(initialDishIds, finalDishIds)) {
+      let updatedMealIds = undefined;
 
-      if (dishIds.includes(id) && !updateDishIds.includes(id)) {
-        meals = this._firestoreService.removeFromArray(meal.id);
-      } else if (!dishIds.includes(id) && updateDishIds.includes(id)) {
-        meals = this._firestoreService.addToArray(meal.id);
+      if (initialDishIds.includes(dishId) && !finalDishIds.includes(dishId)) {
+        updatedMealIds = this._firestoreService.removeFromArray(mealId);
+      } else if (!initialDishIds.includes(dishId) && finalDishIds.includes(dishId)) {
+        updatedMealIds = this._firestoreService.addToArray(mealId);
       }
 
-      if (meals) {
+      if (updatedMealIds) {
         dishUpdates.push({
-          docRef: this._documentService.getDishDoc(id),
-          updates: { meals },
+          docRef: this._documentService.getDishDoc(dishId),
+          updates: { meals: updatedMealIds },
         });
       }
     }

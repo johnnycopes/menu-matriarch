@@ -52,18 +52,18 @@ export class DocumentService {
   }): DocRefUpdate<TagDto, { [key: string]: string[] }>[] {
     const tagUpdates = [];
     for (let tagId of dedupe(initialTagIds, finalTagIds)) {
-      let updatedTagIds = undefined;
+      let updatedIds = undefined;
 
       if (initialTagIds.includes(tagId) && !finalTagIds.includes(tagId)) {
-        updatedTagIds = this._firestoreService.removeFromArray(entityId);
+        updatedIds = this._firestoreService.removeFromArray(entityId);
       } else if (!initialTagIds.includes(tagId) && finalTagIds.includes(tagId)) {
-        updatedTagIds = this._firestoreService.addToArray(entityId);
+        updatedIds = this._firestoreService.addToArray(entityId);
       }
 
-      if (updatedTagIds) {
+      if (updatedIds) {
         tagUpdates.push({
           docRef: this.getTagDoc(tagId),
-          updates: { [key]: updatedTagIds },
+          updates: { [key]: updatedIds },
         });
       }
     }
