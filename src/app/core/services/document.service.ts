@@ -44,6 +44,32 @@ export class DocumentService {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
   }
 
+  public getUpdatedDishDocs({ initialDishIds, finalDishIds, mealId }: {
+    initialDishIds: string[],
+    finalDishIds: string[],
+    mealId: string,
+  }): DocRefUpdate<DishDto, { meals: string[] }>[] {
+    debugger;
+    const dishUpdates = [];
+    for (let dishId of dedupe(initialDishIds, finalDishIds)) {
+      let updatedMealIds = undefined;
+
+      if (initialDishIds.includes(dishId) && !finalDishIds.includes(dishId)) {
+        updatedMealIds = this._firestoreService.removeFromArray(mealId);
+      } else if (!initialDishIds.includes(dishId) && finalDishIds.includes(dishId)) {
+        updatedMealIds = this._firestoreService.addToArray(mealId);
+      }
+
+      if (updatedMealIds) {
+        dishUpdates.push({
+          docRef: this.getDishDoc(dishId),
+          updates: { meals: updatedMealIds },
+        });
+      }
+    }
+    return dishUpdates;
+  }
+
   public getUpdatedTagDocs({ key, initialTagIds, finalTagIds, entityId }: {
     key: 'meals' | 'dishes',
     initialTagIds: string[],

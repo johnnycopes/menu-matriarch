@@ -11,7 +11,6 @@ import { Meal } from '@models/meal.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
 import { createDishDto, createMealDto } from '@utility/domain/create-dtos';
-import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { DocumentService } from './document.service';
 import { FirestoreService } from './firestore.service';
@@ -44,7 +43,7 @@ export class BatchService {
     if (meal.dishes) {
       this._processUpdates(
         batch,
-        this._getUpdatedDishDocs({
+        this._documentService.getUpdatedDishDocs({
           initialDishIds: [],
           finalDishIds: meal.dishes,
           mealId: id,
@@ -124,7 +123,7 @@ export class BatchService {
     if (updates.dishes) {
       this._processUpdates(
         batch,
-        this._getUpdatedDishDocs({
+        this._documentService.getUpdatedDishDocs({
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: updates.dishes,
           mealId: meal.id,
@@ -209,7 +208,7 @@ export class BatchService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._documentService.getMealDoc(meal.id));
     this._processUpdates(batch, [
-      ...this._getUpdatedDishDocs({
+      ...this._documentService.getUpdatedDishDocs({
         initialDishIds: meal.dishes.map(dish => dish.id),
         finalDishIds: [],
         mealId: meal.id,
@@ -318,32 +317,6 @@ export class BatchService {
         },
       };
     });
-  }
-
-  private _getUpdatedDishDocs({ initialDishIds, finalDishIds, mealId }: {
-    initialDishIds: string[],
-    finalDishIds: string[],
-    mealId: string,
-  }): DocRefUpdate<DishDto, { meals: string[] }>[] {
-    debugger;
-    const dishUpdates = [];
-    for (let dishId of dedupe(initialDishIds, finalDishIds)) {
-      let updatedMealIds = undefined;
-
-      if (initialDishIds.includes(dishId) && !finalDishIds.includes(dishId)) {
-        updatedMealIds = this._firestoreService.removeFromArray(mealId);
-      } else if (!initialDishIds.includes(dishId) && finalDishIds.includes(dishId)) {
-        updatedMealIds = this._firestoreService.addToArray(mealId);
-      }
-
-      if (updatedMealIds) {
-        dishUpdates.push({
-          docRef: this._documentService.getDishDoc(dishId),
-          updates: { meals: updatedMealIds },
-        });
-      }
-    }
-    return dishUpdates;
   }
 
   private _getMenuDayDishes(day: Day, dishes: string[]): { [contentsDay: string]: string[] } {
