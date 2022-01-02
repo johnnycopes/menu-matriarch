@@ -3,9 +3,11 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Day } from '@models/day.type';
+import { Dish } from '@models/dish.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Menu } from '@models/menu.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
+import { UserPreferences } from '@models/user-preferences.interface';
 import { createMenuDto } from '@utility/domain/create-dtos';
 import { getDays } from '@utility/domain/get-days';
 import { flattenValues } from '@utility/generic/flatten-values';
@@ -30,23 +32,35 @@ export class MenuDocumentService {
   ) { }
 
   public getMenu(id: string): Observable<Menu | undefined> {
-    return this._firestoreService.getOne<MenuDto>(this._endpoint, id).pipe(
-      switchMap(menuDto => {
-        if (!menuDto) {
-          return of(undefined);
+    return combineLatest([
+      this._firestoreService.getOne<MenuDto>(this._endpoint, id),
+      this._dishService.getDishes(),
+      this._userService.getPreferences(),
+    ]).pipe(
+      map(([menu, dishes, preferences]) => {
+        if (!menu || !preferences) {
+          return undefined;
         }
-        return this._transformMenuDto(menuDto);
+        return this._getMenu({ menu, dishes, preferences });
       })
     );
   }
 
   public getMenus(): Observable<Menu[]> {
-    return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<MenuDto>(this._endpoint, uid)),
-      switchMap(menus => combineLatest(
-        menus.map(menu => this._transformMenuDto(menu))
-      )),
-      map(menus => sort(menus, menu => lower(menu.name))),
+    return combineLatest([
+      this._userService.uid$.pipe(
+        switchMap(uid => this._firestoreService.getMany<MenuDto>(this._endpoint, uid)),
+        map(menus => sort(menus, menu => lower(menu.name))),
+      ),
+      this._dishService.getDishes(),
+      this._userService.getPreferences(),
+    ]).pipe(
+      map(([menus, dishes, preferences]) => {
+        if (!menus || !preferences) {
+          return [];
+        }
+        return menus.map(menu => this._getMenu({ menu, dishes, preferences }));
+      }),
     );
   }
 
@@ -139,25 +153,21 @@ export class MenuDocumentService {
     await batch.commit();
   }
 
-  // TODO: investigate refactoring this to a more pure "_getMenu" method OR the tag/dish services' equivalent of this to "_transform____" for consistency
-  private _transformMenuDto(menu: MenuDto): Observable<Menu> {
-    return combineLatest([
-      this._dishService.getDishes(),
-      this._userService.getPreferences(),
-    ]).pipe(
-      map(([dishes, preferences]) => {
-        return {
-          ...menu,
-          entries: getDays(menu.startDay)
-            .map(day => ({
-              day,
-              dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-            })
-          ),
-          orientation: preferences?.mealOrientation ?? 'horizontal',
-          fallbackText: preferences?.emptyMealText ?? '',
-        };
-      }),
-    );
+  private _getMenu({ menu, dishes, preferences }: {
+    menu: MenuDto,
+    dishes: Dish[],
+    preferences: UserPreferences,
+  }): Menu {
+    return {
+      ...menu,
+      entries: getDays(menu.startDay)
+        .map(day => ({
+          day,
+          dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+        })
+      ),
+      orientation: preferences?.mealOrientation ?? 'horizontal',
+      fallbackText: preferences?.emptyMealText ?? '',
+    };
   }
 }
