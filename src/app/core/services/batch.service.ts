@@ -161,22 +161,6 @@ export class BatchService {
     await batch.commit();
   }
 
-  public async deleteTag(tag: Tag): Promise<void> {
-    const batch = this._firestoreService.getBatch();
-    batch.delete(this._documentService.getTagDoc(tag.id));
-    tag.meals
-      .map(mealId => this._documentService.getMealDoc(mealId))
-      .forEach(meal => batch.update(meal, {
-        tags: this._firestoreService.removeFromArray(tag.id)
-      }));
-    tag.dishes
-      .map(dishId => this._documentService.getDishDoc(dishId))
-      .forEach(dish => batch.update(dish, {
-        tags: this._firestoreService.removeFromArray(tag.id)
-      }));
-    await batch.commit();
-  }
-
   private _getMenusUpdates({ menuIds, day, getDishes = () => [] }: {
     menuIds: string[],
     day?: Day,
