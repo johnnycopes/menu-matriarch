@@ -37,11 +37,11 @@ export class MenuDocumentService {
       this._dishService.getDishes(),
       this._userService.getPreferences(),
     ]).pipe(
-      map(([menu, dishes, preferences]) => {
-        if (!menu || !preferences) {
+      map(([menuDto, dishes, preferences]) => {
+        if (!menuDto || !preferences) {
           return undefined;
         }
-        return this._getMenu({ menu, dishes, preferences });
+        return this._transformDto({ menuDto, dishes, preferences });
       })
     );
   }
@@ -50,16 +50,16 @@ export class MenuDocumentService {
     return combineLatest([
       this._userService.uid$.pipe(
         switchMap(uid => this._firestoreService.getMany<MenuDto>(this._endpoint, uid)),
-        map(menus => sort(menus, menu => lower(menu.name))),
+        map(menuDtos => sort(menuDtos, menuDto => lower(menuDto.name))),
       ),
       this._dishService.getDishes(),
       this._userService.getPreferences(),
     ]).pipe(
-      map(([menus, dishes, preferences]) => {
-        if (!menus || !preferences) {
+      map(([menuDtos, dishes, preferences]) => {
+        if (!menuDtos || !preferences) {
           return [];
         }
-        return menus.map(menu => this._getMenu({ menu, dishes, preferences }));
+        return menuDtos.map(menuDto => this._transformDto({ menuDto, dishes, preferences }));
       }),
     );
   }
@@ -153,17 +153,17 @@ export class MenuDocumentService {
     await batch.commit();
   }
 
-  private _getMenu({ menu, dishes, preferences }: {
-    menu: MenuDto,
+  private _transformDto({ menuDto, dishes, preferences }: {
+    menuDto: MenuDto,
     dishes: Dish[],
     preferences: UserPreferences,
   }): Menu {
     return {
-      ...menu,
-      entries: getDays(menu.startDay)
+      ...menuDto,
+      entries: getDays(menuDto.startDay)
         .map(day => ({
           day,
-          dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
+          dishes: dishes.filter(dish => menuDto.contents[day].includes(dish.id)),
         })
       ),
       orientation: preferences?.mealOrientation ?? 'horizontal',

@@ -36,11 +36,11 @@ export class MealDocumentService {
       this._dishService.getDishes(),
       this._tagService.getTags(),
     ]).pipe(
-      map(([meal, dishes, tags]) => {
-        if (!meal) {
+      map(([mealDto, dishes, tags]) => {
+        if (!mealDto) {
           return undefined;
         }
-        return this._getMeal(meal, dishes, tags);
+        return this._transformDto({ mealDto, dishes, tags });
       })
     );
   }
@@ -49,12 +49,14 @@ export class MealDocumentService {
     return combineLatest([
       this._userService.uid$.pipe(
         switchMap(uid => this._firestoreService.getMany<MealDto>(this._endpoint, uid)),
-        map(meals => sort(meals, meal => lower(meal.name)))
+        map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
       ),
       this._dishService.getDishes(),
       this._tagService.getTags(),
     ]).pipe(
-      map(([meals, dishes, tags]) => meals.map(meal => this._getMeal(meal, dishes, tags)))
+      map(([mealDtos, dishes, tags]) =>
+        mealDtos.map(mealDto => this._transformDto({ mealDto, dishes, tags }))
+      )
     );
   }
 
@@ -141,11 +143,15 @@ export class MealDocumentService {
     await batch.commit();
   }
 
-  private _getMeal(meal: MealDto, dishes: Dish[], tags: Tag[]): Meal {
+  private _transformDto({ mealDto, dishes, tags }: {
+    mealDto: MealDto,
+    dishes: Dish[],
+    tags: Tag[]
+  }): Meal {
     return {
-      ...meal,
-      dishes: dishes.filter(dish => meal.dishes.includes(dish.id)),
-      tags: tags.filter(tag => meal.tags.includes(tag.id)),
+      ...mealDto,
+      dishes: dishes.filter(dish => mealDto.dishes.includes(dish.id)),
+      tags: tags.filter(tag => mealDto.tags.includes(tag.id)),
     };
   }
 }

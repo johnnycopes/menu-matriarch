@@ -32,11 +32,11 @@ export class DishDocumentService {
       this._firestoreService.getOne<DishDto>(this._endpoint, id),
       this._tagService.getTags(),
     ]).pipe(
-      map(([dish, tags]) => {
-        if (!dish) {
+      map(([dishDto, tags]) => {
+        if (!dishDto) {
           return undefined;
         }
-        return this._getDish(dish, tags);
+        return this._transformDto(dishDto, tags);
       })
     );
   }
@@ -45,11 +45,11 @@ export class DishDocumentService {
     return combineLatest([
       this._userService.uid$.pipe(
         switchMap(uid => this._firestoreService.getMany<DishDto>(this._endpoint, uid)),
-        map(dishes => sort(dishes, dish => lower(dish.name)))
+        map(dishDtos => sort(dishDtos, dishDto => lower(dishDto.name)))
       ),
       this._tagService.getTags(),
     ]).pipe(
-      map(([dishes, tags]) => dishes.map(dish => this._getDish(dish, tags)))
+      map(([dishDtos, tags]) => dishDtos.map(dishDto => this._transformDto(dishDto, tags)))
     );
   }
 
@@ -120,10 +120,10 @@ export class DishDocumentService {
     await batch.commit();
   }
 
-  private _getDish(dish: DishDto, tags: Tag[]): Dish {
+  private _transformDto(dishDto: DishDto, tags: Tag[]): Dish {
     return {
-      ...dish,
-      tags: tags.filter(tag => dish.tags.includes(tag.id))
+      ...dishDto,
+      tags: tags.filter(tag => dishDto.tags.includes(tag.id))
     };
   }
 }
