@@ -98,6 +98,30 @@ export class DishDocumentService {
     await batch.commit();
   }
 
+  public async deleteDish(dish: Dish): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    batch.delete(this._documentService.getDishDoc(dish.id));
+    this._documentService.processUpdates(batch, [
+      ...this._documentService.getUpdatedMenuDocs({
+        menuIds: dish.menus,
+        getDishes: () => this._firestoreService.removeFromArray(dish.id)
+      }),
+      ...this._documentService.getUpdatedMealDocs({
+        key: 'dishes',
+        initialMealIds: dish.meals,
+        finalMealIds: [],
+        entityId: dish.id,
+      }),
+      ...this._documentService.getUpdatedTagDocs({
+        key: 'dishes',
+        initialTagIds: dish.tags.map(tag => tag.id),
+        finalTagIds: [],
+        entityId: dish.id,
+      }),
+    ]);
+    await batch.commit();
+  }
+
   private _getDish(dish: DishDto, tags: Tag[]): Dish {
     return {
       ...dish,

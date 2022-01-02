@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
+import { Day } from '@models/day.type';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
@@ -51,6 +52,31 @@ export class DocumentService {
     docRefUpdates.forEach(
       ({ docRef, updates }) => batch.update(docRef, updates)
     );
+  }
+
+  public getUpdatedMenuDocs({ menuIds, day, getDishes = () => [] }: {
+    menuIds: string[],
+    day?: Day,
+    getDishes?: () => string[],
+  }): DocRefUpdate<MenuDto, { [key: string]: string[] }>[] {
+    let updates = {};
+    if (day) {
+      updates = this._getMenuDayDishes(day, getDishes());
+    } else {
+      updates = {
+        ...this._getMenuDayDishes('Monday', getDishes()),
+        ...this._getMenuDayDishes('Tuesday', getDishes()),
+        ...this._getMenuDayDishes('Wednesday', getDishes()),
+        ...this._getMenuDayDishes('Thursday', getDishes()),
+        ...this._getMenuDayDishes('Friday', getDishes()),
+        ...this._getMenuDayDishes('Saturday', getDishes()),
+        ...this._getMenuDayDishes('Sunday', getDishes()),
+      };
+    }
+    return menuIds.map(menuId => ({
+      docRef: this.getMenuDoc(menuId),
+      updates,
+    }));
   }
 
   public getUpdatedMealDocs({ key, initialMealIds, finalMealIds, entityId }: {
@@ -124,5 +150,12 @@ export class DocumentService {
     }
 
     return docUpdates;
+  }
+
+  private _getMenuDayDishes(
+    day: Day,
+    dishes: string[]
+  ): { [contentsDay: string]: string[] } {
+    return { [`contents.${day}`]: dishes };
   }
 }

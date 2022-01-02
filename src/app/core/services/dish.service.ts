@@ -4,7 +4,6 @@ import { concatMap, first, tap } from 'rxjs/operators';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/dish.interface';
-import { BatchService } from './batch.service';
 import { DishDocumentService } from './dish-document.service';
 import { UserService } from './user.service';
 
@@ -14,7 +13,6 @@ import { UserService } from './user.service';
 export class DishService {
 
   constructor(
-    private _batchService: BatchService,
     private _dishDocumentService: DishDocumentService,
     private _userService: UserService,
   ) { }
@@ -63,7 +61,7 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await this._batchService.deleteDish(dish);
+        await this._dishDocumentService.deleteDish(dish);
       })
     );
   }

@@ -4,7 +4,6 @@ import firebase from 'firebase/compat/app';
 
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { DishDto } from '@models/dtos/dish-dto.interface';
-import { Dish } from '@models/dish.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
 import { flattenValues } from '@utility/generic/flatten-values';
@@ -89,30 +88,6 @@ export class BatchService {
         }),
       ]);
     }
-    await batch.commit();
-  }
-
-  public async deleteDish(dish: Dish): Promise<void> {
-    const batch = this._firestoreService.getBatch();
-    batch.delete(this._documentService.getDishDoc(dish.id));
-    this._processUpdates(batch, [
-      ...this._getMenusUpdates({
-        menuIds: dish.menus,
-        getDishes: () => this._firestoreService.removeFromArray(dish.id)
-      }),
-      ...this._documentService.getUpdatedMealDocs({
-        key: 'dishes',
-        initialMealIds: dish.meals,
-        finalMealIds: [],
-        entityId: dish.id,
-      }),
-      ...this._documentService.getUpdatedTagDocs({
-        key: 'dishes',
-        initialTagIds: dish.tags.map(tag => tag.id),
-        finalTagIds: [],
-        entityId: dish.id,
-      }),
-    ]);
     await batch.commit();
   }
 
