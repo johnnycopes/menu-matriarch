@@ -9,10 +9,10 @@ import { Tag } from '@models/tag.interface';
 import { createDishDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
+import { DocumentService } from './document.service';
 import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
-import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'

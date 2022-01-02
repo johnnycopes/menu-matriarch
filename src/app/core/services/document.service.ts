@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
-import { Day } from '@models/day.type';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { UserDto } from '@models/dtos/user-dto.interface';
+import { Day } from '@models/day.type';
+import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
-
+import { dedupe } from '@utility/generic/dedupe';
+import { flattenValues } from '@utility/generic/flatten-values';
 import { FirestoreService } from './firestore.service';
-import { dedupe } from '@shared/utility/generic/dedupe';
 
 interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
   docRef: DocumentReference<TDocRef>;
@@ -61,16 +62,16 @@ export class DocumentService {
   }): DocRefUpdate<MenuDto, { [key: string]: string[] }>[] {
     let updates = {};
     if (day) {
-      updates = this._getMenuDayDishes(day, getDishes());
+      updates = this._getDayDishes(day, getDishes());
     } else {
       updates = {
-        ...this._getMenuDayDishes('Monday', getDishes()),
-        ...this._getMenuDayDishes('Tuesday', getDishes()),
-        ...this._getMenuDayDishes('Wednesday', getDishes()),
-        ...this._getMenuDayDishes('Thursday', getDishes()),
-        ...this._getMenuDayDishes('Friday', getDishes()),
-        ...this._getMenuDayDishes('Saturday', getDishes()),
-        ...this._getMenuDayDishes('Sunday', getDishes()),
+        ...this._getDayDishes('Monday', getDishes()),
+        ...this._getDayDishes('Tuesday', getDishes()),
+        ...this._getDayDishes('Wednesday', getDishes()),
+        ...this._getDayDishes('Thursday', getDishes()),
+        ...this._getDayDishes('Friday', getDishes()),
+        ...this._getDayDishes('Saturday', getDishes()),
+        ...this._getDayDishes('Sunday', getDishes()),
       };
     }
     return menuIds.map(menuId => ({
@@ -106,6 +107,38 @@ export class DocumentService {
       initialIds: initialDishIds,
       finalIds: finalDishIds,
       entityId,
+    });
+  }
+
+  public getUpdatedDishDocsCounters({ dishIds, menu, change }: {
+    dishIds: string[],
+    menu: Menu,
+    change: 'increment' | 'decrement' | 'clear',
+  }): DocRefUpdate<DishDto, { usages: number, menus?: string[] }>[] {
+    const dishCounts = flattenValues(menu.contents)
+      .reduce((hashMap, dishId) => ({
+        ...hashMap,
+        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
+      }), {} as { [dishId: string]: number });
+
+    return dishIds.map(dishId => {
+      const dishCount = dishCounts[dishId] ?? 0;
+      let menusChange = 0;
+      if (dishCount === 0 && change === 'increment') {
+        menusChange = 1;
+      } else if ((dishCount === 1 && change === 'decrement') || change === 'clear') {
+        menusChange = -1;
+      }
+      const menus = menusChange > 0
+        ? this._firestoreService.addToArray(menu.id)
+        : this._firestoreService.removeFromArray(menu.id);
+      return {
+        docRef: this.getDishDoc(dishId),
+        updates: {
+          usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
+          ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
+        },
+      };
     });
   }
 
@@ -152,7 +185,7 @@ export class DocumentService {
     return docUpdates;
   }
 
-  private _getMenuDayDishes(
+  private _getDayDishes(
     day: Day,
     dishes: string[]
   ): { [contentsDay: string]: string[] } {

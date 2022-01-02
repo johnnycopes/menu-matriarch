@@ -5,7 +5,6 @@ import { concatMap, first, tap } from 'rxjs/operators';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
-import { BatchService } from './batch.service';
 import { LocalStorageService } from './local-storage.service';
 import { MenuDocumentService } from './menu-document.service';
 import { UserService } from './user.service';
@@ -17,7 +16,6 @@ export class MenuService {
 
   constructor(
     private _localStorageService: LocalStorageService,
-    private _batchService: BatchService,
     private _menuDocumentService: MenuDocumentService,
     private _userService: UserService,
   ) { }
@@ -62,7 +60,7 @@ export class MenuService {
     dishIds: string[],
     selected: boolean,
   }): Promise<void> {
-    return this._batchService.updateMenuContents({ menu, day, dishIds, selected });
+    return this._menuDocumentService.updateMenuContents({ menu, day, dishIds, selected });
   }
 
   public async deleteMenu(id?: string): Promise<void> {
@@ -73,7 +71,7 @@ export class MenuService {
           if (!menu) {
             return;
           }
-          await this._batchService.deleteMenu(menu);
+          await this._menuDocumentService.deleteMenu(menu);
           if (id === this._localStorageService.getMenuId()) {
             this._localStorageService.deleteMenuId();
           }
@@ -83,6 +81,6 @@ export class MenuService {
   }
 
   public deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
-    return this._batchService.deleteMenuContents(menu, day);
+    return this._menuDocumentService.deleteMenuContents(menu, day);
   }
 }

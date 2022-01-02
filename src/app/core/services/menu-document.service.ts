@@ -8,9 +8,11 @@ import { Menu } from '@models/menu.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { createMenuDto } from '@utility/domain/create-dtos';
 import { getDays } from '@utility/domain/get-days';
+import { flattenValues } from '@utility/generic/flatten-values';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { DishService } from './dish.service';
+import { DocumentService } from './document.service';
 import { FirestoreService } from './firestore.service';
 import { UserService } from './user.service';
 
@@ -22,6 +24,7 @@ export class MenuDocumentService {
 
   constructor(
     private _dishService: DishService,
+    private _documentService: DocumentService,
     private _firestoreService: FirestoreService,
     private _userService: UserService,
   ) { }
@@ -68,6 +71,72 @@ export class MenuDocumentService {
 
   public async updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {
     return await this._firestoreService.update<MenuDto>(this._endpoint, id, updates);
+  }
+
+  public async updateMenuContents({
+    menu, dishIds, day, selected
+  }: {
+    menu: Menu,
+    dishIds: string[],
+    day: Day,
+    selected: boolean,
+  }): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    this._documentService.processUpdates(batch, [
+      ...this._documentService.getUpdatedDishDocsCounters({
+        dishIds,
+        menu,
+        change: selected ? 'increment' : 'decrement'
+      }),
+      ...this._documentService.getUpdatedMenuDocs({
+        menuIds: [menu.id],
+        day,
+        getDishes: selected
+          ? () => this._firestoreService.addToArray(...dishIds)
+          : () => this._firestoreService.removeFromArray(...dishIds)
+      }),
+    ]);
+    await batch.commit();
+  }
+
+  public async deleteMenu(menu: Menu): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    batch.delete(this._documentService.getMenuDoc(menu.id));
+    this._documentService.processUpdates(batch,
+      this._documentService.getUpdatedDishDocsCounters({
+        dishIds: flattenValues(menu.contents),
+        menu,
+        change: 'clear'
+      }),
+    );
+    await batch.commit();
+  }
+
+  public async deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
+    const batch = this._firestoreService.getBatch();
+    // Clear a single day's contents
+    if (day) {
+      this._documentService.processUpdates(batch, [
+        ...this._documentService.getUpdatedMenuDocs({ menuIds: [menu.id], day }),
+        ...this._documentService.getUpdatedDishDocsCounters({
+          dishIds: menu.contents[day],
+          menu,
+          change: 'decrement'
+        }),
+      ]);
+    }
+    // Clear all days' contents
+    else {
+      this._documentService.processUpdates(batch, [
+        ...this._documentService.getUpdatedMenuDocs({ menuIds: [menu.id] }),
+        ...this._documentService.getUpdatedDishDocsCounters({
+          dishIds: flattenValues(menu.contents),
+          menu,
+          change: 'clear'
+        }),
+      ]);
+    }
+    await batch.commit();
   }
 
   // TODO: investigate refactoring this to a more pure "_getMenu" method OR the tag/dish services' equivalent of this to "_transform____" for consistency
