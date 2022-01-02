@@ -64,8 +64,7 @@ export class DishDocumentService {
       createDishDto({ id, uid, ...dish }),
     );
     if (dish.tags) {
-      this._documentService.processUpdates(
-        batch,
+      this._documentService.processUpdates(batch,
         this._documentService.getUpdatedTagDocs({
           key: 'dishes',
           initialTagIds: [],
@@ -85,8 +84,7 @@ export class DishDocumentService {
     const batch = this._firestoreService.getBatch();
     batch.update(this._documentService.getDishDoc(dish.id), updates);
     if (updates.tags) {
-      this._documentService.processUpdates(
-        batch,
+      this._documentService.processUpdates(batch,
         this._documentService.getUpdatedTagDocs({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),

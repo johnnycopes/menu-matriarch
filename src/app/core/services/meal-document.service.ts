@@ -69,8 +69,7 @@ export class MealDocumentService {
       createMealDto({ id, uid, ...meal }),
     );
     if (meal.dishes) {
-      this._documentService.processUpdates(
-        batch,
+      this._documentService.processUpdates(batch,
         this._documentService.getUpdatedDishDocs({
           key: 'meals',
           initialDishIds: [],
@@ -80,8 +79,7 @@ export class MealDocumentService {
       );
     }
     if (meal.tags) {
-      this._documentService.processUpdates(
-        batch,
+      this._documentService.processUpdates(batch,
         this._documentService.getUpdatedTagDocs({
           key: 'meals',
           initialTagIds: [],
@@ -101,8 +99,7 @@ export class MealDocumentService {
     const batch = this._firestoreService.getBatch();
     batch.update(this._documentService.getMealDoc(meal.id), updates);
     if (updates.dishes) {
-      this._documentService.processUpdates(
-        batch,
+      this._documentService.processUpdates(batch,
         this._documentService.getUpdatedDishDocs({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
@@ -112,8 +109,7 @@ export class MealDocumentService {
       );
     }
     if (updates.tags) {
-      this._documentService.processUpdates(
-        batch,
+      this._documentService.processUpdates(batch,
         this._documentService.getUpdatedTagDocs({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
