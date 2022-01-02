@@ -206,6 +206,11 @@ export class BatchService {
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this.getDishDoc(dish.id));
+    dish.meals
+      .map(mealId => this.getMealDoc(mealId))
+      .forEach(meal => batch.update(meal, {
+        dishes: this._firestoreService.removeFromArray(dish.id)
+      }));
     this._processUpdates(batch, [
       ...this._getMenusUpdates({
         menuIds: dish.menus,
