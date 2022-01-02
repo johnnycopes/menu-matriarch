@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
-import { BatchService } from './batch.service';
+import { DocumentService } from './document.service';
 import { FirestoreService } from './firestore.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ import { FirestoreService } from './firestore.service';
 export class SeedDataService {
 
   constructor(
-    private _batchService: BatchService,
+    private _documentService: DocumentService,
     private _firestoreService: FirestoreService,
   ) { }
 
@@ -43,11 +43,11 @@ export class SeedDataService {
     const vegetarianTagId = this._firestoreService.createId();
     batch
       .set(
-        this._batchService.getUserDoc(uid),
+        this._documentService.getUserDoc(uid),
         createUserDto({ uid, name, email }),
       )
       .set(
-        this._batchService.getMenuDoc(menuId),
+        this._documentService.getMenuDoc(menuId),
         createMenuDto({ id: menuId, uid, name: 'Menu #1', contents: {
           Monday: [enchiladasDishId],
           Tuesday: [sushiDishId, misoSoupDishId],
@@ -59,7 +59,7 @@ export class SeedDataService {
         }}),
       )
       .set(
-        this._batchService.getMealDoc(southernClassicMealId),
+        this._documentService.getMealDoc(southernClassicMealId),
         createMealDto({
           id: southernClassicMealId,
           uid,
@@ -68,7 +68,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getMealDoc(sushiDinnerMealId),
+        this._documentService.getMealDoc(sushiDinnerMealId),
         createMealDto({
           id: sushiDinnerMealId,
           uid,
@@ -78,7 +78,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(cornbreadDishId),
+        this._documentService.getDishDoc(cornbreadDishId),
         createDishDto({
           id: cornbreadDishId,
           uid,
@@ -93,7 +93,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(enchiladasDishId),
+        this._documentService.getDishDoc(enchiladasDishId),
         createDishDto({
           id: enchiladasDishId,
           uid,
@@ -104,7 +104,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(friedChickenDishId),
+        this._documentService.getDishDoc(friedChickenDishId),
         createDishDto({
           id: friedChickenDishId,
           uid,
@@ -116,7 +116,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(greekSaladDishId),
+        this._documentService.getDishDoc(greekSaladDishId),
         createDishDto({
           id: greekSaladDishId,
           uid,
@@ -125,7 +125,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(macAndCheeseDishId),
+        this._documentService.getDishDoc(macAndCheeseDishId),
         createDishDto({
           id: macAndCheeseDishId,
           uid,
@@ -140,7 +140,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(misoSoupDishId),
+        this._documentService.getDishDoc(misoSoupDishId),
         createDishDto({
           id: misoSoupDishId,
           uid,
@@ -153,7 +153,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(pizzaDishId),
+        this._documentService.getDishDoc(pizzaDishId),
         createDishDto({
           id: pizzaDishId,
           uid,
@@ -166,7 +166,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(redLentilSoupDishId),
+        this._documentService.getDishDoc(redLentilSoupDishId),
         createDishDto({
           id: redLentilSoupDishId,
           uid,
@@ -178,7 +178,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(roastedCauliflowerDishId),
+        this._documentService.getDishDoc(roastedCauliflowerDishId),
         createDishDto({
           id: roastedCauliflowerDishId,
           uid,
@@ -189,7 +189,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(salmonBurgersDishId),
+        this._documentService.getDishDoc(salmonBurgersDishId),
         createDishDto({
           id: salmonBurgersDishId,
           uid,
@@ -201,7 +201,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(sushiDishId),
+        this._documentService.getDishDoc(sushiDishId),
         createDishDto({
           id: sushiDishId,
           uid,
@@ -214,7 +214,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(sweetPotatoFriesDishId),
+        this._documentService.getDishDoc(sweetPotatoFriesDishId),
         createDishDto({
           id: sweetPotatoFriesDishId,
           uid,
@@ -226,7 +226,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(tiramisuDishId),
+        this._documentService.getDishDoc(tiramisuDishId),
         createDishDto({
           id: tiramisuDishId,
           uid,
@@ -240,7 +240,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getDishDoc(thaiCurryDishId),
+        this._documentService.getDishDoc(thaiCurryDishId),
         createDishDto({
           id: thaiCurryDishId,
           uid,
@@ -253,7 +253,7 @@ export class SeedDataService {
         })
       )
       .set(
-        this._batchService.getTagDoc(easyTagId),
+        this._documentService.getTagDoc(easyTagId),
         createTagDto({
           id: easyTagId,
           uid,
@@ -262,7 +262,7 @@ export class SeedDataService {
         }),
       )
       .set(
-        this._batchService.getTagDoc(pescatarianTagId),
+        this._documentService.getTagDoc(pescatarianTagId),
         createTagDto({
           id: pescatarianTagId,
           uid,
@@ -272,7 +272,7 @@ export class SeedDataService {
         }),
       )
       .set(
-        this._batchService.getTagDoc(veganTagId),
+        this._documentService.getTagDoc(veganTagId),
         createTagDto({ id: veganTagId, uid, name: 'Vegan', dishes: [
           misoSoupDishId,
           redLentilSoupDishId,
@@ -282,7 +282,7 @@ export class SeedDataService {
         ]}),
       )
       .set(
-        this._batchService.getTagDoc(vegetarianTagId),
+        this._documentService.getTagDoc(vegetarianTagId),
         createTagDto({ id: vegetarianTagId, uid, name: 'Vegetarian', dishes: [
           cornbreadDishId,
           greekSaladDishId,

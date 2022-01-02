@@ -1,38 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
+import { concatMap, first, tap } from 'rxjs/operators';
 
-import { Endpoint } from '@models/endpoint.enum';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/tag.interface';
-import { createTagDto } from '@shared/utility/domain/create-dtos';
-import { lower } from '@utility/generic/format';
-import { sort } from '@utility/generic/sort';
-import { FirestoreService } from './firestore.service';
-import { BatchService } from './batch.service';
+import { TagDocumentService } from './tag-document.service';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TagService {
-  private _endpoint = Endpoint.tags;
 
   constructor(
-    private _firestoreService: FirestoreService,
-    private _batchService: BatchService,
+    private _tagDocumentService: TagDocumentService,
     private _userService: UserService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
-    return this._firestoreService.getOne<TagDto>(this._endpoint, id);
+    return this._tagDocumentService.getTag(id);
   }
 
   public getTags(): Observable<Tag[]> {
-    return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<TagDto>(this._endpoint, uid)),
-      map(tags => sort(tags, tag => lower(tag.name)))
-    );
+    return this._tagDocumentService.getTags();
   }
 
   public createTag(tag: Partial<Omit<TagDto, 'id' | 'uid'>>): Observable<string | undefined> {
@@ -40,12 +30,7 @@ export class TagService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = this._firestoreService.createId();
-          await this._firestoreService.create<TagDto>(
-            this._endpoint,
-            id,
-            createTagDto({ id, uid, ...tag })
-          );
+          const id = this._tagDocumentService.createTag({ uid, tag });
           return id;
         } else {
           return undefined;
@@ -55,7 +40,7 @@ export class TagService {
   }
 
   public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
-    return this._firestoreService.update<TagDto>(this._endpoint, id, updates);
+    return this._tagDocumentService.updateTag(id, updates);
   }
 
   public deleteTag(id: string): Observable<Tag | undefined> {
@@ -65,7 +50,7 @@ export class TagService {
         if (!tag) {
           return;
         }
-        await this._batchService.deleteTag(tag);
+        await this._tagDocumentService.deleteTag(tag);
       })
     );
   }

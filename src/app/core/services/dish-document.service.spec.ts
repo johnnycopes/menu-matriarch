@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BatchService } from './batch.service';
+import { DishDocumentService } from './dish-document.service';
 
-describe('BatchService', () => {
-  let service: BatchService;
+describe('DishDocumentService', () => {
+  let service: DishDocumentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BatchService);
+    service = TestBed.inject(DishDocumentService);
   });
 
   it('should be created', () => {
