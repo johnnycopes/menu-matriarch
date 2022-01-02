@@ -55,16 +55,20 @@ export class TagDocumentService {
   public async deleteTag(tag: Tag): Promise<void> {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._documentService.getTagDoc(tag.id));
-    tag.meals
-      .map(mealId => this._documentService.getMealDoc(mealId))
-      .forEach(meal => batch.update(meal, {
-        tags: this._firestoreService.removeFromArray(tag.id)
-      }));
-    tag.dishes
-      .map(dishId => this._documentService.getDishDoc(dishId))
-      .forEach(dish => batch.update(dish, {
-        tags: this._firestoreService.removeFromArray(tag.id)
-      }));
+    this._documentService.processUpdates(batch, [
+      ...this._documentService.getUpdatedMealDocs({
+        key: 'tags',
+        initialMealIds: tag.meals,
+        finalMealIds: [],
+        entityId: tag.id,
+      }),
+      ...this._documentService.getUpdatedDishDocs({
+        key: 'tags',
+        initialDishIds: tag.dishes,
+        finalDishIds: [],
+        entityId: tag.id,
+      }),
+    ]);
     await batch.commit();
   }
 }

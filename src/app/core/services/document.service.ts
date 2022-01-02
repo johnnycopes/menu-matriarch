@@ -53,17 +53,33 @@ export class DocumentService {
     );
   }
 
-  public getUpdatedDishDocs({ initialDishIds, finalDishIds, mealId }: {
+  public getUpdatedMealDocs({ key, initialMealIds, finalMealIds, entityId }: {
+    key: 'dishes' | 'tags',
+    initialMealIds: string[],
+    finalMealIds: string[],
+    entityId: string,
+  }): DocRefUpdate<MealDto, { [key: string]: string[] }>[] {
+    return this._getUpdatedDocs({
+      getDoc: (id) => this.getMealDoc(id),
+      key,
+      initialIds: initialMealIds,
+      finalIds: finalMealIds,
+      entityId,
+    });
+  }
+
+  public getUpdatedDishDocs({ key, initialDishIds, finalDishIds, entityId }: {
+    key: 'meals' | 'tags',
     initialDishIds: string[],
     finalDishIds: string[],
-    mealId: string,
+    entityId: string,
   }): DocRefUpdate<DishDto, { [key: string]: string[] }>[] {
     return this._getUpdatedDocs({
       getDoc: (id) => this.getDishDoc(id),
-      key: 'meals',
+      key,
       initialIds: initialDishIds,
       finalIds: finalDishIds,
-      entityId: mealId,
+      entityId,
     });
   }
 

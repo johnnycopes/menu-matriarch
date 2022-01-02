@@ -72,9 +72,10 @@ export class MealDocumentService {
       this._documentService.processUpdates(
         batch,
         this._documentService.getUpdatedDishDocs({
+          key: 'meals',
           initialDishIds: [],
           finalDishIds: meal.dishes,
-          mealId: id,
+          entityId: id,
         }),
       );
     }
@@ -103,9 +104,10 @@ export class MealDocumentService {
       this._documentService.processUpdates(
         batch,
         this._documentService.getUpdatedDishDocs({
+          key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: updates.dishes,
-          mealId: meal.id,
+          entityId: meal.id,
         }),
       );
     }
@@ -128,9 +130,10 @@ export class MealDocumentService {
     batch.delete(this._documentService.getMealDoc(meal.id));
     this._documentService.processUpdates(batch, [
       ...this._documentService.getUpdatedDishDocs({
+        key: 'meals',
         initialDishIds: meal.dishes.map(dish => dish.id),
         finalDishIds: [],
-        mealId: meal.id,
+        entityId: meal.id,
       }),
       ...this._documentService.getUpdatedTagDocs({
         key: 'meals',
