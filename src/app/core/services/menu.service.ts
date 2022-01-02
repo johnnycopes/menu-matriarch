@@ -1,54 +1,33 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { concatMap, first, tap } from 'rxjs/operators';
 
-import { Endpoint } from '@models/endpoint.enum';
-import { createMenuDto } from '@shared/utility/domain/create-dtos';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
-import { getDays } from '@utility/domain/get-days';
-import { lower } from '@utility/generic/format';
-import { sort } from '@utility/generic/sort';
-import { FirestoreService } from './firestore.service';
 import { BatchService } from './batch.service';
-import { DishService } from './dish.service';
 import { LocalStorageService } from './local-storage.service';
+import { MenuDocumentService } from './menu-document.service';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
-  private _endpoint = Endpoint.menus;
 
   constructor(
-    private _firestoreService: FirestoreService,
     private _localStorageService: LocalStorageService,
     private _batchService: BatchService,
-    private _dishService: DishService,
+    private _menuDocumentService: MenuDocumentService,
     private _userService: UserService,
   ) { }
 
   public getMenu(id: string): Observable<Menu | undefined> {
-    return this._firestoreService.getOne<MenuDto>(this._endpoint, id).pipe(
-      switchMap(menuDto => {
-        if (!menuDto) {
-          return of(undefined);
-        }
-        return this._transformMenuDto(menuDto);
-      })
-    );
+    return this._menuDocumentService.getMenu(id);
   }
 
   public getMenus(): Observable<Menu[]> {
-    return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<MenuDto>(this._endpoint, uid)),
-      switchMap(menus => combineLatest(
-        menus.map(menu => this._transformMenuDto(menu))
-      )),
-      map(menus => sort(menus, menu => lower(menu.name))),
-    );
+    return this._menuDocumentService.getMenus();
   }
 
   public createMenu(menu: Partial<Omit<MenuDto, 'id' | 'uid' | 'startDay'>>): Observable<string | undefined> {
@@ -56,17 +35,11 @@ export class MenuService {
       first(),
       concatMap(async user => {
         if (user) {
-          const id = this._firestoreService.createId();
-          await this._firestoreService.create<MenuDto>(
-            this._endpoint,
-            id,
-            createMenuDto({
-              ...menu,
-              id,
-              uid: user.uid,
-              startDay: user.preferences.defaultMenuStartDay,
-            }),
-          );
+          const id = await this._menuDocumentService.createMenu({
+            uid: user.uid,
+            menu,
+            startDay: user.preferences.defaultMenuStartDay,
+          });
           return id;
         } else {
           return undefined;
@@ -76,11 +49,11 @@ export class MenuService {
   }
 
   public updateMenuName(id: string, name: string): Promise<void> {
-    return this._updateMenu(id, { name });
+    return this._menuDocumentService.updateMenu(id, { name });
   }
 
   public updateMenuStartDay(id: string, startDay: Day): Promise<void> {
-    return this._updateMenu(id, { startDay });
+    return this._menuDocumentService.updateMenu(id, { startDay });
   }
 
   public updateMenuContents({ menu, day, dishIds, selected }: {
@@ -111,30 +84,5 @@ export class MenuService {
 
   public deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
     return this._batchService.deleteMenuContents(menu, day);
-  }
-
-  private _transformMenuDto(menu: MenuDto): Observable<Menu> {
-    return combineLatest([
-      this._dishService.getDishes(),
-      this._userService.getPreferences(),
-    ]).pipe(
-      map(([dishes, preferences]) => {
-        return {
-          ...menu,
-          entries: getDays(menu.startDay)
-            .map(day => ({
-              day,
-              dishes: dishes.filter(dish => menu.contents[day].includes(dish.id)),
-            })
-          ),
-          orientation: preferences?.mealOrientation ?? 'horizontal',
-          fallbackText: preferences?.emptyMealText ?? '',
-        };
-      }),
-    );
-  }
-
-  private async _updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {
-    return await this._firestoreService.update<MenuDto>(this._endpoint, id, updates);
   }
 }
