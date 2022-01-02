@@ -44,6 +44,15 @@ export class DocumentService {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
   }
 
+  public processUpdates(
+    batch: firebase.firestore.WriteBatch,
+    docRefUpdates: DocRefUpdate<any, any>[]
+  ): void {
+    docRefUpdates.forEach(
+      ({ docRef, updates }) => batch.update(docRef, updates)
+    );
+  }
+
   public getUpdatedDishDocs({ initialDishIds, finalDishIds, mealId }: {
     initialDishIds: string[],
     finalDishIds: string[],
@@ -73,7 +82,7 @@ export class DocumentService {
     });
   }
 
-  private _getUpdatedDocs<T>({ initialIds, finalIds, entityId, getDoc, key }: {
+  private _getUpdatedDocs<T>({ getDoc, key, initialIds, finalIds, entityId }: {
     getDoc: (id: string) => DocumentReference<T>,
     key: 'meals' | 'dishes' | 'tags',
     initialIds: string[],

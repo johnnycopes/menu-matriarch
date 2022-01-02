@@ -3,14 +3,12 @@ import { DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
 import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { MealDto } from '@models/dtos/meal-dto.interface';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/dish.interface';
 import { Tag } from '@models/tag.interface';
-import { Meal } from '@models/meal.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
-import { createDishDto, createMealDto } from '@utility/domain/create-dtos';
+import { createDishDto } from '@utility/domain/create-dtos';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { DocumentService } from './document.service';
 import { FirestoreService } from './firestore.service';
@@ -29,40 +27,6 @@ export class BatchService {
     private _documentService: DocumentService,
     private _firestoreService: FirestoreService,
   ) { }
-
-  public async createMeal({ uid, id, meal }: {
-    uid: string,
-    id: string,
-    meal: Partial<Omit<MealDto, 'id' | 'uid'>>
-  }): Promise<void> {
-    const batch = this._firestoreService.getBatch();
-    batch.set(
-      this._documentService.getMealDoc(id),
-      createMealDto({ id, uid, ...meal }),
-    );
-    if (meal.dishes) {
-      this._processUpdates(
-        batch,
-        this._documentService.getUpdatedDishDocs({
-          initialDishIds: [],
-          finalDishIds: meal.dishes,
-          mealId: id,
-        }),
-      );
-    }
-    if (meal.tags) {
-      this._processUpdates(
-        batch,
-        this._documentService.getUpdatedTagDocs({
-          key: 'meals',
-          initialTagIds: [],
-          finalTagIds: meal.tags,
-          entityId: id,
-        }),
-      );
-    }
-    await batch.commit();
-  }
 
   public async createDish({ uid, id, dish }: {
     uid: string,
@@ -111,36 +75,6 @@ export class BatchService {
           : () => this._firestoreService.removeFromArray(...dishIds)
       }),
     ]);
-    await batch.commit();
-  }
-
-  public async updateMeal(
-    meal: Meal,
-    updates: Partial<MealDto>
-  ): Promise<void> {
-    const batch = this._firestoreService.getBatch();
-    batch.update(this._documentService.getMealDoc(meal.id), updates);
-    if (updates.dishes) {
-      this._processUpdates(
-        batch,
-        this._documentService.getUpdatedDishDocs({
-          initialDishIds: meal.dishes.map(dish => dish.id),
-          finalDishIds: updates.dishes,
-          mealId: meal.id,
-        }),
-      );
-    }
-    if (updates.tags) {
-      this._processUpdates(
-        batch,
-        this._documentService.getUpdatedTagDocs({
-          key: 'meals',
-          initialTagIds: meal.tags.map(tag => tag.id),
-          finalTagIds: updates.tags,
-          entityId: meal.id,
-        }),
-      );
-    }
     await batch.commit();
   }
 
@@ -201,25 +135,6 @@ export class BatchService {
         }),
       ]);
     }
-    await batch.commit();
-  }
-
-  public async deleteMeal(meal: Meal): Promise<void> {
-    const batch = this._firestoreService.getBatch();
-    batch.delete(this._documentService.getMealDoc(meal.id));
-    this._processUpdates(batch, [
-      ...this._documentService.getUpdatedDishDocs({
-        initialDishIds: meal.dishes.map(dish => dish.id),
-        finalDishIds: [],
-        mealId: meal.id,
-      }),
-      ...this._documentService.getUpdatedTagDocs({
-        key: 'meals',
-        initialTagIds: meal.tags.map(tag => tag.id),
-        finalTagIds: [],
-        entityId: meal.id,
-      }),
-    ]);
     await batch.commit();
   }
 
