@@ -51,11 +51,11 @@ export class BatchService {
     if (meal.tags) {
       this._processUpdates(
         batch,
-        this._documentService.getUpdatedTags({
-          id,
-          updateKey: 'meals',
-          tagIds: [],
-          updateTagIds: meal.tags,
+        this._documentService.getUpdatedTagDocs({
+          key: 'meals',
+          initialTagIds: [],
+          finalTagIds: meal.tags,
+          entityId: id,
         }),
       );
     }
@@ -75,11 +75,11 @@ export class BatchService {
     if (dish.tags) {
       this._processUpdates(
         batch,
-        this._documentService.getUpdatedTags({
-          id,
-          updateKey: 'dishes',
-          tagIds: [],
-          updateTagIds: dish.tags,
+        this._documentService.getUpdatedTagDocs({
+          key: 'dishes',
+          initialTagIds: [],
+          finalTagIds: dish.tags,
+          entityId: id,
         }),
       );
     }
@@ -127,11 +127,11 @@ export class BatchService {
     if (updates.tags) {
       this._processUpdates(
         batch,
-        this._documentService.getUpdatedTags({
-          id: meal.id,
-          updateKey: 'meals',
-          tagIds: meal.tags.map(tag => tag.id),
-          updateTagIds: updates.tags
+        this._documentService.getUpdatedTagDocs({
+          key: 'meals',
+          initialTagIds: meal.tags.map(tag => tag.id),
+          finalTagIds: updates.tags,
+          entityId: meal.id,
         }),
       );
     }
@@ -147,11 +147,11 @@ export class BatchService {
     if (updates.tags) {
       this._processUpdates(
         batch,
-        this._documentService.getUpdatedTags({
-          id: dish.id,
-          updateKey: 'dishes',
-          tagIds: dish.tags.map(dish => dish.id),
-          updateTagIds: updates.tags
+        this._documentService.getUpdatedTagDocs({
+          key: 'dishes',
+          initialTagIds: dish.tags.map(dish => dish.id),
+          finalTagIds: updates.tags,
+          entityId: dish.id,
         }),
       );
     }
@@ -206,10 +206,11 @@ export class BatchService {
         meal,
         action: 'delete',
       }),
-      ...this._documentService.getUpdatedTags({
-        id: meal.id,
-        updateKey: 'meals',
-        tagIds: meal.tags.map(tag => tag.id),
+      ...this._documentService.getUpdatedTagDocs({
+        key: 'meals',
+        initialTagIds: meal.tags.map(tag => tag.id),
+        finalTagIds: [],
+        entityId: meal.id,
       }),
     ]);
     await batch.commit();
@@ -223,10 +224,11 @@ export class BatchService {
         menuIds: dish.menus,
         getDishes: () => this._firestoreService.removeFromArray(dish.id)
       }),
-      ...this._documentService.getUpdatedTags({
-        id: dish.id,
-        updateKey: 'dishes',
-        tagIds: dish.tags.map(dish => dish.id),
+      ...this._documentService.getUpdatedTagDocs({
+        key: 'dishes',
+        initialTagIds: dish.tags.map(dish => dish.id),
+        finalTagIds: [],
+        entityId: dish.id,
       }),
     ]);
     await batch.commit();

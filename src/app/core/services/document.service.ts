@@ -44,26 +44,26 @@ export class DocumentService {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
   }
 
-  public getUpdatedTags({ id, updateKey, tagIds, updateTagIds = [] }: {
-    id: string,
-    updateKey: 'meals' | 'dishes',
-    tagIds: string[],
-    updateTagIds?: string[],
+  public getUpdatedTagDocs({ key, initialTagIds, finalTagIds, entityId }: {
+    key: 'meals' | 'dishes',
+    initialTagIds: string[],
+    finalTagIds: string[],
+    entityId: string,
   }): DocRefUpdate<TagDto, { [key: string]: string[] }>[] {
     const tagUpdates = [];
-    for (let tagId of dedupe(tagIds, updateTagIds)) {
-      let updatedIds = undefined;
+    for (let tagId of dedupe(initialTagIds, finalTagIds)) {
+      let updatedTagIds = undefined;
 
-      if (tagIds.includes(tagId) && !updateTagIds.includes(tagId)) {
-        updatedIds = this._firestoreService.removeFromArray(id);
-      } else if (!tagIds.includes(tagId) && updateTagIds.includes(tagId)) {
-        updatedIds = this._firestoreService.addToArray(id);
+      if (initialTagIds.includes(tagId) && !finalTagIds.includes(tagId)) {
+        updatedTagIds = this._firestoreService.removeFromArray(entityId);
+      } else if (!initialTagIds.includes(tagId) && finalTagIds.includes(tagId)) {
+        updatedTagIds = this._firestoreService.addToArray(entityId);
       }
 
-      if (updatedIds) {
+      if (updatedTagIds) {
         tagUpdates.push({
           docRef: this.getTagDoc(tagId),
-          updates: { [updateKey]: updatedIds },
+          updates: { [key]: updatedTagIds },
         });
       }
     }
