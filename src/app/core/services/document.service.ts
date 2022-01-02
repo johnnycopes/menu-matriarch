@@ -48,26 +48,14 @@ export class DocumentService {
     initialDishIds: string[],
     finalDishIds: string[],
     mealId: string,
-  }): DocRefUpdate<DishDto, { meals: string[] }>[] {
-    debugger;
-    const dishUpdates = [];
-    for (let dishId of dedupe(initialDishIds, finalDishIds)) {
-      let updatedMealIds = undefined;
-
-      if (initialDishIds.includes(dishId) && !finalDishIds.includes(dishId)) {
-        updatedMealIds = this._firestoreService.removeFromArray(mealId);
-      } else if (!initialDishIds.includes(dishId) && finalDishIds.includes(dishId)) {
-        updatedMealIds = this._firestoreService.addToArray(mealId);
-      }
-
-      if (updatedMealIds) {
-        dishUpdates.push({
-          docRef: this.getDishDoc(dishId),
-          updates: { meals: updatedMealIds },
-        });
-      }
-    }
-    return dishUpdates;
+  }): DocRefUpdate<DishDto, { [key: string]: string[] }>[] {
+    return this._getUpdatedDocs({
+      getDoc: (id) => this.getDishDoc(id),
+      key: 'meals',
+      initialIds: initialDishIds,
+      finalIds: finalDishIds,
+      entityId: mealId,
+    });
   }
 
   public getUpdatedTagDocs({ key, initialTagIds, finalTagIds, entityId }: {
@@ -76,23 +64,40 @@ export class DocumentService {
     finalTagIds: string[],
     entityId: string,
   }): DocRefUpdate<TagDto, { [key: string]: string[] }>[] {
-    const tagUpdates = [];
-    for (let tagId of dedupe(initialTagIds, finalTagIds)) {
+    return this._getUpdatedDocs({
+      getDoc: (id) => this.getTagDoc(id),
+      key,
+      initialIds: initialTagIds,
+      finalIds: finalTagIds,
+      entityId,
+    });
+  }
+
+  private _getUpdatedDocs<T>({ initialIds, finalIds, entityId, getDoc, key }: {
+    getDoc: (id: string) => DocumentReference<T>,
+    key: 'meals' | 'dishes' | 'tags',
+    initialIds: string[],
+    finalIds: string[],
+    entityId: string,
+  }): DocRefUpdate<T, { [key: string]: string[] }>[] {
+    const docUpdates = [];
+    for (let id of dedupe(initialIds, finalIds)) {
       let updatedIds = undefined;
 
-      if (initialTagIds.includes(tagId) && !finalTagIds.includes(tagId)) {
+      if (initialIds.includes(id) && !finalIds.includes(id)) {
         updatedIds = this._firestoreService.removeFromArray(entityId);
-      } else if (!initialTagIds.includes(tagId) && finalTagIds.includes(tagId)) {
+      } else if (!initialIds.includes(id) && finalIds.includes(id)) {
         updatedIds = this._firestoreService.addToArray(entityId);
       }
 
       if (updatedIds) {
-        tagUpdates.push({
-          docRef: this.getTagDoc(tagId),
+        docUpdates.push({
+          docRef: getDoc(id),
           updates: { [key]: updatedIds },
         });
       }
     }
-    return tagUpdates;
+
+    return docUpdates;
   }
 }
