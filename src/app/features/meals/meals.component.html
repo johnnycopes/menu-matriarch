@@ -1,21 +1,19 @@
 <app-meals-list>
-  <ng-template #mealTemplate
-    let-meal
-    let-activeMeal="activeMeal"
-    let-fallbackText="fallbackText"
-    let-orientation="orientation"
-  >
-    <app-meal-card
-      [id]="meal.id"
-      [name]="meal.name"
-      [description]="meal.description"
-      [dishes]="meal.dishes"
-      [tags]="meal.tags"
-      [active]="meal === activeMeal"
-      [fallbackText]="fallbackText"
-      [orientation]="orientation"
-    ></app-meal-card>
-  </ng-template>
+  <app-meal-card *appMealDef="
+      let meal;
+      let activeMeal = activeMeal;
+      let fallbackText = fallbackText;
+      let orientation = orientation;
+    "
+    [id]="meal.id"
+    [name]="meal.name"
+    [description]="meal.description"
+    [dishes]="meal.dishes"
+    [tags]="meal.tags"
+    [active]="meal === activeMeal"
+    [fallbackText]="fallbackText"
+    [orientation]="orientation"
+  ></app-meal-card>
 </app-meals-list>
 
 <section>
