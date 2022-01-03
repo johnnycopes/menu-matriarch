@@ -19,6 +19,6 @@ export class TagsListComponent<T extends Tag> {
   public tagDef: TagDefDirective<T> | undefined;
 
   public get tagTemplate(): TemplateRef<TagDefContext<T>> | null {
-		return this.tagDef?.template ?? null;
-	}
+    return this.tagDef?.template ?? null;
+  }
 }

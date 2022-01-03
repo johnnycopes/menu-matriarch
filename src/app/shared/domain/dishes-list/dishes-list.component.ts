@@ -47,8 +47,8 @@ export class DishesListComponent {
   public dishDef: DishDefDirective | undefined;
 
   public get dishTemplate(): TemplateRef<DishContext> | null {
-		return this.dishDef?.template ?? null;
-	}
+    return this.dishDef?.template ?? null;
+  }
 
   constructor(
     private _dishService: DishService,

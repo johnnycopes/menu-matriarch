@@ -47,8 +47,8 @@ export class MealsListComponent {
   public mealDef: MealDefDirective | undefined;
 
   public get mealTemplate(): TemplateRef<MealDefContext> | null {
-		return this.mealDef?.template ?? null;
-	}
+    return this.mealDef?.template ?? null;
+  }
 
   constructor(
     private _filterService: FilterService,
