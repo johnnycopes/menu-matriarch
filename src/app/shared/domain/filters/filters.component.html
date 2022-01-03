@@ -5,7 +5,7 @@
     [tags]="tags"
     [interactive]="true"
   >
-    <ng-template #tagTemplate let-tag>
+    <ng-container *appTagDef="let tag">
       <app-checkbox
         [name]="tag.id"
         [ngModel]="selected.includes(tag.id)"
@@ -16,7 +16,7 @@
           [name]="tag.name"
         ></app-tag>
       </app-checkbox>
-    </ng-template>
+    </ng-container>
     <li>
       <button app-button
         buttonStyle="ternary"

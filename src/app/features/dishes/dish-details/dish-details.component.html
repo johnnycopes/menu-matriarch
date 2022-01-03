@@ -42,12 +42,10 @@
         *ngIf="dish.tags.length"
         [tags]="dish.tags"
       >
-        <ng-template #tagTemplate let-tag>
-          <app-tag
-            [id]="tag.id"
-            [name]="tag.name"
-          ></app-tag>
-        </ng-template>
+        <app-tag *appTagDef="let tag"
+          [id]="tag.id"
+          [name]="tag.name"
+        ></app-tag>
       </app-tags-list>
     </div>
     <div *ngIf="dish?.notes"

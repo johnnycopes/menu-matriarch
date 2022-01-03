@@ -8,6 +8,7 @@ import { RouterService } from '@services/router.service';
 import { TagService } from '@services/tag.service';
 import { UserService } from '@services/user.service';
 import { trackById } from '@utility/domain/track-by-functions';
+import { MealDefContext, MealDefDirective } from './meal-def.directive';
 
 @Component({
   selector: 'app-meals-list',
@@ -42,8 +43,12 @@ export class MealsListComponent {
   );
   public readonly trackByFn = trackById;
 
-  @ContentChild('mealTemplate')
-  public mealTemplate: TemplateRef<any> | null = null;
+  @ContentChild(MealDefDirective)
+  public mealDef: MealDefDirective | undefined;
+
+  public get mealTemplate(): TemplateRef<MealDefContext> | null {
+    return this.mealDef?.template ?? null;
+  }
 
   constructor(
     private _filterService: FilterService,

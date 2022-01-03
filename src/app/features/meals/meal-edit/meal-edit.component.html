@@ -6,29 +6,25 @@
     <app-dishes-list class="dishes"
       ngModelGroup="dishes"
     >
-      <ng-template #dishTemplate
-        let-dish
-      >
-        <app-card>
-          <app-dish-summary
-            [id]="dish.id"
-            [name]="dish.name"
-            [description]="dish.description"
-            [link]="dish.link"
-            [tags]="dish.tags"
-            [menus]="dish.menus"
-            [meals]="dish.meals"
-            [usages]="dish.usages"
-          ></app-dish-summary>
-          <app-checkbox class="included"
-            [name]="dish.id"
-            [ngModel]="vm.dishesModel.includes(dish.id)"
-            (ngModelChange)="onDishChange(form.value.dishes)"
-          >
-            Include in meal
-          </app-checkbox>
-        </app-card>
-      </ng-template>
+      <app-card *appDishDef="let dish">
+        <app-dish-summary
+          [id]="dish.id"
+          [name]="dish.name"
+          [description]="dish.description"
+          [link]="dish.link"
+          [tags]="dish.tags"
+          [menus]="dish.menus"
+          [meals]="dish.meals"
+          [usages]="dish.usages"
+        ></app-dish-summary>
+        <app-checkbox class="included"
+          [name]="dish.id"
+          [ngModel]="vm.dishesModel.includes(dish.id)"
+          (ngModelChange)="onDishChange(form.value.dishes)"
+        >
+          Include in meal
+        </app-checkbox>
+      </app-card>
     </app-dishes-list>
 
     <app-section>
@@ -83,7 +79,7 @@
             [tags]="vm.tags"
             [interactive]="true"
           >
-            <ng-template #tagTemplate let-tag>
+            <ng-container *appTagDef="let tag">
               <app-checkbox
                 [name]="tag.id"
                 [ngModel]="tag.checked"
@@ -93,7 +89,7 @@
                   [name]="tag.name"
                 ></app-tag>
               </app-checkbox>
-            </ng-template>
+            </ng-container>
           </app-tags-list>
           <ng-template #noTagsPlaceholder>
             <div class="placeholder">
