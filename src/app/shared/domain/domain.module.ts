@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { GenericModule } from '@shared/generic/generic.module';
 
 import { CountComponent } from './count/count.component';
+import { DishDefDirective } from './dishes-list/dish-def.directive';
 import { DishesListComponent } from './dishes-list/dishes-list.component';
 import { DishSummaryComponent } from './dish-summary/dish-summary.component';
 import { EmptyViewPlaceholderComponent } from './empty-view-placeholder/empty-view-placeholder.component';
@@ -25,6 +26,7 @@ import { TagsListComponent } from './tags-list/tags-list.component';
 @NgModule({
   declarations: [
     CountComponent,
+    DishDefDirective,
     DishesListComponent,
     DishSummaryComponent,
     EmptyViewPlaceholderComponent,
@@ -40,6 +42,7 @@ import { TagsListComponent } from './tags-list/tags-list.component';
   ],
   exports: [
     CountComponent,
+    DishDefDirective,
     DishesListComponent,
     DishSummaryComponent,
     EmptyViewPlaceholderComponent,

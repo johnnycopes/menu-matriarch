@@ -7,6 +7,7 @@ import { FilterService } from '@services/filter.service';
 import { RouterService } from '@services/router.service';
 import { TagService } from '@services/tag.service';
 import { trackByDishType, trackById } from '@utility/domain/track-by-functions';
+import { DishContext, DishDefDirective } from './dish-def.directive';
 
 @Component({
   selector: 'app-dishes-list',
@@ -42,8 +43,12 @@ export class DishesListComponent {
   public readonly groupTrackByFn = trackByDishType;
   public readonly dishTrackByFn = trackById;
 
-  @ContentChild('dishTemplate')
-  public dishTemplate: TemplateRef<any> | null = null;
+  @ContentChild(DishDefDirective)
+  public dishDef: DishDefDirective | undefined;
+
+  public get dishTemplate(): TemplateRef<DishContext> | null {
+		return this.dishDef?.template ?? null;
+	}
 
   constructor(
     private _dishService: DishService,

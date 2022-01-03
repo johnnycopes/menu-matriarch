@@ -1,19 +1,15 @@
 <app-dishes-list (nameDblClick)="nameDblClick.emit()">
-  <ng-template #dishTemplate
-    let-dish
-  >
-    <app-planner-dish
-      [id]="dish.id"
-      [type]="dish.type"
-      [name]="dish.name"
-      [description]="dish.description"
-      [link]="dish.link"
-      [tags]="dish.tags"
-      [menus]="dish.menus"
-      [meals]="dish.meals"
-      [usages]="dish.usages"
-      [menu]="menu"
-      (dayChange)="onDayChange(menu, $event)"
-    ></app-planner-dish>
-  </ng-template>
+  <app-planner-dish *appDishDef="let dish"
+    [id]="dish.id"
+    [type]="dish.type"
+    [name]="dish.name"
+    [description]="dish.description"
+    [link]="dish.link"
+    [tags]="dish.tags"
+    [menus]="dish.menus"
+    [meals]="dish.meals"
+    [usages]="dish.usages"
+    [menu]="menu"
+    (dayChange)="onDayChange(menu, $event)"
+  ></app-planner-dish>
 </app-dishes-list>
