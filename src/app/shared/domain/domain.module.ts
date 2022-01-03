@@ -20,6 +20,7 @@ import { MealDefDirective } from './meals-list/meal-def.directive';
 import { MealsListComponent } from './meals-list/meals-list.component';
 import { MealSummaryComponent } from './meal-summary/meal-summary.component';
 import { TagComponent } from './tag/tag.component';
+import { TagDefDirective } from './tags-list/tag-def.directive';
 import { TagsListComponent } from './tags-list/tags-list.component';
 
 
@@ -40,6 +41,7 @@ import { TagsListComponent } from './tags-list/tags-list.component';
     MealsListComponent,
     MealSummaryComponent,
     TagComponent,
+    TagDefDirective,
     TagsListComponent,
   ],
   exports: [
@@ -57,6 +59,7 @@ import { TagsListComponent } from './tags-list/tags-list.component';
     MealsListComponent,
     MealSummaryComponent,
     TagComponent,
+    TagDefDirective,
     TagsListComponent,
   ],
   imports: [
