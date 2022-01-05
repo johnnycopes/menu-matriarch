@@ -56,13 +56,13 @@ export class TagDocumentService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._documentService.getTagDoc(tag.id));
     this._documentService.processUpdates(batch, [
-      ...this._documentService.getUpdatedMealDocs({
+      ...this._documentService.getMealUpdates({
         key: 'tags',
         initialMealIds: tag.meals,
         finalMealIds: [],
         entityId: tag.id,
       }),
-      ...this._documentService.getUpdatedDishDocs({
+      ...this._documentService.getDishUpdates({
         key: 'tags',
         initialDishIds: tag.dishes,
         finalDishIds: [],

@@ -8,8 +8,10 @@ import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { Day } from '@models/day.type';
+import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
+import { flattenValues } from '@utility/generic/flatten-values';
 import { FirestoreService } from './firestore.service';
 
 export interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
@@ -53,11 +55,11 @@ export class DocumentService {
     );
   }
 
-  public getUpdatedMenuDocs({ menuIds, day, getDishes = () => [] }: {
+  public getMenuContentsUpdates({ menuIds, day, getDishes = () => [] }: {
     menuIds: string[],
     day?: Day,
     getDishes?: () => string[],
-  }): DocRefUpdate<MenuDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<MenuDto, { [key in string]: string[] }>[] {
     let updates = {};
     if (day) {
       updates = this._getDayDishes(day, getDishes());
@@ -78,13 +80,13 @@ export class DocumentService {
     }));
   }
 
-  public getUpdatedMealDocs({ key, initialMealIds, finalMealIds, entityId }: {
+  public getMealUpdates({ key, initialMealIds, finalMealIds, entityId }: {
     key: 'dishes' | 'tags',
     initialMealIds: string[],
     finalMealIds: string[],
     entityId: string,
   }): DocRefUpdate<MealDto, { [key: string]: string[] }>[] {
-    return this._getUpdatedDocs({
+    return this._getDocUpdates({
       getDoc: (id) => this.getMealDoc(id),
       key,
       initialIds: initialMealIds,
@@ -93,13 +95,13 @@ export class DocumentService {
     });
   }
 
-  public getUpdatedDishDocs({ key, initialDishIds, finalDishIds, entityId }: {
+  public getDishUpdates({ key, initialDishIds, finalDishIds, entityId }: {
     key: 'meals' | 'tags',
     initialDishIds: string[],
     finalDishIds: string[],
     entityId: string,
   }): DocRefUpdate<DishDto, { [key: string]: string[] }>[] {
-    return this._getUpdatedDocs({
+    return this._getDocUpdates({
       getDoc: (id) => this.getDishDoc(id),
       key,
       initialIds: initialDishIds,
@@ -108,13 +110,45 @@ export class DocumentService {
     });
   }
 
-  public getUpdatedTagDocs({ key, initialTagIds, finalTagIds, entityId }: {
+  public getDishCountersUpdates({ dishIds, menu, change }: {
+    dishIds: string[],
+    menu: Menu,
+    change: 'increment' | 'decrement' | 'clear',
+  }): DocRefUpdate<DishDto, { usages: number, menus?: string[] }>[] {
+    const dishCounts = flattenValues(menu.contents)
+      .reduce((hashMap, dishId) => ({
+        ...hashMap,
+        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
+      }), {} as { [dishId: string]: number });
+
+    return dishIds.map(dishId => {
+      const dishCount = dishCounts[dishId] ?? 0;
+      let menusChange = 0;
+      if (dishCount === 0 && change === 'increment') {
+        menusChange = 1;
+      } else if ((dishCount === 1 && change === 'decrement') || change === 'clear') {
+        menusChange = -1;
+      }
+      const menus = menusChange > 0
+        ? this._firestoreService.addToArray(menu.id)
+        : this._firestoreService.removeFromArray(menu.id);
+      return {
+        docRef: this.getDishDoc(dishId),
+        updates: {
+          usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
+          ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
+        },
+      };
+    });
+  }
+
+  public getTagUpdates({ key, initialTagIds, finalTagIds, entityId }: {
     key: 'meals' | 'dishes',
     initialTagIds: string[],
     finalTagIds: string[],
     entityId: string,
   }): DocRefUpdate<TagDto, { [key: string]: string[] }>[] {
-    return this._getUpdatedDocs({
+    return this._getDocUpdates({
       getDoc: (id) => this.getTagDoc(id),
       key,
       initialIds: initialTagIds,
@@ -123,7 +157,7 @@ export class DocumentService {
     });
   }
 
-  private _getUpdatedDocs<T>({ getDoc, key, initialIds, finalIds, entityId }: {
+  private _getDocUpdates<T>({ getDoc, key, initialIds, finalIds, entityId }: {
     getDoc: (id: string) => DocumentReference<T>,
     key: 'meals' | 'dishes' | 'tags',
     initialIds: string[],

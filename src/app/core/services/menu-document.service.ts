@@ -4,7 +4,6 @@ import { map, switchMap } from 'rxjs/operators';
 
 import { Day } from '@models/day.type';
 import { Dish } from '@models/dish.interface';
-import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Menu } from '@models/menu.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
@@ -15,7 +14,7 @@ import { flattenValues } from '@utility/generic/flatten-values';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { DishService } from './dish.service';
-import { DocRefUpdate, DocumentService } from './document.service';
+import { DocumentService } from './document.service';
 import { FirestoreService } from './firestore.service';
 import { UserService } from './user.service';
 
@@ -98,12 +97,12 @@ export class MenuDocumentService {
   }): Promise<void> {
     const batch = this._firestoreService.getBatch();
     this._documentService.processUpdates(batch, [
-      ...this._getUpdatedDishDocs({
+      ...this._documentService.getDishCountersUpdates({
         dishIds,
         menu,
         change: selected ? 'increment' : 'decrement'
       }),
-      ...this._documentService.getUpdatedMenuDocs({
+      ...this._documentService.getMenuContentsUpdates({
         menuIds: [menu.id],
         day,
         getDishes: selected
@@ -118,7 +117,7 @@ export class MenuDocumentService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._documentService.getMenuDoc(menu.id));
     this._documentService.processUpdates(batch,
-      this._getUpdatedDishDocs({
+      this._documentService.getDishCountersUpdates({
         dishIds: flattenValues(menu.contents),
         menu,
         change: 'clear'
@@ -132,8 +131,8 @@ export class MenuDocumentService {
     // Clear a single day's contents
     if (day) {
       this._documentService.processUpdates(batch, [
-        ...this._documentService.getUpdatedMenuDocs({ menuIds: [menu.id], day }),
-        ...this._getUpdatedDishDocs({
+        ...this._documentService.getMenuContentsUpdates({ menuIds: [menu.id], day }),
+        ...this._documentService.getDishCountersUpdates({
           dishIds: menu.contents[day],
           menu,
           change: 'decrement'
@@ -143,8 +142,8 @@ export class MenuDocumentService {
     // Clear all days' contents
     else {
       this._documentService.processUpdates(batch, [
-        ...this._documentService.getUpdatedMenuDocs({ menuIds: [menu.id] }),
-        ...this._getUpdatedDishDocs({
+        ...this._documentService.getMenuContentsUpdates({ menuIds: [menu.id] }),
+        ...this._documentService.getDishCountersUpdates({
           dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear'
@@ -152,38 +151,6 @@ export class MenuDocumentService {
       ]);
     }
     await batch.commit();
-  }
-
-  private _getUpdatedDishDocs({ dishIds, menu, change }: {
-    dishIds: string[],
-    menu: Menu,
-    change: 'increment' | 'decrement' | 'clear',
-  }): DocRefUpdate<DishDto, { usages: number, menus?: string[] }>[] {
-    const dishCounts = flattenValues(menu.contents)
-      .reduce((hashMap, dishId) => ({
-        ...hashMap,
-        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
-      }), {} as { [dishId: string]: number });
-
-    return dishIds.map(dishId => {
-      const dishCount = dishCounts[dishId] ?? 0;
-      let menusChange = 0;
-      if (dishCount === 0 && change === 'increment') {
-        menusChange = 1;
-      } else if ((dishCount === 1 && change === 'decrement') || change === 'clear') {
-        menusChange = -1;
-      }
-      const menus = menusChange > 0
-        ? this._firestoreService.addToArray(menu.id)
-        : this._firestoreService.removeFromArray(menu.id);
-      return {
-        docRef: this._documentService.getDishDoc(dishId),
-        updates: {
-          usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
-          ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
-        },
-      };
-    });
   }
 
   private _transformDto({ menuDto, dishes, preferences }: {

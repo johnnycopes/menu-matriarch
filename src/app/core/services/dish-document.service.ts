@@ -65,7 +65,7 @@ export class DishDocumentService {
     );
     if (dish.tags) {
       this._documentService.processUpdates(batch,
-        this._documentService.getUpdatedTagDocs({
+        this._documentService.getTagUpdates({
           key: 'dishes',
           initialTagIds: [],
           finalTagIds: dish.tags,
@@ -85,7 +85,7 @@ export class DishDocumentService {
     batch.update(this._documentService.getDishDoc(dish.id), updates);
     if (updates.tags) {
       this._documentService.processUpdates(batch,
-        this._documentService.getUpdatedTagDocs({
+        this._documentService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
           finalTagIds: updates.tags,
@@ -100,17 +100,17 @@ export class DishDocumentService {
     const batch = this._firestoreService.getBatch();
     batch.delete(this._documentService.getDishDoc(dish.id));
     this._documentService.processUpdates(batch, [
-      ...this._documentService.getUpdatedMenuDocs({
+      ...this._documentService.getMenuContentsUpdates({
         menuIds: dish.menus,
         getDishes: () => this._firestoreService.removeFromArray(dish.id)
       }),
-      ...this._documentService.getUpdatedMealDocs({
+      ...this._documentService.getMealUpdates({
         key: 'dishes',
         initialMealIds: dish.meals,
         finalMealIds: [],
         entityId: dish.id,
       }),
-      ...this._documentService.getUpdatedTagDocs({
+      ...this._documentService.getTagUpdates({
         key: 'dishes',
         initialTagIds: dish.tags.map(tag => tag.id),
         finalTagIds: [],
