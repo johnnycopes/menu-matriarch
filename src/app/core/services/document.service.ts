@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
-import firebase from 'firebase/compat/app';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
@@ -8,16 +7,12 @@ import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { Day } from '@models/day.type';
+import { DocRefUpdate } from '@models/doc-ref-update.interface';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { FirestoreService } from './firestore.service';
-
-export interface DocRefUpdate<T> {
-  docRef: DocumentReference<T>;
-  updates: firebase.firestore.UpdateData;
-}
 
 @Injectable({
   providedIn: 'root'

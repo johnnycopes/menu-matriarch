@@ -1,7 +1,7 @@
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
-import { DocRefUpdate } from './document.service';
+import { DocRefUpdate } from '@models/doc-ref-update.interface';
 
 export class Batch {
 
