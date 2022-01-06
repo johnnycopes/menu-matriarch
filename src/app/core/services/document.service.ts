@@ -14,9 +14,9 @@ import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { FirestoreService } from './firestore.service';
 
-export interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
-  docRef: DocumentReference<TDocRef>;
-  updates: TUpdates;
+interface DocRefUpdate<T> {
+  docRef: DocumentReference<T>;
+  updates: firebase.firestore.UpdateData;
 }
 
 @Injectable({
@@ -48,7 +48,7 @@ export class DocumentService {
 
   public processUpdates(
     batch: firebase.firestore.WriteBatch,
-    docRefUpdates: DocRefUpdate<any, any>[]
+    docRefUpdates: DocRefUpdate<any>[]
   ): void {
     docRefUpdates.forEach(
       ({ docRef, updates }) => batch.update(docRef, updates)
@@ -59,7 +59,7 @@ export class DocumentService {
     menuIds: string[],
     day?: Day,
     getDishes?: () => string[],
-  }): DocRefUpdate<MenuDto, { [key in string]: string[] }>[] {
+  }): DocRefUpdate<MenuDto>[] {
     let updates = {};
     if (day) {
       updates = this._getDayDishes(day, getDishes());
@@ -85,7 +85,7 @@ export class DocumentService {
     initialMealIds: string[],
     finalMealIds: string[],
     entityId: string,
-  }): DocRefUpdate<MealDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<MealDto>[] {
     return this._getDocUpdates({
       getDoc: (id) => this.getMealDoc(id),
       key,
@@ -100,7 +100,7 @@ export class DocumentService {
     initialDishIds: string[],
     finalDishIds: string[],
     entityId: string,
-  }): DocRefUpdate<DishDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<DishDto>[] {
     return this._getDocUpdates({
       getDoc: (id) => this.getDishDoc(id),
       key,
@@ -114,7 +114,7 @@ export class DocumentService {
     dishIds: string[],
     menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
-  }): DocRefUpdate<DishDto, { usages: number, menus?: string[] }>[] {
+  }): DocRefUpdate<DishDto>[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({
         ...hashMap,
@@ -147,7 +147,7 @@ export class DocumentService {
     initialTagIds: string[],
     finalTagIds: string[],
     entityId: string,
-  }): DocRefUpdate<TagDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<TagDto>[] {
     return this._getDocUpdates({
       getDoc: (id) => this.getTagDoc(id),
       key,
@@ -163,7 +163,7 @@ export class DocumentService {
     initialIds: string[],
     finalIds: string[],
     entityId: string,
-  }): DocRefUpdate<T, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<T>[] {
     const docUpdates = [];
     for (let id of dedupe(initialIds, finalIds)) {
       let updatedIds = undefined;
@@ -181,7 +181,6 @@ export class DocumentService {
         });
       }
     }
-
     return docUpdates;
   }
 
