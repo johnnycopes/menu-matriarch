@@ -55,20 +55,22 @@ export class DocumentService {
     );
   }
 
-  public getMenuContentsUpdates({ menuIds, change, day, dishIds }: {
-    change: 'add' | 'remove' | 'clear',
+  public getMenuContentsUpdates({ menuIds, dishIds, day, change }: {
     menuIds: string[],
-    dishIds?: string[],
+    dishIds: string[],
     day?: Day,
+    change?: 'add' | 'remove',
   }): DocRefUpdate<MenuDto>[] {
-    let updates = {};
+    if (dishIds.length && !change) {
+      throw new Error("A 'change' argument is needed in order to modify the menus' dishes");
+    }
     let dishes: string[] = [];
-    if (change === 'add' && dishIds) {
+    if (change === 'add') {
       dishes = this._firestoreService.addToArray(...dishIds);
-    } else if (change === 'remove' && dishIds) {
+    } else if (change === 'remove') {
       dishes = this._firestoreService.removeFromArray(...dishIds);
     }
-
+    let updates: { [contentsDay: string]: string[] } = {};
     if (day) {
       updates = this._getDayDishes(day, dishes);
     } else {
@@ -118,10 +120,10 @@ export class DocumentService {
     });
   }
 
-  public getDishCountersUpdates({ change, dishIds, menu }: {
-    change: 'increment' | 'decrement' | 'clear',
+  public getDishCountersUpdates({ dishIds, menu, change }: {
     dishIds: string[],
     menu: Menu,
+    change: 'increment' | 'decrement' | 'clear',
   }): DocRefUpdate<DishDto>[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({

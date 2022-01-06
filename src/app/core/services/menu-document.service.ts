@@ -98,15 +98,15 @@ export class MenuDocumentService {
     const batch = this._firestoreService.getBatch();
     this._documentService.processUpdates(batch, [
       ...this._documentService.getDishCountersUpdates({
-        change: selected ? 'increment' : 'decrement',
         dishIds,
         menu,
+        change: selected ? 'increment' : 'decrement',
       }),
       ...this._documentService.getMenuContentsUpdates({
-        change: selected ? 'add' : 'remove',
         menuIds: [menu.id],
         dishIds,
         day,
+        change: selected ? 'add' : 'remove',
       }),
     ]);
     await batch.commit();
@@ -117,9 +117,9 @@ export class MenuDocumentService {
     batch.delete(this._documentService.getMenuDoc(menu.id));
     this._documentService.processUpdates(batch,
       this._documentService.getDishCountersUpdates({
-        change: 'clear',
         dishIds: flattenValues(menu.contents),
         menu,
+        change: 'clear',
       }),
     );
     await batch.commit();
@@ -131,14 +131,14 @@ export class MenuDocumentService {
     if (day) {
       this._documentService.processUpdates(batch, [
         ...this._documentService.getMenuContentsUpdates({
-          change: 'clear',
           menuIds: [menu.id],
+          dishIds: [],
           day,
         }),
         ...this._documentService.getDishCountersUpdates({
-          change: 'decrement',
           dishIds: menu.contents[day],
           menu,
+          change: 'decrement',
         }),
       ]);
     }
@@ -146,13 +146,13 @@ export class MenuDocumentService {
     else {
       this._documentService.processUpdates(batch, [
         ...this._documentService.getMenuContentsUpdates({
-          change: 'clear',
           menuIds: [menu.id],
+          dishIds: [],
         }),
         ...this._documentService.getDishCountersUpdates({
-          change: 'clear',
           dishIds: flattenValues(menu.contents),
           menu,
+          change: 'clear',
         }),
       ]);
     }
