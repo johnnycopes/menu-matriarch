@@ -39,11 +39,15 @@ export class UserDocumentService {
     );
   }
 
-  public updatePreferences(uid: string, preferences: UserPreferences): Promise<void> {
+  public updatePreferences(user: User, updates: Partial<UserPreferences>): Promise<void> {
+    const { uid, preferences } = user;
     return this._firestoreService.update<UserDto>(
       this._endpoint,
       uid,
-      { preferences }
+      { preferences: {
+        ...preferences,
+        ...updates,
+      }}
     );
   }
 }

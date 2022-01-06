@@ -32,23 +32,7 @@ export class UserService {
         if (!user?.uid) {
           return;
         }
-        const fallbackPreferences = user?.preferences ?? {
-          darkMode: false,
-          dayNameDisplay: 'full',
-          defaultMenuStartDay: 'Monday',
-          emptyMealText: 'undecided',
-          mealOrientation: 'horizontal',
-        };
-        await this._userDocumentService.updatePreferences(
-          user.uid,
-          {
-            darkMode: updates?.darkMode ?? fallbackPreferences.darkMode,
-            dayNameDisplay: updates?.dayNameDisplay ?? fallbackPreferences.dayNameDisplay,
-            defaultMenuStartDay: updates?.defaultMenuStartDay ?? fallbackPreferences.defaultMenuStartDay,
-            emptyMealText: updates?.emptyMealText ?? fallbackPreferences.emptyMealText,
-            mealOrientation: updates?.mealOrientation ?? fallbackPreferences.mealOrientation,
-          }
-        );
+        await this._userDocumentService.updatePreferences(user, updates);
       }),
     );
   }
