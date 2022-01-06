@@ -103,7 +103,7 @@ export class MenuDocumentService {
         menu,
       }),
       ...this._documentService.getMenuContentsUpdates({
-        change: selected ? 'increment' : 'decrement',
+        change: selected ? 'add' : 'remove',
         menuIds: [menu.id],
         dishIds,
         day,

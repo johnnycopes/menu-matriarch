@@ -101,7 +101,7 @@ export class DishDocumentService {
     batch.delete(this._documentService.getDishDoc(dish.id));
     this._documentService.processUpdates(batch, [
       ...this._documentService.getMenuContentsUpdates({
-        change: 'decrement',
+        change: 'remove',
         menuIds: dish.menus,
         dishIds: [dish.id],
       }),

@@ -19,8 +19,6 @@ interface DocRefUpdate<T> {
   updates: firebase.firestore.UpdateData;
 }
 
-type Change = 'increment' | 'decrement' | 'clear';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -58,16 +56,16 @@ export class DocumentService {
   }
 
   public getMenuContentsUpdates({ menuIds, change, day, dishIds }: {
-    change: Change,
+    change: 'add' | 'remove' | 'clear',
     menuIds: string[],
     dishIds?: string[],
     day?: Day,
   }): DocRefUpdate<MenuDto>[] {
     let updates = {};
     let dishes: string[] = [];
-    if (change === 'increment' && dishIds) {
+    if (change === 'add' && dishIds) {
       dishes = this._firestoreService.addToArray(...dishIds);
-    } else if (change === 'decrement' && dishIds) {
+    } else if (change === 'remove' && dishIds) {
       dishes = this._firestoreService.removeFromArray(...dishIds);
     }
 
@@ -120,10 +118,10 @@ export class DocumentService {
     });
   }
 
-  public getDishCountersUpdates({ dishIds, menu, change }: {
+  public getDishCountersUpdates({ change, dishIds, menu }: {
+    change: 'increment' | 'decrement' | 'clear',
     dishIds: string[],
     menu: Menu,
-    change: Change,
   }): DocRefUpdate<DishDto>[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({
