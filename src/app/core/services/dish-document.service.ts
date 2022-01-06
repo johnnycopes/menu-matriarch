@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
 import { DishDto } from '@models/dtos/dish-dto.interface';
@@ -10,7 +10,6 @@ import { createDishDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
 import { ApiService } from './api.service';
-import { AuthService } from './auth.service';
 import { DocumentService } from './document.service';
 import { TagService } from './tag.service';
 
@@ -22,7 +21,6 @@ export class DishDocumentService {
 
   constructor(
     private _apiService: ApiService,
-    private _authService: AuthService,
     private _documentService: DocumentService,
     private _tagService: TagService,
   ) { }
@@ -41,10 +39,9 @@ export class DishDocumentService {
     );
   }
 
-  public getDishes(): Observable<Dish[]> {
+  public getDishes(uid: string): Observable<Dish[]> {
     return combineLatest([
-      this._authService.uid$.pipe(
-        switchMap(uid => this._apiService.getMany<DishDto>(this._endpoint, uid)),
+      this._apiService.getMany<DishDto>(this._endpoint, uid).pipe(
         map(dishDtos => sort(dishDtos, dishDto => lower(dishDto.name)))
       ),
       this._tagService.getTags(),

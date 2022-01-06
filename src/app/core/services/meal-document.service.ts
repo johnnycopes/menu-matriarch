@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
@@ -11,7 +11,6 @@ import { createMealDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { ApiService } from './api.service';
-import { AuthService } from './auth.service';
 import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
 import { TagService } from './tag.service';
@@ -24,7 +23,6 @@ export class MealDocumentService {
 
   constructor(
     private _apiService: ApiService,
-    private _authService: AuthService,
     private _dishService: DishService,
     private _documentService: DocumentService,
     private _tagService: TagService,
@@ -45,10 +43,9 @@ export class MealDocumentService {
     );
   }
 
-  public getMeals(): Observable<Meal[]> {
+  public getMeals(uid: string): Observable<Meal[]> {
     return combineLatest([
-      this._authService.uid$.pipe(
-        switchMap(uid => this._apiService.getMany<MealDto>(this._endpoint, uid)),
+      this._apiService.getMany<MealDto>(this._endpoint, uid).pipe(
         map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
       ),
       this._dishService.getDishes(),
@@ -60,10 +57,10 @@ export class MealDocumentService {
     );
   }
 
-  public async createMeal({ uid, meal }: {
+  public async createMeal(
     uid: string,
     meal: Partial<Omit<MealDto, 'id' | 'uid'>>
-  }): Promise<string> {
+  ): Promise<string> {
     const id = this._apiService.createId();
     const batch = this._apiService.createBatch();
     batch.set(

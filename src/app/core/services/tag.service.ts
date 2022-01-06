@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, first, tap } from 'rxjs/operators';
 
 import { TagDto } from '@models/dtos/tag-dto.interface';
@@ -22,7 +22,15 @@ export class TagService {
   }
 
   public getTags(): Observable<Tag[]> {
-    return this._tagDocumentService.getTags();
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._tagDocumentService.getTags(uid);
+        }
+        return of([]);
+      })
+    );
   }
 
   public createTag(tag: Partial<Omit<TagDto, 'id' | 'uid'>>): Observable<string | undefined> {

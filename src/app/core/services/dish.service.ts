@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, first, tap } from 'rxjs/operators';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
@@ -22,7 +22,15 @@ export class DishService {
   }
 
   public getDishes(): Observable<Dish[]> {
-    return this._dishDocumentService.getDishes();
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._dishDocumentService.getDishes(uid);
+        }
+        return of([]);
+      })
+    );
   }
 
   public createDish(dish: Partial<Omit<DishDto, 'id' | 'uid'>>): Observable<string | undefined> {

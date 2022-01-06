@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Endpoint } from '@models/endpoint.enum';
 import { Tag } from '@models/tag.interface';
@@ -9,7 +9,6 @@ import { createTagDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { ApiService } from './api.service';
-import { AuthService } from './auth.service';
 import { DocumentService } from './document.service';
 
 @Injectable({
@@ -20,7 +19,6 @@ export class TagDocumentService {
 
   constructor(
     private _apiService: ApiService,
-    private _authService: AuthService,
     private _documentService: DocumentService,
   ) { }
 
@@ -28,9 +26,8 @@ export class TagDocumentService {
     return this._apiService.getOne<TagDto>(this._endpoint, id);
   }
 
-  public getTags(): Observable<Tag[]> {
-    return this._authService.uid$.pipe(
-      switchMap(uid => this._apiService.getMany<TagDto>(this._endpoint, uid)),
+  public getTags(uid: string): Observable<Tag[]> {
+    return this._apiService.getMany<TagDto>(this._endpoint, uid).pipe(
       map(tags => sort(tags, tag => lower(tag.name)))
     );
   }

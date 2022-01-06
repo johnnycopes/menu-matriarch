@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, first, tap } from 'rxjs/operators';
 
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
+import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
 import { MenuDocumentService } from './menu-document.service';
 import { UserService } from './user.service';
@@ -15,6 +16,7 @@ import { UserService } from './user.service';
 export class MenuService {
 
   constructor(
+    private _authService: AuthService,
     private _localStorageService: LocalStorageService,
     private _menuDocumentService: MenuDocumentService,
     private _userService: UserService,
@@ -25,7 +27,15 @@ export class MenuService {
   }
 
   public getMenus(): Observable<Menu[]> {
-    return this._menuDocumentService.getMenus();
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._menuDocumentService.getMenus(uid);
+        }
+        return of([]);
+      })
+    );
   }
 
   public createMenu(menu: Partial<Omit<MenuDto, 'id' | 'uid' | 'startDay'>>): Observable<string | undefined> {

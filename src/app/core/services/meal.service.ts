@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, first, tap } from 'rxjs/operators';
 
 import { MealDto } from '@models/dtos/meal-dto.interface';
@@ -22,7 +22,15 @@ export class MealService {
   }
 
   public getMeals(): Observable<Meal[]> {
-    return this._mealDocumentService.getMeals();
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._mealDocumentService.getMeals(uid);
+        }
+        return of([]);
+      })
+    );
   }
 
   public createMeal(meal: Partial<Omit<MealDto, 'id' | 'uid'>>): Observable<string | undefined> {
@@ -30,7 +38,7 @@ export class MealService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = await this._mealDocumentService.createMeal({ uid, meal });
+          const id = await this._mealDocumentService.createMeal(uid, meal);
           return id;
         } else {
           return undefined;
