@@ -12,6 +12,7 @@ import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
+import { Batch } from './batch';
 import { FirestoreService } from './firestore.service';
 
 interface DocRefUpdate<T> {
@@ -47,7 +48,7 @@ export class DocumentService {
   }
 
   public processUpdates(
-    batch: firebase.firestore.WriteBatch,
+    batch: Batch,
     docRefUpdates: DocRefUpdate<any>[]
   ): void {
     docRefUpdates.forEach(
