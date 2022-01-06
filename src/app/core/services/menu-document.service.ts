@@ -95,7 +95,7 @@ export class MenuDocumentService {
     selected: boolean,
   }): Promise<void> {
     const batch = this._apiService.createBatch();
-    this._documentService.processUpdates(batch, [
+    batch.updateMultiple([
       ...this._documentService.getDishCountersUpdates({
         dishIds,
         menu,
@@ -114,7 +114,7 @@ export class MenuDocumentService {
   public async deleteMenu(menu: Menu): Promise<void> {
     const batch = this._apiService.createBatch();
     batch.delete(this._documentService.getMenuDoc(menu.id));
-    this._documentService.processUpdates(batch,
+    batch.updateMultiple(
       this._documentService.getDishCountersUpdates({
         dishIds: flattenValues(menu.contents),
         menu,
@@ -128,7 +128,7 @@ export class MenuDocumentService {
     const batch = this._apiService.createBatch();
     // Clear a single day's contents
     if (day) {
-      this._documentService.processUpdates(batch, [
+      batch.updateMultiple([
         ...this._documentService.getMenuContentsUpdates({
           menuIds: [menu.id],
           dishIds: [],
@@ -143,7 +143,7 @@ export class MenuDocumentService {
     }
     // Clear all days' contents
     else {
-      this._documentService.processUpdates(batch, [
+      batch.updateMultiple([
         ...this._documentService.getMenuContentsUpdates({
           menuIds: [menu.id],
           dishIds: [],

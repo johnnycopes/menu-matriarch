@@ -68,7 +68,7 @@ export class MealDocumentService {
       createMealDto({ id, uid, ...meal }),
     );
     if (meal.dishes) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getDishUpdates({
           key: 'meals',
           initialDishIds: [],
@@ -78,7 +78,7 @@ export class MealDocumentService {
       );
     }
     if (meal.tags) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getTagUpdates({
           key: 'meals',
           initialTagIds: [],
@@ -98,7 +98,7 @@ export class MealDocumentService {
     const batch = this._apiService.createBatch();
     batch.update(this._documentService.getMealDoc(meal.id), updates);
     if (updates.dishes) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
@@ -108,7 +108,7 @@ export class MealDocumentService {
       );
     }
     if (updates.tags) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
@@ -123,7 +123,7 @@ export class MealDocumentService {
   public async deleteMeal(meal: Meal): Promise<void> {
     const batch = this._apiService.createBatch();
     batch.delete(this._documentService.getMealDoc(meal.id));
-    this._documentService.processUpdates(batch, [
+    batch.updateMultiple([
       ...this._documentService.getDishUpdates({
         key: 'meals',
         initialDishIds: meal.dishes.map(dish => dish.id),

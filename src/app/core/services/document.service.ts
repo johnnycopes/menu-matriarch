@@ -12,10 +12,9 @@ import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
-import { Batch } from './batch';
 import { FirestoreService } from './firestore.service';
 
-interface DocRefUpdate<T> {
+export interface DocRefUpdate<T> {
   docRef: DocumentReference<T>;
   updates: firebase.firestore.UpdateData;
 }
@@ -45,15 +44,6 @@ export class DocumentService {
 
   public getTagDoc(id: string): DocumentReference<TagDto> {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
-  }
-
-  public processUpdates(
-    batch: Batch,
-    docRefUpdates: DocRefUpdate<any>[]
-  ): void {
-    docRefUpdates.forEach(
-      ({ docRef, updates }) => batch.update(docRef, updates)
-    );
   }
 
   public getMenuContentsUpdates({ menuIds, dishIds, day, change }: {

@@ -61,7 +61,7 @@ export class DishDocumentService {
       createDishDto({ id, uid, ...dish }),
     );
     if (dish.tags) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getTagUpdates({
           key: 'dishes',
           initialTagIds: [],
@@ -81,7 +81,7 @@ export class DishDocumentService {
     const batch = this._apiService.createBatch();
     batch.update(this._documentService.getDishDoc(dish.id), updates);
     if (updates.tags) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
@@ -96,7 +96,7 @@ export class DishDocumentService {
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._apiService.createBatch();
     batch.delete(this._documentService.getDishDoc(dish.id));
-    this._documentService.processUpdates(batch, [
+    batch.updateMultiple([
       ...this._documentService.getMenuContentsUpdates({
         menuIds: dish.menus,
         dishIds: [dish.id],
