@@ -19,6 +19,8 @@ interface DocRefUpdate<T> {
   updates: firebase.firestore.UpdateData;
 }
 
+type Change = 'increment' | 'decrement' | 'clear';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -55,23 +57,31 @@ export class DocumentService {
     );
   }
 
-  public getMenuContentsUpdates({ menuIds, day, getDishes = () => [] }: {
+  public getMenuContentsUpdates({ menuIds, change, day, dishIds }: {
+    change: Change,
     menuIds: string[],
+    dishIds?: string[],
     day?: Day,
-    getDishes?: () => string[],
   }): DocRefUpdate<MenuDto>[] {
     let updates = {};
+    let dishes: string[] = [];
+    if (change === 'increment' && dishIds) {
+      dishes = this._firestoreService.addToArray(...dishIds);
+    } else if (change === 'decrement' && dishIds) {
+      dishes = this._firestoreService.removeFromArray(...dishIds);
+    }
+
     if (day) {
-      updates = this._getDayDishes(day, getDishes());
+      updates = this._getDayDishes(day, dishes);
     } else {
       updates = {
-        ...this._getDayDishes('Monday', getDishes()),
-        ...this._getDayDishes('Tuesday', getDishes()),
-        ...this._getDayDishes('Wednesday', getDishes()),
-        ...this._getDayDishes('Thursday', getDishes()),
-        ...this._getDayDishes('Friday', getDishes()),
-        ...this._getDayDishes('Saturday', getDishes()),
-        ...this._getDayDishes('Sunday', getDishes()),
+        ...this._getDayDishes('Monday', dishes),
+        ...this._getDayDishes('Tuesday', dishes),
+        ...this._getDayDishes('Wednesday', dishes),
+        ...this._getDayDishes('Thursday', dishes),
+        ...this._getDayDishes('Friday', dishes),
+        ...this._getDayDishes('Saturday', dishes),
+        ...this._getDayDishes('Sunday', dishes),
       };
     }
     return menuIds.map(menuId => ({
@@ -113,7 +123,7 @@ export class DocumentService {
   public getDishCountersUpdates({ dishIds, menu, change }: {
     dishIds: string[],
     menu: Menu,
-    change: 'increment' | 'decrement' | 'clear',
+    change: Change,
   }): DocRefUpdate<DishDto>[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({

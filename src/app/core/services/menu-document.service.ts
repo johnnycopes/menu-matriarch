@@ -98,16 +98,15 @@ export class MenuDocumentService {
     const batch = this._firestoreService.getBatch();
     this._documentService.processUpdates(batch, [
       ...this._documentService.getDishCountersUpdates({
+        change: selected ? 'increment' : 'decrement',
         dishIds,
         menu,
-        change: selected ? 'increment' : 'decrement'
       }),
       ...this._documentService.getMenuContentsUpdates({
+        change: selected ? 'increment' : 'decrement',
         menuIds: [menu.id],
+        dishIds,
         day,
-        getDishes: selected
-          ? () => this._firestoreService.addToArray(...dishIds)
-          : () => this._firestoreService.removeFromArray(...dishIds)
       }),
     ]);
     await batch.commit();
@@ -118,9 +117,9 @@ export class MenuDocumentService {
     batch.delete(this._documentService.getMenuDoc(menu.id));
     this._documentService.processUpdates(batch,
       this._documentService.getDishCountersUpdates({
+        change: 'clear',
         dishIds: flattenValues(menu.contents),
         menu,
-        change: 'clear'
       }),
     );
     await batch.commit();
@@ -131,22 +130,29 @@ export class MenuDocumentService {
     // Clear a single day's contents
     if (day) {
       this._documentService.processUpdates(batch, [
-        ...this._documentService.getMenuContentsUpdates({ menuIds: [menu.id], day }),
+        ...this._documentService.getMenuContentsUpdates({
+          change: 'clear',
+          menuIds: [menu.id],
+          day,
+        }),
         ...this._documentService.getDishCountersUpdates({
+          change: 'decrement',
           dishIds: menu.contents[day],
           menu,
-          change: 'decrement'
         }),
       ]);
     }
     // Clear all days' contents
     else {
       this._documentService.processUpdates(batch, [
-        ...this._documentService.getMenuContentsUpdates({ menuIds: [menu.id] }),
+        ...this._documentService.getMenuContentsUpdates({
+          change: 'clear',
+          menuIds: [menu.id],
+        }),
         ...this._documentService.getDishCountersUpdates({
+          change: 'clear',
           dishIds: flattenValues(menu.contents),
           menu,
-          change: 'clear'
         }),
       ]);
     }

@@ -101,8 +101,9 @@ export class DishDocumentService {
     batch.delete(this._documentService.getDishDoc(dish.id));
     this._documentService.processUpdates(batch, [
       ...this._documentService.getMenuContentsUpdates({
+        change: 'decrement',
         menuIds: dish.menus,
-        getDishes: () => this._firestoreService.removeFromArray(dish.id)
+        dishIds: [dish.id],
       }),
       ...this._documentService.getMealUpdates({
         key: 'dishes',
