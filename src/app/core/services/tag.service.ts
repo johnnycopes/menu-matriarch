@@ -4,8 +4,8 @@ import { concatMap, first, tap } from 'rxjs/operators';
 
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/tag.interface';
+import { AuthService } from './auth.service';
 import { TagDocumentService } from './tag-document.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ import { UserService } from './user.service';
 export class TagService {
 
   constructor(
+    private _authService: AuthService,
     private _tagDocumentService: TagDocumentService,
-    private _userService: UserService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
@@ -26,7 +26,7 @@ export class TagService {
   }
 
   public createTag(tag: Partial<Omit<TagDto, 'id' | 'uid'>>): Observable<string | undefined> {
-    return this._userService.uid$.pipe(
+    return this._authService.uid$.pipe(
       first(),
       concatMap(async uid => {
         if (uid) {

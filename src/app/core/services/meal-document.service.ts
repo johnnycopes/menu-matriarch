@@ -11,10 +11,10 @@ import { createMealDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { ApiService } from './api.service';
+import { AuthService } from './auth.service';
 import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
 import { TagService } from './tag.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +24,10 @@ export class MealDocumentService {
 
   constructor(
     private _apiService: ApiService,
+    private _authService: AuthService,
     private _dishService: DishService,
     private _documentService: DocumentService,
     private _tagService: TagService,
-    private _userService: UserService,
   ) { }
 
   public getMeal(id: string): Observable<Meal | undefined> {
@@ -47,7 +47,7 @@ export class MealDocumentService {
 
   public getMeals(): Observable<Meal[]> {
     return combineLatest([
-      this._userService.uid$.pipe(
+      this._authService.uid$.pipe(
         switchMap(uid => this._apiService.getMany<MealDto>(this._endpoint, uid)),
         map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
       ),

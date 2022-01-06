@@ -13,10 +13,6 @@ export class UserService {
 
   constructor(private _userDocumentService: UserDocumentService) { }
 
-  public get uid$(): Observable<string | undefined> {
-    return this._userDocumentService.uid$;
-  }
-
   public getUser(): Observable<User | undefined> {
     return this._userDocumentService.getUser();
   }

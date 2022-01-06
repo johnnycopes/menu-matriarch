@@ -9,8 +9,8 @@ import { createTagDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { ApiService } from './api.service';
+import { AuthService } from './auth.service';
 import { DocumentService } from './document.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,8 @@ export class TagDocumentService {
 
   constructor(
     private _apiService: ApiService,
+    private _authService: AuthService,
     private _documentService: DocumentService,
-    private _userService: UserService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
@@ -29,7 +29,7 @@ export class TagDocumentService {
   }
 
   public getTags(): Observable<Tag[]> {
-    return this._userService.uid$.pipe(
+    return this._authService.uid$.pipe(
       switchMap(uid => this._apiService.getMany<TagDto>(this._endpoint, uid)),
       map(tags => sort(tags, tag => lower(tag.name)))
     );
