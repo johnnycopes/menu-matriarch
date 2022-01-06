@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
+import { ApiService } from './api.service';
 import { DocumentService } from './document.service';
-import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +10,8 @@ import { FirestoreService } from './firestore.service';
 export class SeedDataService {
 
   constructor(
+    private _apiService: ApiService,
     private _documentService: DocumentService,
-    private _firestoreService: FirestoreService,
   ) { }
 
   public async createUserData({ uid, name, email }: {
@@ -19,28 +19,28 @@ export class SeedDataService {
     name: string,
     email: string,
   }): Promise<string> {
-    const batch = this._firestoreService.getBatch();
-    const menuId = this._firestoreService.createId();
-    const southernClassicMealId = this._firestoreService.createId();
-    const sushiDinnerMealId = this._firestoreService.createId();
-    const cornbreadDishId = this._firestoreService.createId();
-    const enchiladasDishId = this._firestoreService.createId();
-    const friedChickenDishId = this._firestoreService.createId();
-    const greekSaladDishId = this._firestoreService.createId();
-    const macAndCheeseDishId = this._firestoreService.createId();
-    const misoSoupDishId = this._firestoreService.createId();
-    const pizzaDishId = this._firestoreService.createId();
-    const redLentilSoupDishId = this._firestoreService.createId();
-    const roastedCauliflowerDishId = this._firestoreService.createId();
-    const salmonBurgersDishId = this._firestoreService.createId();
-    const sushiDishId = this._firestoreService.createId();
-    const sweetPotatoFriesDishId = this._firestoreService.createId();
-    const tiramisuDishId = this._firestoreService.createId();
-    const thaiCurryDishId = this._firestoreService.createId();
-    const easyTagId = this._firestoreService.createId();
-    const pescatarianTagId = this._firestoreService.createId();
-    const veganTagId = this._firestoreService.createId();
-    const vegetarianTagId = this._firestoreService.createId();
+    const batch = this._apiService.createBatch();
+    const menuId = this._apiService.createId();
+    const southernClassicMealId = this._apiService.createId();
+    const sushiDinnerMealId = this._apiService.createId();
+    const cornbreadDishId = this._apiService.createId();
+    const enchiladasDishId = this._apiService.createId();
+    const friedChickenDishId = this._apiService.createId();
+    const greekSaladDishId = this._apiService.createId();
+    const macAndCheeseDishId = this._apiService.createId();
+    const misoSoupDishId = this._apiService.createId();
+    const pizzaDishId = this._apiService.createId();
+    const redLentilSoupDishId = this._apiService.createId();
+    const roastedCauliflowerDishId = this._apiService.createId();
+    const salmonBurgersDishId = this._apiService.createId();
+    const sushiDishId = this._apiService.createId();
+    const sweetPotatoFriesDishId = this._apiService.createId();
+    const tiramisuDishId = this._apiService.createId();
+    const thaiCurryDishId = this._apiService.createId();
+    const easyTagId = this._apiService.createId();
+    const pescatarianTagId = this._apiService.createId();
+    const veganTagId = this._apiService.createId();
+    const vegetarianTagId = this._apiService.createId();
     batch
       .set(
         this._documentService.getUserDoc(uid),

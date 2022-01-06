@@ -10,9 +10,9 @@ import { Tag } from '@models/tag.interface';
 import { createMealDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { ApiService } from './api.service';
 import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
-import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
@@ -23,16 +23,16 @@ export class MealDocumentService {
   private _endpoint = Endpoint.meals;
 
   constructor(
+    private _apiService: ApiService,
     private _dishService: DishService,
     private _documentService: DocumentService,
-    private _firestoreService: FirestoreService,
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
 
   public getMeal(id: string): Observable<Meal | undefined> {
     return combineLatest([
-      this._firestoreService.getOne<MealDto>(this._endpoint, id),
+      this._apiService.getOne<MealDto>(this._endpoint, id),
       this._dishService.getDishes(),
       this._tagService.getTags(),
     ]).pipe(
@@ -48,7 +48,7 @@ export class MealDocumentService {
   public getMeals(): Observable<Meal[]> {
     return combineLatest([
       this._userService.uid$.pipe(
-        switchMap(uid => this._firestoreService.getMany<MealDto>(this._endpoint, uid)),
+        switchMap(uid => this._apiService.getMany<MealDto>(this._endpoint, uid)),
         map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
       ),
       this._dishService.getDishes(),
@@ -64,8 +64,8 @@ export class MealDocumentService {
     uid: string,
     meal: Partial<Omit<MealDto, 'id' | 'uid'>>
   }): Promise<string> {
-    const id = this._firestoreService.createId();
-    const batch = this._firestoreService.getBatch();
+    const id = this._apiService.createId();
+    const batch = this._apiService.createBatch();
     batch.set(
       this._documentService.getMealDoc(id),
       createMealDto({ id, uid, ...meal }),
@@ -98,7 +98,7 @@ export class MealDocumentService {
     meal: Meal,
     updates: Partial<MealDto>
   ): Promise<void> {
-    const batch = this._firestoreService.getBatch();
+    const batch = this._apiService.createBatch();
     batch.update(this._documentService.getMealDoc(meal.id), updates);
     if (updates.dishes) {
       this._documentService.processUpdates(batch,
@@ -124,7 +124,7 @@ export class MealDocumentService {
   }
 
   public async deleteMeal(meal: Meal): Promise<void> {
-    const batch = this._firestoreService.getBatch();
+    const batch = this._apiService.createBatch();
     batch.delete(this._documentService.getMealDoc(meal.id));
     this._documentService.processUpdates(batch, [
       ...this._documentService.getDishUpdates({

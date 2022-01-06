@@ -9,8 +9,8 @@ import { Tag } from '@models/tag.interface';
 import { createDishDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
+import { ApiService } from './api.service';
 import { DocumentService } from './document.service';
-import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
@@ -21,15 +21,15 @@ export class DishDocumentService {
   private _endpoint = Endpoint.dishes;
 
   constructor(
+    private _apiService: ApiService,
     private _documentService: DocumentService,
-    private _firestoreService: FirestoreService,
     private _tagService: TagService,
     private _userService: UserService,
   ) { }
 
   public getDish(id: string): Observable<Dish | undefined> {
     return combineLatest([
-      this._firestoreService.getOne<DishDto>(this._endpoint, id),
+      this._apiService.getOne<DishDto>(this._endpoint, id),
       this._tagService.getTags(),
     ]).pipe(
       map(([dishDto, tags]) => {
@@ -44,7 +44,7 @@ export class DishDocumentService {
   public getDishes(): Observable<Dish[]> {
     return combineLatest([
       this._userService.uid$.pipe(
-        switchMap(uid => this._firestoreService.getMany<DishDto>(this._endpoint, uid)),
+        switchMap(uid => this._apiService.getMany<DishDto>(this._endpoint, uid)),
         map(dishDtos => sort(dishDtos, dishDto => lower(dishDto.name)))
       ),
       this._tagService.getTags(),
@@ -57,8 +57,8 @@ export class DishDocumentService {
     uid: string,
     dish: Partial<Omit<DishDto, 'id' | 'uid'>>
   }): Promise<string> {
-    const id = this._firestoreService.createId();
-    const batch = this._firestoreService.getBatch();
+    const id = this._apiService.createId();
+    const batch = this._apiService.createBatch();
     batch.set(
       this._documentService.getDishDoc(id),
       createDishDto({ id, uid, ...dish }),
@@ -81,7 +81,7 @@ export class DishDocumentService {
     dish: Dish,
     updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Promise<void> {
-    const batch = this._firestoreService.getBatch();
+    const batch = this._apiService.createBatch();
     batch.update(this._documentService.getDishDoc(dish.id), updates);
     if (updates.tags) {
       this._documentService.processUpdates(batch,
@@ -97,7 +97,7 @@ export class DishDocumentService {
   }
 
   public async deleteDish(dish: Dish): Promise<void> {
-    const batch = this._firestoreService.getBatch();
+    const batch = this._apiService.createBatch();
     batch.delete(this._documentService.getDishDoc(dish.id));
     this._documentService.processUpdates(batch, [
       ...this._documentService.getMenuContentsUpdates({

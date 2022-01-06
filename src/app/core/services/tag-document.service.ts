@@ -8,8 +8,8 @@ import { TagDto } from '@models/dtos/tag-dto.interface';
 import { createTagDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { ApiService } from './api.service';
 import { DocumentService } from './document.service';
-import { FirestoreService } from './firestore.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -19,18 +19,18 @@ export class TagDocumentService {
   private _endpoint = Endpoint.tags;
 
   constructor(
+    private _apiService: ApiService,
     private _documentService: DocumentService,
-    private _firestoreService: FirestoreService,
     private _userService: UserService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
-    return this._firestoreService.getOne<TagDto>(this._endpoint, id);
+    return this._apiService.getOne<TagDto>(this._endpoint, id);
   }
 
   public getTags(): Observable<Tag[]> {
     return this._userService.uid$.pipe(
-      switchMap(uid => this._firestoreService.getMany<TagDto>(this._endpoint, uid)),
+      switchMap(uid => this._apiService.getMany<TagDto>(this._endpoint, uid)),
       map(tags => sort(tags, tag => lower(tag.name)))
     );
   }
@@ -39,8 +39,8 @@ export class TagDocumentService {
     uid: string,
     tag: Partial<Omit<TagDto, 'id' | 'uid'>>
   }): Promise<string> {
-    const id = this._firestoreService.createId();
-    await this._firestoreService.create<TagDto>(
+    const id = this._apiService.createId();
+    await this._apiService.create<TagDto>(
       this._endpoint,
       id,
       createTagDto({ id, uid, ...tag })
@@ -49,11 +49,11 @@ export class TagDocumentService {
   }
 
   public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
-    return this._firestoreService.update<TagDto>(this._endpoint, id, updates);
+    return this._apiService.update<TagDto>(this._endpoint, id, updates);
   }
 
   public async deleteTag(tag: Tag): Promise<void> {
-    const batch = this._firestoreService.getBatch();
+    const batch = this._apiService.createBatch();
     batch.delete(this._documentService.getTagDoc(tag.id));
     this._documentService.processUpdates(batch, [
       ...this._documentService.getMealUpdates({
