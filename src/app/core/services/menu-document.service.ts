@@ -113,14 +113,15 @@ export class MenuDocumentService {
 
   public async deleteMenu(menu: Menu): Promise<void> {
     const batch = this._apiService.createBatch();
-    batch.delete(this._documentService.getMenuDoc(menu.id));
-    batch.updateMultiple(
-      this._documentService.getDishCountersUpdates({
-        dishIds: flattenValues(menu.contents),
-        menu,
-        change: 'clear',
-      }),
-    );
+    batch
+      .delete(this._documentService.getMenuDoc(menu.id))
+      .updateMultiple(
+        this._documentService.getDishCountersUpdates({
+          dishIds: flattenValues(menu.contents),
+          menu,
+          change: 'clear',
+        }),
+      );
     await batch.commit();
   }
 

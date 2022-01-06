@@ -7,23 +7,26 @@ export class Batch {
 
   constructor(private _batch: firebase.firestore.WriteBatch) { }
 
-  public set<T>(documentRef: DocumentReference<T>, data: T): firebase.firestore.WriteBatch {
-    return this._batch.set<T>(documentRef, data);
+  public set<T>(documentRef: DocumentReference<T>, data: T): Batch {
+    this._batch.set<T>(documentRef, data);
+    return this;
   }
 
-  public update(documentRef: DocumentReference<any>, updates: firebase.firestore.UpdateData): firebase.firestore.WriteBatch {
-    return this._batch.update(documentRef, updates);
+  public update(documentRef: DocumentReference<any>, updates: firebase.firestore.UpdateData): Batch {
+    this._batch.update(documentRef, updates);
+    return this;
   }
 
-  public updateMultiple(docRefUpdates: DocRefUpdate<any>[]): firebase.firestore.WriteBatch {
+  public updateMultiple(docRefUpdates: DocRefUpdate<any>[]): Batch {
     docRefUpdates.forEach(
       ({ docRef, updates }) => this._batch.update(docRef, updates)
     );
-    return this._batch;
+    return this;
   }
 
-  public delete(documentRef: DocumentReference<any>): firebase.firestore.WriteBatch {
-    return this._batch.delete(documentRef);
+  public delete(documentRef: DocumentReference<any>): Batch {
+    this._batch.delete(documentRef);
+    return this;
   }
 
   public commit(): Promise<void> {

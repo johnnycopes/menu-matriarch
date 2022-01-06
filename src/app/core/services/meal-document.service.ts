@@ -122,21 +122,22 @@ export class MealDocumentService {
 
   public async deleteMeal(meal: Meal): Promise<void> {
     const batch = this._apiService.createBatch();
-    batch.delete(this._documentService.getMealDoc(meal.id));
-    batch.updateMultiple([
-      ...this._documentService.getDishUpdates({
-        key: 'meals',
-        initialDishIds: meal.dishes.map(dish => dish.id),
-        finalDishIds: [],
-        entityId: meal.id,
-      }),
-      ...this._documentService.getTagUpdates({
-        key: 'meals',
-        initialTagIds: meal.tags.map(tag => tag.id),
-        finalTagIds: [],
-        entityId: meal.id,
-      }),
-    ]);
+    batch
+      .delete(this._documentService.getMealDoc(meal.id))
+      .updateMultiple([
+        ...this._documentService.getDishUpdates({
+          key: 'meals',
+          initialDishIds: meal.dishes.map(dish => dish.id),
+          finalDishIds: [],
+          entityId: meal.id,
+        }),
+        ...this._documentService.getTagUpdates({
+          key: 'meals',
+          initialTagIds: meal.tags.map(tag => tag.id),
+          finalTagIds: [],
+          entityId: meal.id,
+        }),
+      ]);
     await batch.commit();
   }
 
