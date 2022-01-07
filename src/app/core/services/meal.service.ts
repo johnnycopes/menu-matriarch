@@ -5,7 +5,7 @@ import { concatMap, first, tap } from 'rxjs/operators';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { Meal } from '@models/meal.interface';
 import { AuthService } from './auth.service';
-import { MealDocumentService } from './meal-document.service';
+import { MealDataService } from './meal-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,11 @@ export class MealService {
 
   constructor(
     private _authService: AuthService,
-    private _mealDocumentService: MealDocumentService,
+    private _mealDataService: MealDataService,
   ) { }
 
   public getMeal(id: string): Observable<Meal | undefined> {
-    return this._mealDocumentService.getMeal(id);
+    return this._mealDataService.getMeal(id);
   }
 
   public getMeals(): Observable<Meal[]> {
@@ -26,7 +26,7 @@ export class MealService {
       first(),
       concatMap(uid => {
         if (uid) {
-          return this._mealDocumentService.getMeals(uid);
+          return this._mealDataService.getMeals(uid);
         }
         return of([]);
       })
@@ -38,7 +38,7 @@ export class MealService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = await this._mealDocumentService.createMeal(uid, meal);
+          const id = await this._mealDataService.createMeal(uid, meal);
           return id;
         } else {
           return undefined;
@@ -57,7 +57,7 @@ export class MealService {
         if (!meal) {
           return;
         }
-        await this._mealDocumentService.updateMeal(meal, updates);
+        await this._mealDataService.updateMeal(meal, updates);
       })
     );
   }
@@ -69,7 +69,7 @@ export class MealService {
         if (!meal) {
           return;
         }
-        await this._mealDocumentService.deleteMeal(meal);
+        await this._mealDataService.deleteMeal(meal);
       })
     );
   }

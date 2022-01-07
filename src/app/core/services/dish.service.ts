@@ -5,7 +5,7 @@ import { concatMap, first, tap } from 'rxjs/operators';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/dish.interface';
 import { AuthService } from './auth.service';
-import { DishDocumentService } from './dish-document.service';
+import { DishDataService } from './dish-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,11 @@ export class DishService {
 
   constructor(
     private _authService: AuthService,
-    private _dishDocumentService: DishDocumentService,
+    private _dishDataService: DishDataService,
   ) { }
 
   public getDish(id: string): Observable<Dish | undefined> {
-    return this._dishDocumentService.getDish(id);
+    return this._dishDataService.getDish(id);
   }
 
   public getDishes(): Observable<Dish[]> {
@@ -26,7 +26,7 @@ export class DishService {
       first(),
       concatMap(uid => {
         if (uid) {
-          return this._dishDocumentService.getDishes(uid);
+          return this._dishDataService.getDishes(uid);
         }
         return of([]);
       })
@@ -38,7 +38,7 @@ export class DishService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = this._dishDocumentService.createDish({ uid, dish });
+          const id = this._dishDataService.createDish({ uid, dish });
           return id;
         } else {
           return undefined;
@@ -57,7 +57,7 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await this._dishDocumentService.updateDish(dish, updates);
+        await this._dishDataService.updateDish(dish, updates);
       })
     );
   }
@@ -69,7 +69,7 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await this._dishDocumentService.deleteDish(dish);
+        await this._dishDataService.deleteDish(dish);
       })
     );
   }

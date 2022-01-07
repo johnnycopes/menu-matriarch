@@ -8,26 +8,26 @@ import { TagDto } from '@models/dtos/tag-dto.interface';
 import { createTagDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
-import { ApiService } from './api.service';
+import { DataService } from './data.service';
 import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TagDocumentService {
+export class TagDataService {
   private _endpoint = Endpoint.tags;
 
   constructor(
-    private _apiService: ApiService,
+    private _dataService: DataService,
     private _documentService: DocumentService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
-    return this._apiService.getOne<TagDto>(this._endpoint, id);
+    return this._dataService.getOne<TagDto>(this._endpoint, id);
   }
 
   public getTags(uid: string): Observable<Tag[]> {
-    return this._apiService.getMany<TagDto>(this._endpoint, uid).pipe(
+    return this._dataService.getMany<TagDto>(this._endpoint, uid).pipe(
       map(tags => sort(tags, tag => lower(tag.name)))
     );
   }
@@ -36,8 +36,8 @@ export class TagDocumentService {
     uid: string,
     tag: Partial<Omit<TagDto, 'id' | 'uid'>>
   }): Promise<string> {
-    const id = this._apiService.createId();
-    await this._apiService.create<TagDto>(
+    const id = this._dataService.createId();
+    await this._dataService.create<TagDto>(
       this._endpoint,
       id,
       createTagDto({ id, uid, ...tag })
@@ -46,11 +46,11 @@ export class TagDocumentService {
   }
 
   public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
-    return this._apiService.update<TagDto>(this._endpoint, id, updates);
+    return this._dataService.update<TagDto>(this._endpoint, id, updates);
   }
 
   public async deleteTag(tag: Tag): Promise<void> {
-    const batch = this._apiService.createBatch();
+    const batch = this._dataService.createBatch();
     batch
       .delete(this._documentService.getTagDoc(tag.id))
       .updateMultiple([

@@ -13,7 +13,7 @@ import { getDays } from '@utility/domain/get-days';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
-import { ApiService } from './api.service';
+import { DataService } from './data.service';
 import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
 import { UserService } from './user.service';
@@ -21,11 +21,11 @@ import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class MenuDocumentService {
+export class MenuDataService {
   private _endpoint = Endpoint.menus;
 
   constructor(
-    private _apiService: ApiService,
+    private _dataService: DataService,
     private _dishService: DishService,
     private _documentService: DocumentService,
     private _userService: UserService,
@@ -33,7 +33,7 @@ export class MenuDocumentService {
 
   public getMenu(id: string): Observable<Menu | undefined> {
     return combineLatest([
-      this._apiService.getOne<MenuDto>(this._endpoint, id),
+      this._dataService.getOne<MenuDto>(this._endpoint, id),
       this._dishService.getDishes(),
       this._userService.getPreferences(),
     ]).pipe(
@@ -48,7 +48,7 @@ export class MenuDocumentService {
 
   public getMenus(uid: string): Observable<Menu[]> {
     return combineLatest([
-      this._apiService.getMany<MenuDto>(this._endpoint, uid).pipe(
+      this._dataService.getMany<MenuDto>(this._endpoint, uid).pipe(
         map(menuDtos => sort(menuDtos, menuDto => lower(menuDto.name))),
       ),
       this._dishService.getDishes(),
@@ -68,8 +68,8 @@ export class MenuDocumentService {
     menu: Partial<Omit<MenuDto, 'id' | 'uid' | 'startDay'>>,
     startDay: Day,
   }) {
-    const id = this._apiService.createId();
-    await this._apiService.create<MenuDto>(
+    const id = this._dataService.createId();
+    await this._dataService.create<MenuDto>(
       this._endpoint,
       id,
       createMenuDto({
@@ -83,7 +83,7 @@ export class MenuDocumentService {
   }
 
   public async updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {
-    return await this._apiService.update<MenuDto>(this._endpoint, id, updates);
+    return await this._dataService.update<MenuDto>(this._endpoint, id, updates);
   }
 
   public async updateMenuContents({
@@ -94,7 +94,7 @@ export class MenuDocumentService {
     day: Day,
     selected: boolean,
   }): Promise<void> {
-    const batch = this._apiService.createBatch();
+    const batch = this._dataService.createBatch();
     batch.updateMultiple([
       ...this._documentService.getDishCountersUpdates({
         dishIds,
@@ -112,7 +112,7 @@ export class MenuDocumentService {
   }
 
   public async deleteMenu(menu: Menu): Promise<void> {
-    const batch = this._apiService.createBatch();
+    const batch = this._dataService.createBatch();
     batch
       .delete(this._documentService.getMenuDoc(menu.id))
       .updateMultiple(
@@ -126,7 +126,7 @@ export class MenuDocumentService {
   }
 
   public async deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
-    const batch = this._apiService.createBatch();
+    const batch = this._dataService.createBatch();
     // Clear a single day's contents
     if (day) {
       batch.updateMultiple([

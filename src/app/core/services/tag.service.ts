@@ -5,7 +5,7 @@ import { concatMap, first, tap } from 'rxjs/operators';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/tag.interface';
 import { AuthService } from './auth.service';
-import { TagDocumentService } from './tag-document.service';
+import { TagDataService } from './tag-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,11 @@ export class TagService {
 
   constructor(
     private _authService: AuthService,
-    private _tagDocumentService: TagDocumentService,
+    private _tagDataService: TagDataService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
-    return this._tagDocumentService.getTag(id);
+    return this._tagDataService.getTag(id);
   }
 
   public getTags(): Observable<Tag[]> {
@@ -26,7 +26,7 @@ export class TagService {
       first(),
       concatMap(uid => {
         if (uid) {
-          return this._tagDocumentService.getTags(uid);
+          return this._tagDataService.getTags(uid);
         }
         return of([]);
       })
@@ -38,7 +38,7 @@ export class TagService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = this._tagDocumentService.createTag({ uid, tag });
+          const id = this._tagDataService.createTag({ uid, tag });
           return id;
         } else {
           return undefined;
@@ -48,7 +48,7 @@ export class TagService {
   }
 
   public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
-    return this._tagDocumentService.updateTag(id, updates);
+    return this._tagDataService.updateTag(id, updates);
   }
 
   public deleteTag(id: string): Observable<Tag | undefined> {
@@ -58,7 +58,7 @@ export class TagService {
         if (!tag) {
           return;
         }
-        await this._tagDocumentService.deleteTag(tag);
+        await this._tagDataService.deleteTag(tag);
       })
     );
   }

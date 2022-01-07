@@ -7,7 +7,7 @@ import { FirestoreService } from './firestore.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class DataService {
 
   constructor(private _firestoreService: FirestoreService) { }
 

@@ -7,7 +7,7 @@ import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
 import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
-import { MenuDocumentService } from './menu-document.service';
+import { MenuDataService } from './menu-data.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -18,12 +18,12 @@ export class MenuService {
   constructor(
     private _authService: AuthService,
     private _localStorageService: LocalStorageService,
-    private _menuDocumentService: MenuDocumentService,
+    private _menuDataService: MenuDataService,
     private _userService: UserService,
   ) { }
 
   public getMenu(id: string): Observable<Menu | undefined> {
-    return this._menuDocumentService.getMenu(id);
+    return this._menuDataService.getMenu(id);
   }
 
   public getMenus(): Observable<Menu[]> {
@@ -31,7 +31,7 @@ export class MenuService {
       first(),
       concatMap(uid => {
         if (uid) {
-          return this._menuDocumentService.getMenus(uid);
+          return this._menuDataService.getMenus(uid);
         }
         return of([]);
       })
@@ -43,7 +43,7 @@ export class MenuService {
       first(),
       concatMap(async user => {
         if (user) {
-          const id = await this._menuDocumentService.createMenu({
+          const id = await this._menuDataService.createMenu({
             uid: user.uid,
             menu,
             startDay: user.preferences.defaultMenuStartDay,
@@ -57,11 +57,11 @@ export class MenuService {
   }
 
   public updateMenuName(id: string, name: string): Promise<void> {
-    return this._menuDocumentService.updateMenu(id, { name });
+    return this._menuDataService.updateMenu(id, { name });
   }
 
   public updateMenuStartDay(id: string, startDay: Day): Promise<void> {
-    return this._menuDocumentService.updateMenu(id, { startDay });
+    return this._menuDataService.updateMenu(id, { startDay });
   }
 
   public updateMenuContents({ menu, day, dishIds, selected }: {
@@ -70,7 +70,7 @@ export class MenuService {
     dishIds: string[],
     selected: boolean,
   }): Promise<void> {
-    return this._menuDocumentService.updateMenuContents({ menu, day, dishIds, selected });
+    return this._menuDataService.updateMenuContents({ menu, day, dishIds, selected });
   }
 
   public async deleteMenu(id?: string): Promise<void> {
@@ -81,7 +81,7 @@ export class MenuService {
           if (!menu) {
             return;
           }
-          await this._menuDocumentService.deleteMenu(menu);
+          await this._menuDataService.deleteMenu(menu);
           if (id === this._localStorageService.getMenuId()) {
             this._localStorageService.deleteMenuId();
           }
@@ -91,6 +91,6 @@ export class MenuService {
   }
 
   public deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
-    return this._menuDocumentService.deleteMenuContents(menu, day);
+    return this._menuDataService.deleteMenuContents(menu, day);
   }
 }

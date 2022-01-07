@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
-import { ApiService } from './api.service';
+import { DataService } from './data.service';
 import { DocumentService } from './document.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ import { DocumentService } from './document.service';
 export class SeedDataService {
 
   constructor(
-    private _apiService: ApiService,
+    private _dataService: DataService,
     private _documentService: DocumentService,
   ) { }
 
@@ -19,28 +19,28 @@ export class SeedDataService {
     name: string,
     email: string,
   }): Promise<string> {
-    const batch = this._apiService.createBatch();
-    const menuId = this._apiService.createId();
-    const southernClassicMealId = this._apiService.createId();
-    const sushiDinnerMealId = this._apiService.createId();
-    const cornbreadDishId = this._apiService.createId();
-    const enchiladasDishId = this._apiService.createId();
-    const friedChickenDishId = this._apiService.createId();
-    const greekSaladDishId = this._apiService.createId();
-    const macAndCheeseDishId = this._apiService.createId();
-    const misoSoupDishId = this._apiService.createId();
-    const pizzaDishId = this._apiService.createId();
-    const redLentilSoupDishId = this._apiService.createId();
-    const roastedCauliflowerDishId = this._apiService.createId();
-    const salmonBurgersDishId = this._apiService.createId();
-    const sushiDishId = this._apiService.createId();
-    const sweetPotatoFriesDishId = this._apiService.createId();
-    const tiramisuDishId = this._apiService.createId();
-    const thaiCurryDishId = this._apiService.createId();
-    const easyTagId = this._apiService.createId();
-    const pescatarianTagId = this._apiService.createId();
-    const veganTagId = this._apiService.createId();
-    const vegetarianTagId = this._apiService.createId();
+    const batch = this._dataService.createBatch();
+    const menuId = this._dataService.createId();
+    const southernClassicMealId = this._dataService.createId();
+    const sushiDinnerMealId = this._dataService.createId();
+    const cornbreadDishId = this._dataService.createId();
+    const enchiladasDishId = this._dataService.createId();
+    const friedChickenDishId = this._dataService.createId();
+    const greekSaladDishId = this._dataService.createId();
+    const macAndCheeseDishId = this._dataService.createId();
+    const misoSoupDishId = this._dataService.createId();
+    const pizzaDishId = this._dataService.createId();
+    const redLentilSoupDishId = this._dataService.createId();
+    const roastedCauliflowerDishId = this._dataService.createId();
+    const salmonBurgersDishId = this._dataService.createId();
+    const sushiDishId = this._dataService.createId();
+    const sweetPotatoFriesDishId = this._dataService.createId();
+    const tiramisuDishId = this._dataService.createId();
+    const thaiCurryDishId = this._dataService.createId();
+    const easyTagId = this._dataService.createId();
+    const pescatarianTagId = this._dataService.createId();
+    const veganTagId = this._dataService.createId();
+    const vegetarianTagId = this._dataService.createId();
     batch
       .set(
         this._documentService.getUserDoc(uid),
