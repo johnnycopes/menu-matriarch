@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Dish } from '@models/dish.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Meal } from '@models/meal.interface';
-import { Tag } from '@models/tag.interface';
 import { createMealDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { DataService } from './data.service';
-import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
-import { TagService } from './tag.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,37 +19,23 @@ export class MealDataService {
 
   constructor(
     private _dataService: DataService,
-    private _dishService: DishService,
     private _documentService: DocumentService,
-    private _tagService: TagService,
   ) { }
 
-  public getMeal(id: string): Observable<Meal | undefined> {
-    return combineLatest([
-      this._dataService.getOne<MealDto>(this._endpoint, id),
-      this._dishService.getDishes(),
-      this._tagService.getTags(),
-    ]).pipe(
-      map(([mealDto, dishes, tags]) => {
+  public getMeal(id: string): Observable<MealDto | undefined> {
+    return this._dataService.getOne<MealDto>(this._endpoint, id).pipe(
+      map(mealDto => {
         if (!mealDto) {
           return undefined;
         }
-        return this._transformDto({ mealDto, dishes, tags });
+        return mealDto;
       })
     );
   }
 
-  public getMeals(uid: string): Observable<Meal[]> {
-    return combineLatest([
-      this._dataService.getMany<MealDto>(this._endpoint, uid).pipe(
-        map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
-      ),
-      this._dishService.getDishes(),
-      this._tagService.getTags(),
-    ]).pipe(
-      map(([mealDtos, dishes, tags]) =>
-        mealDtos.map(mealDto => this._transformDto({ mealDto, dishes, tags }))
-      )
+  public getMeals(uid: string): Observable<MealDto[]> {
+    return this._dataService.getMany<MealDto>(this._endpoint, uid).pipe(
+      map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
     );
   }
 
@@ -139,17 +121,5 @@ export class MealDataService {
         }),
       ]);
     await batch.commit();
-  }
-
-  private _transformDto({ mealDto, dishes, tags }: {
-    mealDto: MealDto,
-    dishes: Dish[],
-    tags: Tag[]
-  }): Meal {
-    return {
-      ...mealDto,
-      dishes: dishes.filter(dish => mealDto.dishes.includes(dish.id)),
-      tags: tags.filter(tag => mealDto.tags.includes(tag.id)),
-    };
   }
 }
