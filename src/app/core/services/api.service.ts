@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
 
 import { Batch } from './batch';
@@ -18,10 +17,6 @@ export class ApiService {
 
   public createBatch(): Batch {
     return new Batch(this._firestoreService.createBatch());
-  }
-
-  public createTransaction<T>(updateFn: (transaction: firebase.firestore.Transaction) => Promise<T>) {
-    return this._firestoreService.createTransaction(updateFn);
   }
 
   public getOne<T>(endpoint: string, id: string | undefined): Observable<T | undefined> {

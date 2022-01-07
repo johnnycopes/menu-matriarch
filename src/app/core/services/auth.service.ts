@@ -14,13 +14,14 @@ export class AuthService {
   public get uid$() {
     return this._auth.user.pipe(
       map(user => user?.uid),
-      shareReplay({ refCount: true, bufferSize: 1 }),
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
   public get loggedIn$(): Observable<boolean> {
     return this._auth.user.pipe(
-      map(Boolean)
+      map(Boolean),
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
