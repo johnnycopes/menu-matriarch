@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
-import firebase from 'firebase/compat/app';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
@@ -8,16 +7,12 @@ import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { UserDto } from '@models/dtos/user-dto.interface';
 import { Day } from '@models/day.type';
+import { DocRefUpdate } from '@models/doc-ref-update.interface';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { FirestoreService } from './firestore.service';
-
-export interface DocRefUpdate<TDocRef, TUpdates extends firebase.firestore.UpdateData> {
-  docRef: DocumentReference<TDocRef>;
-  updates: TUpdates;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -46,32 +41,33 @@ export class DocumentService {
     return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
   }
 
-  public processUpdates(
-    batch: firebase.firestore.WriteBatch,
-    docRefUpdates: DocRefUpdate<any, any>[]
-  ): void {
-    docRefUpdates.forEach(
-      ({ docRef, updates }) => batch.update(docRef, updates)
-    );
-  }
-
-  public getMenuContentsUpdates({ menuIds, day, getDishes = () => [] }: {
+  public getMenuContentsUpdates({ menuIds, dishIds, day, change }: {
     menuIds: string[],
+    dishIds: string[],
     day?: Day,
-    getDishes?: () => string[],
-  }): DocRefUpdate<MenuDto, { [key in string]: string[] }>[] {
-    let updates = {};
+    change?: 'add' | 'remove',
+  }): DocRefUpdate<MenuDto>[] {
+    if (dishIds.length && !change) {
+      throw new Error("A 'change' argument is needed in order to modify the menus' dishes");
+    }
+    let dishes: string[] = [];
+    if (change === 'add') {
+      dishes = this._firestoreService.addToArray(...dishIds);
+    } else if (change === 'remove') {
+      dishes = this._firestoreService.removeFromArray(...dishIds);
+    }
+    let updates: { [contentsDay: string]: string[] } = {};
     if (day) {
-      updates = this._getDayDishes(day, getDishes());
+      updates = this._getDayDishes(day, dishes);
     } else {
       updates = {
-        ...this._getDayDishes('Monday', getDishes()),
-        ...this._getDayDishes('Tuesday', getDishes()),
-        ...this._getDayDishes('Wednesday', getDishes()),
-        ...this._getDayDishes('Thursday', getDishes()),
-        ...this._getDayDishes('Friday', getDishes()),
-        ...this._getDayDishes('Saturday', getDishes()),
-        ...this._getDayDishes('Sunday', getDishes()),
+        ...this._getDayDishes('Monday', dishes),
+        ...this._getDayDishes('Tuesday', dishes),
+        ...this._getDayDishes('Wednesday', dishes),
+        ...this._getDayDishes('Thursday', dishes),
+        ...this._getDayDishes('Friday', dishes),
+        ...this._getDayDishes('Saturday', dishes),
+        ...this._getDayDishes('Sunday', dishes),
       };
     }
     return menuIds.map(menuId => ({
@@ -85,7 +81,7 @@ export class DocumentService {
     initialMealIds: string[],
     finalMealIds: string[],
     entityId: string,
-  }): DocRefUpdate<MealDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<MealDto>[] {
     return this._getDocUpdates({
       getDoc: (id) => this.getMealDoc(id),
       key,
@@ -100,7 +96,7 @@ export class DocumentService {
     initialDishIds: string[],
     finalDishIds: string[],
     entityId: string,
-  }): DocRefUpdate<DishDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<DishDto>[] {
     return this._getDocUpdates({
       getDoc: (id) => this.getDishDoc(id),
       key,
@@ -114,7 +110,7 @@ export class DocumentService {
     dishIds: string[],
     menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
-  }): DocRefUpdate<DishDto, { usages: number, menus?: string[] }>[] {
+  }): DocRefUpdate<DishDto>[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({
         ...hashMap,
@@ -147,7 +143,7 @@ export class DocumentService {
     initialTagIds: string[],
     finalTagIds: string[],
     entityId: string,
-  }): DocRefUpdate<TagDto, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<TagDto>[] {
     return this._getDocUpdates({
       getDoc: (id) => this.getTagDoc(id),
       key,
@@ -163,7 +159,7 @@ export class DocumentService {
     initialIds: string[],
     finalIds: string[],
     entityId: string,
-  }): DocRefUpdate<T, { [key: string]: string[] }>[] {
+  }): DocRefUpdate<T>[] {
     const docUpdates = [];
     for (let id of dedupe(initialIds, finalIds)) {
       let updatedIds = undefined;
@@ -181,7 +177,6 @@ export class DocumentService {
         });
       }
     }
-
     return docUpdates;
   }
 

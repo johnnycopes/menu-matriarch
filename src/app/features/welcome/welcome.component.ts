@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { first, tap } from 'rxjs/operators';
 
 import { AuthService } from '@services/auth.service';
-import { UserService } from '@services/user.service';
 import { RouterService } from '@services/router.service';
 import { SeedDataService } from '@services/seed-data.service';
 
@@ -20,7 +19,6 @@ export class WelcomeComponent {
     private _authService: AuthService,
     private _routerService: RouterService,
     private _seedDataService: SeedDataService,
-    private _userService: UserService,
   ) { }
 
   public async login(): Promise<void> {
@@ -28,7 +26,7 @@ export class WelcomeComponent {
       const user = await this._authService.login();
       if (user) {
         const { name, email } = user;
-        this._userService.uid$.pipe(
+        this._authService.uid$.pipe(
           first(),
           tap(async uid => {
             if (!uid) {

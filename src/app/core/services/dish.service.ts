@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, first, tap } from 'rxjs/operators';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/dish.interface';
+import { AuthService } from './auth.service';
 import { DishDocumentService } from './dish-document.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ import { UserService } from './user.service';
 export class DishService {
 
   constructor(
+    private _authService: AuthService,
     private _dishDocumentService: DishDocumentService,
-    private _userService: UserService,
   ) { }
 
   public getDish(id: string): Observable<Dish | undefined> {
@@ -22,11 +22,19 @@ export class DishService {
   }
 
   public getDishes(): Observable<Dish[]> {
-    return this._dishDocumentService.getDishes();
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._dishDocumentService.getDishes(uid);
+        }
+        return of([]);
+      })
+    );
   }
 
   public createDish(dish: Partial<Omit<DishDto, 'id' | 'uid'>>): Observable<string | undefined> {
-    return this._userService.uid$.pipe(
+    return this._authService.uid$.pipe(
       first(),
       concatMap(async uid => {
         if (uid) {

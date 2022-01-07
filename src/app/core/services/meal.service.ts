@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, first, tap } from 'rxjs/operators';
 
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { Meal } from '@models/meal.interface';
+import { AuthService } from './auth.service';
 import { MealDocumentService } from './meal-document.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ import { UserService } from './user.service';
 export class MealService {
 
   constructor(
+    private _authService: AuthService,
     private _mealDocumentService: MealDocumentService,
-    private _userService: UserService,
   ) { }
 
   public getMeal(id: string): Observable<Meal | undefined> {
@@ -22,15 +22,23 @@ export class MealService {
   }
 
   public getMeals(): Observable<Meal[]> {
-    return this._mealDocumentService.getMeals();
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._mealDocumentService.getMeals(uid);
+        }
+        return of([]);
+      })
+    );
   }
 
   public createMeal(meal: Partial<Omit<MealDto, 'id' | 'uid'>>): Observable<string | undefined> {
-    return this._userService.uid$.pipe(
+    return this._authService.uid$.pipe(
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = await this._mealDocumentService.createMeal({ uid, meal });
+          const id = await this._mealDocumentService.createMeal(uid, meal);
           return id;
         } else {
           return undefined;

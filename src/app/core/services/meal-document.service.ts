@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
@@ -10,11 +10,10 @@ import { Tag } from '@models/tag.interface';
 import { createMealDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { ApiService } from './api.service';
 import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
-import { FirestoreService } from './firestore.service';
 import { TagService } from './tag.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,16 +22,15 @@ export class MealDocumentService {
   private _endpoint = Endpoint.meals;
 
   constructor(
+    private _apiService: ApiService,
     private _dishService: DishService,
     private _documentService: DocumentService,
-    private _firestoreService: FirestoreService,
     private _tagService: TagService,
-    private _userService: UserService,
   ) { }
 
   public getMeal(id: string): Observable<Meal | undefined> {
     return combineLatest([
-      this._firestoreService.getOne<MealDto>(this._endpoint, id),
+      this._apiService.getOne<MealDto>(this._endpoint, id),
       this._dishService.getDishes(),
       this._tagService.getTags(),
     ]).pipe(
@@ -45,10 +43,9 @@ export class MealDocumentService {
     );
   }
 
-  public getMeals(): Observable<Meal[]> {
+  public getMeals(uid: string): Observable<Meal[]> {
     return combineLatest([
-      this._userService.uid$.pipe(
-        switchMap(uid => this._firestoreService.getMany<MealDto>(this._endpoint, uid)),
+      this._apiService.getMany<MealDto>(this._endpoint, uid).pipe(
         map(mealDtos => sort(mealDtos, mealDto => lower(mealDto.name)))
       ),
       this._dishService.getDishes(),
@@ -60,18 +57,18 @@ export class MealDocumentService {
     );
   }
 
-  public async createMeal({ uid, meal }: {
+  public async createMeal(
     uid: string,
     meal: Partial<Omit<MealDto, 'id' | 'uid'>>
-  }): Promise<string> {
-    const id = this._firestoreService.createId();
-    const batch = this._firestoreService.getBatch();
+  ): Promise<string> {
+    const id = this._apiService.createId();
+    const batch = this._apiService.createBatch();
     batch.set(
       this._documentService.getMealDoc(id),
       createMealDto({ id, uid, ...meal }),
     );
     if (meal.dishes) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getDishUpdates({
           key: 'meals',
           initialDishIds: [],
@@ -81,7 +78,7 @@ export class MealDocumentService {
       );
     }
     if (meal.tags) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getTagUpdates({
           key: 'meals',
           initialTagIds: [],
@@ -98,10 +95,10 @@ export class MealDocumentService {
     meal: Meal,
     updates: Partial<MealDto>
   ): Promise<void> {
-    const batch = this._firestoreService.getBatch();
+    const batch = this._apiService.createBatch();
     batch.update(this._documentService.getMealDoc(meal.id), updates);
     if (updates.dishes) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
@@ -111,7 +108,7 @@ export class MealDocumentService {
       );
     }
     if (updates.tags) {
-      this._documentService.processUpdates(batch,
+      batch.updateMultiple(
         this._documentService.getTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
@@ -124,22 +121,23 @@ export class MealDocumentService {
   }
 
   public async deleteMeal(meal: Meal): Promise<void> {
-    const batch = this._firestoreService.getBatch();
-    batch.delete(this._documentService.getMealDoc(meal.id));
-    this._documentService.processUpdates(batch, [
-      ...this._documentService.getDishUpdates({
-        key: 'meals',
-        initialDishIds: meal.dishes.map(dish => dish.id),
-        finalDishIds: [],
-        entityId: meal.id,
-      }),
-      ...this._documentService.getTagUpdates({
-        key: 'meals',
-        initialTagIds: meal.tags.map(tag => tag.id),
-        finalTagIds: [],
-        entityId: meal.id,
-      }),
-    ]);
+    const batch = this._apiService.createBatch();
+    batch
+      .delete(this._documentService.getMealDoc(meal.id))
+      .updateMultiple([
+        ...this._documentService.getDishUpdates({
+          key: 'meals',
+          initialDishIds: meal.dishes.map(dish => dish.id),
+          finalDishIds: [],
+          entityId: meal.id,
+        }),
+        ...this._documentService.getTagUpdates({
+          key: 'meals',
+          initialTagIds: meal.tags.map(tag => tag.id),
+          finalTagIds: [],
+          entityId: meal.id,
+        }),
+      ]);
     await batch.commit();
   }
 

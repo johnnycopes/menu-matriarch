@@ -11,11 +11,11 @@ export class FirestoreService {
 
   constructor(private _firestore: AngularFirestore) { }
 
-  public getBatch(): firebase.firestore.WriteBatch {
+  public createBatch(): firebase.firestore.WriteBatch {
     return this._firestore.firestore.batch();
   }
 
-  public getTransaction<T>(updateFn: (transaction: firebase.firestore.Transaction) => Promise<T>) {
+  public createTransaction<T>(updateFn: (transaction: firebase.firestore.Transaction) => Promise<T>) {
     return this._firestore.firestore.runTransaction(updateFn);
   }
 
