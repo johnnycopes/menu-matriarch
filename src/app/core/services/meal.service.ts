@@ -7,8 +7,8 @@ import { Dish } from '@models/dish.interface';
 import { Meal } from '@models/meal.interface';
 import { Tag } from '@models/tag.interface';
 import { AuthService } from './auth.service';
-import { MealDataService } from './meal-data.service';
 import { DishService } from './dish.service';
+import { MealDataService } from './meal-data.service';
 import { TagService } from './tag.service';
 
 @Injectable({
