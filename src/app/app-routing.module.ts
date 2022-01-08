@@ -41,7 +41,7 @@ const routes: Routes = [
       { path: ':id', component: DishDetailsComponent },
       { path: ':id/edit', component: DishEditComponent },
     ]},
-    { path: '', redirectTo: 'dishes', pathMatch: 'full', data: { state: Route.dishes } },
+    { path: '', redirectTo: 'planner', pathMatch: 'full', data: { state: Route.planner } },
     { path: 'settings', component: SettingsComponent, data: { state: Route.settings } },
   ]},
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] },

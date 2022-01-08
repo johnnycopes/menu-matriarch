@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { PlannerView } from '@models/planner-view.type';
 import { MenuService } from '@services/menu.service';
@@ -16,9 +16,14 @@ import { RouterService } from '@services/router.service';
 export class PlannerComponent {
   public view$ = this._routerService.activePlannerView$;
   public menu$ = this._route.paramMap.pipe(
-    map(paramMap => paramMap.get('menuId') ?? 'NO_ID'),
-    switchMap(menuId => this._menuService.getMenu(menuId)),
-    catchError(_ => of<'INVALID'>('INVALID')),
+    map(paramMap => paramMap.get('menuId')),
+    switchMap(menuId => {
+      if (!menuId) {
+        return of<'INVALID'>('INVALID');
+      }
+      return this._menuService.getMenu(menuId)
+    }),
+    map(menu => menu ? menu : 'INVALID')
   );
 
   constructor(
