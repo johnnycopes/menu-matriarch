@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable, of } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { catchError, shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,22 +23,17 @@ export class FirestoreService {
     return this._getDoc<T>(endpoint, id).ref;
   }
 
-  public getOne<T>(endpoint: string, id: string | undefined): Observable<T | undefined> {
-    if (!id) {
-      return of(undefined);
-    }
+  public getOne<T>(endpoint: string, id: string): Observable<T | undefined> {
     return this
       ._getDoc<T>(endpoint, id)
       .valueChanges()
       .pipe(
+        catchError(_ => of(undefined)),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
   }
 
-  public getMany<T>(endpoint: string, uid: string | undefined): Observable<T[]> {
-    if (!uid) {
-      return of([]);
-    }
+  public getMany<T>(endpoint: string, uid: string): Observable<T[]> {
     return this._firestore
       .collection<T>(
         endpoint,
@@ -46,6 +41,7 @@ export class FirestoreService {
       )
       .valueChanges()
       .pipe(
+        catchError(_ => of([])),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
   }

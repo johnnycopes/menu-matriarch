@@ -43,7 +43,7 @@ export class DishService {
             this._dishDataService.getDishes(uid),
             this._tagService.getTags(),
           ]).pipe(
-            map(([dishDtos, tags]) => dishDtos.map(dishDto => this._transformDto(dishDto, tags)))
+            map(([dishDtos, tags]) =>dishDtos.map(dishDto => this._transformDto(dishDto, tags)))
           );
         }
         return of([]);

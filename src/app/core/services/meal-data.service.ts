@@ -23,14 +23,7 @@ export class MealDataService {
   ) { }
 
   public getMeal(id: string): Observable<MealDto | undefined> {
-    return this._dataService.getOne<MealDto>(this._endpoint, id).pipe(
-      map(mealDto => {
-        if (!mealDto) {
-          return undefined;
-        }
-        return mealDto;
-      })
-    );
+    return this._dataService.getOne<MealDto>(this._endpoint, id);
   }
 
   public getMeals(uid: string): Observable<MealDto[]> {

@@ -53,7 +53,7 @@ export class MenuService {
             this._userService.getPreferences(),
           ]).pipe(
             map(([menuDtos, dishes, preferences]) => {
-              if (!menuDtos || !preferences) {
+              if (!preferences) {
                 return [];
               }
               return menuDtos.map(menuDto => this._transformDto({ menuDto, dishes, preferences }));

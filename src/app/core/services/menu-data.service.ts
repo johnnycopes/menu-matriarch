@@ -25,14 +25,7 @@ export class MenuDataService {
   ) { }
 
   public getMenu(id: string): Observable<MenuDto | undefined> {
-    return this._dataService.getOne<MenuDto>(this._endpoint, id).pipe(
-      map(menuDto => {
-        if (!menuDto) {
-          return undefined;
-        }
-        return menuDto;
-      })
-    );
+    return this._dataService.getOne<MenuDto>(this._endpoint, id);
   }
 
   public getMenus(uid: string): Observable<MenuDto[]> {
