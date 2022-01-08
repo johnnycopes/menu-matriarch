@@ -1,52 +1,34 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dish } from '@models/dish.interface';
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
-import { Tag } from '@models/tag.interface';
 import { createDishDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
-import { ApiService } from './api.service';
+import { DataService } from './data.service';
 import { DocumentService } from './document.service';
-import { TagService } from './tag.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DishDocumentService {
+export class DishDataService {
   private _endpoint = Endpoint.dishes;
 
   constructor(
-    private _apiService: ApiService,
-    private _documentService: DocumentService,
-    private _tagService: TagService,
+    private _dataService: DataService,
+    private _documentService: DocumentService
   ) { }
 
-  public getDish(id: string): Observable<Dish | undefined> {
-    return combineLatest([
-      this._apiService.getOne<DishDto>(this._endpoint, id),
-      this._tagService.getTags(),
-    ]).pipe(
-      map(([dishDto, tags]) => {
-        if (!dishDto) {
-          return undefined;
-        }
-        return this._transformDto(dishDto, tags);
-      })
-    );
+  public getDish(id: string): Observable<DishDto | undefined> {
+    return this._dataService.getOne<DishDto>(this._endpoint, id);
   }
 
-  public getDishes(uid: string): Observable<Dish[]> {
-    return combineLatest([
-      this._apiService.getMany<DishDto>(this._endpoint, uid).pipe(
-        map(dishDtos => sort(dishDtos, dishDto => lower(dishDto.name)))
-      ),
-      this._tagService.getTags(),
-    ]).pipe(
-      map(([dishDtos, tags]) => dishDtos.map(dishDto => this._transformDto(dishDto, tags)))
+  public getDishes(uid: string): Observable<DishDto[]> {
+    return this._dataService.getMany<DishDto>(this._endpoint, uid).pipe(
+      map(dishDtos => sort(dishDtos, dishDto => lower(dishDto.name)))
     );
   }
 
@@ -54,8 +36,8 @@ export class DishDocumentService {
     uid: string,
     dish: Partial<Omit<DishDto, 'id' | 'uid'>>
   }): Promise<string> {
-    const id = this._apiService.createId();
-    const batch = this._apiService.createBatch();
+    const id = this._dataService.createId();
+    const batch = this._dataService.createBatch();
     batch.set(
       this._documentService.getDishDoc(id),
       createDishDto({ id, uid, ...dish }),
@@ -78,7 +60,7 @@ export class DishDocumentService {
     dish: Dish,
     updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Promise<void> {
-    const batch = this._apiService.createBatch();
+    const batch = this._dataService.createBatch();
     batch.update(this._documentService.getDishDoc(dish.id), updates);
     if (updates.tags) {
       batch.updateMultiple(
@@ -94,7 +76,7 @@ export class DishDocumentService {
   }
 
   public async deleteDish(dish: Dish): Promise<void> {
-    const batch = this._apiService.createBatch();
+    const batch = this._dataService.createBatch();
     batch
       .delete(this._documentService.getDishDoc(dish.id))
       .updateMultiple([
@@ -117,12 +99,5 @@ export class DishDocumentService {
         }),
       ]);
     await batch.commit();
-  }
-
-  private _transformDto(dishDto: DishDto, tags: Tag[]): Dish {
-    return {
-      ...dishDto,
-      tags: tags.filter(tag => dishDto.tags.includes(tag.id))
-    };
   }
 }

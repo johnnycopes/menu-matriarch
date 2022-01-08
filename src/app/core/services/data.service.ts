@@ -7,7 +7,7 @@ import { FirestoreService } from './firestore.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class DataService {
 
   constructor(private _firestoreService: FirestoreService) { }
 
@@ -19,11 +19,11 @@ export class ApiService {
     return new Batch(this._firestoreService.createBatch());
   }
 
-  public getOne<T>(endpoint: string, id: string | undefined): Observable<T | undefined> {
+  public getOne<T>(endpoint: string, id: string): Observable<T | undefined> {
     return this._firestoreService.getOne(endpoint, id);
   }
 
-  public getMany<T>(endpoint: string, uid: string | undefined): Observable<T[]> {
+  public getMany<T>(endpoint: string, uid: string): Observable<T[]> {
     return this._firestoreService.getMany(endpoint, uid);
   }
 

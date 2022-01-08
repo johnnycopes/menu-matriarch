@@ -6,18 +6,18 @@ import { UserDto } from '@models/dtos/user-dto.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { User } from '@models/user.interface';
 import { UserPreferences } from '@models/user-preferences.interface';
-import { ApiService } from './api.service';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserDocumentService {
+export class UserDataService {
   private _endpoint = Endpoint.users;
 
-  constructor(private _apiService: ApiService) { }
+  constructor(private _dataService: DataService) { }
 
   public getUser(uid: string): Observable<User | undefined> {
-    return this._apiService.getOne<UserDto>(this._endpoint, uid);
+    return this._dataService.getOne<UserDto>(this._endpoint, uid);
   }
 
   public getPreferences(uid: string): Observable<UserPreferences | undefined> {
@@ -28,7 +28,7 @@ export class UserDocumentService {
 
   public updatePreferences(user: User, updates: Partial<UserPreferences>): Promise<void> {
     const { uid, preferences } = user;
-    return this._apiService.update<UserDto>(
+    return this._dataService.update<UserDto>(
       this._endpoint,
       uid,
       { preferences: {
