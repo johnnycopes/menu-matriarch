@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { concatMap, first, tap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { concatMap, first, map, tap } from 'rxjs/operators';
 
-import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { Menu } from '@models/menu.interface';
 import { Day } from '@models/day.type';
+import { Dish } from '@models/dish.interface';
+import { Menu } from '@models/menu.interface';
+import { MenuDto } from '@models/dtos/menu-dto.interface';
+import { UserPreferences } from '@models/user-preferences.interface';
+import { getDays } from '@utility/domain/get-days';
 import { AuthService } from './auth.service';
+import { DishService } from './dish.service';
 import { LocalStorageService } from './local-storage.service';
 import { MenuDataService } from './menu-data.service';
 import { UserService } from './user.service';
@@ -17,13 +21,25 @@ export class MenuService {
 
   constructor(
     private _authService: AuthService,
+    private _dishService: DishService,
     private _localStorageService: LocalStorageService,
     private _menuDataService: MenuDataService,
     private _userService: UserService,
   ) { }
 
   public getMenu(id: string): Observable<Menu | undefined> {
-    return this._menuDataService.getMenu(id);
+    return combineLatest([
+      this._menuDataService.getMenu(id),
+      this._dishService.getDishes(),
+      this._userService.getPreferences(),
+    ]).pipe(
+      map(([menuDto, dishes, preferences]) => {
+        if (!menuDto || !preferences) {
+          return undefined;
+        }
+        return this._transformDto({ menuDto, dishes, preferences });
+      })
+    );
   }
 
   public getMenus(): Observable<Menu[]> {
@@ -31,7 +47,18 @@ export class MenuService {
       first(),
       concatMap(uid => {
         if (uid) {
-          return this._menuDataService.getMenus(uid);
+          return combineLatest([
+            this._menuDataService.getMenus(uid),
+            this._dishService.getDishes(),
+            this._userService.getPreferences(),
+          ]).pipe(
+            map(([menuDtos, dishes, preferences]) => {
+              if (!menuDtos || !preferences) {
+                return [];
+              }
+              return menuDtos.map(menuDto => this._transformDto({ menuDto, dishes, preferences }));
+            }),
+          );
         }
         return of([]);
       })
@@ -92,5 +119,23 @@ export class MenuService {
 
   public deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
     return this._menuDataService.deleteMenuContents(menu, day);
+  }
+
+  private _transformDto({ menuDto, dishes, preferences }: {
+    menuDto: MenuDto,
+    dishes: Dish[],
+    preferences: UserPreferences,
+  }): Menu {
+    return {
+      ...menuDto,
+      entries: getDays(menuDto.startDay)
+        .map(day => ({
+          day,
+          dishes: dishes.filter(dish => menuDto.contents[day].includes(dish.id)),
+        })
+      ),
+      orientation: preferences?.mealOrientation ?? 'horizontal',
+      fallbackText: preferences?.emptyMealText ?? '',
+    };
   }
 }

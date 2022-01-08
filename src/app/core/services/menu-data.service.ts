@@ -1,22 +1,17 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Day } from '@models/day.type';
-import { Dish } from '@models/dish.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { Menu } from '@models/menu.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { UserPreferences } from '@models/user-preferences.interface';
 import { createMenuDto } from '@utility/domain/create-dtos';
-import { getDays } from '@utility/domain/get-days';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
 import { DataService } from './data.service';
-import { DishService } from './dish.service';
 import { DocumentService } from './document.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,40 +21,23 @@ export class MenuDataService {
 
   constructor(
     private _dataService: DataService,
-    private _dishService: DishService,
     private _documentService: DocumentService,
-    private _userService: UserService,
   ) { }
 
-  public getMenu(id: string): Observable<Menu | undefined> {
-    return combineLatest([
-      this._dataService.getOne<MenuDto>(this._endpoint, id),
-      this._dishService.getDishes(),
-      this._userService.getPreferences(),
-    ]).pipe(
-      map(([menuDto, dishes, preferences]) => {
-        if (!menuDto || !preferences) {
+  public getMenu(id: string): Observable<MenuDto | undefined> {
+    return this._dataService.getOne<MenuDto>(this._endpoint, id).pipe(
+      map(menuDto => {
+        if (!menuDto) {
           return undefined;
         }
-        return this._transformDto({ menuDto, dishes, preferences });
+        return menuDto;
       })
     );
   }
 
-  public getMenus(uid: string): Observable<Menu[]> {
-    return combineLatest([
-      this._dataService.getMany<MenuDto>(this._endpoint, uid).pipe(
-        map(menuDtos => sort(menuDtos, menuDto => lower(menuDto.name))),
-      ),
-      this._dishService.getDishes(),
-      this._userService.getPreferences(),
-    ]).pipe(
-      map(([menuDtos, dishes, preferences]) => {
-        if (!menuDtos || !preferences) {
-          return [];
-        }
-        return menuDtos.map(menuDto => this._transformDto({ menuDto, dishes, preferences }));
-      }),
+  public getMenus(uid: string): Observable<MenuDto[]> {
+    return this._dataService.getMany<MenuDto>(this._endpoint, uid).pipe(
+      map(menuDtos => sort(menuDtos, menuDto => lower(menuDto.name))),
     );
   }
 
@@ -157,23 +135,5 @@ export class MenuDataService {
       ]);
     }
     await batch.commit();
-  }
-
-  private _transformDto({ menuDto, dishes, preferences }: {
-    menuDto: MenuDto,
-    dishes: Dish[],
-    preferences: UserPreferences,
-  }): Menu {
-    return {
-      ...menuDto,
-      entries: getDays(menuDto.startDay)
-        .map(day => ({
-          day,
-          dishes: dishes.filter(dish => menuDto.contents[day].includes(dish.id)),
-        })
-      ),
-      orientation: preferences?.mealOrientation ?? 'horizontal',
-      fallbackText: preferences?.emptyMealText ?? '',
-    };
   }
 }
