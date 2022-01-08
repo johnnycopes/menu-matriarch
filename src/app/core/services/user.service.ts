@@ -5,7 +5,7 @@ import { concatMap, first, tap } from 'rxjs/operators';
 import { User } from '@models/user.interface';
 import { UserPreferences } from '@models/user-preferences.interface';
 import { AuthService } from './auth.service';
-import { UserDataService } from './user-data.service';
+import { UserDataService } from './internal/user-data.service';
 
 @Injectable({
   providedIn: 'root'

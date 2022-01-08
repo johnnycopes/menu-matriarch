@@ -5,7 +5,7 @@ import { map, filter, tap, distinctUntilChanged } from "rxjs/operators";
 
 import { PlannerView } from "@models/planner-view.type";
 import { Route } from "@models/route.enum";
-import { LocalStorageService } from "./local-storage.service";
+import { LocalStorageService } from "./internal/local-storage.service";
 
 // interface IRouterState {
 //   currentRoute: string;

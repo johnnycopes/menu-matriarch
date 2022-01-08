@@ -6,7 +6,7 @@ import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/dish.interface';
 import { Tag } from '@models/tag.interface';
 import { AuthService } from './auth.service';
-import { DishDataService } from './dish-data.service';
+import { DishDataService } from './internal/dish-data.service';
 import { TagService } from './tag.service';
 
 @Injectable({

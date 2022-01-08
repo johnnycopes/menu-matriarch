@@ -10,8 +10,8 @@ import { UserPreferences } from '@models/user-preferences.interface';
 import { getDays } from '@utility/domain/get-days';
 import { AuthService } from './auth.service';
 import { DishService } from './dish.service';
-import { LocalStorageService } from './local-storage.service';
-import { MenuDataService } from './menu-data.service';
+import { LocalStorageService } from './internal/local-storage.service';
+import { MenuDataService } from './internal/menu-data.service';
 import { UserService } from './user.service';
 
 @Injectable({

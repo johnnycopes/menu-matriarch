@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
-import { DataService } from './data.service';
-import { DocumentService } from './document.service';
+import { DataService } from './internal/data.service';
+import { DocumentService } from './internal/document.service';
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,7 @@ import { DishType } from '@models/dish-type.type';
 import { Menu } from '@models/menu.interface';
 import { MenuEntry } from '@models/menu-entry.interface';
 import { Orientation } from '@models/orientation.type';
-import { getDishTypes } from '@shared/utility/domain/get-dish-types';
+import { getDishTypes } from '@utility/domain/get-dish-types';
 
 interface PrintMenu extends Pick<Menu,
   'name' | 'entries' | 'fallbackText' | 'orientation'

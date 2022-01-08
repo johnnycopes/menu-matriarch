@@ -5,7 +5,7 @@ import { concatMap, first, tap } from 'rxjs/operators';
 import { TagDto } from '@models/dtos/tag-dto.interface';
 import { Tag } from '@models/tag.interface';
 import { AuthService } from './auth.service';
-import { TagDataService } from './tag-data.service';
+import { TagDataService } from './internal/tag-data.service';
 
 @Injectable({
   providedIn: 'root'
