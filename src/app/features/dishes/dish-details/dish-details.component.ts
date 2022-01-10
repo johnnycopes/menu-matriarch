@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { concatMap, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { DishService } from '@services/dish.service';
-import { trackBySelf } from '@utility/domain/track-by-functions';
+import { trackById } from '@utility/domain/track-by-functions';
 
 @Component({
   selector: 'app-dish-details',
@@ -22,9 +22,9 @@ export class DishDetailsComponent {
         return of(undefined);
       }
       return this._dishService.getDish(id);
-    })
+    }),
   );
-  public readonly ingredientTrackByFn = trackBySelf;
+  public readonly ingredientTrackByFn = trackById;
 
   constructor(
     private _route: ActivatedRoute,

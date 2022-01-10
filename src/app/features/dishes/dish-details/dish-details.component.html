@@ -55,7 +55,7 @@
     </div>
     <ul *ngIf="dish.ingredients.length">
       <li *ngFor="let ingredient of dish.ingredients; trackBy: ingredientTrackByFn">
-        {{ ingredient }}
+        {{ ingredient.name }}
       </li>
     </ul>
   </div>

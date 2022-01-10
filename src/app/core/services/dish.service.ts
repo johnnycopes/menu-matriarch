@@ -4,9 +4,11 @@ import { concatMap, first, map, tap } from 'rxjs/operators';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
 import { Dish } from '@models/dish.interface';
+import { Ingredient } from '@models/ingredient.interface';
 import { Tag } from '@models/tag.interface';
 import { AuthService } from './auth.service';
 import { DishDataService } from './internal/dish-data.service';
+import { IngredientService } from './ingredient.service';
 import { TagService } from './tag.service';
 
 @Injectable({
@@ -17,19 +19,21 @@ export class DishService {
   constructor(
     private _authService: AuthService,
     private _dishDataService: DishDataService,
+    private _ingredientService: IngredientService,
     private _tagService: TagService,
   ) { }
 
   public getDish(id: string): Observable<Dish | undefined> {
     return combineLatest([
       this._dishDataService.getDish(id),
+      this._ingredientService.getIngredients(),
       this._tagService.getTags(),
     ]).pipe(
-      map(([dishDto, tags]) => {
+      map(([dishDto, ingredients, tags]) => {
         if (!dishDto) {
           return undefined;
         }
-        return this._transformDto(dishDto, tags);
+        return this._transformDto({ dishDto, ingredients, tags });
       })
     );
   }
@@ -41,9 +45,12 @@ export class DishService {
         if (uid) {
           return combineLatest([
             this._dishDataService.getDishes(uid),
+            this._ingredientService.getIngredients(),
             this._tagService.getTags(),
           ]).pipe(
-            map(([dishDtos, tags]) =>dishDtos.map(dishDto => this._transformDto(dishDto, tags)))
+            map(([dishDtos, ingredients, tags]) => dishDtos.map(
+              dishDto => this._transformDto({ dishDto, ingredients, tags })
+            ))
           );
         }
         return of([]);
@@ -92,10 +99,14 @@ export class DishService {
     );
   }
 
-  private _transformDto(dishDto: DishDto, tags: Tag[]): Dish {
+  private _transformDto({ dishDto, ingredients, tags }: {
+    dishDto: DishDto,
+    ingredients: Ingredient[],
+    tags: Tag[],
+  }): Dish {
     return {
       ...dishDto,
-      ingredients: [],
+      ingredients: ingredients.filter(ingredient => dishDto.ingredients.includes(ingredient.id)),
       tags: tags.filter(tag => dishDto.tags.includes(tag.id))
     };
   }
