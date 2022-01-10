@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
 
 import { DishDto } from '@models/dtos/dish-dto.interface';
+import { IngredientDto } from '@models/dtos/ingredient-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
@@ -35,6 +36,10 @@ export class DocumentService {
 
   public getDishDoc(id: string): DocumentReference<DishDto> {
     return this._firestoreService.getDocRef<DishDto>(Endpoint.dishes, id);
+  }
+
+  public getIngredientDoc(id: string): DocumentReference<IngredientDto> {
+    return this._firestoreService.getDocRef<IngredientDto>(Endpoint.ingredients, id);
   }
 
   public getTagDoc(id: string): DocumentReference<TagDto> {

@@ -1,22 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { concatMap, first } from 'rxjs/operators';
 
 import { Ingredient } from '@models/ingredient.interface';
+import { AuthService } from './auth.service';
+import { IngredientDataService } from './internal/ingredient-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IngredientService {
 
-  constructor() { }
+  constructor(
+    private _authService: AuthService,
+    private _ingredientDataService: IngredientDataService,
+  ) { }
+
+  public getIngredient(id: string): Observable<Ingredient | undefined> {
+    return this._ingredientDataService.getIngredient(id);
+  }
 
   public getIngredients(): Observable<Ingredient[]> {
-    return of([{
-      id: '1',
-      uid: 'yPjDo53aeqOpvVbVB6OoKh6V1xD3',
-      name: 'Onions',
-      type: 'produce',
-      dishes: ['PfTtZ9dlbIFNqcS5l3OI'],
-    }]);
+    return this._authService.uid$.pipe(
+      first(),
+      concatMap(uid => {
+        if (uid) {
+          return this._ingredientDataService.getIngredients(uid);
+        }
+        return of([]);
+      })
+    );
   }
 }
