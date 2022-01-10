@@ -8,12 +8,8 @@
 
 .icon {
   margin-left: spacing(16);
-  color: color($neutral, 5);
   cursor: pointer;
-
-  &:hover {
-    color: color($indigo, 5);
-  }
+  @include hover;
 }
 
 .meal {

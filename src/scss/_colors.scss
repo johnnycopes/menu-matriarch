@@ -95,3 +95,11 @@ $yellow: (
 @function color($palette, $value) {
   @return map-get($palette, $value);
 }
+
+@mixin hover {
+  color: color($neutral, 4);
+
+  &:hover {
+    color: color($indigo, 5);
+  }
+}

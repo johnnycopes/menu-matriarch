@@ -12,7 +12,7 @@
 .external-link {
   margin-right: spacing(4);
   font-size: font-size(14);
-  color: color($neutral, 3);
+  @include hover;
 }
 
 .details {

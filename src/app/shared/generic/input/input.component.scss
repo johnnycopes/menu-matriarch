@@ -9,7 +9,7 @@
   margin-bottom: spacing(4);
   font-size: font-size(14);
   color: color($neutral, 5);
-  @include small-caps();
+  @include small-caps;
 }
 
 ::ng-deep input[type="text"] {
