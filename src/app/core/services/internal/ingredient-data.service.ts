@@ -47,8 +47,11 @@ export class IngredientDataService {
     return id;
   }
 
-  public updateIngredient(id: string, updates: Partial<IngredientDto>): Promise<void> {
-    return this._dataService.update<IngredientDto>(this._endpoint, id, updates);
+  public async updateIngredient(ingredient: Ingredient, updates: Partial<IngredientDto>): Promise<void> {
+    const batch = this._dataService.createBatch();
+    batch.update(this._documentService.getIngredientDoc(ingredient.id), updates);
+    // TODO: update ingredient doc and relevant dishes docs
+    await batch.commit();
   }
 
   public async deleteIngredient(ingredient: Ingredient): Promise<void> {
