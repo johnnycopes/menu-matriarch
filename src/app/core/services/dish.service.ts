@@ -56,7 +56,7 @@ export class DishService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = this._dishDataService.createDish({ uid, dish });
+          const id = await this._dishDataService.createDish({ uid, dish });
           return id;
         } else {
           return undefined;

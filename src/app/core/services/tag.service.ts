@@ -38,7 +38,7 @@ export class TagService {
       first(),
       concatMap(async uid => {
         if (uid) {
-          const id = this._tagDataService.createTag({ uid, tag });
+          const id = await this._tagDataService.createTag({ uid, tag });
           return id;
         } else {
           return undefined;
