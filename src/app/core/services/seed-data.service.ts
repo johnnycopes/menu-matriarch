@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
+import { createDishDto, createMealDto, createMenuDto, createIngredientDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
 import { DataService } from './internal/data.service';
 import { DocumentService } from './internal/document.service';
 
@@ -27,6 +27,7 @@ export class SeedDataService {
     const enchiladasDishId = this._dataService.createId();
     const friedChickenDishId = this._dataService.createId();
     const greekSaladDishId = this._dataService.createId();
+    const huevosRotosDishId = this._dataService.createId();
     const macAndCheeseDishId = this._dataService.createId();
     const misoSoupDishId = this._dataService.createId();
     const pizzaDishId = this._dataService.createId();
@@ -39,6 +40,14 @@ export class SeedDataService {
     const thaiCurryDishId = this._dataService.createId();
     const easyTagId = this._dataService.createId();
     const pescatarianTagId = this._dataService.createId();
+    const eggsIngredientId = this._dataService.createId();
+    const garlicIngredientId = this._dataService.createId();
+    const oliveOilIngredientId = this._dataService.createId();
+    const onionIngredientId = this._dataService.createId();
+    const paprikaIngredientId = this._dataService.createId();
+    const pepperIngredientId = this._dataService.createId();
+    const potatoIngredientId = this._dataService.createId();
+    const saltIngredientId = this._dataService.createId();
     const veganTagId = this._dataService.createId();
     const vegetarianTagId = this._dataService.createId();
     batch
@@ -121,6 +130,28 @@ export class SeedDataService {
           id: greekSaladDishId,
           uid,
           name: 'Greek Salad',
+          tags: [vegetarianTagId],
+        })
+      )
+      .set(
+        this._documentService.getDishDoc(huevosRotosDishId),
+        createDishDto({
+          id: huevosRotosDishId,
+          uid,
+          name: 'Huevos Rotos',
+          description: 'Tasty pan fried potatoes topped with runny eggs',
+          type: 'main',
+          link: 'https://cooking.nytimes.com/recipes/1020055-huevos-rotos-broken-eggs',
+          ingredients: [
+            eggsIngredientId,
+            garlicIngredientId,
+            oliveOilIngredientId,
+            onionIngredientId,
+            paprikaIngredientId,
+            pepperIngredientId,
+            potatoIngredientId,
+            saltIngredientId,
+          ],
           tags: [vegetarianTagId],
         })
       )
@@ -253,6 +284,86 @@ export class SeedDataService {
         })
       )
       .set(
+        this._documentService.getIngredientDoc(eggsIngredientId),
+        createIngredientDto({
+          id: eggsIngredientId,
+          uid,
+          name: 'Eggs',
+          type: 'refrigerated',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(garlicIngredientId),
+        createIngredientDto({
+          id: garlicIngredientId,
+          uid,
+          name: 'Garlic',
+          type: 'produce',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(oliveOilIngredientId),
+        createIngredientDto({
+          id: oliveOilIngredientId,
+          uid,
+          name: 'Olive Oil',
+          type: 'oil',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(onionIngredientId),
+        createIngredientDto({
+          id: onionIngredientId,
+          uid,
+          name: 'Onion',
+          type: 'produce',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(paprikaIngredientId),
+        createIngredientDto({
+          id: paprikaIngredientId,
+          uid,
+          name: 'Paprika',
+          type: 'spice',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(pepperIngredientId),
+        createIngredientDto({
+          id: pepperIngredientId,
+          uid,
+          name: 'Pepper',
+          type: 'spice',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(potatoIngredientId),
+        createIngredientDto({
+          id: potatoIngredientId,
+          uid,
+          name: 'Potato',
+          type: 'produce',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
+        this._documentService.getIngredientDoc(saltIngredientId),
+        createIngredientDto({
+          id: saltIngredientId,
+          uid,
+          name: 'Salt',
+          type: 'spice',
+          dishes: [huevosRotosDishId],
+        })
+      )
+      .set(
         this._documentService.getTagDoc(easyTagId),
         createTagDto({
           id: easyTagId,
@@ -286,6 +397,7 @@ export class SeedDataService {
         createTagDto({ id: vegetarianTagId, uid, name: 'Vegetarian', dishes: [
           cornbreadDishId,
           greekSaladDishId,
+          huevosRotosDishId,
           macAndCheeseDishId,
           misoSoupDishId,
           pizzaDishId,

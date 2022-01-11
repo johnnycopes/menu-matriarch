@@ -1,12 +1,13 @@
 export type IngredientType =
   'bread/bakery' |
+  'condiment' |
   'canned/jarred good' |
-  'condiment/spice' |
   'dry good' |
   'frozen' |
   'grocery' |
   'meat/seafood' |
+  'oil' |
   'produce' |
   'refrigerated' |
-  'sauce/oil' |
+  'spice' |
   'uncategorized';
