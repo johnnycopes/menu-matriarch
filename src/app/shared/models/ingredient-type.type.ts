@@ -1,8 +1,12 @@
 export type IngredientType =
-  'deli' |
+  'bread/bakery' |
+  'canned/jarred good' |
+  'condiment/spice' |
+  'dry good' |
   'frozen' |
   'grocery' |
+  'meat/seafood' |
   'produce' |
-  'seafood' |
-  'spice' |
+  'refrigerated' |
+  'sauce/oil' |
   'uncategorized';
