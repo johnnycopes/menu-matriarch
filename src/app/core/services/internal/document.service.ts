@@ -5,7 +5,6 @@ import { DishDto } from '@models/dtos/dish-dto.interface';
 import { MealDto } from '@models/dtos/meal-dto.interface';
 import { MenuDto } from '@models/dtos/menu-dto.interface';
 import { TagDto } from '@models/dtos/tag-dto.interface';
-import { UserDto } from '@models/dtos/user-dto.interface';
 import { Day } from '@models/day.type';
 import { DocRefUpdate } from '@models/doc-ref-update.interface';
 import { Menu } from '@models/menu.interface';
@@ -27,26 +26,6 @@ export class DocumentService {
       this._firestoreService.createBatch(),
       (endpoint, id) => this._firestoreService.getDocRef(endpoint, id),
     );
-  }
-
-  public getUserDoc(uid: string): DocumentReference<UserDto> {
-    return this._firestoreService.getDocRef<UserDto>(Endpoint.users, uid);
-  }
-
-  public getMealDoc(id: string): DocumentReference<MealDto> {
-    return this._firestoreService.getDocRef<MealDto>(Endpoint.meals, id);
-  }
-
-  public getMenuDoc(id: string): DocumentReference<MenuDto> {
-    return this._firestoreService.getDocRef<MenuDto>(Endpoint.menus, id);
-  }
-
-  public getDishDoc(id: string): DocumentReference<DishDto> {
-    return this._firestoreService.getDocRef<DishDto>(Endpoint.dishes, id);
-  }
-
-  public getTagDoc(id: string): DocumentReference<TagDto> {
-    return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
   }
 
   public getMenuContentsUpdates({ menuIds, dishIds, day, change }: {
@@ -79,7 +58,7 @@ export class DocumentService {
       };
     }
     return menuIds.map(menuId => ({
-      docRef: this.getMenuDoc(menuId),
+      docRef: this._getMenuDocRef(menuId),
       updates,
     }));
   }
@@ -91,7 +70,7 @@ export class DocumentService {
     entityId: string,
   }): DocRefUpdate<MealDto>[] {
     return this._getDocUpdates({
-      getDoc: (id) => this.getMealDoc(id),
+      getDocRef: (id) => this._getMealDocRef(id),
       key,
       initialIds: initialMealIds,
       finalIds: finalMealIds,
@@ -106,7 +85,7 @@ export class DocumentService {
     entityId: string,
   }): DocRefUpdate<DishDto>[] {
     return this._getDocUpdates({
-      getDoc: (id) => this.getDishDoc(id),
+      getDocRef: (id) => this._getDishDocRef(id),
       key,
       initialIds: initialDishIds,
       finalIds: finalDishIds,
@@ -137,7 +116,7 @@ export class DocumentService {
         ? this._firestoreService.addToArray(menu.id)
         : this._firestoreService.removeFromArray(menu.id);
       return {
-        docRef: this.getDishDoc(dishId),
+        docRef: this._getDishDocRef(dishId),
         updates: {
           usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
           ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
@@ -153,7 +132,7 @@ export class DocumentService {
     entityId: string,
   }): DocRefUpdate<TagDto>[] {
     return this._getDocUpdates({
-      getDoc: (id) => this.getTagDoc(id),
+      getDocRef: (id) => this._getTagDocRef(id),
       key,
       initialIds: initialTagIds,
       finalIds: finalTagIds,
@@ -161,8 +140,24 @@ export class DocumentService {
     });
   }
 
-  private _getDocUpdates<T>({ getDoc, key, initialIds, finalIds, entityId }: {
-    getDoc: (id: string) => DocumentReference<T>,
+  private _getMealDocRef(id: string): DocumentReference<MealDto> {
+    return this._firestoreService.getDocRef<MealDto>(Endpoint.meals, id);
+  }
+
+  private _getMenuDocRef(id: string): DocumentReference<MenuDto> {
+    return this._firestoreService.getDocRef<MenuDto>(Endpoint.menus, id);
+  }
+
+  private _getDishDocRef(id: string): DocumentReference<DishDto> {
+    return this._firestoreService.getDocRef<DishDto>(Endpoint.dishes, id);
+  }
+
+  private _getTagDocRef(id: string): DocumentReference<TagDto> {
+    return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
+  }
+
+  private _getDocUpdates<T>({ getDocRef, key, initialIds, finalIds, entityId }: {
+    getDocRef: (id: string) => DocumentReference<T>,
     key: 'meals' | 'dishes' | 'tags',
     initialIds: string[],
     finalIds: string[],
@@ -180,7 +175,7 @@ export class DocumentService {
 
       if (updatedIds) {
         docUpdates.push({
-          docRef: getDoc(id),
+          docRef: getDocRef(id),
           updates: { [key]: updatedIds },
         });
       }
