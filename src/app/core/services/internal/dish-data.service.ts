@@ -38,7 +38,7 @@ export class DishDataService {
   }): Promise<string> {
     const id = this._dataService.createId();
     const batch = this._documentService.createBatch();
-    batch.newSet({
+    batch.set({
       endpoint: this._endpoint,
       id,
       data: createDishDto({ id, uid, ...dish }),
@@ -62,7 +62,7 @@ export class DishDataService {
     updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Promise<void> {
     const batch = this._documentService.createBatch();
-    batch.newUpdate({
+    batch.update({
       endpoint: this._endpoint,
       id: dish.id,
       updates,
@@ -83,7 +83,7 @@ export class DishDataService {
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._documentService.createBatch();
     batch
-      .newDelete(this._endpoint, dish.id)
+      .delete(this._endpoint, dish.id)
       .updateMultiple([
         ...this._documentService.getMenuContentsUpdates({
           menuIds: dish.menus,

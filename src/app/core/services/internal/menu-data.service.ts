@@ -85,7 +85,7 @@ export class MenuDataService {
   public async deleteMenu(menu: Menu): Promise<void> {
     const batch = this._documentService.createBatch();
     batch
-      .newDelete(this._endpoint, menu.id)
+      .delete(this._endpoint, menu.id)
       .updateMultiple(
         this._documentService.getDishCountersUpdates({
           dishIds: flattenValues(menu.contents),
