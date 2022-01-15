@@ -1,8 +1,6 @@
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
-import { DocRefUpdate } from '@models/doc-ref-update.interface';
-
 export interface BatchUpdate {
   endpoint: string;
   id: string;
@@ -32,15 +30,8 @@ export class Batch {
     return this;
   }
 
-  public newUpdateMultiple(updates: BatchUpdate[]): Batch {
+  public updateMultiple(updates: BatchUpdate[]): Batch {
     updates.forEach(({ endpoint, id, updates }) => this.update({ endpoint, id, updates }));
-    return this;
-  }
-
-  public updateMultiple(docRefUpdates: DocRefUpdate<any>[]): Batch {
-    docRefUpdates.forEach(
-      ({ docRef, updates }) => this._batch.update(docRef, updates)
-    );
     return this;
   }
 

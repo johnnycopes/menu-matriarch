@@ -44,8 +44,8 @@ export class DishDataService {
       data: createDishDto({ id, uid, ...dish }),
     });
     if (dish.tags) {
-      batch.newUpdateMultiple(
-        this._batchService.newGetTagUpdates({
+      batch.updateMultiple(
+        this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: [],
           finalTagIds: dish.tags,
@@ -68,8 +68,8 @@ export class DishDataService {
       updates,
     });
     if (updates.tags) {
-      batch.newUpdateMultiple(
-        this._batchService.newGetTagUpdates({
+      batch.updateMultiple(
+        this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
           finalTagIds: updates.tags,
@@ -84,19 +84,19 @@ export class DishDataService {
     const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, dish.id)
-      .newUpdateMultiple([
-        ...this._batchService.newGetMenuContentsUpdates({
+      .updateMultiple([
+        ...this._batchService.getMenuContentsUpdates({
           menuIds: dish.menus,
           dishIds: [dish.id],
           change: 'remove',
         }),
-        ...this._batchService.newGetMealUpdates({
+        ...this._batchService.getMealUpdates({
           key: 'dishes',
           initialMealIds: dish.meals,
           finalMealIds: [],
           entityId: dish.id,
         }),
-        ...this._batchService.newGetTagUpdates({
+        ...this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
           finalTagIds: [],
