@@ -37,11 +37,11 @@ export class BatchService {
     } else if (change === 'remove') {
       dishes = this._firestoreService.removeFromArray(...dishIds);
     }
-    let updates: { [contentsDay: string]: string[] } = {};
+    let data: { [contentsDay: string]: string[] } = {};
     if (day) {
-      updates = this._getDayDishes(day, dishes);
+      data = this._getDayDishes(day, dishes);
     } else {
-      updates = {
+      data = {
         ...this._getDayDishes('Monday', dishes),
         ...this._getDayDishes('Tuesday', dishes),
         ...this._getDayDishes('Wednesday', dishes),
@@ -54,7 +54,7 @@ export class BatchService {
     return menuIds.map(menuId => ({
       endpoint: Endpoint.menus,
       id: menuId,
-      updates,
+      data,
     }));
   }
 
@@ -113,7 +113,7 @@ export class BatchService {
       return {
         endpoint: Endpoint.dishes,
         id: dishId,
-        updates: {
+        data: {
           usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
           ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
         },
@@ -157,7 +157,7 @@ export class BatchService {
         batchUpdates.push({
           endpoint,
           id,
-          updates: { [key]: updatedIds },
+          data: { [key]: updatedIds },
         });
       }
     }
