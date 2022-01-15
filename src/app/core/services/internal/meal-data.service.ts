@@ -8,8 +8,8 @@ import { Meal } from '@models/meal.interface';
 import { createMealDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { BatchService } from './batch.service';
 import { DataService } from './data.service';
-import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class MealDataService {
   private _endpoint = Endpoint.meals;
 
   constructor(
+    private _batchService: BatchService,
     private _dataService: DataService,
-    private _documentService: DocumentService,
   ) { }
 
   public getMeal(id: string): Observable<MealDto | undefined> {
@@ -37,7 +37,7 @@ export class MealDataService {
     meal: Partial<Omit<MealDto, 'id' | 'uid'>>
   ): Promise<string> {
     const id = this._dataService.createId();
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch.set({
       endpoint: this._endpoint,
       id,
@@ -45,7 +45,7 @@ export class MealDataService {
     });
     if (meal.dishes) {
       batch.updateMultiple(
-        this._documentService.getDishUpdates({
+        this._batchService.getDishUpdates({
           key: 'meals',
           initialDishIds: [],
           finalDishIds: meal.dishes,
@@ -55,7 +55,7 @@ export class MealDataService {
     }
     if (meal.tags) {
       batch.updateMultiple(
-        this._documentService.getTagUpdates({
+        this._batchService.getTagUpdates({
           key: 'meals',
           initialTagIds: [],
           finalTagIds: meal.tags,
@@ -71,7 +71,7 @@ export class MealDataService {
     meal: Meal,
     updates: Partial<MealDto>
   ): Promise<void> {
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch.update({
       endpoint: this._endpoint,
       id: meal.id,
@@ -79,7 +79,7 @@ export class MealDataService {
     });
     if (updates.dishes) {
       batch.updateMultiple(
-        this._documentService.getDishUpdates({
+        this._batchService.getDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: updates.dishes,
@@ -89,7 +89,7 @@ export class MealDataService {
     }
     if (updates.tags) {
       batch.updateMultiple(
-        this._documentService.getTagUpdates({
+        this._batchService.getTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
           finalTagIds: updates.tags,
@@ -101,17 +101,17 @@ export class MealDataService {
   }
 
   public async deleteMeal(meal: Meal): Promise<void> {
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, meal.id)
       .updateMultiple([
-        ...this._documentService.getDishUpdates({
+        ...this._batchService.getDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: [],
           entityId: meal.id,
         }),
-        ...this._documentService.getTagUpdates({
+        ...this._batchService.getTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
           finalTagIds: [],

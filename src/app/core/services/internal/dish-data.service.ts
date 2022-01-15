@@ -8,8 +8,8 @@ import { Endpoint } from '@models/endpoint.enum';
 import { createDishDto } from '@utility/domain/create-dtos';
 import { sort } from '@utility/generic/sort';
 import { lower } from '@utility/generic/format';
+import { BatchService } from './batch.service';
 import { DataService } from './data.service';
-import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class DishDataService {
   private _endpoint = Endpoint.dishes;
 
   constructor(
+    private _batchService: BatchService,
     private _dataService: DataService,
-    private _documentService: DocumentService
   ) { }
 
   public getDish(id: string): Observable<DishDto | undefined> {
@@ -37,7 +37,7 @@ export class DishDataService {
     dish: Partial<Omit<DishDto, 'id' | 'uid'>>
   }): Promise<string> {
     const id = this._dataService.createId();
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch.set({
       endpoint: this._endpoint,
       id,
@@ -45,7 +45,7 @@ export class DishDataService {
     });
     if (dish.tags) {
       batch.updateMultiple(
-        this._documentService.getTagUpdates({
+        this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: [],
           finalTagIds: dish.tags,
@@ -61,7 +61,7 @@ export class DishDataService {
     dish: Dish,
     updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Promise<void> {
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch.update({
       endpoint: this._endpoint,
       id: dish.id,
@@ -69,7 +69,7 @@ export class DishDataService {
     });
     if (updates.tags) {
       batch.updateMultiple(
-        this._documentService.getTagUpdates({
+        this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
           finalTagIds: updates.tags,
@@ -81,22 +81,22 @@ export class DishDataService {
   }
 
   public async deleteDish(dish: Dish): Promise<void> {
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, dish.id)
       .updateMultiple([
-        ...this._documentService.getMenuContentsUpdates({
+        ...this._batchService.getMenuContentsUpdates({
           menuIds: dish.menus,
           dishIds: [dish.id],
           change: 'remove',
         }),
-        ...this._documentService.getMealUpdates({
+        ...this._batchService.getMealUpdates({
           key: 'dishes',
           initialMealIds: dish.meals,
           finalMealIds: [],
           entityId: dish.id,
         }),
-        ...this._documentService.getTagUpdates({
+        ...this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
           finalTagIds: [],

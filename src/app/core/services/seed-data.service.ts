@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Endpoint } from '@models/endpoint.enum';
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
+import { BatchService } from './internal/batch.service';
 import { DataService } from './internal/data.service';
-import { DocumentService } from './internal/document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,8 @@ import { DocumentService } from './internal/document.service';
 export class SeedDataService {
 
   constructor(
+    private _batchService: BatchService,
     private _dataService: DataService,
-    private _documentService: DocumentService,
   ) { }
 
   public async createUserData({ uid, name, email }: {
@@ -20,7 +20,6 @@ export class SeedDataService {
     name: string,
     email: string,
   }): Promise<string> {
-    const batch = this._documentService.createBatch();
     const menuId = this._dataService.createId();
     const southernClassicMealId = this._dataService.createId();
     const sushiDinnerMealId = this._dataService.createId();
@@ -42,6 +41,7 @@ export class SeedDataService {
     const pescatarianTagId = this._dataService.createId();
     const veganTagId = this._dataService.createId();
     const vegetarianTagId = this._dataService.createId();
+    const batch = this._batchService.createBatch();
     batch
       .set({
         endpoint: Endpoint.users,

@@ -8,8 +8,8 @@ import { TagDto } from '@models/dtos/tag-dto.interface';
 import { createTagDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { BatchService } from './batch.service';
 import { DataService } from './data.service';
-import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class TagDataService {
   private _endpoint = Endpoint.tags;
 
   constructor(
+    private _batchService: BatchService,
     private _dataService: DataService,
-    private _documentService: DocumentService,
   ) { }
 
   public getTag(id: string): Observable<Tag | undefined> {
@@ -50,17 +50,17 @@ export class TagDataService {
   }
 
   public async deleteTag(tag: Tag): Promise<void> {
-    const batch = this._documentService.createBatch();
+    const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, tag.id)
       .updateMultiple([
-        ...this._documentService.getMealUpdates({
+        ...this._batchService.getMealUpdates({
           key: 'tags',
           initialMealIds: tag.meals,
           finalMealIds: [],
           entityId: tag.id,
         }),
-        ...this._documentService.getDishUpdates({
+        ...this._batchService.getDishUpdates({
           key: 'tags',
           initialDishIds: tag.dishes,
           finalDishIds: [],
