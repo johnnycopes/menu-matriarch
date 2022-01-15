@@ -15,13 +15,6 @@ export class DataService {
     return this._firestoreService.createId();
   }
 
-  public createBatch(): Batch {
-    return new Batch(
-      this._firestoreService.createBatch(),
-      (endpoint, id) => this._firestoreService.getDocRef(endpoint, id),
-    );
-  }
-
   public getOne<T>(endpoint: string, id: string): Observable<T | undefined> {
     return this._firestoreService.getOne(endpoint, id);
   }

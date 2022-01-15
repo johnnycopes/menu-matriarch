@@ -37,7 +37,7 @@ export class MealDataService {
     meal: Partial<Omit<MealDto, 'id' | 'uid'>>
   ): Promise<string> {
     const id = this._dataService.createId();
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     batch.newSet({
       endpoint: this._endpoint,
       id,
@@ -71,7 +71,7 @@ export class MealDataService {
     meal: Meal,
     updates: Partial<MealDto>
   ): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     batch.newUpdate({
       endpoint: this._endpoint,
       id: meal.id,
@@ -101,7 +101,7 @@ export class MealDataService {
   }
 
   public async deleteMeal(meal: Meal): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     batch
       .newDelete(this._endpoint, meal.id)
       .updateMultiple([

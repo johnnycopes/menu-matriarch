@@ -65,7 +65,7 @@ export class MenuDataService {
     day: Day,
     selected: boolean,
   }): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     batch.updateMultiple([
       ...this._documentService.getDishCountersUpdates({
         dishIds,
@@ -83,7 +83,7 @@ export class MenuDataService {
   }
 
   public async deleteMenu(menu: Menu): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     batch
       .newDelete(this._endpoint, menu.id)
       .updateMultiple(
@@ -97,7 +97,7 @@ export class MenuDataService {
   }
 
   public async deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     // Clear a single day's contents
     if (day) {
       batch.updateMultiple([

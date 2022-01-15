@@ -12,6 +12,7 @@ import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
+import { Batch } from './batch';
 import { FirestoreService } from './firestore.service';
 
 @Injectable({
@@ -20,6 +21,13 @@ import { FirestoreService } from './firestore.service';
 export class DocumentService {
 
   constructor(private _firestoreService: FirestoreService) { }
+
+  public createBatch(): Batch {
+    return new Batch(
+      this._firestoreService.createBatch(),
+      (endpoint, id) => this._firestoreService.getDocRef(endpoint, id),
+    );
+  }
 
   public getUserDoc(uid: string): DocumentReference<UserDto> {
     return this._firestoreService.getDocRef<UserDto>(Endpoint.users, uid);

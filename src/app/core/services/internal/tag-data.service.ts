@@ -50,7 +50,7 @@ export class TagDataService {
   }
 
   public async deleteTag(tag: Tag): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     batch
       .newDelete(this._endpoint, tag.id)
       .updateMultiple([

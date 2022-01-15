@@ -19,7 +19,7 @@ export class SeedDataService {
     name: string,
     email: string,
   }): Promise<string> {
-    const batch = this._dataService.createBatch();
+    const batch = this._documentService.createBatch();
     const menuId = this._dataService.createId();
     const southernClassicMealId = this._dataService.createId();
     const sushiDinnerMealId = this._dataService.createId();
