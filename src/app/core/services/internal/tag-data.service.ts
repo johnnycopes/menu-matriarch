@@ -52,7 +52,7 @@ export class TagDataService {
   public async deleteTag(tag: Tag): Promise<void> {
     const batch = this._dataService.createBatch();
     batch
-      .delete(this._documentService.getTagDoc(tag.id))
+      .newDelete(this._endpoint, tag.id)
       .updateMultiple([
         ...this._documentService.getMealUpdates({
           key: 'tags',

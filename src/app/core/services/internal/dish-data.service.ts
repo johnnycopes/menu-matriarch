@@ -38,10 +38,11 @@ export class DishDataService {
   }): Promise<string> {
     const id = this._dataService.createId();
     const batch = this._dataService.createBatch();
-    batch.set(
-      this._documentService.getDishDoc(id),
-      createDishDto({ id, uid, ...dish }),
-    );
+    batch.newSet({
+      endpoint: this._endpoint,
+      id,
+      data: createDishDto({ id, uid, ...dish }),
+    });
     if (dish.tags) {
       batch.updateMultiple(
         this._documentService.getTagUpdates({
@@ -61,7 +62,11 @@ export class DishDataService {
     updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Promise<void> {
     const batch = this._dataService.createBatch();
-    batch.update(this._documentService.getDishDoc(dish.id), updates);
+    batch.newUpdate({
+      endpoint: this._endpoint,
+      id: dish.id,
+      updates,
+    });
     if (updates.tags) {
       batch.updateMultiple(
         this._documentService.getTagUpdates({
@@ -78,7 +83,7 @@ export class DishDataService {
   public async deleteDish(dish: Dish): Promise<void> {
     const batch = this._dataService.createBatch();
     batch
-      .delete(this._documentService.getDishDoc(dish.id))
+      .newDelete(this._endpoint, dish.id)
       .updateMultiple([
         ...this._documentService.getMenuContentsUpdates({
           menuIds: dish.menus,

@@ -38,10 +38,11 @@ export class MealDataService {
   ): Promise<string> {
     const id = this._dataService.createId();
     const batch = this._dataService.createBatch();
-    batch.set(
-      this._documentService.getMealDoc(id),
-      createMealDto({ id, uid, ...meal }),
-    );
+    batch.newSet({
+      endpoint: this._endpoint,
+      id,
+      data: createMealDto({ id, uid, ...meal }),
+    });
     if (meal.dishes) {
       batch.updateMultiple(
         this._documentService.getDishUpdates({
@@ -71,7 +72,11 @@ export class MealDataService {
     updates: Partial<MealDto>
   ): Promise<void> {
     const batch = this._dataService.createBatch();
-    batch.update(this._documentService.getMealDoc(meal.id), updates);
+    batch.newUpdate({
+      endpoint: this._endpoint,
+      id: meal.id,
+      updates,
+    });
     if (updates.dishes) {
       batch.updateMultiple(
         this._documentService.getDishUpdates({
@@ -98,7 +103,7 @@ export class MealDataService {
   public async deleteMeal(meal: Meal): Promise<void> {
     const batch = this._dataService.createBatch();
     batch
-      .delete(this._documentService.getMealDoc(meal.id))
+      .newDelete(this._endpoint, meal.id)
       .updateMultiple([
         ...this._documentService.getDishUpdates({
           key: 'meals',
