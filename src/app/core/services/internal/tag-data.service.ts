@@ -53,14 +53,14 @@ export class TagDataService {
     const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, tag.id)
-      .updateMultiple([
-        ...this._batchService.getMealUpdates({
+      .newUpdateMultiple([
+        ...this._batchService.newGetMealUpdates({
           key: 'tags',
           initialMealIds: tag.meals,
           finalMealIds: [],
           entityId: tag.id,
         }),
-        ...this._batchService.getDishUpdates({
+        ...this._batchService.newGetDishUpdates({
           key: 'tags',
           initialDishIds: tag.dishes,
           finalDishIds: [],

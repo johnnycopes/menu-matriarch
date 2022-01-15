@@ -44,8 +44,8 @@ export class MealDataService {
       data: createMealDto({ id, uid, ...meal }),
     });
     if (meal.dishes) {
-      batch.updateMultiple(
-        this._batchService.getDishUpdates({
+      batch.newUpdateMultiple(
+        this._batchService.newGetDishUpdates({
           key: 'meals',
           initialDishIds: [],
           finalDishIds: meal.dishes,
@@ -54,8 +54,8 @@ export class MealDataService {
       );
     }
     if (meal.tags) {
-      batch.updateMultiple(
-        this._batchService.getTagUpdates({
+      batch.newUpdateMultiple(
+        this._batchService.newGetTagUpdates({
           key: 'meals',
           initialTagIds: [],
           finalTagIds: meal.tags,
@@ -78,8 +78,8 @@ export class MealDataService {
       updates,
     });
     if (updates.dishes) {
-      batch.updateMultiple(
-        this._batchService.getDishUpdates({
+      batch.newUpdateMultiple(
+        this._batchService.newGetDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: updates.dishes,
@@ -88,8 +88,8 @@ export class MealDataService {
       );
     }
     if (updates.tags) {
-      batch.updateMultiple(
-        this._batchService.getTagUpdates({
+      batch.newUpdateMultiple(
+        this._batchService.newGetTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
           finalTagIds: updates.tags,
@@ -104,14 +104,14 @@ export class MealDataService {
     const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, meal.id)
-      .updateMultiple([
-        ...this._batchService.getDishUpdates({
+      .newUpdateMultiple([
+        ...this._batchService.newGetDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: [],
           entityId: meal.id,
         }),
-        ...this._batchService.getTagUpdates({
+        ...this._batchService.newGetTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
           finalTagIds: [],

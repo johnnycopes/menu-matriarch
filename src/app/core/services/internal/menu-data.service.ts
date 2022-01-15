@@ -66,13 +66,13 @@ export class MenuDataService {
     selected: boolean,
   }): Promise<void> {
     const batch = this._batchService.createBatch();
-    batch.updateMultiple([
-      ...this._batchService.getDishCountersUpdates({
+    batch.newUpdateMultiple([
+      ...this._batchService.newGetDishCountersUpdates({
         dishIds,
         menu,
         change: selected ? 'increment' : 'decrement',
       }),
-      ...this._batchService.getMenuContentsUpdates({
+      ...this._batchService.newGetMenuContentsUpdates({
         menuIds: [menu.id],
         dishIds,
         day,
@@ -86,8 +86,8 @@ export class MenuDataService {
     const batch = this._batchService.createBatch();
     batch
       .delete(this._endpoint, menu.id)
-      .updateMultiple(
-        this._batchService.getDishCountersUpdates({
+      .newUpdateMultiple(
+        this._batchService.newGetDishCountersUpdates({
           dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear',
@@ -100,13 +100,13 @@ export class MenuDataService {
     const batch = this._batchService.createBatch();
     // Clear a single day's contents
     if (day) {
-      batch.updateMultiple([
-        ...this._batchService.getMenuContentsUpdates({
+      batch.newUpdateMultiple([
+        ...this._batchService.newGetMenuContentsUpdates({
           menuIds: [menu.id],
           dishIds: [],
           day,
         }),
-        ...this._batchService.getDishCountersUpdates({
+        ...this._batchService.newGetDishCountersUpdates({
           dishIds: menu.contents[day],
           menu,
           change: 'decrement',
@@ -115,12 +115,12 @@ export class MenuDataService {
     }
     // Clear all days' contents
     else {
-      batch.updateMultiple([
-        ...this._batchService.getMenuContentsUpdates({
+      batch.newUpdateMultiple([
+        ...this._batchService.newGetMenuContentsUpdates({
           menuIds: [menu.id],
           dishIds: [],
         }),
-        ...this._batchService.getDishCountersUpdates({
+        ...this._batchService.newGetDishCountersUpdates({
           dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear',
