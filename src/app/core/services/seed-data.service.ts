@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { Endpoint } from '@models/endpoint.enum';
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from '@utility/domain/create-dtos';
 import { DataService } from './internal/data.service';
 import { DocumentService } from './internal/document.service';
@@ -42,13 +43,15 @@ export class SeedDataService {
     const veganTagId = this._dataService.createId();
     const vegetarianTagId = this._dataService.createId();
     batch
-      .set(
-        this._documentService.getUserDoc(uid),
-        createUserDto({ uid, name, email }),
-      )
-      .set(
-        this._documentService.getMenuDoc(menuId),
-        createMenuDto({ id: menuId, uid, name: 'Menu #1', contents: {
+      .newSet({
+        endpoint: Endpoint.users,
+        id: uid,
+        data: createUserDto({ uid, name, email }),
+      })
+      .newSet({
+        endpoint: Endpoint.menus,
+        id: menuId,
+        data: createMenuDto({ id: menuId, uid, name: 'Menu #1', contents: {
           Monday: [enchiladasDishId],
           Tuesday: [sushiDishId, misoSoupDishId],
           Wednesday: [salmonBurgersDishId, sweetPotatoFriesDishId],
@@ -57,29 +60,32 @@ export class SeedDataService {
           Saturday: [thaiCurryDishId, tiramisuDishId],
           Sunday: [friedChickenDishId, cornbreadDishId, macAndCheeseDishId],
         }}),
-      )
-      .set(
-        this._documentService.getMealDoc(southernClassicMealId),
-        createMealDto({
+      })
+      .newSet({
+        endpoint: Endpoint.meals,
+        id: southernClassicMealId,
+        data: createMealDto({
           id: southernClassicMealId,
           uid,
           name: 'Southern Classic',
           dishes: [cornbreadDishId, friedChickenDishId, macAndCheeseDishId],
         })
-      )
-      .set(
-        this._documentService.getMealDoc(sushiDinnerMealId),
-        createMealDto({
+      })
+      .newSet({
+        endpoint: Endpoint.meals,
+        id: sushiDinnerMealId,
+        data: createMealDto({
           id: sushiDinnerMealId,
           uid,
           name: 'Sushi Dinner',
           dishes: [sushiDishId, misoSoupDishId],
           tags: [pescatarianTagId],
         })
-      )
-      .set(
-        this._documentService.getDishDoc(cornbreadDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: cornbreadDishId,
+        data: createDishDto({
           id: cornbreadDishId,
           uid,
           name: 'Cornbread',
@@ -91,10 +97,11 @@ export class SeedDataService {
           tags: [vegetarianTagId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(enchiladasDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: enchiladasDishId,
+        data: createDishDto({
           id: enchiladasDishId,
           uid,
           name: 'Enchiladas',
@@ -102,10 +109,11 @@ export class SeedDataService {
           menus: [menuId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(friedChickenDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: friedChickenDishId,
+        data: createDishDto({
           id: friedChickenDishId,
           uid,
           name: 'Fried Chicken',
@@ -114,19 +122,21 @@ export class SeedDataService {
           meals: [southernClassicMealId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(greekSaladDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: greekSaladDishId,
+        data: createDishDto({
           id: greekSaladDishId,
           uid,
           name: 'Greek Salad',
           tags: [vegetarianTagId],
         })
-      )
-      .set(
-        this._documentService.getDishDoc(macAndCheeseDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: macAndCheeseDishId,
+        data: createDishDto({
           id: macAndCheeseDishId,
           uid,
           name: 'Macaroni and Cheese',
@@ -138,10 +148,11 @@ export class SeedDataService {
           tags: [vegetarianTagId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(misoSoupDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: misoSoupDishId,
+        data: createDishDto({
           id: misoSoupDishId,
           uid,
           name: 'Miso Soup',
@@ -151,10 +162,11 @@ export class SeedDataService {
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(pizzaDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: pizzaDishId,
+        data: createDishDto({
           id: pizzaDishId,
           uid,
           name: 'Pizza',
@@ -164,10 +176,11 @@ export class SeedDataService {
           tags: [vegetarianTagId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(redLentilSoupDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: redLentilSoupDishId,
+        data: createDishDto({
           id: redLentilSoupDishId,
           uid,
           name: 'Red Lentil Soup',
@@ -176,10 +189,11 @@ export class SeedDataService {
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
         })
-      )
-      .set(
-        this._documentService.getDishDoc(roastedCauliflowerDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: roastedCauliflowerDishId,
+        data: createDishDto({
           id: roastedCauliflowerDishId,
           uid,
           name: 'Roasted Cauliflower',
@@ -187,10 +201,11 @@ export class SeedDataService {
           type: 'side',
           tags: [easyTagId, veganTagId, vegetarianTagId],
         })
-      )
-      .set(
-        this._documentService.getDishDoc(salmonBurgersDishId),
-        createDishDto({
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: salmonBurgersDishId,
+        data: createDishDto({
           id: salmonBurgersDishId,
           uid,
           name: 'Salmon Burgers',
@@ -198,11 +213,12 @@ export class SeedDataService {
           menus: [menuId],
           tags: [pescatarianTagId],
           usages: 1,
-        })
-      )
-      .set(
-        this._documentService.getDishDoc(sushiDishId),
-        createDishDto({
+        }),
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: sushiDishId,
+        data: createDishDto({
           id: sushiDishId,
           uid,
           name: 'Sushi',
@@ -211,11 +227,12 @@ export class SeedDataService {
           meals: [sushiDinnerMealId],
           tags: [pescatarianTagId],
           usages: 1,
-        })
-      )
-      .set(
-        this._documentService.getDishDoc(sweetPotatoFriesDishId),
-        createDishDto({
+        }),
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: sweetPotatoFriesDishId,
+        data: createDishDto({
           id: sweetPotatoFriesDishId,
           uid,
           name: 'Sweet Potato Fries',
@@ -223,11 +240,12 @@ export class SeedDataService {
           menus: [menuId],
           tags: [veganTagId, vegetarianTagId],
           usages: 1,
-        })
-      )
-      .set(
-        this._documentService.getDishDoc(tiramisuDishId),
-        createDishDto({
+        }),
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: tiramisuDishId,
+        data: createDishDto({
           id: tiramisuDishId,
           uid,
           name: 'Tiramisu',
@@ -237,11 +255,12 @@ export class SeedDataService {
           menus: [menuId],
           tags: [],
           usages: 2,
-        })
-      )
-      .set(
-        this._documentService.getDishDoc(thaiCurryDishId),
-        createDishDto({
+        }),
+      })
+      .newSet({
+        endpoint: Endpoint.dishes,
+        id: thaiCurryDishId,
+        data: createDishDto({
           id: thaiCurryDishId,
           uid,
           name: 'Thai Curry',
@@ -250,40 +269,44 @@ export class SeedDataService {
           menus: [menuId],
           tags: [easyTagId, veganTagId, vegetarianTagId],
           usages: 1,
-        })
-      )
-      .set(
-        this._documentService.getTagDoc(easyTagId),
-        createTagDto({
+        }),
+      })
+      .newSet({
+        endpoint: Endpoint.tags,
+        id: easyTagId,
+        data: createTagDto({
           id: easyTagId,
           uid,
           name: 'Easy',
           dishes: [roastedCauliflowerDishId, thaiCurryDishId]
         }),
-      )
-      .set(
-        this._documentService.getTagDoc(pescatarianTagId),
-        createTagDto({
+      })
+      .newSet({
+        endpoint: Endpoint.tags,
+        id: pescatarianTagId,
+        data: createTagDto({
           id: pescatarianTagId,
           uid,
           name: 'Pescatarian',
           dishes: [salmonBurgersDishId, sushiDishId],
           meals: [sushiDinnerMealId],
         }),
-      )
-      .set(
-        this._documentService.getTagDoc(veganTagId),
-        createTagDto({ id: veganTagId, uid, name: 'Vegan', dishes: [
+      })
+      .newSet({
+        endpoint: Endpoint.tags,
+        id: veganTagId,
+        data: createTagDto({ id: veganTagId, uid, name: 'Vegan', dishes: [
           misoSoupDishId,
           redLentilSoupDishId,
           roastedCauliflowerDishId,
           sweetPotatoFriesDishId,
           thaiCurryDishId
         ]}),
-      )
-      .set(
-        this._documentService.getTagDoc(vegetarianTagId),
-        createTagDto({ id: vegetarianTagId, uid, name: 'Vegetarian', dishes: [
+      })
+      .newSet({
+        endpoint: Endpoint.tags,
+        id: vegetarianTagId,
+        data: createTagDto({ id: vegetarianTagId, uid, name: 'Vegetarian', dishes: [
           cornbreadDishId,
           greekSaladDishId,
           macAndCheeseDishId,
@@ -294,7 +317,7 @@ export class SeedDataService {
           sweetPotatoFriesDishId,
           thaiCurryDishId
         ]}),
-      );
+      });
     await batch.commit();
     return menuId;
   }
