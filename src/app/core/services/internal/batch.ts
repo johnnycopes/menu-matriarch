@@ -4,7 +4,7 @@ import firebase from 'firebase/compat/app';
 export interface BatchUpdate {
   endpoint: string;
   id: string;
-  updates: { [key: string]: any };
+  data: { [key: string]: any };
 }
 
 export class Batch {
@@ -24,14 +24,14 @@ export class Batch {
     return this;
   }
 
-  public update({ endpoint, id, updates }: BatchUpdate): Batch {
+  public update({ endpoint, id, data }: BatchUpdate): Batch {
     const docRef = this._getDocRef(endpoint, id);
-    this._batch.update(docRef, updates);
+    this._batch.update(docRef, data);
     return this;
   }
 
   public updateMultiple(updates: BatchUpdate[]): Batch {
-    updates.forEach(({ endpoint, id, updates }) => this.update({ endpoint, id, updates }));
+    updates.forEach(({ endpoint, id, data }) => this.update({ endpoint, id, data }));
     return this;
   }
 

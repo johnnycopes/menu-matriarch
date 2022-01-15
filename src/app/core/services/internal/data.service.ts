@@ -27,8 +27,8 @@ export class DataService {
     return this._firestoreService.create(endpoint, id, details);
   }
 
-  public async update<T>(endpoint: string, id: string, updates: Partial<T>): Promise<void> {
-    return await this._firestoreService.update(endpoint, id, updates);
+  public async update<T>(endpoint: string, id: string, data: Partial<T>): Promise<void> {
+    return await this._firestoreService.update(endpoint, id, data);
   }
 
   public async delete<T>(endpoint: string, id: string): Promise<void> {

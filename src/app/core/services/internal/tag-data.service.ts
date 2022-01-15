@@ -45,8 +45,8 @@ export class TagDataService {
     return id;
   }
 
-  public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
-    return this._dataService.update<TagDto>(this._endpoint, id, updates);
+  public updateTag(id: string, data: Partial<TagDto>): Promise<void> {
+    return this._dataService.update<TagDto>(this._endpoint, id, data);
   }
 
   public async deleteTag(tag: Tag): Promise<void> {

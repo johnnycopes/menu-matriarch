@@ -67,7 +67,7 @@ export class DishService {
 
   public updateDish(
     id: string,
-    updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
+    data: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Observable<Dish | undefined> {
     return this.getDish(id).pipe(
       first(),
@@ -75,7 +75,7 @@ export class DishService {
         if (!dish) {
           return;
         }
-        await this._dishDataService.updateDish(dish, updates);
+        await this._dishDataService.updateDish(dish, data);
       })
     );
   }

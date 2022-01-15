@@ -53,8 +53,8 @@ export class MenuDataService {
     return id;
   }
 
-  public async updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {
-    return await this._dataService.update<MenuDto>(this._endpoint, id, updates);
+  public async updateMenu(id: string, data: Partial<MenuDto>): Promise<void> {
+    return await this._dataService.update<MenuDto>(this._endpoint, id, data);
   }
 
   public async updateMenuContents({

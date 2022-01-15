@@ -46,17 +46,17 @@ export class FirestoreService {
       );
   }
 
-  public async create<T>(endpoint: string, id: string, details: T): Promise<void> {
+  public async create<T>(endpoint: string, id: string, data: T): Promise<void> {
     return await this
       ._getDoc<T>(endpoint, id)
-      .set(details);
+      .set(data);
   }
 
 
-  public async update<T>(endpoint: string, id: string, updates: Partial<T>): Promise<void> {
+  public async update<T>(endpoint: string, id: string, data: Partial<T>): Promise<void> {
     return await this
       ._getDoc<T>(endpoint, id)
-      .update(updates);
+      .update(data);
   }
 
   public async delete<T>(endpoint: string, id: string): Promise<void> {

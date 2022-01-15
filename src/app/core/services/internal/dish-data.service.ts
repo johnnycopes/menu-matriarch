@@ -59,20 +59,20 @@ export class DishDataService {
 
   public async updateDish(
     dish: Dish,
-    updates: Partial<Omit<DishDto, 'usages' | 'menus'>>
+    data: Partial<Omit<DishDto, 'usages' | 'menus'>>
   ): Promise<void> {
     const batch = this._batchService.createBatch();
     batch.update({
       endpoint: this._endpoint,
       id: dish.id,
-      updates,
+      data,
     });
-    if (updates.tags) {
+    if (data.tags) {
       batch.updateMultiple(
         this._batchService.getTagUpdates({
           key: 'dishes',
           initialTagIds: dish.tags.map(tag => tag.id),
-          finalTagIds: updates.tags,
+          finalTagIds: data.tags,
           entityId: dish.id,
         }),
       );

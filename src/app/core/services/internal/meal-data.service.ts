@@ -69,30 +69,30 @@ export class MealDataService {
 
   public async updateMeal(
     meal: Meal,
-    updates: Partial<MealDto>
+    data: Partial<MealDto>
   ): Promise<void> {
     const batch = this._batchService.createBatch();
     batch.update({
       endpoint: this._endpoint,
       id: meal.id,
-      updates,
+      data,
     });
-    if (updates.dishes) {
+    if (data.dishes) {
       batch.updateMultiple(
         this._batchService.getDishUpdates({
           key: 'meals',
           initialDishIds: meal.dishes.map(dish => dish.id),
-          finalDishIds: updates.dishes,
+          finalDishIds: data.dishes,
           entityId: meal.id,
         }),
       );
     }
-    if (updates.tags) {
+    if (data.tags) {
       batch.updateMultiple(
         this._batchService.getTagUpdates({
           key: 'meals',
           initialTagIds: meal.tags.map(tag => tag.id),
-          finalTagIds: updates.tags,
+          finalTagIds: data.tags,
           entityId: meal.id,
         }),
       );

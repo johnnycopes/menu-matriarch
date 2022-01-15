@@ -74,7 +74,7 @@ export class MealService {
 
   public updateMeal(
     id: string,
-    updates: Partial<MealDto>
+    data: Partial<MealDto>
   ): Observable<Meal | undefined> {
     return this.getMeal(id).pipe(
       first(),
@@ -82,7 +82,7 @@ export class MealService {
         if (!meal) {
           return;
         }
-        await this._mealDataService.updateMeal(meal, updates);
+        await this._mealDataService.updateMeal(meal, data);
       })
     );
   }
