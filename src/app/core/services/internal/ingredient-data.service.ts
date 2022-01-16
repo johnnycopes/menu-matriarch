@@ -8,8 +8,8 @@ import { IngredientDto } from '@models/dtos/ingredient-dto.interface';
 import { createIngredientDto } from '@utility/domain/create-dtos';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { BatchService } from './batch.service';
 import { DataService } from './data.service';
-import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class IngredientDataService {
   private _endpoint = Endpoint.ingredients;
 
   constructor(
+    private _batchService: BatchService,
     private _dataService: DataService,
-    private _documentService: DocumentService,
   ) { }
 
   public getIngredient(id: string): Observable<IngredientDto | undefined> {
@@ -48,16 +48,20 @@ export class IngredientDataService {
   }
 
   public async updateIngredient(ingredient: Ingredient, updates: Partial<IngredientDto>): Promise<void> {
-    const batch = this._dataService.createBatch();
-    batch.update(this._documentService.getIngredientDoc(ingredient.id), updates);
+    const batch = this._batchService.createBatch();
+    batch.update({
+      endpoint: Endpoint.ingredients,
+      id: ingredient.id,
+      data: updates
+    });
     // TODO: update ingredient doc and relevant dishes docs
     await batch.commit();
   }
 
   public async deleteIngredient(ingredient: Ingredient): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._batchService.createBatch();
     batch
-      .delete(this._documentService.getIngredientDoc(ingredient.id));
+      .delete(Endpoint.ingredients, ingredient.id);
       // TODO: update dish docs to remove ingredient
     await batch.commit();
   }

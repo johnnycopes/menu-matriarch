@@ -26,14 +26,14 @@ export class UserDataService {
     );
   }
 
-  public updatePreferences(user: User, updates: Partial<UserPreferences>): Promise<void> {
+  public updatePreferences(user: User, data: Partial<UserPreferences>): Promise<void> {
     const { uid, preferences } = user;
     return this._dataService.update<UserDto>(
       this._endpoint,
       uid,
       { preferences: {
         ...preferences,
-        ...updates,
+        ...data,
       }}
     );
   }
