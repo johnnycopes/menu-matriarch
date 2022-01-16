@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Batch } from './batch';
 import { FirestoreService } from './firestore.service';
 
 @Injectable({
