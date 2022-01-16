@@ -10,8 +10,8 @@ import { createMenuDto } from '@utility/domain/create-dtos';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { lower } from '@utility/generic/format';
 import { sort } from '@utility/generic/sort';
+import { BatchService } from './batch.service';
 import { DataService } from './data.service';
-import { DocumentService } from './document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,8 @@ export class MenuDataService {
   private _endpoint = Endpoint.menus;
 
   constructor(
+    private _batchService: BatchService,
     private _dataService: DataService,
-    private _documentService: DocumentService,
   ) { }
 
   public getMenu(id: string): Observable<MenuDto | undefined> {
@@ -53,8 +53,8 @@ export class MenuDataService {
     return id;
   }
 
-  public async updateMenu(id: string, updates: Partial<MenuDto>): Promise<void> {
-    return await this._dataService.update<MenuDto>(this._endpoint, id, updates);
+  public async updateMenu(id: string, data: Partial<MenuDto>): Promise<void> {
+    return await this._dataService.update<MenuDto>(this._endpoint, id, data);
   }
 
   public async updateMenuContents({
@@ -65,14 +65,14 @@ export class MenuDataService {
     day: Day,
     selected: boolean,
   }): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._batchService.createBatch();
     batch.updateMultiple([
-      ...this._documentService.getDishCountersUpdates({
+      ...this._batchService.getDishCountersUpdates({
         dishIds,
         menu,
         change: selected ? 'increment' : 'decrement',
       }),
-      ...this._documentService.getMenuContentsUpdates({
+      ...this._batchService.getMenuContentsUpdates({
         menuIds: [menu.id],
         dishIds,
         day,
@@ -83,11 +83,11 @@ export class MenuDataService {
   }
 
   public async deleteMenu(menu: Menu): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._batchService.createBatch();
     batch
-      .delete(this._documentService.getMenuDoc(menu.id))
+      .delete(this._endpoint, menu.id)
       .updateMultiple(
-        this._documentService.getDishCountersUpdates({
+        this._batchService.getDishCountersUpdates({
           dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear',
@@ -97,16 +97,16 @@ export class MenuDataService {
   }
 
   public async deleteMenuContents(menu: Menu, day?: Day): Promise<void> {
-    const batch = this._dataService.createBatch();
+    const batch = this._batchService.createBatch();
     // Clear a single day's contents
     if (day) {
       batch.updateMultiple([
-        ...this._documentService.getMenuContentsUpdates({
+        ...this._batchService.getMenuContentsUpdates({
           menuIds: [menu.id],
           dishIds: [],
           day,
         }),
-        ...this._documentService.getDishCountersUpdates({
+        ...this._batchService.getDishCountersUpdates({
           dishIds: menu.contents[day],
           menu,
           change: 'decrement',
@@ -116,11 +116,11 @@ export class MenuDataService {
     // Clear all days' contents
     else {
       batch.updateMultiple([
-        ...this._documentService.getMenuContentsUpdates({
+        ...this._batchService.getMenuContentsUpdates({
           menuIds: [menu.id],
           dishIds: [],
         }),
-        ...this._documentService.getDishCountersUpdates({
+        ...this._batchService.getDishCountersUpdates({
           dishIds: flattenValues(menu.contents),
           menu,
           change: 'clear',

@@ -1,44 +1,25 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
-import { DishDto } from '@models/dtos/dish-dto.interface';
-import { MealDto } from '@models/dtos/meal-dto.interface';
-import { MenuDto } from '@models/dtos/menu-dto.interface';
-import { TagDto } from '@models/dtos/tag-dto.interface';
-import { UserDto } from '@models/dtos/user-dto.interface';
 import { Day } from '@models/day.type';
-import { DocRefUpdate } from '@models/doc-ref-update.interface';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
+import { Batch, BatchUpdate } from './batch';
 import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DocumentService {
+export class BatchService {
 
   constructor(private _firestoreService: FirestoreService) { }
 
-  public getUserDoc(uid: string): DocumentReference<UserDto> {
-    return this._firestoreService.getDocRef<UserDto>(Endpoint.users, uid);
-  }
-
-  public getMealDoc(id: string): DocumentReference<MealDto> {
-    return this._firestoreService.getDocRef<MealDto>(Endpoint.meals, id);
-  }
-
-  public getMenuDoc(id: string): DocumentReference<MenuDto> {
-    return this._firestoreService.getDocRef<MenuDto>(Endpoint.menus, id);
-  }
-
-  public getDishDoc(id: string): DocumentReference<DishDto> {
-    return this._firestoreService.getDocRef<DishDto>(Endpoint.dishes, id);
-  }
-
-  public getTagDoc(id: string): DocumentReference<TagDto> {
-    return this._firestoreService.getDocRef<TagDto>(Endpoint.tags, id);
+  public createBatch(): Batch {
+    return new Batch(
+      this._firestoreService.createBatch(),
+      (endpoint, id) => this._firestoreService.getDocRef(endpoint, id),
+    );
   }
 
   public getMenuContentsUpdates({ menuIds, dishIds, day, change }: {
@@ -46,7 +27,7 @@ export class DocumentService {
     dishIds: string[],
     day?: Day,
     change?: 'add' | 'remove',
-  }): DocRefUpdate<MenuDto>[] {
+  }): BatchUpdate[] {
     if (dishIds.length && !change) {
       throw new Error("A 'change' argument is needed in order to modify the menus' dishes");
     }
@@ -56,11 +37,11 @@ export class DocumentService {
     } else if (change === 'remove') {
       dishes = this._firestoreService.removeFromArray(...dishIds);
     }
-    let updates: { [contentsDay: string]: string[] } = {};
+    let data: { [contentsDay: string]: string[] } = {};
     if (day) {
-      updates = this._getDayDishes(day, dishes);
+      data = this._getDayDishes(day, dishes);
     } else {
-      updates = {
+      data = {
         ...this._getDayDishes('Monday', dishes),
         ...this._getDayDishes('Tuesday', dishes),
         ...this._getDayDishes('Wednesday', dishes),
@@ -71,8 +52,9 @@ export class DocumentService {
       };
     }
     return menuIds.map(menuId => ({
-      docRef: this.getMenuDoc(menuId),
-      updates,
+      endpoint: Endpoint.menus,
+      id: menuId,
+      data,
     }));
   }
 
@@ -81,9 +63,9 @@ export class DocumentService {
     initialMealIds: string[],
     finalMealIds: string[],
     entityId: string,
-  }): DocRefUpdate<MealDto>[] {
-    return this._getDocUpdates({
-      getDoc: (id) => this.getMealDoc(id),
+  }): BatchUpdate[] {
+    return this._getBatchUpdates({
+      endpoint: Endpoint.meals,
       key,
       initialIds: initialMealIds,
       finalIds: finalMealIds,
@@ -96,9 +78,9 @@ export class DocumentService {
     initialDishIds: string[],
     finalDishIds: string[],
     entityId: string,
-  }): DocRefUpdate<DishDto>[] {
-    return this._getDocUpdates({
-      getDoc: (id) => this.getDishDoc(id),
+  }): BatchUpdate[] {
+    return this._getBatchUpdates({
+      endpoint: Endpoint.dishes,
       key,
       initialIds: initialDishIds,
       finalIds: finalDishIds,
@@ -110,7 +92,7 @@ export class DocumentService {
     dishIds: string[],
     menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
-  }): DocRefUpdate<DishDto>[] {
+  }): BatchUpdate[] {
     const dishCounts = flattenValues(menu.contents)
       .reduce((hashMap, dishId) => ({
         ...hashMap,
@@ -129,8 +111,9 @@ export class DocumentService {
         ? this._firestoreService.addToArray(menu.id)
         : this._firestoreService.removeFromArray(menu.id);
       return {
-        docRef: this.getDishDoc(dishId),
-        updates: {
+        endpoint: Endpoint.dishes,
+        id: dishId,
+        data: {
           usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
           ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
         },
@@ -143,9 +126,9 @@ export class DocumentService {
     initialTagIds: string[],
     finalTagIds: string[],
     entityId: string,
-  }): DocRefUpdate<TagDto>[] {
-    return this._getDocUpdates({
-      getDoc: (id) => this.getTagDoc(id),
+  }): BatchUpdate[] {
+    return this._getBatchUpdates({
+      endpoint: Endpoint.tags,
       key,
       initialIds: initialTagIds,
       finalIds: finalTagIds,
@@ -153,14 +136,14 @@ export class DocumentService {
     });
   }
 
-  private _getDocUpdates<T>({ getDoc, key, initialIds, finalIds, entityId }: {
-    getDoc: (id: string) => DocumentReference<T>,
+  private _getBatchUpdates({ endpoint, key, initialIds, finalIds, entityId }: {
+    endpoint: string,
     key: 'meals' | 'dishes' | 'tags',
     initialIds: string[],
     finalIds: string[],
     entityId: string,
-  }): DocRefUpdate<T>[] {
-    const docUpdates = [];
+  }): BatchUpdate[] {
+    const batchUpdates = [];
     for (let id of dedupe(initialIds, finalIds)) {
       let updatedIds = undefined;
 
@@ -171,13 +154,14 @@ export class DocumentService {
       }
 
       if (updatedIds) {
-        docUpdates.push({
-          docRef: getDoc(id),
-          updates: { [key]: updatedIds },
+        batchUpdates.push({
+          endpoint,
+          id,
+          data: { [key]: updatedIds },
         });
       }
     }
-    return docUpdates;
+    return batchUpdates;
   }
 
   private _getDayDishes(

@@ -41,14 +41,14 @@ export class UserService {
     );
   }
 
-  public updatePreferences(updates: Partial<UserPreferences>): Observable<User | undefined> {
+  public updatePreferences(data: Partial<UserPreferences>): Observable<User | undefined> {
     return this.getUser().pipe(
       first(),
       tap(async user => {
         if (!user?.uid) {
           return;
         }
-        await this._userDataService.updatePreferences(user, updates);
+        await this._userDataService.updatePreferences(user, data);
       }),
     );
   }

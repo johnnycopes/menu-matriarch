@@ -47,8 +47,8 @@ export class TagService {
     );
   }
 
-  public updateTag(id: string, updates: Partial<TagDto>): Promise<void> {
-    return this._tagDataService.updateTag(id, updates);
+  public updateTag(id: string, data: Partial<TagDto>): Promise<void> {
+    return this._tagDataService.updateTag(id, data);
   }
 
   public deleteTag(id: string): Observable<Tag | undefined> {

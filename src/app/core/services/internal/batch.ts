@@ -1,31 +1,43 @@
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
-import { DocRefUpdate } from '@models/doc-ref-update.interface';
+export interface BatchUpdate {
+  endpoint: string;
+  id: string;
+  data: { [key: string]: any };
+}
 
 export class Batch {
 
-  constructor(private _batch: firebase.firestore.WriteBatch) { }
+  constructor(
+    private _batch: firebase.firestore.WriteBatch,
+    private _getDocRef: <T>(endpoint: string, id: string) => DocumentReference<T>,
+  ) { }
 
-  public set<T>(documentRef: DocumentReference<T>, data: T): Batch {
-    this._batch.set<T>(documentRef, data);
+  public set<T>({ endpoint, id, data }: {
+    endpoint: string,
+    id: string,
+    data: T,
+  }): Batch {
+    const docRef = this._getDocRef<T>(endpoint, id);
+    this._batch.set<T>(docRef, data);
     return this;
   }
 
-  public update(documentRef: DocumentReference<any>, updates: firebase.firestore.UpdateData): Batch {
-    this._batch.update(documentRef, updates);
+  public update({ endpoint, id, data }: BatchUpdate): Batch {
+    const docRef = this._getDocRef(endpoint, id);
+    this._batch.update(docRef, data);
     return this;
   }
 
-  public updateMultiple(docRefUpdates: DocRefUpdate<any>[]): Batch {
-    docRefUpdates.forEach(
-      ({ docRef, updates }) => this._batch.update(docRef, updates)
-    );
+  public updateMultiple(updates: BatchUpdate[]): Batch {
+    updates.forEach(({ endpoint, id, data }) => this.update({ endpoint, id, data }));
     return this;
   }
 
-  public delete(documentRef: DocumentReference<any>): Batch {
-    this._batch.delete(documentRef);
+  public delete(endpoint: string, id: string): Batch {
+    const docRef = this._getDocRef(endpoint, id);
+    this._batch.delete(docRef);
     return this;
   }
 
