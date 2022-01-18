@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { FirestoreService } from './firestore.service';
+import { Batch } from './batch';
 
 @Injectable({
   providedIn: 'root'

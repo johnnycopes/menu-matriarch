@@ -137,7 +137,7 @@ export class MealEditComponent {
     formDishes: Record<string, boolean>,
   ): Dish[] {
     const dishes: Dish[] = [];
-    for (let dishId in formDishes) {
+    for (const dishId in formDishes) {
       if (formDishes[dishId]) {
         const dish = allDishes.find(dish => dish.id === dishId);
         if (dish) {

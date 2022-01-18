@@ -9,11 +9,11 @@ import { NgForm } from '@angular/forms';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KanbanBoardFormComponent {
-	@Input() name: string = '';
+	@Input() name = '';
 	@Output() add: EventEmitter<string> = new EventEmitter();
 	public readonly addNewIcon = faPlus;
-	public adding: boolean = false;
-	public model: string = '';
+	public adding = false;
+	public model = '';
 
 	public submitForm(form: NgForm): void {
 		this.add.emit(this.model);

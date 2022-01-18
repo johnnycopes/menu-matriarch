@@ -8,9 +8,9 @@ import { trackBySelf } from "@utility/domain/track-by-functions";
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DemoComponentComponent {
-	@Input() name: string = '';
-	@Input() description: string = '';
+	@Input() name = '';
+	@Input() description = '';
 	@Input() dependencies: string[] = [];
-	@Input() limitWidth: boolean = false;
+	@Input() limitWidth = false;
   public readonly trackByFn = trackBySelf;
 }

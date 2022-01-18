@@ -11,7 +11,7 @@ import { OptionsMenuComponent } from './options-menu.component';
 })
 export class OptionsMenuTriggerDirective implements AfterViewInit, OnDestroy {
   @Input('appOptionsMenuTrigger') menu: OptionsMenuComponent | undefined;
-  private _templatePortal: TemplatePortal<any> | undefined;
+  private _templatePortal: TemplatePortal<unknown> | undefined;
   private _overlayRef: OverlayRef | undefined;
   private _destroy$ = new Subject<void>();
 

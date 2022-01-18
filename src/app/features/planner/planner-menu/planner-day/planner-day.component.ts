@@ -19,7 +19,7 @@ export class PlannerDayComponent implements OnInit {
   set dishes(value: Dish[]) {
     this.dishIds = JSON.stringify(value.map(dish => dish.id));
     this._dishes = value;
-  };
+  }
   get dishes(): Dish[] { return this._dishes; }
   @Input() fallbackText = '';
   @Input() orientation: Orientation = 'horizontal';
@@ -27,7 +27,7 @@ export class PlannerDayComponent implements OnInit {
   public readonly addIcon = faPlusSquare;
   public readonly clearIcon = faTimes;
   public readonly trackByFn = trackById;
-  public dishIds: string = '';
+  public dishIds = '';
   private _dishes: Dish[] = [];
 
   public ngOnInit(): void {

@@ -7,7 +7,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputComponent {
-  @Input() label: string = '';
-  @Input() showError: boolean = false;
-  @Input() errorMessage: string = '';
+  @Input() label = '';
+  @Input() showError = false;
+  @Input() errorMessage = '';
 }

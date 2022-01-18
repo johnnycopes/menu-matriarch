@@ -44,7 +44,7 @@ export class PlannerMealComponent {
         indeterminate,
       };
     }) ?? [];
-  };
+  }
   @Output() dayChange = new EventEmitter<{ dishIds: string[], day: Day, selected: boolean }>();
   public entryModels: EntryModel[] = [];
   public readonly trackByFn = trackByDay;
@@ -57,7 +57,7 @@ export class PlannerMealComponent {
       return { checked: false, indeterminate: false };
     }
     let matches = 0;
-    for (let mealDishId of mealDishIds) {
+    for (const mealDishId of mealDishIds) {
       if (entryDishIds.includes(mealDishId)) {
         matches++;
       }

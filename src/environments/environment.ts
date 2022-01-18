@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
 
 export const environment = {
   production: false,

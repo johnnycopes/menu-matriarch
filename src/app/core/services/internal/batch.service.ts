@@ -144,7 +144,7 @@ export class BatchService {
     entityId: string,
   }): BatchUpdate[] {
     const batchUpdates = [];
-    for (let id of dedupe(initialIds, finalIds)) {
+    for (const id of dedupe(initialIds, finalIds)) {
       let updatedIds = undefined;
 
       if (initialIds.includes(id) && !finalIds.includes(id)) {

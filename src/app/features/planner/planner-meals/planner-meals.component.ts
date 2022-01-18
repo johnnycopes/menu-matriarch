@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 
 import { Day } from '@models/day.type';
-import { Dish } from '@models/dish.interface';
 import { Menu } from '@models/menu.interface';
 import { MenuService } from '@services/menu.service';
 

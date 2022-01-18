@@ -5,4 +5,4 @@ export interface MealDto {
   description: string;
   dishes: string[];
   tags: string[];
-};
+}
