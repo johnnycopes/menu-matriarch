@@ -15,7 +15,9 @@ export class FirestoreService {
     return this._firestore.firestore.batch();
   }
 
-  public createTransaction<T>(updateFn: (transaction: firebase.firestore.Transaction) => Promise<T>) {
+  public createTransaction<T>(
+    updateFn: (transaction: firebase.firestore.Transaction) => Promise<T>
+  ): Promise<T> {
     return this._firestore.firestore.runTransaction(updateFn);
   }
 
@@ -28,7 +30,7 @@ export class FirestoreService {
       ._getDoc<T>(endpoint, id)
       .valueChanges()
       .pipe(
-        catchError(_ => of(undefined)),
+        catchError(() => of(undefined)),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
   }
@@ -41,7 +43,7 @@ export class FirestoreService {
       )
       .valueChanges()
       .pipe(
-        catchError(_ => of([])),
+        catchError(() => of([])),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
   }

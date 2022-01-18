@@ -89,8 +89,8 @@ export class DishEditComponent {
       type: form.value.type,
       tags: Object
         .entries<boolean>(form.value?.tags ?? [])
-        .filter(([key, checked]) => checked)
-        .map(([key, checked]) => key),
+        .filter(([_key, checked]) => checked)
+        .map(([key, _checked]) => key),
       notes: form.value.notes,
     };
     if (!this._routeId) {
