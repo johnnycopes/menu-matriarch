@@ -3,7 +3,7 @@
 $size: 40px;
 
 @mixin box-shadow($color) {
-	box-shadow: 0 2px 0 #{$color};
+  box-shadow: 0 2px 0 #{$color};
 }
 
 @mixin button-style($background, $hover, $box-shadow, $disabled) {
@@ -36,11 +36,11 @@ $size: 40px;
   font-family: $font-stack;
   font-weight: 700;
   color: $white;
-  @include small-caps();
+  @include small-caps;
 
   &:hover {
     color: $white;
-  };
+  }
 
   &--primary {
     @include button-style(color($pink, 7), color($pink, 6), color($pink, 5), color($pink, 8));

@@ -6,7 +6,6 @@ import { DishType } from '@models/dish-type.type';
 @Component({
   selector: 'app-dish-card',
   templateUrl: './dish-card.component.html',
-  styleUrls: ['./dish-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishCardComponent {

@@ -5,7 +5,6 @@ import { fadeInAnimation } from '@utility/domain/animations';
 @Component({
   selector: 'app-tab',
   templateUrl: './tab.component.html',
-  styleUrls: ['./tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [fadeInAnimation]
 })

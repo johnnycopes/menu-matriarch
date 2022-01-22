@@ -5,6 +5,21 @@
   position: relative;
 }
 
+.checkbox {
+  position: relative;
+  height: 14px;
+  width: 14px;
+  border: border(thin) solid color($neutral, 7);
+  border-radius: 2px;
+
+  // Default checkmark (unchecked)
+  &::after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+}
+
 .container {
   display: inline-flex;
   align-items: center;
@@ -19,21 +34,6 @@
     &:hover .checkbox {
       background: none;
     }
-  }
-}
-
-.checkbox {
-  position: relative;
-  height: 14px;
-  width: 14px;
-  border: border(thin) solid color($neutral, 7);
-  border-radius: 2px;
-
-  // Default checkmark (unchecked)
-  &::after {
-    content: "";
-    position: absolute;
-    display: none;
   }
 }
 

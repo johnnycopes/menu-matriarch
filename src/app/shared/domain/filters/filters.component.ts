@@ -5,7 +5,6 @@ import { Tag } from '@models/tag.interface';
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FiltersComponent {
