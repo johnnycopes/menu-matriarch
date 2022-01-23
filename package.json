@@ -12,7 +12,8 @@
     "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev --only hosting",
     "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
     "delete-user": "node scripts/dev/delete-user.js",
-    "reset-dev": "node scripts/dev/delete-all-users.js && firebase firestore:delete --all-collections -y --project menu-matriarch-dev"
+    "reset-dev": "node scripts/dev/delete-all-users.js && firebase firestore:delete --all-collections -y --project menu-matriarch-dev",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -58,6 +59,7 @@
     "eslint": "^7.26.0",
     "firebase-tools": "^9.0.0",
     "fuzzy": "^0.1.3",
+    "husky": "^7.0.4",
     "inquirer": "^6.2.2",
     "inquirer-autocomplete-prompt": "^1.0.1",
     "jasmine-core": "~3.8.0",
@@ -67,9 +69,14 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "lint-staged": "^12.3.0",
     "open": "^7.0.3",
     "stylelint": "^14.2.0",
     "stylelint-config-standard-scss": "^3.0.0",
     "typescript": "~4.4.4"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.css": "stylelint --fix"
   }
 }
