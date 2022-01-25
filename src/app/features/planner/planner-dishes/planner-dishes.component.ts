@@ -7,7 +7,6 @@ import { MenuService } from '@services/menu.service';
 @Component({
   selector: 'app-planner-dishes',
   templateUrl: './planner-dishes.component.html',
-  styleUrls: ['./planner-dishes.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannerDishesComponent {

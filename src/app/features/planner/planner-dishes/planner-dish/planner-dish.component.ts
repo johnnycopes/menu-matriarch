@@ -26,14 +26,14 @@ export class PlannerDishComponent {
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
   @Input() meals: string[] = [];
-  @Input() usages: number = 0;
+  @Input() usages = 0;
   @Input()
   public set menu(menu: Menu | undefined) {
     this.entryModels = menu?.entries.map(entry => ({
       day: entry.day,
       checked: !!entry.dishes.find(dish => dish.id === this.id),
     })) ?? [];
-  };
+  }
   @Output() dayChange = new EventEmitter<{ id: string, day: Day, selected: boolean }>();
 
   public entryModels: EntryModel[] = [];

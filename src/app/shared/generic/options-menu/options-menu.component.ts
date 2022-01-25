@@ -13,5 +13,5 @@ export class OptionsMenuComponent {
   @Output() closed = new EventEmitter<void>();
 
   @ViewChild(TemplateRef)
-  public templateRef: TemplateRef<any> | undefined;
+  public templateRef: TemplateRef<unknown> | undefined;
 }

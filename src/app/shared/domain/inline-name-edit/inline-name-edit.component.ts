@@ -8,7 +8,7 @@ import { NgForm } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InlineNameEditComponent {
-  @Input() name: string = '';
+  @Input() name = '';
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<string>();
 

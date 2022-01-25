@@ -11,7 +11,7 @@ type Alert = 'success' | 'warning' | 'error';
 })
 export class AlertComponent {
   @Input() type: Alert = 'error';
-  @Input() large: boolean = false;
+  @Input() large = false;
 
   @HostBinding('class')
   public get hostClasses(): { [key: string]: boolean } {

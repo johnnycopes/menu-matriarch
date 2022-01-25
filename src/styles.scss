@@ -23,9 +23,9 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
   font-size: 100%;
   font-weight: inherit;
   vertical-align: baseline;
@@ -38,14 +38,14 @@ html {
 }
 
 body {
-	height: 100%;
-	position: relative;
-	background: color($neutral, 9);
-	color: color($neutral, 1);
-	font-family: $font-stack;
-	font-weight: font-weight(normal);
-	line-height: line-height(normal);
-	overflow: hidden;
+  height: 100%;
+  position: relative;
+  background: color($neutral, 9);
+  color: color($neutral, 1);
+  font-family: $font-stack;
+  font-weight: font-weight(normal);
+  line-height: line-height(normal);
+  overflow: hidden;
 }
 
 a {
@@ -58,32 +58,32 @@ a {
 }
 
 ol, ul {
-	list-style: none;
+  list-style: none;
 }
 
 li {
-	list-style: none;
+  list-style: none;
 }
 
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-	display: block;
+  display: block;
 }
 
 blockquote, q {
-	quotes: none;
+  quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+blockquote::before, blockquote::after,
+q::before, q::after {
+  content: "";
+  content: none;
 }
 
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 em {

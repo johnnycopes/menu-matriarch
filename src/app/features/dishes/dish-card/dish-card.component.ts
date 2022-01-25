@@ -6,7 +6,6 @@ import { DishType } from '@models/dish-type.type';
 @Component({
   selector: 'app-dish-card',
   templateUrl: './dish-card.component.html',
-  styleUrls: ['./dish-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DishCardComponent {
@@ -15,11 +14,11 @@ export class DishCardComponent {
   @Input() description = '';
   @Input() link = '';
   @Input() type: DishType = 'main';
-  @Input() favorited: boolean = false;
+  @Input() favorited = false;
   @Input() ingredients: string[] = [];
   @Input() tags: Tag[] = [];
   @Input() menus: string[] = [];
   @Input() meals: string[] = [];
-  @Input() usages: number = 0;
+  @Input() usages = 0;
   @Input() active = false;
 }

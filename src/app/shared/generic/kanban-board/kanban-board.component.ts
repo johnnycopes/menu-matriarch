@@ -26,21 +26,21 @@ export interface KanbanColumnMove {
 export class KanbanBoardComponent<TColumn, TItem> {
   @Input() columns: TColumn[] = [];
   @Input() config: KanbanBoard<TColumn, TItem> = {
-    getColumnId: _ => '',
-    getColumnName: _ => '',
-    getColumnItems: _ => [],
-    getItemId: _ => '',
+    getColumnId: () => '',
+    getColumnName: () => '',
+    getColumnItems: () => [],
+    getItemId: () => '',
   };
   @Input() itemTemplate: TemplateRef<unknown> | undefined;
   @Input() actions: string[] = [];
-  @Input() columnUnit: string = 'Column';
-  @Input() itemUnit: string = 'Item';
+  @Input() columnUnit = 'Column';
+  @Input() itemUnit = 'Item';
   @Output() columnAdd: EventEmitter<string> = new EventEmitter();
   @Output() columnMove: EventEmitter<KanbanColumnMove> = new EventEmitter();
   @Output() itemAdd: EventEmitter<IKanbanBoardItemAdd> = new EventEmitter();
   @Output() itemMove: EventEmitter<IKanbanBoardItemMove> = new EventEmitter();
   @Output() actionClick: EventEmitter<IKanbanBoardActionClick> = new EventEmitter();
-  public moving: boolean = false;
+  public moving = false;
   public trackByFn = trackByFactory(this.config.getColumnId);
 
   public onColumnAdd(newColumnName: string): void {

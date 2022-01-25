@@ -38,7 +38,7 @@ export class MenuDataService {
     uid: string,
     menu: Partial<Omit<MenuDto, 'id' | 'uid' | 'startDay'>>,
     startDay: Day,
-  }) {
+  }): Promise<string> {
     const id = this._dataService.createId();
     await this._dataService.create<MenuDto>(
       this._endpoint,

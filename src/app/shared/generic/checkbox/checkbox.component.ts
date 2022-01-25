@@ -13,12 +13,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   }]
 })
 export class CheckboxComponent implements ControlValueAccessor {
-  @Input() disabled: boolean = false;
-  @Input() indeterminate: boolean = false;
-  @Input() bold: boolean = false;
-  @Input() invertColors: boolean = false;
-  public checked: boolean = false;
-  private _onChangeFn: (value: boolean) => void = (_) => undefined;
+  @Input() disabled = false;
+  @Input() indeterminate = false;
+  @Input() bold = false;
+  @Input() invertColors = false;
+  public checked = false;
+  private _onChangeFn: (value: boolean) => void = () => undefined;
 
   constructor(private _changeDetectorRef: ChangeDetectorRef) { }
 
@@ -31,7 +31,9 @@ export class CheckboxComponent implements ControlValueAccessor {
     this._onChangeFn = fn;
   }
 
-  registerOnTouched(_fn: (value: boolean) => void): void { }
+  registerOnTouched(fn: (value: boolean) => void): void {
+    fn;
+  }
 
   onChange(value: boolean): void {
     this.checked = value;

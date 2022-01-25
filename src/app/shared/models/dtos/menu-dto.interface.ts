@@ -9,4 +9,4 @@ export interface MenuDto {
   contents: {
     [day in Day]: string[];
   };
-};
+}

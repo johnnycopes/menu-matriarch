@@ -106,12 +106,12 @@ export class MealEditComponent {
       description: form.value.description,
       tags: Object
         .entries<boolean>(form.value?.tags ?? [])
-        .filter(([key, checked]) => checked)
-        .map(([key, checked]) => key),
+        .filter(([_key, checked]) => checked)
+        .map(([key, _checked]) => key),
       dishes: Object
         .entries<boolean>(form.value.dishes)
-        .filter(([key, checked]) => checked)
-        .map(([key, checked]) => key),
+        .filter(([_key, checked]) => checked)
+        .map(([key, _checked]) => key),
     };
     if (!this._routeId) {
       this._mealService.createMeal(details).pipe(
@@ -137,7 +137,7 @@ export class MealEditComponent {
     formDishes: Record<string, boolean>,
   ): Dish[] {
     const dishes: Dish[] = [];
-    for (let dishId in formDishes) {
+    for (const dishId in formDishes) {
       if (formDishes[dishId]) {
         const dish = allDishes.find(dish => dish.id === dishId);
         if (dish) {

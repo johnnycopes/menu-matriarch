@@ -11,7 +11,7 @@ export class AuthService {
 
   constructor(private _auth: AngularFireAuth) { }
 
-  public get uid$() {
+  public get uid$(): Observable<string | undefined> {
     return this._auth.user.pipe(
       map(user => user?.uid),
       shareReplay({ bufferSize: 1, refCount: true }),

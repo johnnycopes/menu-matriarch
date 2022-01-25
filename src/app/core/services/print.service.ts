@@ -7,9 +7,9 @@ import { MenuEntry } from '@models/menu-entry.interface';
 import { Orientation } from '@models/orientation.type';
 import { getDishTypes } from '@utility/domain/get-dish-types';
 
-interface PrintMenu extends Pick<Menu,
+type PrintMenu = Pick<Menu,
   'name' | 'entries' | 'fallbackText' | 'orientation'
->{ }
+>;
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class PrintService {
       this._popupWindow?.document.close();
     } else {
       this._popupWindow.focus();
-    };
+    }
   }
 
   private _createDocument({ name, entries, fallbackText, orientation }: PrintMenu): string {

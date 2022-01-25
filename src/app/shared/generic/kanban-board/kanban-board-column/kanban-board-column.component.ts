@@ -29,14 +29,14 @@ export interface IKanbanBoardItemMove {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KanbanBoardColumnComponent<TItem> {
-  @Input() id: string = '';
-  @Input() name: string = '';
+  @Input() id = '';
+  @Input() name = '';
   @Input() items: TItem[] = [];
   @Input() itemTemplate: TemplateRef<unknown> | undefined;
-  @Input() itemUnit: string = 'Item';
-  @Input() getItemId: (item: TItem) => string = _ => '';
+  @Input() itemUnit = 'Item';
+  @Input() getItemId: (item: TItem) => string = () => '';
   @Input() actions: string[] = [];
-  @Input() moving: boolean = false;
+  @Input() moving = false;
   @Output() itemAdd: EventEmitter<IKanbanBoardItemAdd> = new EventEmitter();
   @Output() itemMove: EventEmitter<IKanbanBoardItemMove> = new EventEmitter();
   @Output() actionClick: EventEmitter<IKanbanBoardActionClick> = new EventEmitter();

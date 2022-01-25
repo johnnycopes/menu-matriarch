@@ -6,48 +6,48 @@
 }
 
 app-demo-component {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-	& > * {
-		margin-bottom: 10px;
-	}
+  & > * {
+    margin-bottom: 10px;
+  }
 }
 
 .bold,
 strong {
-	font-weight: 700;
+  font-weight: 700;
 }
 
 .panel-container {
-	height: 300px;
-	padding: 20px;
-	background: color($neutral, 5);
+  height: 300px;
+  padding: 20px;
+  background: color($neutral, 5);
 }
 
 .inline {
-	align-self: flex-start;
+  align-self: flex-start;
 }
 
 .container-1,
 .container-2,
 .container-3 {
-	padding: 20px;
+  padding: 20px;
 }
 
 .container-1 {
-	background: salmon;
+  background: salmon;
 
-	&--hover{
-		background: limegreen;
-	}
+  &--hover {
+    background: limegreen;
+  }
 }
 
 .container-2 {
-	background: cadetblue;
+  background: cadetblue;
 }
 
 .container-3 {
-	background: gold;
+  background: gold;
 }
