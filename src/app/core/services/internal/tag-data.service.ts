@@ -55,13 +55,13 @@ export class TagDataService {
       .delete(this._endpoint, tag.id)
       .updateMultiple([
         ...this._batchService.getMealUpdates({
-          key: 'tags',
+          key: 'tagIds',
           initialMealIds: tag.mealIds,
           finalMealIds: [],
           entityId: tag.id,
         }),
         ...this._batchService.getDishUpdates({
-          key: 'tags',
+          key: 'tagIds',
           initialDishIds: tag.dishIds,
           finalDishIds: [],
           entityId: tag.id,

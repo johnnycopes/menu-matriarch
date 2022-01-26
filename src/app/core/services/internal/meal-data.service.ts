@@ -46,7 +46,7 @@ export class MealDataService {
     if (meal.dishIds) {
       batch.updateMultiple(
         this._batchService.getDishUpdates({
-          key: 'meals',
+          key: 'mealIds',
           initialDishIds: [],
           finalDishIds: meal.dishIds,
           entityId: id,
@@ -56,7 +56,7 @@ export class MealDataService {
     if (meal.tagIds) {
       batch.updateMultiple(
         this._batchService.getTagUpdates({
-          key: 'meals',
+          key: 'mealIds',
           initialTagIds: [],
           finalTagIds: meal.tagIds,
           entityId: id,
@@ -77,10 +77,12 @@ export class MealDataService {
       id: meal.id,
       data,
     });
+    console.log(meal);
+    console.log(data);
     if (data.dishIds) {
       batch.updateMultiple(
         this._batchService.getDishUpdates({
-          key: 'meals',
+          key: 'mealIds',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: data.dishIds,
           entityId: meal.id,
@@ -90,7 +92,7 @@ export class MealDataService {
     if (data.tagIds) {
       batch.updateMultiple(
         this._batchService.getTagUpdates({
-          key: 'meals',
+          key: 'mealIds',
           initialTagIds: meal.tags.map(tag => tag.id),
           finalTagIds: data.tagIds,
           entityId: meal.id,
@@ -106,13 +108,13 @@ export class MealDataService {
       .delete(this._endpoint, meal.id)
       .updateMultiple([
         ...this._batchService.getDishUpdates({
-          key: 'meals',
+          key: 'mealIds',
           initialDishIds: meal.dishes.map(dish => dish.id),
           finalDishIds: [],
           entityId: meal.id,
         }),
         ...this._batchService.getTagUpdates({
-          key: 'meals',
+          key: 'mealIds',
           initialTagIds: meal.tags.map(tag => tag.id),
           finalTagIds: [],
           entityId: meal.id,

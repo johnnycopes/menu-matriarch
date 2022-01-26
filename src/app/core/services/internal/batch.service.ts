@@ -59,7 +59,7 @@ export class BatchService {
   }
 
   public getMealUpdates({ key, initialMealIds, finalMealIds, entityId }: {
-    key: 'dishes' | 'tags',
+    key: 'dishIds' | 'tagIds',
     initialMealIds: string[],
     finalMealIds: string[],
     entityId: string,
@@ -74,7 +74,7 @@ export class BatchService {
   }
 
   public getDishUpdates({ key, initialDishIds, finalDishIds, entityId }: {
-    key: 'meals' | 'tags',
+    key: 'mealIds' | 'tagIds',
     initialDishIds: string[],
     finalDishIds: string[],
     entityId: string,
@@ -122,7 +122,7 @@ export class BatchService {
   }
 
   public getTagUpdates({ key, initialTagIds, finalTagIds, entityId }: {
-    key: 'meals' | 'dishes',
+    key: 'mealIds' | 'dishIds',
     initialTagIds: string[],
     finalTagIds: string[],
     entityId: string,
@@ -138,7 +138,7 @@ export class BatchService {
 
   private _getBatchUpdates({ endpoint, key, initialIds, finalIds, entityId }: {
     endpoint: string,
-    key: 'meals' | 'dishes' | 'tags',
+    key: 'mealIds' | 'dishIds' | 'tagIds',
     initialIds: string[],
     finalIds: string[],
     entityId: string,

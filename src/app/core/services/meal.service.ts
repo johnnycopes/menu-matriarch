@@ -105,7 +105,10 @@ export class MealService {
     tags: Tag[]
   }): Meal {
     return {
-      ...mealDto,
+      id: mealDto.id,
+      uid: mealDto.uid,
+      name: mealDto.name,
+      description: mealDto.description,
       dishes: dishes.filter(dish => mealDto.dishIds.includes(dish.id)),
       tags: tags.filter(tag => mealDto.tagIds.includes(tag.id)),
     };
