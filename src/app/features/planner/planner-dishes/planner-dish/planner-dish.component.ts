@@ -24,8 +24,8 @@ export class PlannerDishComponent {
   @Input() link = '';
   @Input() type: DishType = 'main';
   @Input() tags: Tag[] = [];
-  @Input() menus: string[] = [];
-  @Input() meals: string[] = [];
+  @Input() menuIds: string[] = [];
+  @Input() mealIds: string[] = [];
   @Input() usages = 0;
   @Input()
   public set menu(menu: Menu | undefined) {

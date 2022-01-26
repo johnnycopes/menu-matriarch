@@ -77,8 +77,6 @@ export class MealDataService {
       id: meal.id,
       data,
     });
-    console.log(meal);
-    console.log(data);
     if (data.dishIds) {
       batch.updateMultiple(
         this._batchService.getDishUpdates({
