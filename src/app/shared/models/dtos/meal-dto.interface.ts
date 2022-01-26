@@ -3,6 +3,6 @@ export interface MealDto {
   uid: string;
   name: string;
   description: string;
-  dishes: string[];
-  tags: string[];
+  dishIds: string[];
+  tagIds: string[];
 }

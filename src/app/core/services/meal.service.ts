@@ -106,8 +106,8 @@ export class MealService {
   }): Meal {
     return {
       ...mealDto,
-      dishes: dishes.filter(dish => mealDto.dishes.includes(dish.id)),
-      tags: tags.filter(tag => mealDto.tags.includes(tag.id)),
+      dishes: dishes.filter(dish => mealDto.dishIds.includes(dish.id)),
+      tags: tags.filter(tag => mealDto.tagIds.includes(tag.id)),
     };
   }
 }

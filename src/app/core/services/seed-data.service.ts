@@ -68,7 +68,7 @@ export class SeedDataService {
           id: southernClassicMealId,
           uid,
           name: 'Southern Classic',
-          dishes: [cornbreadDishId, friedChickenDishId, macAndCheeseDishId],
+          dishIds: [cornbreadDishId, friedChickenDishId, macAndCheeseDishId],
         })
       })
       .set({
@@ -78,8 +78,8 @@ export class SeedDataService {
           id: sushiDinnerMealId,
           uid,
           name: 'Sushi Dinner',
-          dishes: [sushiDishId, misoSoupDishId],
-          tags: [pescatarianTagId],
+          dishIds: [sushiDishId, misoSoupDishId],
+          tagIds: [pescatarianTagId],
         })
       })
       .set({
