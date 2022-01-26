@@ -22,11 +22,11 @@ export class TagDataService {
     private _dataService: DataService,
   ) { }
 
-  public getTag(id: string): Observable<Tag | undefined> {
+  public getTag(id: string): Observable<TagDto | undefined> {
     return this._dataService.getOne<TagDto>(this._endpoint, id);
   }
 
-  public getTags(uid: string): Observable<Tag[]> {
+  public getTags(uid: string): Observable<TagDto[]> {
     return this._dataService.getMany<TagDto>(this._endpoint, uid).pipe(
       map(tags => sort(tags, tag => lower(tag.name)))
     );
