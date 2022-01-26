@@ -278,7 +278,7 @@ export class SeedDataService {
           id: easyTagId,
           uid,
           name: 'Easy',
-          dishes: [roastedCauliflowerDishId, thaiCurryDishId]
+          dishIds: [roastedCauliflowerDishId, thaiCurryDishId]
         }),
       })
       .set({
@@ -288,14 +288,14 @@ export class SeedDataService {
           id: pescatarianTagId,
           uid,
           name: 'Pescatarian',
-          dishes: [salmonBurgersDishId, sushiDishId],
-          meals: [sushiDinnerMealId],
+          dishIds: [salmonBurgersDishId, sushiDishId],
+          mealIds: [sushiDinnerMealId],
         }),
       })
       .set({
         endpoint: Endpoint.tags,
         id: veganTagId,
-        data: createTagDto({ id: veganTagId, uid, name: 'Vegan', dishes: [
+        data: createTagDto({ id: veganTagId, uid, name: 'Vegan', dishIds: [
           misoSoupDishId,
           redLentilSoupDishId,
           roastedCauliflowerDishId,
@@ -306,7 +306,7 @@ export class SeedDataService {
       .set({
         endpoint: Endpoint.tags,
         id: vegetarianTagId,
-        data: createTagDto({ id: vegetarianTagId, uid, name: 'Vegetarian', dishes: [
+        data: createTagDto({ id: vegetarianTagId, uid, name: 'Vegetarian', dishIds: [
           cornbreadDishId,
           greekSaladDishId,
           macAndCheeseDishId,

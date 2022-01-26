@@ -56,13 +56,13 @@ export class TagDataService {
       .updateMultiple([
         ...this._batchService.getMealUpdates({
           key: 'tags',
-          initialMealIds: tag.meals,
+          initialMealIds: tag.mealIds,
           finalMealIds: [],
           entityId: tag.id,
         }),
         ...this._batchService.getDishUpdates({
           key: 'tags',
-          initialDishIds: tag.dishes,
+          initialDishIds: tag.dishIds,
           finalDishIds: [],
           entityId: tag.id,
         }),
