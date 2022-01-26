@@ -9,9 +9,9 @@ export interface DishDto {
   description: string;
   link: string;
   ingredients: string[];
-  menus: string[];
-  meals: string[];
-  tags: string[];
+  menuIds: string[];
+  mealIds: string[];
+  tagIds: string[];
   notes: string;
   usages: number;
 }

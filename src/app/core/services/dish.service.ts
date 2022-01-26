@@ -95,7 +95,7 @@ export class DishService {
   private _transformDto(dishDto: DishDto, tags: Tag[]): Dish {
     return {
       ...dishDto,
-      tags: tags.filter(tag => dishDto.tags.includes(tag.id))
+      tags: tags.filter(tag => dishDto.tagIds.includes(tag.id))
     };
   }
 }

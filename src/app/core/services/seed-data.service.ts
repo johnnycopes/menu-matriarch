@@ -92,9 +92,9 @@ export class SeedDataService {
           description: 'Made in the skillet with brown butter',
           type: 'side',
           link: 'https://cooking.nytimes.com/recipes/1016965-brown-butter-skillet-cornbread',
-          menus: [menuId],
-          meals: [southernClassicMealId],
-          tags: [vegetarianTagId],
+          menuIds: [menuId],
+          mealIds: [southernClassicMealId],
+          tagIds: [vegetarianTagId],
           usages: 1,
         })
       })
@@ -106,7 +106,7 @@ export class SeedDataService {
           uid,
           name: 'Enchiladas',
           link: 'https://cooking.nytimes.com/recipes/1018152-enchiladas-con-carne',
-          menus: [menuId],
+          menuIds: [menuId],
           usages: 1,
         })
       })
@@ -118,8 +118,8 @@ export class SeedDataService {
           uid,
           name: 'Fried Chicken',
           link: 'https://cooking.nytimes.com/recipes/1018219-buttermilk-fried-chicken',
-          menus: [menuId],
-          meals: [southernClassicMealId],
+          menuIds: [menuId],
+          mealIds: [southernClassicMealId],
           usages: 1,
         })
       })
@@ -130,7 +130,7 @@ export class SeedDataService {
           id: greekSaladDishId,
           uid,
           name: 'Greek Salad',
-          tags: [vegetarianTagId],
+          tagIds: [vegetarianTagId],
         })
       })
       .set({
@@ -143,9 +143,9 @@ export class SeedDataService {
           description: 'Delicious baked noodles from the USA',
           type: 'side',
           link: 'https://cooking.nytimes.com/recipes/1015825-creamy-macaroni-and-cheese',
-          menus: [menuId],
-          meals: [southernClassicMealId],
-          tags: [vegetarianTagId],
+          menuIds: [menuId],
+          mealIds: [southernClassicMealId],
+          tagIds: [vegetarianTagId],
           usages: 1,
         })
       })
@@ -157,9 +157,9 @@ export class SeedDataService {
           uid,
           name: 'Miso Soup',
           type: 'side',
-          menus: [menuId],
-          meals: [sushiDinnerMealId],
-          tags: [veganTagId, vegetarianTagId],
+          menuIds: [menuId],
+          mealIds: [sushiDinnerMealId],
+          tagIds: [veganTagId, vegetarianTagId],
           usages: 1,
         })
       })
@@ -172,8 +172,8 @@ export class SeedDataService {
           name: 'Pizza',
           description: 'Delicious round vessel from Italy',
           link: 'https://cooking.nytimes.com/guides/1-how-to-make-pizza',
-          menus: [menuId],
-          tags: [vegetarianTagId],
+          menuIds: [menuId],
+          tagIds: [vegetarianTagId],
           usages: 1,
         })
       })
@@ -185,8 +185,8 @@ export class SeedDataService {
           uid,
           name: 'Red Lentil Soup',
           link: 'https://cooking.nytimes.com/recipes/1016062-red-lentil-soup-with-lemon',
-          menus: [menuId],
-          tags: [veganTagId, vegetarianTagId],
+          menuIds: [menuId],
+          tagIds: [veganTagId, vegetarianTagId],
           usages: 1,
         })
       })
@@ -199,7 +199,7 @@ export class SeedDataService {
           name: 'Roasted Cauliflower',
           link: 'https://cooking.nytimes.com/recipes/7588-roasted-cauliflower',
           type: 'side',
-          tags: [easyTagId, veganTagId, vegetarianTagId],
+          tagIds: [easyTagId, veganTagId, vegetarianTagId],
         })
       })
       .set({
@@ -210,8 +210,8 @@ export class SeedDataService {
           uid,
           name: 'Salmon Burgers',
           link: 'https://cooking.nytimes.com/recipes/7131-salmon-burgers',
-          menus: [menuId],
-          tags: [pescatarianTagId],
+          menuIds: [menuId],
+          tagIds: [pescatarianTagId],
           usages: 1,
         }),
       })
@@ -223,9 +223,9 @@ export class SeedDataService {
           uid,
           name: 'Sushi',
           description: 'Delicious tiny vessels from Japan',
-          menus: [menuId],
-          meals: [sushiDinnerMealId],
-          tags: [pescatarianTagId],
+          menuIds: [menuId],
+          mealIds: [sushiDinnerMealId],
+          tagIds: [pescatarianTagId],
           usages: 1,
         }),
       })
@@ -237,8 +237,8 @@ export class SeedDataService {
           uid,
           name: 'Sweet Potato Fries',
           type: 'side',
-          menus: [menuId],
-          tags: [veganTagId, vegetarianTagId],
+          menuIds: [menuId],
+          tagIds: [veganTagId, vegetarianTagId],
           usages: 1,
         }),
       })
@@ -252,8 +252,8 @@ export class SeedDataService {
           description: 'Delicious coffee-flavored Italian cake',
           link: 'https://cooking.nytimes.com/recipes/1018684-classic-tiramisu',
           type: 'dessert',
-          menus: [menuId],
-          tags: [],
+          menuIds: [menuId],
+          tagIds: [],
           usages: 2,
         }),
       })
@@ -266,8 +266,8 @@ export class SeedDataService {
           name: 'Thai Curry',
           description: 'Delicious fragrant stew from Thailand',
           link: 'https://cooking.nytimes.com/recipes/1015694-vegan-thai-curry-vegetables',
-          menus: [menuId],
-          tags: [easyTagId, veganTagId, vegetarianTagId],
+          menuIds: [menuId],
+          tagIds: [easyTagId, veganTagId, vegetarianTagId],
           usages: 1,
         }),
       })
