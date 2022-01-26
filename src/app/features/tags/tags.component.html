@@ -21,8 +21,8 @@
       *ngFor="let tag of tags; trackBy: trackByFn"
       [id]="tag.id"
       [name]="tag.name"
-      [meals]="tag.meals"
-      [dishes]="tag.dishes"
+      [meals]="tag.mealIds"
+      [dishes]="tag.dishIds"
       (edit)="onTagEdit(tag.id, $event)"
       (delete)="onTagDelete(tag.id)"
     >

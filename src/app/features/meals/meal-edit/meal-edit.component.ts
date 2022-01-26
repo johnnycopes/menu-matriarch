@@ -16,8 +16,8 @@ import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
 interface MealEditForm {
   name: string;
   description: string;
-  dishes: string[];
-  tags: string[];
+  dishIds: string[];
+  tagIds: string[];
 }
 
 type FormDishes = Record<string, boolean>;
@@ -104,11 +104,11 @@ export class MealEditComponent {
     const details: MealEditForm = {
       name: form.value.name,
       description: form.value.description,
-      tags: Object
+      tagIds: Object
         .entries<boolean>(form.value?.tags ?? [])
         .filter(([_key, checked]) => checked)
         .map(([key, _checked]) => key),
-      dishes: Object
+      dishIds: Object
         .entries<boolean>(form.value.dishes)
         .filter(([_key, checked]) => checked)
         .map(([key, _checked]) => key),
