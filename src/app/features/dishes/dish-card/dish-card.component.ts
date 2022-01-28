@@ -17,8 +17,8 @@ export class DishCardComponent {
   @Input() favorited = false;
   @Input() ingredients: string[] = [];
   @Input() tags: Tag[] = [];
-  @Input() menus: string[] = [];
-  @Input() meals: string[] = [];
+  @Input() menuIds: string[] = [];
+  @Input() mealIds: string[] = [];
   @Input() usages = 0;
   @Input() active = false;
 }

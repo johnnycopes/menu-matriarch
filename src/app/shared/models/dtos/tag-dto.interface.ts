@@ -3,6 +3,6 @@ export interface TagDto {
   uid: string;
   name: string;
   color: string;
-  meals: string[];
-  dishes: string[];
+  mealIds: string[];
+  dishIds: string[];
 }

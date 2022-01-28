@@ -8,10 +8,10 @@ export interface DishDto {
   favorited: boolean;
   description: string;
   link: string;
-  ingredients: string[];
-  menus: string[];
-  meals: string[];
-  tags: string[];
+  menuIds: string[];
+  mealIds: string[];
+  ingredientIds: string[];
+  tagIds: string[];
   notes: string;
   usages: number;
 }

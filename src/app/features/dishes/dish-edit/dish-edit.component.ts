@@ -16,7 +16,7 @@ interface DishEditForm {
   description: string;
   link: string;
   type: DishType;
-  tags: string[];
+  tagIds: string[];
   notes: string;
 }
 
@@ -87,7 +87,7 @@ export class DishEditComponent {
       description: form.value.description,
       link: form.value.link,
       type: form.value.type,
-      tags: Object
+      tagIds: Object
         .entries<boolean>(form.value?.tags ?? [])
         .filter(([_key, checked]) => checked)
         .map(([key, _checked]) => key),

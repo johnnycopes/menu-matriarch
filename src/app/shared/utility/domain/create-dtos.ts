@@ -39,20 +39,20 @@ export function createMenuDto({ id, uid, name, favorited, startDay, contents }: 
 }
 
 export function createMealDto(
-  { id, uid, name, description, dishes, tags }: Partial<MealDto>
+  { id, uid, name, description, dishIds, tagIds }: Partial<MealDto>
 ): MealDto {
   return {
     id: id ?? '',
     uid: uid ?? '',
     name: name ?? '',
     description: description ?? '',
-    dishes: dishes ?? [],
-    tags: tags ?? [],
+    dishIds: dishIds ?? [],
+    tagIds: tagIds ?? [],
   };
 }
 
 export function createDishDto(
-  { id, uid, type, name, favorited, description, link, ingredients, meals, tags, notes, menus, usages }: Partial<DishDto>
+  { id, uid, type, name, favorited, description, link, notes, usages, menuIds, mealIds, ingredientIds, tagIds }: Partial<DishDto>
 ): DishDto {
   return {
     id: id ?? '',
@@ -62,22 +62,22 @@ export function createDishDto(
     favorited: favorited ?? false,
     description: description ?? '',
     link: link ?? '',
-    ingredients: ingredients ?? [],
-    meals: meals ?? [],
-    tags: tags ?? [],
     notes: notes ?? '',
-    menus: menus ?? [],
     usages: usages ?? 0,
+    menuIds: menuIds ?? [],
+    mealIds: mealIds ?? [],
+    ingredientIds: ingredientIds ?? [],
+    tagIds: tagIds ?? [],
   };
 }
 
-export function createTagDto({ id, uid, name, color, meals, dishes }: Partial<TagDto>): TagDto {
+export function createTagDto({ id, uid, name, color, mealIds, dishIds }: Partial<TagDto>): TagDto {
   return {
     id: id ?? '',
     uid: uid ?? '',
     name: name ?? '',
     color: color ?? '',
-    meals: meals ?? [],
-    dishes: dishes ?? [],
+    mealIds: mealIds ?? [],
+    dishIds: dishIds ?? [],
   };
 }

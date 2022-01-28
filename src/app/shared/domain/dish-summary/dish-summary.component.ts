@@ -15,8 +15,8 @@ export class DishSummaryComponent {
   @Input() description = '';
   @Input() link = '';
   @Input() tags: Tag[] = [];
-  @Input() menus: string[] = [];
-  @Input() meals: string[] = [];
+  @Input() menuIds: string[] = [];
+  @Input() mealIds: string[] = [];
   @Input() usages = 0;
   public readonly faLink = faLink;
 }
