@@ -31,24 +31,24 @@ export class BatchService {
     if (dishIds.length && !change) {
       throw new Error("A 'change' argument is needed in order to modify the menus' dishes");
     }
-    let dishes: string[] = [];
+    let updatedDishIds: string[] = [];
     if (change === 'add') {
-      dishes = this._firestoreService.addToArray(...dishIds);
+      updatedDishIds = this._firestoreService.addToArray(...dishIds);
     } else if (change === 'remove') {
-      dishes = this._firestoreService.removeFromArray(...dishIds);
+      updatedDishIds = this._firestoreService.removeFromArray(...dishIds);
     }
     let data: { [contentsDay: string]: string[] } = {};
     if (day) {
-      data = this._getDayDishes(day, dishes);
+      data = this._getDayData(day, updatedDishIds);
     } else {
       data = {
-        ...this._getDayDishes('Monday', dishes),
-        ...this._getDayDishes('Tuesday', dishes),
-        ...this._getDayDishes('Wednesday', dishes),
-        ...this._getDayDishes('Thursday', dishes),
-        ...this._getDayDishes('Friday', dishes),
-        ...this._getDayDishes('Saturday', dishes),
-        ...this._getDayDishes('Sunday', dishes),
+        ...this._getDayData('Monday', updatedDishIds),
+        ...this._getDayData('Tuesday', updatedDishIds),
+        ...this._getDayData('Wednesday', updatedDishIds),
+        ...this._getDayData('Thursday', updatedDishIds),
+        ...this._getDayData('Friday', updatedDishIds),
+        ...this._getDayData('Saturday', updatedDishIds),
+        ...this._getDayData('Sunday', updatedDishIds),
       };
     }
     return menuIds.map(menuId => ({
@@ -107,7 +107,7 @@ export class BatchService {
       } else if ((dishCount === 1 && change === 'decrement') || change === 'clear') {
         menusChange = -1;
       }
-      const menus = menusChange > 0
+      const menuIds = menusChange > 0
         ? this._firestoreService.addToArray(menu.id)
         : this._firestoreService.removeFromArray(menu.id);
       return {
@@ -115,7 +115,7 @@ export class BatchService {
         id: dishId,
         data: {
           usages: this._firestoreService.changeCounter(change === 'increment' ? 1 : -1),
-          ...(menusChange !== 0 && { menus }), // only include `menus` if `menusChange` isn't 0
+          ...(menusChange !== 0 && { menuIds }), // only include `menuIds` if `menusChange` isn't 0
         },
       };
     });
@@ -164,10 +164,10 @@ export class BatchService {
     return batchUpdates;
   }
 
-  private _getDayDishes(
+  private _getDayData(
     day: Day,
-    dishes: string[]
+    dishIds: string[]
   ): { [contentsDay: string]: string[] } {
-    return { [`contents.${day}`]: dishes };
+    return { [`contents.${day}`]: dishIds };
   }
 }
