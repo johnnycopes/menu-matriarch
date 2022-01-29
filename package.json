@@ -42,6 +42,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-builders/jest": "^13.0.2",
     "@angular-devkit/architect": "^0.1300.3",
     "@angular-devkit/build-angular": "~13.0.3",
     "@angular-eslint/builder": "12.7.0",
@@ -52,6 +53,7 @@
     "@angular/cli": "~13.0.3",
     "@angular/compiler-cli": "~13.0.2",
     "@types/jasmine": "~3.8.0",
+    "@types/jest": "^27.4.0",
     "@types/lodash-es": "^4.17.5",
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "4.28.2",
@@ -63,6 +65,8 @@
     "inquirer": "^6.2.2",
     "inquirer-autocomplete-prompt": "^1.0.1",
     "jasmine-core": "~3.8.0",
+    "jest": "^27.4.7",
+    "jest-preset-angular": "^11.1.0",
     "jsonc-parser": "^3.0.0",
     "karma-coverage": "~2.0.3",
     "lint-staged": "^12.3.0",
