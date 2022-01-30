@@ -7,7 +7,7 @@
     "build": "ng build",
     "lint:scss": "stylelint \"**/*.scss\"",
     "lint:ts": "ng lint",
-    "test": "ng test",
+    "test": "jest",
     "watch": "ng build --watch --configuration development",
     "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev --only hosting",
     "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
