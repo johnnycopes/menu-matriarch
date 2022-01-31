@@ -75,7 +75,10 @@
     "typescript": "~4.4.4"
   },
   "lint-staged": {
-    "*.ts": "eslint",
+    "*.ts": [
+      "eslint --max-warnings=0",
+      "jest --bail --findRelatedTests"
+    ],
     "*.scss": "stylelint"
   }
 }
