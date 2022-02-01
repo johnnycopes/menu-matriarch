@@ -4,6 +4,7 @@ import { Day } from '@models/day.type';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
 import { dedupe } from '@utility/generic/dedupe';
+import { tally } from '@utility/generic/tally';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { Batch, BatchUpdate } from './batch';
 import { FirestoreService } from './firestore.service';
@@ -93,12 +94,7 @@ export class BatchService {
     menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
   }): BatchUpdate[] {
-    const dishCounts = flattenValues(menu.contents)
-      .reduce((hashMap, dishId) => ({
-        ...hashMap,
-        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
-      }), {} as { [dishId: string]: number });
-
+    const dishCounts = tally(flattenValues(menu.contents));
     return dishIds.map(dishId => {
       const dishCount = dishCounts[dishId] ?? 0;
       let menusChange = 0;
