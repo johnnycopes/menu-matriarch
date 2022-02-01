@@ -4,5 +4,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Runs unit tests
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
       - run: npm run test
