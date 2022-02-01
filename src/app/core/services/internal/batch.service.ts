@@ -143,7 +143,7 @@ export class BatchService {
     finalIds: string[],
     entityId: string,
   }): BatchUpdate[] {
-    const batchUpdates = [];
+    const batchUpdates: BatchUpdate[] = [];
     for (const id of dedupe(initialIds, finalIds)) {
       let updatedIds = undefined;
 

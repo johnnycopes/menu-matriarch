@@ -9,5 +9,5 @@ export const lower = formatter(str => str.toLowerCase());
 export const upper = formatter(str => str.toUpperCase());
 
 export const upperFirst = formatter(
-	(str) => upper(str[0]) + lower(str.substr(1))
+	(str) => upper(str[0]) + lower(str.substring(1))
 );

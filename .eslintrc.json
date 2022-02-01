@@ -38,6 +38,9 @@
             "style": "kebab-case"
           }
         ],
+        "no-console": [
+          "warn"
+        ],
         "@typescript-eslint/no-unused-vars": [
           "warn",
           {
