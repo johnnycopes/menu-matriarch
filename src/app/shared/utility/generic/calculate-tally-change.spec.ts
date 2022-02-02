@@ -7,6 +7,14 @@ describe('calculateTallyChange', () => {
     produce: 0,
   };
 
+  it('throws an error if key does not exist in tally', () => {
+    expect(() => calculateTallyChange({
+      tally,
+      key: 'fake',
+      change: 'increment',
+    })).toThrowError('Key not present in tally');
+  });
+
   it('returns 1 on increment when value is 0', () => {
     expect(calculateTallyChange({
       tally,

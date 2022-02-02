@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Day } from '@models/day.type';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
-import { calculateTallyChange } from '@utility/generic/calculate-tally-change';
+import { calculateTallyChange, TallyChange } from '@utility/generic/calculate-tally-change';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { tally } from '@utility/generic/tally';
 import { uniqueDiff } from '@utility/generic/unique-diff';
@@ -79,7 +79,7 @@ export class BatchService {
   public getDishCountersUpdates({ dishIds, menu, change }: {
     dishIds: string[],
     menu: Menu,
-    change: 'increment' | 'decrement' | 'clear',
+    change: TallyChange,
   }): BatchUpdate[] {
     const dishCounts = tally(flattenValues(menu.contents));
     return dishIds.map(dishId => {
