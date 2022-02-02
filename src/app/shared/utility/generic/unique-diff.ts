@@ -1,6 +1,6 @@
 import { dedupe } from "./dedupe";
 
-export function uniqeDiff<T>(initial: T[], final: T[]): {
+export function uniqueDiff<T>(initial: T[], final: T[]): {
   added: T[],
   removed: T[],
 } {
