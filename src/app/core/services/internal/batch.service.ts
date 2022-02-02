@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Day } from '@models/day.type';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
-import { dedupe } from '@utility/generic/dedupe';
 import { flattenValues } from '@utility/generic/flatten-values';
+import { tally } from '@utility/generic/tally';
+import { uniqueDiff } from '@utility/generic/unique-diff';
 import { Batch, BatchUpdate } from './batch';
 import { FirestoreService } from './firestore.service';
 
@@ -37,24 +38,10 @@ export class BatchService {
     } else if (change === 'remove') {
       updatedDishIds = this._firestoreService.removeFromArray(...dishIds);
     }
-    let data: { [contentsDay: string]: string[] } = {};
-    if (day) {
-      data = this._getDayData(day, updatedDishIds);
-    } else {
-      data = {
-        ...this._getDayData('Monday', updatedDishIds),
-        ...this._getDayData('Tuesday', updatedDishIds),
-        ...this._getDayData('Wednesday', updatedDishIds),
-        ...this._getDayData('Thursday', updatedDishIds),
-        ...this._getDayData('Friday', updatedDishIds),
-        ...this._getDayData('Saturday', updatedDishIds),
-        ...this._getDayData('Sunday', updatedDishIds),
-      };
-    }
     return menuIds.map(menuId => ({
       endpoint: Endpoint.menus,
       id: menuId,
-      data,
+      data: this._getMenuContentsData(updatedDishIds, day),
     }));
   }
 
@@ -93,12 +80,7 @@ export class BatchService {
     menu: Menu,
     change: 'increment' | 'decrement' | 'clear',
   }): BatchUpdate[] {
-    const dishCounts = flattenValues(menu.contents)
-      .reduce((hashMap, dishId) => ({
-        ...hashMap,
-        [dishId]: hashMap[dishId] ? hashMap[dishId] + 1 : 1
-      }), {} as { [dishId: string]: number });
-
+    const dishCounts = tally(flattenValues(menu.contents));
     return dishIds.map(dishId => {
       const dishCount = dishCounts[dishId] ?? 0;
       let menusChange = 0;
@@ -143,31 +125,38 @@ export class BatchService {
     finalIds: string[],
     entityId: string,
   }): BatchUpdate[] {
-    const batchUpdates: BatchUpdate[] = [];
-    for (const id of dedupe(initialIds, finalIds)) {
-      let updatedIds = undefined;
-
-      if (initialIds.includes(id) && !finalIds.includes(id)) {
-        updatedIds = this._firestoreService.removeFromArray(entityId);
-      } else if (!initialIds.includes(id) && finalIds.includes(id)) {
-        updatedIds = this._firestoreService.addToArray(entityId);
-      }
-
-      if (updatedIds) {
-        batchUpdates.push({
-          endpoint,
-          id,
-          data: { [key]: updatedIds },
-        });
-      }
-    }
+    const { added, removed } = uniqueDiff(initialIds, finalIds);
+    const batchUpdates: BatchUpdate[] = [
+      ...added.map(id => ({
+        endpoint,
+        id,
+        data: { [key]: this._firestoreService.addToArray(entityId) }
+      })),
+      ...removed.map(id => ({
+        endpoint,
+        id,
+        data: { [key]: this._firestoreService.removeFromArray(entityId) }
+      })),
+    ];
     return batchUpdates;
   }
 
-  private _getDayData(
-    day: Day,
-    dishIds: string[]
-  ): { [contentsDay: string]: string[] } {
-    return { [`contents.${day}`]: dishIds };
+  private _getMenuContentsData(
+    dishIds: string[],
+    day: Day | undefined
+  ): Record<string, string[]> {
+    if (day) {
+      return { [`contents.${day}`]: dishIds };
+    } else {
+      return {
+        'contents.Monday': dishIds,
+        'contents.Tuesday': dishIds,
+        'contents.Wednesday': dishIds,
+        'contents.Thursday': dishIds,
+        'contents.Friday': dishIds,
+        'contents.Saturday': dishIds,
+        'contents.Sunday': dishIds,
+      };
+    }
   }
 }
