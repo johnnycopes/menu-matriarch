@@ -38,24 +38,10 @@ export class BatchService {
     } else if (change === 'remove') {
       updatedDishIds = this._firestoreService.removeFromArray(...dishIds);
     }
-    let data: { [contentsDay: string]: string[] } = {};
-    if (day) {
-      data = this._getDayData(day, updatedDishIds);
-    } else {
-      data = {
-        ...this._getDayData('Monday', updatedDishIds),
-        ...this._getDayData('Tuesday', updatedDishIds),
-        ...this._getDayData('Wednesday', updatedDishIds),
-        ...this._getDayData('Thursday', updatedDishIds),
-        ...this._getDayData('Friday', updatedDishIds),
-        ...this._getDayData('Saturday', updatedDishIds),
-        ...this._getDayData('Sunday', updatedDishIds),
-      };
-    }
     return menuIds.map(menuId => ({
       endpoint: Endpoint.menus,
       id: menuId,
-      data,
+      data: this._getMenuContentsData(updatedDishIds, day),
     }));
   }
 
@@ -155,10 +141,22 @@ export class BatchService {
     return batchUpdates;
   }
 
-  private _getDayData(
-    day: Day,
-    dishIds: string[]
-  ): { [contentsDay: string]: string[] } {
-    return { [`contents.${day}`]: dishIds };
+  private _getMenuContentsData(
+    dishIds: string[],
+    day: Day | undefined
+  ): Record<string, string[]> {
+    if (day) {
+      return { [`contents.${day}`]: dishIds };
+    } else {
+      return {
+        'contents.Monday': dishIds,
+        'contents.Tuesday': dishIds,
+        'contents.Wednesday': dishIds,
+        'contents.Thursday': dishIds,
+        'contents.Friday': dishIds,
+        'contents.Saturday': dishIds,
+        'contents.Sunday': dishIds,
+      };
+    }
   }
 }
