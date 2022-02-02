@@ -1,4 +1,4 @@
-import { uniqueDiff } from "./unique-diff";
+import { uniqueDiff } from './unique-diff';
 
 describe('uniqueDiff', () => {
   it('returns empty values when initial and final are empty', () => {
