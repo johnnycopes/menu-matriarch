@@ -1,4 +1,4 @@
-import { TrackByFunction } from "@angular/core";
+import { TrackByFunction } from '@angular/core';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function trackByFactory<T>(getId: (item: T) => any): TrackByFunction<T> {

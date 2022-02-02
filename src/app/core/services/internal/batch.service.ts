@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Day } from '@models/day.type';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
+import { calculateTallyChange, TallyChange } from '@utility/generic/calculate-tally-change';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { tally } from '@utility/generic/tally';
 import { uniqueDiff } from '@utility/generic/unique-diff';
@@ -78,17 +79,15 @@ export class BatchService {
   public getDishCountersUpdates({ dishIds, menu, change }: {
     dishIds: string[],
     menu: Menu,
-    change: 'increment' | 'decrement' | 'clear',
+    change: TallyChange,
   }): BatchUpdate[] {
     const dishCounts = tally(flattenValues(menu.contents));
     return dishIds.map(dishId => {
-      const dishCount = dishCounts[dishId] ?? 0;
-      let menusChange = 0;
-      if (dishCount === 0 && change === 'increment') {
-        menusChange = 1;
-      } else if ((dishCount === 1 && change === 'decrement') || change === 'clear') {
-        menusChange = -1;
-      }
+      const menusChange = calculateTallyChange({
+        tally: dishCounts,
+        key: dishId,
+        change,
+      });
       const menuIds = menusChange > 0
         ? this._firestoreService.addToArray(menu.id)
         : this._firestoreService.removeFromArray(menu.id);
