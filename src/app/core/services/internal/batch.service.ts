@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Day } from '@models/day.type';
 import { Menu } from '@models/menu.interface';
 import { Endpoint } from '@models/endpoint.enum';
-import { dedupe } from '@utility/generic/dedupe';
 import { tally } from '@utility/generic/tally';
+import { uniqueDiff } from '@utility/generic/unique-diff';
 import { flattenValues } from '@utility/generic/flatten-values';
 import { Batch, BatchUpdate } from './batch';
 import { FirestoreService } from './firestore.service';
@@ -139,24 +139,19 @@ export class BatchService {
     finalIds: string[],
     entityId: string,
   }): BatchUpdate[] {
-    const batchUpdates: BatchUpdate[] = [];
-    for (const id of dedupe(initialIds, finalIds)) {
-      let updatedIds = undefined;
-
-      if (initialIds.includes(id) && !finalIds.includes(id)) {
-        updatedIds = this._firestoreService.removeFromArray(entityId);
-      } else if (!initialIds.includes(id) && finalIds.includes(id)) {
-        updatedIds = this._firestoreService.addToArray(entityId);
-      }
-
-      if (updatedIds) {
-        batchUpdates.push({
-          endpoint,
-          id,
-          data: { [key]: updatedIds },
-        });
-      }
-    }
+    const { added, removed } = uniqueDiff(initialIds, finalIds);
+    const batchUpdates: BatchUpdate[] = [
+      ...added.map(id => ({
+        endpoint,
+        id,
+        data: { [key]: this._firestoreService.addToArray(entityId) }
+      })),
+      ...removed.map(id => ({
+        endpoint,
+        id,
+        data: { [key]: this._firestoreService.removeFromArray(entityId) }
+      })),
+    ];
     return batchUpdates;
   }
 
