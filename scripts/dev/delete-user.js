@@ -1,7 +1,8 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('../../firebase-admin-dev.json');
 const uid = process.argv.slice(2)?.[0];
-const { deleteUserAccount } = require('./utility');
+const { TEST_UID } = require('../../cypress.env.json');
+const { deleteUser } = require('./utility');
 
 if (!uid) {
   throw new Error('A UID must be passed in as an argument to the script');
@@ -12,25 +13,8 @@ admin.initializeApp({
 });
 
 (async function() {
-  const db = admin.firestore();
-  const batch = db.batch();
-  const collections = ['users', 'menus', 'dishes', 'tags'];
-
-  const snapshots = await Promise.all(
-    collections.map(collection => {
-      return db.collection(collection)
-        .where('uid', '==', uid)
-        .get();
-    })
-  );
-  snapshots.forEach(snapshot => {
-    snapshot.forEach(doc => {
-      batch.delete(doc.ref);
-    });
-  });
-
-  await Promise.all([
-    deleteUserAccount(admin, uid),
-    batch.commit(),
-  ]);
+  if (uid === TEST_UID) {
+    throw new Error('UID belongs to test account and cannot be deleted');
+  }
+  deleteUser(admin, uid);
 })();
