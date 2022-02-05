@@ -15,6 +15,7 @@
     "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
     "db:delete-account": "node scripts/dev/delete-account.js",
     "db:delete-data": "node scripts/dev/delete-data.js",
+    "db:seed-data": "node scripts/dev/seed-data.js",
     "db:reset": "node scripts/dev/delete-all-accounts.js",
     "prepare": "husky install"
   },
