@@ -59,6 +59,7 @@
     "@typescript-eslint/eslint-plugin": "4.28.2",
     "@typescript-eslint/parser": "4.28.2",
     "cypress": "^9.4.1",
+    "cypress-firebase": "^2.2.1",
     "eslint": "^7.26.0",
     "firebase-admin": "^9.0.0",
     "firebase-tools": "^9.0.0",
