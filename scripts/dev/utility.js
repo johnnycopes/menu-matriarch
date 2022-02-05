@@ -1,7 +1,30 @@
+async function deleteAccount(admin, uid) {
+  await Promise.all([
+    deleteUser(admin, uid),
+    deleteData(admin, uid),
+  ]).then(function () {
+    console.log(`Successfully deleted user ${uid}`);
+  })
+  .catch(function (error) {
+    console.log(`Error deleting user ${uid}:`, error);
+  });
+}
+
 async function deleteUser(admin, uid) {
+  await admin.auth().deleteUser(uid)
+    .then(() => console.log(`Successfully deleted user ${uid}`))
+    .catch((error) => console.log(`Error deleting user ${uid}:`, error));
+}
+
+async function deleteData(admin, uid) {
+  const userExists = await verifyUserExists(admin, uid);
+  if (!userExists) {
+    console.log(`User ${uid} not found.`);
+    return false;
+  }
   const db = admin.firestore();
   const batch = db.batch();
-  const collections = ['users', 'menus', 'dishes', 'tags'];
+  const collections = ['users', 'menus', 'meals', 'dishes', 'tags'];
 
   const snapshots = await Promise.all(
     collections.map(collection => {
@@ -10,23 +33,25 @@ async function deleteUser(admin, uid) {
         .get();
     })
   );
+
   snapshots.forEach(snapshot => {
     snapshot.forEach(doc => {
       batch.delete(doc.ref);
     });
   });
 
-  await Promise.all([
-    admin.auth().deleteUser(uid),
-    batch.commit(),
-  ]).then(function () {
-    console.log(`Successfully deleted user ${uid}`);
-  })
-  .catch(function (error) {
-    console.log(`Error deleting user ${uid}:`, error);
-  });;
+  batch.commit()
+    .then(() => console.log(`Successfully deleted data for user ${uid}`))
+    .catch((error) => console.log(`Error deleting data for user ${uid}:`, error));
+}
+
+function verifyUserExists(admin, uid) {
+  return admin.auth().getUser(uid)
+    .then(() => true)
+    .catch(() => false);
 }
 
 module.exports = {
-  deleteUser
+  deleteAccount,
+  deleteData,
 };

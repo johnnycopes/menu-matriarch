@@ -13,8 +13,9 @@
     "watch": "ng build --watch --configuration development",
     "deploy-dev": "ng build --configuration development && firebase deploy --project menu-matriarch-dev --only hosting",
     "deploy-prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
-    "db:delete-user": "node scripts/dev/delete-user.js",
-    "db:reset": "node scripts/dev/delete-all-users.js",
+    "db:delete-account": "node scripts/dev/delete-account.js",
+    "db:delete-data": "node scripts/dev/delete-data.js",
+    "db:reset": "node scripts/dev/delete-all-accounts.js",
     "prepare": "husky install"
   },
   "private": true,

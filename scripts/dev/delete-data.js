@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('../../firebase-admin-dev.json');
 const uid = process.argv.slice(2)?.[0];
-const { deleteUser } = require('./utility');
+const { deleteData } = require('./utility');
 const { TEST_UID } = require('../../cypress.env.json');
 
 if (!uid) {
@@ -14,7 +14,7 @@ admin.initializeApp({
 
 (async function() {
   if (uid === TEST_UID) {
-    throw new Error('UID belongs to test account and cannot be deleted');
+    throw new Error('UID belongs to test account. Data will not be be deleted.');
   }
-  deleteUser(admin, uid);
+  deleteData(admin, uid);
 })();

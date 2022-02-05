@@ -10,7 +10,7 @@ admin.initializeApp({
 
 function deleteAllUserAccounts(nextPageToken) {
   if (!serviceAccount.project_id.includes('dev')) {
-    throw new Error('STOP! This script is targeting the wrong environment');
+    throw new Error('STOP! This script is targeting the wrong environment.');
   }
 
   admin.auth().listUsers(100, nextPageToken)
@@ -18,7 +18,7 @@ function deleteAllUserAccounts(nextPageToken) {
       listUsersResult.users.forEach((userRecord) => {
         const uid = userRecord.toJSON().uid;
         if (uid === TEST_UID) {
-          console.log(`Skipping test user ${uid}`);
+          console.log(`Skipping test user ${uid}.`);
           return;
         }
         deleteUser(admin, uid);
