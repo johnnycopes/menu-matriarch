@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('../../firebase-admin-dev.json');
-const { deleteUser } = require('./utility');
+const { deleteAccount } = require('./utility');
 const { TEST_UID } = require('../../cypress.env.json');
 
 admin.initializeApp({
@@ -21,7 +21,7 @@ function deleteAllUserAccounts(nextPageToken) {
           console.log(`Skipping test user ${uid}.`);
           return;
         }
-        deleteUser(admin, uid);
+        deleteAccount(admin, uid);
       });
       if (listUsersResult.pageToken) {
         deleteAllUserAccounts(listUsersResult.pageToken);
