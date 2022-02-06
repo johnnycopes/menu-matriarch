@@ -1,5 +1,5 @@
 /**
- * Deletes user account from Firebase Authentication and ALL of their
+ * Deletes user from Firebase Authentication AND their
  * associated data from Firestore
  */
 async function deleteAccount(admin, uid) {
@@ -10,7 +10,7 @@ async function deleteAccount(admin, uid) {
 }
 
 /**
- * Deletes user account from Firebase Authentication. Does not delete any
+ * Deletes user from Firebase Authentication. Does NOT delete any
  * data from Firestore
  */
 async function deleteUser(admin, uid) {
@@ -20,8 +20,8 @@ async function deleteUser(admin, uid) {
 }
 
 /**
- * Deletes all user data from Firestore EXCEPT their document in the 'Users'
- * collection. Does not delete user account from Firebase Authentication
+ * Deletes all user data from Firestore. Does NOT delete user account
+ * from Firebase Authentication
  */
 async function deleteData(admin, uid) {
   const userInfo = await fetchUserInfo(admin, uid);
@@ -52,8 +52,8 @@ async function deleteData(admin, uid) {
 }
 
 /**
- * Fetches user info from Firebase Authentication. Also useful for confirming
- * that a UID is valid
+ * Fetches user info from Firebase Authentication. Also useful for
+ * confirming that a UID is valid
  */
 function fetchUserInfo(admin, uid) {
   return admin.auth().getUser(uid)

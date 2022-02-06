@@ -1,6 +1,5 @@
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { SETTINGS as AUTH_SETTINGS } from '@angular/fire/compat/auth';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from '@angular/platform-browser';
 import { DragDropModule } from "@angular/cdk/drag-drop";
@@ -96,9 +95,7 @@ import { WelcomeComponent } from './features/welcome/welcome.component';
     DomainModule,
     GenericModule,
   ],
-  providers: [
-    { provide: AUTH_SETTINGS, useValue: { appVerificationDisabledForTesting: true } },
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Tags Feature', () => {
   before(() => {
     const testUid = Cypress.env('TEST_UID');

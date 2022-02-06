@@ -9,12 +9,11 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
+const admin = require('firebase-admin');
+const cypressFirebasePlugin = require('cypress-firebase').plugin;
+
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
-const admin = require("firebase-admin");
-const cypressFirebasePlugin = require("cypress-firebase").plugin;
-
 /**
  * @type {Cypress.PluginConfig}
  */
