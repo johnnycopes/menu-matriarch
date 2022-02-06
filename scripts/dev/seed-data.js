@@ -9,23 +9,38 @@ admin.initializeApp({
 (async function(uid) {
   const db = admin.firestore();
   const batch = db.batch();
-
+  const user = createDocRef(db, 'users', uid);
   const menu = createDocRef(db, 'menus');
   const sushiDinnerMeal = createDocRef(db, 'meals');
   const sushiDish = createDocRef(db, 'dishes');
   const misoSoupDish = createDocRef(db, 'dishes');
   const pescatarianTag = createDocRef(db, 'tags');
   const vegetarianTag = createDocRef(db, 'tags');
+  const userInfo = await admin.auth().getUser(uid);
 
-  batch.set(menu, createMenu({ id: menu.id, uid, name: 'Menu #1', contents: {
-    Monday: [],
-    Tuesday: [sushiDish.id, misoSoupDish.id],
-    Wednesday: [],
-    Thursday: [],
-    Friday: [],
-    Saturday: [],
-    Sunday: [],
-  }}));
+  if (!userInfo) {
+    throw new Error(`UID ${uid} does not exist`);
+  }
+
+  batch.set(user, createUser({
+    uid,
+    name: userInfo.displayName,
+    email: userInfo.email,
+  }));
+  batch.set(menu, createMenu({
+    id: menu.id,
+    uid,
+    name: 'Menu #1',
+    contents: {
+      Monday: [],
+      Tuesday: [sushiDish.id, misoSoupDish.id],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+      Sunday: [],
+    }
+  }));
   batch.set(sushiDinnerMeal, createMeal({
     id: sushiDinnerMeal.id,
     uid,
@@ -70,8 +85,27 @@ admin.initializeApp({
   await batch.commit();
 })(uid);
 
-function createDocRef(db, endpoint) {
-  return db.collection(endpoint).doc();
+function createDocRef(db, endpoint, id) {
+  if (id) {
+    return db.collection(endpoint).doc(id);
+  } else {
+    return db.collection(endpoint).doc();
+  }
+}
+
+function createUser({ uid, name, email, preferences }) {
+  return {
+    uid: uid ?? '',
+    name: name ?? '',
+    email: email ?? '',
+    preferences: {
+      darkMode: preferences?.darkMode ?? false,
+      dayNameDisplay: preferences?.dayNameDisplay ?? 'full',
+      defaultMenuStartDay: preferences?.defaultMenuStartDay ?? 'Monday',
+      emptyMealText: preferences?.emptyMealText ?? 'undecided',
+      mealOrientation: preferences?.mealOrientation ?? 'horizontal',
+    },
+  }
 }
 
 function createMenu({ id, uid, name, favorited, startDay, contents }) {

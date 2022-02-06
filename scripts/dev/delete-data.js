@@ -12,5 +12,5 @@ admin.initializeApp({
 });
 
 (async function() {
-  deleteData({ admin, uid, deleteUserData: false });
+  deleteData(admin, uid);
 })();

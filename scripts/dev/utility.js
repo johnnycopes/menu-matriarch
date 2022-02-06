@@ -5,7 +5,7 @@
 async function deleteAccount(admin, uid) {
   await Promise.all([
     deleteUser(admin, uid),
-    deleteData({ admin, uid, deleteUserData: true }),
+    deleteData(admin, uid),
   ]);
 }
 
@@ -23,7 +23,7 @@ async function deleteUser(admin, uid) {
  * Deletes all user data from Firestore EXCEPT their document in the 'Users'
  * collection. Does not delete user account from Firebase Authentication
  */
-async function deleteData({ admin, uid, deleteUserData }) {
+async function deleteData(admin, uid) {
   const userExists = await verifyUserExists(admin, uid);
   if (!userExists) {
     console.log(`User ${uid} not found`);
@@ -31,10 +31,7 @@ async function deleteData({ admin, uid, deleteUserData }) {
   }
   const db = admin.firestore();
   const batch = db.batch();
-  const collections = ['menus', 'meals', 'dishes', 'tags'];
-  if (deleteUserData) {
-    collections.push('users');
-  }
+  const collections = ['users', 'menus', 'meals', 'dishes', 'tags'];
   const snapshots = await Promise.all(
     collections.map(collection => {
       return db.collection(collection)
