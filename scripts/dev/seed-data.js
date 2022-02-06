@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('../../firebase-admin-dev.json');
 const uid = process.argv.slice(2)?.[0];
+const { fetchUserInfo } = require('./utility');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -16,7 +17,7 @@ admin.initializeApp({
   const misoSoupDish = createDocRef(db, 'dishes');
   const pescatarianTag = createDocRef(db, 'tags');
   const vegetarianTag = createDocRef(db, 'tags');
-  const userInfo = await admin.auth().getUser(uid);
+  const userInfo = await fetchUserInfo(admin, uid);
 
   if (!userInfo) {
     throw new Error(`UID ${uid} does not exist`);

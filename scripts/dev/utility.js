@@ -24,8 +24,8 @@ async function deleteUser(admin, uid) {
  * collection. Does not delete user account from Firebase Authentication
  */
 async function deleteData(admin, uid) {
-  const userExists = await verifyUserExists(admin, uid);
-  if (!userExists) {
+  const userInfo = await fetchUserInfo(admin, uid);
+  if (!userInfo) {
     console.log(`User ${uid} not found`);
     return false;
   }
@@ -51,13 +51,18 @@ async function deleteData(admin, uid) {
     .catch((error) => console.log(`Error deleting data for user ${uid}:`, error));
 }
 
-function verifyUserExists(admin, uid) {
+/**
+ * Fetches user info from Firebase Authentication. Also useful for confirming
+ * that a UID is valid
+ */
+function fetchUserInfo(admin, uid) {
   return admin.auth().getUser(uid)
-    .then(() => true)
+    .then(info => info)
     .catch(() => false);
 }
 
 module.exports = {
   deleteAccount,
   deleteData,
+  fetchUserInfo,
 };
