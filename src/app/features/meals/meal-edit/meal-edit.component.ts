@@ -12,6 +12,7 @@ import { TagService } from '@services/tag.service';
 import { UserService } from '@services/user.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
 import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
+import { recordToArray } from '@utility/generic/record-to-array';
 
 interface MealEditForm {
   name: string;
@@ -104,14 +105,8 @@ export class MealEditComponent {
     const details: MealEditForm = {
       name: form.value.name,
       description: form.value.description,
-      tagIds: Object
-        .entries<boolean>(form.value?.tags ?? [])
-        .filter(([_key, checked]) => checked)
-        .map(([key, _checked]) => key),
-      dishIds: Object
-        .entries<boolean>(form.value.dishes)
-        .filter(([_key, checked]) => checked)
-        .map(([key, _checked]) => key),
+      tagIds: recordToArray<string>(form.value.tags),
+      dishIds: recordToArray<string>(form.value.dishes),
     };
     if (!this._routeId) {
       this._mealService.createMeal(details).pipe(
