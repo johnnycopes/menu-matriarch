@@ -11,8 +11,8 @@ import { MealService } from '@services/meal.service';
 import { TagService } from '@services/tag.service';
 import { UserService } from '@services/user.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
-import { recordToArray } from '@utility/generic/record-to-array';
 import { trackById, trackBySelf } from '@utility/domain/track-by-functions';
+import { recordToArray } from '@utility/generic/record-to-array';
 
 interface MealEditForm {
   name: string;
