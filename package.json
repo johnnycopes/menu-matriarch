@@ -18,7 +18,8 @@
     "db:delete-data": "node scripts/dev/delete-data.js",
     "db:seed-data": "node scripts/dev/seed-data.js",
     "db:reset": "node scripts/dev/delete-all-accounts.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "fake": "npm run nothing"
   },
   "private": true,
   "dependencies": {
