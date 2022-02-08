@@ -10,6 +10,7 @@ import { DishService } from '@services/dish.service';
 import { TagService } from '@services/tag.service';
 import { getDishTypes } from '@utility/domain/get-dish-types';
 import { trackBySelf } from '@utility/domain/track-by-functions';
+import { recordToArray } from '@utility/generic/record-to-array';
 
 interface DishEditForm {
   name: string;
@@ -87,10 +88,7 @@ export class DishEditComponent {
       description: form.value.description,
       link: form.value.link,
       type: form.value.type,
-      tagIds: Object
-        .entries<boolean>(form.value?.tags ?? [])
-        .filter(([_key, checked]) => checked)
-        .map(([key, _checked]) => key),
+      tagIds: recordToArray<string>(form.value?.tags ?? []),
       notes: form.value.notes,
     };
     if (!this._routeId) {
