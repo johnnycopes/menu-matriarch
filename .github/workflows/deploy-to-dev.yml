@@ -1,7 +1,10 @@
-name: Code Quality
-on: pull_request
+name: Deploy to Dev
+on:
+  push:
+    branches:
+      - test
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,9 +19,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install
-      - name: Lint SCSS
-        run: npm run lint:scss
-      - name: Lint TS
-        run: npm run lint:ts
-      - name: Run unit tests
-        run: npm run test
+      - name: Build app and deploy
+        run: npm run deploy:dev
