@@ -8,7 +8,6 @@ export function calculateTallyChange<T extends string | symbol | number>({ tally
   if (!(key in tally) && (change === 'decrement' || change === 'clear')) {
     throw new Error('Cannot decrement or clear value: key is not present in tally');
   }
-
   const count = tally[key] ?? 0;
   if (count === 0 && change === 'increment') {
     return 1;
