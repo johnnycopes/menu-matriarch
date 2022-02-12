@@ -16,7 +16,7 @@
     "deploy:prod": "ng build --configuration production && firebase deploy --project menu-matriarch",
     "db:delete-account": "node scripts/dev/delete-account.js",
     "db:delete-data": "node scripts/dev/delete-data.js",
-    "db:seed-data": "node scripts/dev/seed-data.js",
+    "db:seed-data": "ts-node scripts/dev/seed-data.ts",
     "db:reset": "node scripts/dev/delete-all-accounts.js",
     "prepare": "husky install"
   },
@@ -77,6 +77,8 @@
     "open": "^7.0.3",
     "stylelint": "^14.2.0",
     "stylelint-config-standard-scss": "^3.0.0",
+    "ts-node": "^10.5.0",
+    "tsconfig-paths": "^3.12.0",
     "typescript": "~4.4.4"
   },
   "lint-staged": {
