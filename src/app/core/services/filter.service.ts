@@ -7,7 +7,7 @@ import { FilteredDishesGroup } from '@models/filtered-dishes.interface';
 import { Meal } from '@models/meal.interface';
 import { Tag } from '@models/tag.interface';
 import { getDishTypes } from '@utility/domain/get-dish-types';
-import { lower } from '@utility/generic/format';
+import { includes } from '@utility/generic/includes';
 
 interface State {
   panel: boolean;
@@ -89,14 +89,8 @@ export class FilterService {
     tags: Tag[],
     text: string,
     tagIds: string[],
-  }) {
-    return (
-      (tagIds.length === 0 || tags.some(tag => tagIds.includes(tag.id)))) &&
-      (
-        lower(name).includes(lower(text)) ||
-        lower(description).includes(lower(text)) ||
-        tags.some(tag => lower(tag.name).includes(lower(text))
-      )
-    );
+  }): boolean {
+    return (tagIds.length === 0 || tags.some(tag => tagIds.includes(tag.id)))
+      && includes([name, description, ...tags.map(tag => tag.name)], text);
   }
 }
