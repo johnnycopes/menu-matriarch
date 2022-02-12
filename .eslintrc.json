@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": [
-    "scripts/**/*",
+    "scripts/**/*.js",
     "cypress/**/*"
   ],
   "overrides": [
