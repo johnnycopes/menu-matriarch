@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import * as admin from 'firebase-admin';
 
 import { Endpoint } from "@models/endpoint.enum";
 import { createDishDto, createMealDto, createMenuDto, createTagDto, createUserDto } from "@utility/domain/create-dtos";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const serviceAccount = require('../../firebase-admin-dev.json');
 const uid = process.argv.slice(2)?.[0];
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { fetchUserInfo } = require('./utility');
 
 admin.initializeApp({
