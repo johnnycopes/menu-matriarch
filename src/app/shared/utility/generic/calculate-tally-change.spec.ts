@@ -1,18 +1,36 @@
 import { calculateTallyChange } from "./calculate-tally-change";
 
 describe('calculateTallyChange', () => {
-  const tally: Record<string, number> = {
-    fruits: 3,
-    vegetables: 1,
-    produce: 0,
-  };
+  let tally: Record<string, number>;
 
-  it('throws an error if key does not exist in tally', () => {
+  beforeEach(() => {
+    tally = {
+      fruits: 3,
+      vegetables: 1,
+      produce: 0,
+    };
+  });
+
+  it('throws an error on decrement or clear when value does not exist in tally', () => {
     expect(() => calculateTallyChange({
       tally,
       key: 'fake',
+      change: 'decrement',
+    })).toThrowError('Cannot decrement or clear value: key is not present in tally');
+
+    expect(() => calculateTallyChange({
+      tally,
+      key: 'fake',
+      change: 'clear',
+    })).toThrowError('Cannot decrement or clear value: key is not present in tally');
+  });
+
+  it('returns 1 on increment when value does not exist in tally', () => {
+    expect(calculateTallyChange({
+      tally,
+      key: 'fake',
       change: 'increment',
-    })).toThrowError('Key not present in tally');
+    })).toBe(1);
   });
 
   it('returns 1 on increment when value is 0', () => {

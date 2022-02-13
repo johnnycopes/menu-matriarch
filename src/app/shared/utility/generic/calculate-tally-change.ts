@@ -5,10 +5,10 @@ export function calculateTallyChange<T extends string | symbol | number>({ tally
   key: T,
   change: TallyChange,
 }): 1 | 0 | -1 {
-  if (!(key in tally)) {
-    throw new Error('Key not present in tally');
+  if (!(key in tally) && (change === 'decrement' || change === 'clear')) {
+    throw new Error('Cannot decrement or clear value: key is not present in tally');
   }
-  const count = tally[key];
+  const count = tally[key] ?? 0;
   if (count === 0 && change === 'increment') {
     return 1;
   } else if ((count === 1 && change === 'decrement') || change === 'clear') {
