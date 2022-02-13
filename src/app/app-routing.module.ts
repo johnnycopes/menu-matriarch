@@ -4,6 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { Route } from '@models/route.enum';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoggedInAuthGuard } from './core/guards/logged-in-auth.guard';
+import { PlannerGuard } from './core/guards/planner.guard';
 import { DemoComponent } from './features/demo/demo.component';
 import { DishDetailsComponent } from './features/dishes/dish-details/dish-details.component';
 import { DishEditComponent } from './features/dishes/dish-edit/dish-edit.component';
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: '', component: ShellComponent, canActivate: [AuthGuard], children: [
     { path: 'demo', component: DemoComponent, data: { state: Route.demo } },
     { path: 'planner/:menuId', component: PlannerComponent, data: { state: Route.planner } },
-    { path: 'planner', component: PlannerComponent, data: { state: Route.planner } },
+    { path: 'planner', component: PlannerComponent, canActivate: [PlannerGuard], data: { state: Route.planner } },
     { path: 'menus', component: MenusComponent, data: { state: Route.menus } },
     { path: 'tags', component: TagsComponent, data: { state: Route.tags } },
     { path: 'meals', component: MealsComponent, data: { state: Route.meals }, children: [
