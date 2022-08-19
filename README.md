@@ -1,5 +1,7 @@
 # MenuMatriarch
 
+## NOTE: this project is now being maintained in a [different repo](https://github.com/johnnycopes/atocha).
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.8.
 
 ## Development server
